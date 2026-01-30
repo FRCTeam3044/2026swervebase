@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive.spindexer;
+package frc.robot.subsystems.spindexer;
 
 import org.littletonrobotics.junction.AutoLog;
 
@@ -13,5 +13,5 @@ public interface SpindexerIO {
 
   public default void setSpeed(double speed) {}
 
-  public default void updateInputs(SpindexerIOInputs inputs) {}
+  public default void updateInputs(SpindexerIOInputsAutoLogged inputs) {}
 }

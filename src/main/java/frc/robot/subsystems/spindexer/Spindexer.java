@@ -1,11 +1,9 @@
-package frc.robot.subsystems.drive.spindexer;
-
-import org.littletonrobotics.junction.Logger;
+package frc.robot.subsystems.spindexer;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import org.littletonrobotics.junction.Logger;
 
 public class Spindexer extends SubsystemBase {
   private final SpindexerIO io;
