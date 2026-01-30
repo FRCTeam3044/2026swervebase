@@ -1,5 +1,3 @@
 package frc.robot.subsystems.kicker;
 
-public class KickerIOSpark {
-    
-}
+public class KickerIOSpark {}
