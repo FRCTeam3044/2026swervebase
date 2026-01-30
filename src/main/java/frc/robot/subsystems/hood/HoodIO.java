@@ -1,11 +1,10 @@
-package frc.robot.subsystems.kicker;
+package frc.robot.subsystems.hood;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public interface KickerIO {
-
+public interface HoodIO {
   @AutoLog
-  public static class KickerIOInputs {
+  public static class HoodIOInputs {
     public double speedIntake = 0.0;
     public double speedRollers = 0.0;
     public double absEncoderOne = 0.0;
@@ -13,7 +12,7 @@ public interface KickerIO {
     public double relEncoder = 0.0;
   }
 
-  public default void setSpeed(double speed) {}
+  public default void setAngle(double angle) {}
 
-  public default void updateInputs(KickerIOInputs inputs) {}
+  public default void updateInputs(HoodIOInputs inputs) {}
 }

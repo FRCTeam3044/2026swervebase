@@ -1,15 +1,13 @@
 package frc.robot.subsystems.kicker;
 
-import java.util.function.DoubleSupplier;
-
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.function.DoubleSupplier;
+import org.littletonrobotics.junction.Logger;
 
 public class Kicker extends SubsystemBase {
-    private final KickerIO io;
+  private final KickerIO io;
   private final KickerIOInputsAutoLogged inputs = new KickerIOInputsAutoLogged();
 
   public Kicker(KickerIO io) {
