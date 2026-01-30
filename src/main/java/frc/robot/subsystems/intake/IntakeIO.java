@@ -13,12 +13,10 @@ public interface IntakeIO {
     public double relEncoder = 0.0;
   }
 
-  public default void setSpeedIntake(double speed) {
-  }
+  public default void setSpeedIntake(double speed) {}
 
-  public default void setSpeedRollers(double speed) {
-  }
+  public default void setSpeedRollers(double speed) {}
 
-  public default void updateInputs(IntakeIOInputs inputs) {
-  };
+  public default void updateInputs(IntakeIOInputs inputs) {}
+  ;
 }

@@ -11,9 +11,8 @@ public interface ShooterIO {
     public double relEncoder = 0.0;
   }
 
-  public default void setSpeed(double speed) {
-  }
+  public default void setSpeed(double speed) {}
 
-  public default void updateInputs(ShooterIOInputs inputs) {
-  };
+  public default void updateInputs(ShooterIOInputs inputs) {}
+  ;
 }
