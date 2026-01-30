@@ -13,7 +13,9 @@ public interface KickerIO {
     public double relEncoder = 0.0;
   }
 
-  public default void setSpeed(double speed) {}
+  public default void setSpeed(double speed) {
+  }
 
-  public default void updateInputs(KickerIOInputs inputs) {}
+  public default void updateInputs(KickerIOInputs inputs) {
+  }
 }

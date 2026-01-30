@@ -11,7 +11,9 @@ public interface SpindexerIO {
     public double relEncoder = 0.0;
   }
 
-  public default void setSpeed(double speed) {}
+  public default void setSpeed(double speed) {
+  }
 
-  public default void updateInputs(SpindexerIOInputsAutoLogged inputs) {}
+  public default void updateInputs(SpindexerIOInputsAutoLogged inputs) {
+  }
 }
