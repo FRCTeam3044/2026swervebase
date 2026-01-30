@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive.turret;
+package frc.robot.subsystems.turret;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;

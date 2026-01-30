@@ -1,4 +1,4 @@
-package frc.robot.subsystems.drive.turret;
+package frc.robot.subsystems.turret;
 
 import org.littletonrobotics.junction.AutoLog;
 
@@ -13,5 +13,5 @@ public interface TurretIO {
 
   public default void setAngle(double angle) {}
 
-  public default void updateInputs(TurretIOInputs inputs) {}
+  public default void updateInputs(TurretIOInputsAutoLogged inputs) {}
 }

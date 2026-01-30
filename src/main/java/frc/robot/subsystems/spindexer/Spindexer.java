@@ -1,4 +1,5 @@
-package frc.robot.subsystems.drive.spindexer;
+
+package frc.robot.subsystems.spindexer;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
