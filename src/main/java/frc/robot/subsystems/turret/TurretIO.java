@@ -11,7 +11,11 @@ public interface TurretIO {
     public double relEncoder = 0.0;
   }
 
-  public default void setAngle(double angle) {}
+  public default void setAngle(double angle) {
+    
+  }
 
-  public default void updateInputs(TurretIOInputsAutoLogged inputs) {}
+  public default void updateInputs(TurretIOInputsAutoLogged inputs) {
+
+  }
 }
