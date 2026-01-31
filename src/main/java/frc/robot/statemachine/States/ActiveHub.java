@@ -1,5 +1,6 @@
 package frc.robot.statemachine.States;
 
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.statemachine.StateMachine;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
@@ -13,6 +14,7 @@ import me.nabdev.oxidation.State;
 public class ActiveHub extends State {
   public ActiveHub(
       StateMachine stateMachine,
+      CommandXboxController driverController,
       Drive drive,
       Intake intake,
       Spindexer spindexer,
@@ -23,11 +25,11 @@ public class ActiveHub extends State {
     super(stateMachine);
 
     startWhenActive(intake.moveIntake(null));
-    startWhenActive(intake.runRollers(null));
+    driverController.leftTrigger().whileTrue(intake.runRollers(null));
     startWhenActive(spindexer.setSpeed(0));
     startWhenActive(kicker.runKicker(null));
     startWhenActive(hood.moveHood(null));
     startWhenActive(turret.rotate(null));
-    startWhenActive(shooter.runShooter(null));
+    driverController.rightTrigger().whileTrue(shooter.runShooter(null));
   }
 }
