@@ -1,4 +1,4 @@
-package frc.robot.subsystems.Shooter;
+package frc.robot.subsystems.shooter;
 
 public class ShooterIOSpark implements ShooterIO {
   /*  private final SparkFlex motor = new SparkFlex(0, MotorType.kBrushless);
