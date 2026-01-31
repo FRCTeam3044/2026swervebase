@@ -9,6 +9,7 @@ package frc.robot;
 
 import com.revrobotics.util.StatusLogger;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.ironmaple.simulation.SimulatedArena;
@@ -29,6 +30,12 @@ import org.littletonrobotics.urcl.URCL;
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   public static RobotContainer robotContainer;
+
+  public static Timer timer = new Timer();
+
+  public Timer getTimer() {
+    return timer;
+  }
 
   public Robot() {
     // Record metadata
@@ -130,6 +137,7 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+    timer.start();
   }
 
   /** This function is called periodically during operator control. */
@@ -152,6 +160,7 @@ public class Robot extends LoggedRobot {
   public void simulationInit() {
     SimulatedArena.getInstance().resetFieldForAuto();
   }
+
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {
