@@ -1,33 +1,33 @@
 {
-    "presentation": {
-        "Shoot Speed": {
-            "comment": "Auto-Generated",
-            "value": "7.0"
-        },
-        "Shoot Angle": {
-            "comment": "Auto-Generated",
-            "value": "45.0"
-        }
+  "presentation": {
+    "Shoot Speed": {
+      "comment": "Auto-Generated",
+      "value": "7.0"
     },
-    "mode": "competition",
-    "simulation": {
-        "Shoot Speed": {
-            "comment": "Auto-Generated",
-            "value": "9.0"
-        },
-        "Shoot Angle": {
-            "comment": "Auto-Generated",
-            "value": "55.0"
-        }
-    },
-    "competition": {
-        "Shoot Speed": {
-            "comment": "Auto-Generated",
-            "value": "7.0"
-        },
-        "Shoot Angle": {
-            "comment": "Auto-Generated",
-            "value": "70.0"
-        }
+    "Shoot Angle": {
+      "comment": "Auto-Generated",
+      "value": "45.0"
     }
+  },
+  "mode": "competition",
+  "simulation": {
+    "Shoot Speed": {
+      "comment": "Auto-Generated",
+      "value": "9.0"
+    },
+    "Shoot Angle": {
+      "comment": "Auto-Generated",
+      "value": "55.0"
+    }
+  },
+  "competition": {
+    "Shoot Speed": {
+      "comment": "Auto-Generated",
+      "value": "7.0"
+    },
+    "Shoot Angle": {
+      "comment": "Auto-Generated",
+      "value": "70.0"
+    }
+  }
 }
