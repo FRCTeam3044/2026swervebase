@@ -9,8 +9,10 @@ package frc.robot;
 
 import com.revrobotics.util.StatusLogger;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import me.nabdev.oxconfig.OxConfig;
 import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -21,9 +23,12 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the
+ * name of this class or
+ * the package after creating this project, you must also update the
+ * build.gradle file in the
  * project.
  */
 public class Robot extends LoggedRobot {
@@ -77,6 +82,8 @@ public class Robot extends LoggedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
+
+    OxConfig.initialize();
   }
 
   /** This function is called periodically during all modes. */
@@ -95,17 +102,33 @@ public class Robot extends LoggedRobot {
 
     // Return to non-RT thread priority (do not modify the first argument)
     // Threads.setCurrentThreadPriority(false, 10);
+
+    Logger.recordOutput("Target", robotContainer.autoTargetUtils.getTarget());
+    Logger.recordOutput("Effective Target", robotContainer.autoTargetUtils.getEffectiveTarget());
+
+    Logger.recordOutput(
+        "Distance from target",
+        robotContainer.drive
+            .getPose()
+            .getTranslation()
+            .getDistance(
+                robotContainer.autoTargetUtils.getTarget().getTranslation().toTranslation2d()));
   }
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+  }
 
   /** This function is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
-  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+  /**
+   * This autonomous runs the autonomous command selected by your
+   * {@link RobotContainer} class.
+   */
   @Override
   public void autonomousInit() {
     autonomousCommand = robotContainer.getAutonomousCommand();
@@ -118,7 +141,8 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   /** This function is called once when teleop is enabled. */
   @Override
@@ -134,7 +158,8 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   /** This function is called once when test mode is enabled. */
   @Override
@@ -145,13 +170,17 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
-    SimulatedArena.getInstance().resetFieldForAuto();
+    // SimulatedArena.getInstance().resetFieldForAuto();
   }
+
+  double lastScore = 0;
+
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {
@@ -160,6 +189,13 @@ public class Robot extends LoggedRobot {
     Pose3d[] fuelPoses = SimulatedArena.getInstance().getGamePiecesArrayByType("Fuel");
     Logger.recordOutput("FieldSimulation/FuelPositions", fuelPoses);
     Logger.recordOutput(
-        "FieldSimulation/Robot", robotContainer.driveSimulation.getSimulatedDriveTrainPose());
+        "FieldSimulation/Robot", RobotContainer.driveSimulation.getSimulatedDriveTrainPose());
+
+    double currentScore = SmartDashboard.getNumber(
+        "MapleSim/MatchData/Breakdown/blue Alliance/TotalFuelInHub", 0);
+    if (currentScore != lastScore) {
+      lastScore = currentScore;
+      SmartDashboard.putNumber("LastScoreTime", robotContainer.simShotTimer.get());
+    }
   }
 }

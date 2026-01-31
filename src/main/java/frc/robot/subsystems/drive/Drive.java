@@ -32,7 +32,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
-import frc.robot.Robot;
+import frc.robot.RobotContainer;
+import frc.robot.util.ChassisAccelerations;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
@@ -93,6 +94,9 @@ public class Drive extends SubsystemBase {
                 (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
   }
 
+  private ChassisSpeeds lastChassisSpeeds = new ChassisSpeeds();
+  private ChassisSpeeds chassisSpeeds = new ChassisSpeeds();
+
   @Override
   public void periodic() {
     odometryLock.lock(); // Prevents odometry updates while reading data
@@ -149,11 +153,14 @@ public class Drive extends SubsystemBase {
     }
 
     poseEstimator.addVisionMeasurement(
-        Robot.robotContainer.driveSimulation.getSimulatedDriveTrainPose(),
+        RobotContainer.driveSimulation.getSimulatedDriveTrainPose(),
         sampleTimestamps[sampleCount - 1]);
 
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
+
+    lastChassisSpeeds = chassisSpeeds;
+    chassisSpeeds = getFieldRelativeChassisSpeeds();
   }
 
   /**
@@ -238,8 +245,20 @@ public class Drive extends SubsystemBase {
 
   /** Returns the measured chassis speeds of the robot. */
   @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
-  private ChassisSpeeds getChassisSpeeds() {
+  public ChassisSpeeds getChassisSpeeds() {
     return kinematics.toChassisSpeeds(getModuleStates());
+  }
+
+  public ChassisSpeeds getFieldRelativeChassisSpeeds() {
+    return RobotContainer.driveSimulation.getDriveTrainSimulatedChassisSpeedsFieldRelative();
+  }
+
+  public ChassisSpeeds getRobotRelativeChassisSpeeds() {
+    return RobotContainer.driveSimulation.getDriveTrainSimulatedChassisSpeedsRobotRelative();
+  }
+
+  public ChassisAccelerations getChassisAccelerations() {
+    return new ChassisAccelerations(lastChassisSpeeds, chassisSpeeds, 0.02);
   }
 
   /** Returns the position of each module in radians. */
