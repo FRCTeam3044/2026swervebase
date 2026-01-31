@@ -10,9 +10,11 @@ public class Kicker extends SubsystemBase {
   private final KickerIO io;
   private final KickerIOInputsAutoLogged inputs = new KickerIOInputsAutoLogged();
 
-  private final ConfigurableParameter<Double> speedOne = new ConfigurableParameter<>(0.0, "Kicker motor 1 speed");
+  private final ConfigurableParameter<Double> speedOne =
+      new ConfigurableParameter<>(0.0, "Kicker motor 1 speed");
 
-  private final ConfigurableParameter<Double> speedTwo = new ConfigurableParameter<>(0.0, "Kicker motor 2 speed");
+  private final ConfigurableParameter<Double> speedTwo =
+      new ConfigurableParameter<>(0.0, "Kicker motor 2 speed");
 
   public Kicker(KickerIO io) {
     this.io = io;
