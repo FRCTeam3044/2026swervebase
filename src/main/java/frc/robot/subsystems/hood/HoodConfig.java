@@ -1,3 +1,5 @@
 package frc.robot.subsystems.hood;
 
-public class HoodConfig {}
+public class HoodConfig {
+    
+}
