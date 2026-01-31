@@ -1,4 +1,3 @@
 package frc.robot.subsystems.kicker;
 
-public class KickerConfig {
-}
+public class KickerConfig {}

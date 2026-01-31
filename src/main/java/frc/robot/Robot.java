@@ -152,6 +152,7 @@ public class Robot extends LoggedRobot {
   public void simulationInit() {
     SimulatedArena.getInstance().resetFieldForAuto();
   }
+
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {
@@ -161,5 +162,7 @@ public class Robot extends LoggedRobot {
     Logger.recordOutput("FieldSimulation/FuelPositions", fuelPoses);
     Logger.recordOutput(
         "FieldSimulation/Robot", robotContainer.driveSimulation.getSimulatedDriveTrainPose());
+
+    robotContainer.updateMechanism();
   }
 }
