@@ -5,9 +5,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
+import me.nabdev.oxconfig.ConfigurableParameter;
+
 public class Spindexer extends SubsystemBase {
   private final SpindexerIO io;
   private final SpindexerIOInputsAutoLogged inputs = new SpindexerIOInputsAutoLogged();
+
+  private ConfigurableParameter<Double> spindexerSpeed = new ConfigurableParameter<Double>(0.5, "Spindexer speed");
 
   public Spindexer(SpindexerIO io) {
     this.io = io;
@@ -19,7 +23,7 @@ public class Spindexer extends SubsystemBase {
     Logger.processInputs("Spindexer", inputs);
   }
 
-  public Command setSpeed(double speed) {
-    return Commands.run(() -> io.setSpeed(speed), this);
+  public Command setSpeed() {
+    return Commands.run(() -> io.setSpeed(spindexerSpeed.get()), this);
   }
 }
