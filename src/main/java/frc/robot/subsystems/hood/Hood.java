@@ -21,6 +21,14 @@ public class Hood extends SubsystemBase {
   }
 
   public Command moveHood(DoubleSupplier angle) {
-    return Commands.run(() -> io.setAngle(angle.getAsDouble()), this);
+    return Commands.run(
+        () -> {
+          io.setAngle(angle.getAsDouble());
+        },
+        this);
+  }
+
+  public double getHoodAngle() {
+    return inputs.hoodAngleRads;
   }
 }
