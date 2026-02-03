@@ -8,6 +8,8 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.networktables.PubSub;
+
 public class ShooterIOSpark implements ShooterIO {
   public final SparkFlex motor = new SparkFlex(ShooterConstants.kMotorPort, MotorType.kBrushless);
 
@@ -21,7 +23,7 @@ public class ShooterIOSpark implements ShooterIO {
     tryUntilOk(motor2, 5, () -> motor2.configure(ShooterConfig.motorConfig,
                 ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
   }
-
+ 
   @Override
   public void setSpeed(double speed) {
     motor.set(speed);
