@@ -8,8 +8,6 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.networktables.PubSub;
-
 public class ShooterIOSpark implements ShooterIO {
   public final SparkFlex motor = new SparkFlex(ShooterConstants.kMotorPort, MotorType.kBrushless);
 
