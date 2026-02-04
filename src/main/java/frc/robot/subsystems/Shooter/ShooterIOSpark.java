@@ -14,14 +14,26 @@ public class ShooterIOSpark implements ShooterIO {
   public final SparkFlex motor2 = new SparkFlex(1, MotorType.kBrushless);
 
   private final RelativeEncoder encoder = motor.getEncoder();
-  
+
   public ShooterIOSpark() {
-    tryUntilOk(motor, 5, () -> motor.configure(ShooterConfig.motorConfig,
-                ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
-    tryUntilOk(motor2, 5, () -> motor2.configure(ShooterConfig.motorConfig,
-                ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+    tryUntilOk(
+        motor,
+        5,
+        () ->
+            motor.configure(
+                ShooterConfig.motorConfig,
+                ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters));
+    tryUntilOk(
+        motor2,
+        5,
+        () ->
+            motor2.configure(
+                ShooterConfig.motorConfig,
+                ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters));
   }
- 
+
   @Override
   public void setSpeed(double speed) {
     motor.set(speed);
