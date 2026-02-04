@@ -1,17 +1,15 @@
 package frc.robot.subsystems.spindexer;
 
+import static frc.robot.subsystems.spindexer.SpindexerConstants.*;
 import static frc.robot.util.SparkUtil.ifOk;
-
-import java.util.function.DoubleSupplier;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import static frc.robot.subsystems.spindexer.SpindexerConstants.*;
+import java.util.function.DoubleSupplier;
 
 public class SpindexerIOSpark implements SpindexerIO {
-    private final SparkMax motor = new SparkMax(canId, MotorType.kBrushless);
-
+  private final SparkMax motor = new SparkMax(canId, MotorType.kBrushless);
 
   private RelativeEncoder encoderOne = motor.getEncoder();
 
