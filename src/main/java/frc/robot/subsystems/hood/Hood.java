@@ -22,7 +22,15 @@ public class Hood extends SubsystemBase {
     Logger.processInputs("Hood", inputs);
   }
 
-  public Command moveHood() {
-    return Commands.run(() -> io.setAngle(angle.get()), this);
+  public Command moveHood(DoubleSupplier angle) {
+    return Commands.run(
+        () -> {
+          io.setAngle(angle.getAsDouble());
+        },
+        this);
+  }
+
+  public double getHoodAngle() {
+    return inputs.hoodAngleRads;
   }
 }

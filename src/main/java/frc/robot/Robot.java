@@ -170,5 +170,7 @@ public class Robot extends LoggedRobot {
     Logger.recordOutput("FieldSimulation/FuelPositions", fuelPoses);
     Logger.recordOutput(
         "FieldSimulation/Robot", robotContainer.driveSimulation.getSimulatedDriveTrainPose());
+
+    robotContainer.updateMechanism();
   }
 }
