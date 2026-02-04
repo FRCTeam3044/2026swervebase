@@ -10,11 +10,11 @@ public class Intake extends SubsystemBase {
   private final IntakeIO io;
   private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
 
-  private final ConfigurableParameter<Double> speedIntake =
-      new ConfigurableParameter<>(0.0, "Intake speed");
+  private ConfigurableParameter<Double> intakeRollerSpeed =
+      new ConfigurableParameter<Double>(0.5, "Intake roller speed");
 
-  private final ConfigurableParameter<Double> speedRollers =
-      new ConfigurableParameter<>(0.0, "Roller speed");
+        private ConfigurableParameter<Double> intakeSpeed =
+      new ConfigurableParameter<Double>(0.5, "Intake speed");
 
   public Intake(IntakeIO io) {
     this.io = io;
@@ -23,14 +23,14 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    Logger.processInputs("Shooter", inputs);
+    Logger.processInputs("Intake", inputs);
   }
 
   public Command moveIntake() {
-    return Commands.run(() -> io.setSpeedIntake(speedIntake.get()), this);
+    return Commands.run(() -> io.setSpeedIntake(intakeSpeed.get()), this);
   }
 
   public Command runRollers() {
-    return Commands.run(() -> io.setSpeedRollers(speedRollers.get()), this);
+    return Commands.run(() -> io.setSpeedRollers(intakeRollerSpeed.get()), this);
   }
 }
