@@ -188,6 +188,7 @@ public class RobotContainer {
 
                 // Configure the button bindings
                 configureButtonBindings();
+                controller.leftBumper().onTrue(hood.moveHood());
 
                 mech = new Mechanism2d(3, 3);
                 root = mech.getRoot("Shooter", 1.5, 0);
@@ -218,7 +219,7 @@ public class RobotContainer {
                                                 () -> -controller.getLeftX(),
                                                 () -> -controller.getRightX()));
 
-                controller.leftBumper().onTrue(hood.moveHood(() -> Math.PI));
+                controller.leftBumper().onTrue(hood.moveHood());
 
                 // Lock t 0° when A button is held
                 controller

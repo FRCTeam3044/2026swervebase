@@ -1,23 +1,41 @@
 package frc.robot.subsystems.intake;
 
-import static frc.robot.subsystems.kicker.KickerConstants.canIdOne;
-import static frc.robot.subsystems.kicker.KickerConstants.canIdTwo;
+import static frc.robot.subsystems.intake.IntakeConfig.*;
+import static frc.robot.subsystems.intake.IntakeConstants.*;
 import static frc.robot.util.SparkUtil.ifOk;
 
+import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import java.util.function.DoubleSupplier;
+import me.nabdev.oxconfig.sampleClasses.ConfigurablePIDController;
 
 public class IntakeIOSpark implements IntakeIO {
   private final SparkMax motorOne = new SparkMax(canIdOne, MotorType.kBrushless);
   public final SparkMax motorTwo = new SparkMax(canIdTwo, MotorType.kBrushless);
 
+  private SparkMax bagMotor = new SparkMax(bagId, MotorType.kBrushed);
+
   private RelativeEncoder encoderOne = motorOne.getEncoder();
   private RelativeEncoder encoderTwo = motorTwo.getEncoder();
 
+  private ConfigurablePIDController intakeController =
+      new ConfigurablePIDController(0.0, 0.0, 0.0, "Intake Position Controller");
+
+  private double targetPosition;
+
+  public IntakeIOSpark() {
+    motorOne.configure(
+        motorConfigOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    motorTwo.configure(
+        motorConfigTwo, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  }
+
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
+
     ifOk(motorOne, motorOne::getOutputCurrent, (value) -> inputs.currentApms = value);
     ifOk(motorOne, encoderOne::getVelocity, (value) -> inputs.speedIntake = value);
 
@@ -33,15 +51,17 @@ public class IntakeIOSpark implements IntakeIO {
         motorTwo,
         new DoubleSupplier[] {motorTwo::getAppliedOutput, motorTwo::getBusVoltage},
         (values) -> inputs.appliedVoltage = values[0] * values[1]);
+
+    motorOne.set(intakeController.calculate(encoderOne.getPosition(), targetPosition));
   }
 
   @Override
-  public void setSpeedIntake(double speed) {
-    motorOne.set(speed);
+  public void setIntakePosition(double position) {
+    targetPosition = position;
   }
 
   @Override
   public void setSpeedRollers(double speed) {
-    motorTwo.set(speed);
+    bagMotor.set(speed);
   }
 }

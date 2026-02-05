@@ -2,16 +2,30 @@ package frc.robot.subsystems.spindexer;
 
 import static frc.robot.subsystems.spindexer.SpindexerConstants.*;
 import static frc.robot.util.SparkUtil.ifOk;
+import static frc.robot.util.SparkUtil.tryUntilOk;
 
+import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.ResetMode;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
 import java.util.function.DoubleSupplier;
 
 public class SpindexerIOSpark implements SpindexerIO {
-  private final SparkMax motor = new SparkMax(canId, MotorType.kBrushless);
+  private final SparkFlex motor = new SparkFlex(canId, MotorType.kBrushless);
 
   private RelativeEncoder encoderOne = motor.getEncoder();
+
+  public SpindexerIOSpark() {
+    tryUntilOk(
+        motor,
+        5,
+        () ->
+            motor.configure(
+                SpindexerConfig.motorConfig,
+                ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters));
+  }
 
   @Override
   public void updateInputs(SpindexerIOInputs inputs) {

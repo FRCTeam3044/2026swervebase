@@ -13,8 +13,10 @@ public class Intake extends SubsystemBase {
   private ConfigurableParameter<Double> intakeRollerSpeed =
       new ConfigurableParameter<Double>(0.5, "Intake roller speed");
 
-  private ConfigurableParameter<Double> intakeSpeed =
-      new ConfigurableParameter<Double>(0.5, "Intake speed");
+  private ConfigurableParameter<Double> intakeTopPosition =
+      new ConfigurableParameter<Double>(0.5, "Intake top position");
+  private ConfigurableParameter<Double> intakeBottomPosition =
+      new ConfigurableParameter<Double>(0.5, "Intake bottom position");
 
   public Intake(IntakeIO io) {
     this.io = io;
@@ -26,8 +28,12 @@ public class Intake extends SubsystemBase {
     Logger.processInputs("Intake", inputs);
   }
 
-  public Command moveIntake() {
-    return Commands.run(() -> io.setSpeedIntake(intakeSpeed.get()), this);
+  public Command intakeTop() {
+    return Commands.run(() -> io.setIntakePosition(intakeTopPosition.get()), this);
+  }
+
+  public Command intakeBottom() {
+    return Commands.run(() -> io.setIntakePosition(intakeBottomPosition.get()), this);
   }
 
   public Command runRollers() {

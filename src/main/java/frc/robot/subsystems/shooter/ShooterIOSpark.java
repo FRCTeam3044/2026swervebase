@@ -10,8 +10,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 public class ShooterIOSpark implements ShooterIO {
   public final SparkFlex motor = new SparkFlex(ShooterConstants.kMotorPort, MotorType.kBrushless);
-
-  public final SparkFlex motor2 = new SparkFlex(1, MotorType.kBrushless);
+  public final SparkFlex motor2 = new SparkFlex(ShooterConstants.kMotorPort2, MotorType.kBrushless);
 
   private final RelativeEncoder encoder = motor.getEncoder();
 
