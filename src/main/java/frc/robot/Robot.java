@@ -10,6 +10,7 @@ package frc.robot;
 import com.revrobotics.util.StatusLogger;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import me.nabdev.oxconfig.OxConfig;
@@ -23,14 +24,23 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the
+ * name of this class or
+ * the package after creating this project, you must also update the
+ * build.gradle file in the
  * project.
  */
 public class Robot extends LoggedRobot {
   private Command autonomousCommand;
   public static RobotContainer robotContainer;
+
+  public static Timer timer = new Timer();
+
+  public Timer getTimer() {
+    return timer;
+  }
 
   public Robot() {
     // Record metadata
@@ -105,8 +115,7 @@ public class Robot extends LoggedRobot {
 
     Logger.recordOutput(
         "Distance from target",
-        robotContainer
-            .drive
+        robotContainer.drive
             .getPose()
             .getTranslation()
             .getDistance(
@@ -115,13 +124,18 @@ public class Robot extends LoggedRobot {
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+  }
 
   /** This function is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+  }
 
-  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+  /**
+   * This autonomous runs the autonomous command selected by your
+   * {@link RobotContainer} class.
+   */
   @Override
   public void autonomousInit() {
     autonomousCommand = robotContainer.getAutonomousCommand();
@@ -134,7 +148,8 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   /** This function is called once when teleop is enabled. */
   @Override
@@ -146,11 +161,13 @@ public class Robot extends LoggedRobot {
     if (autonomousCommand != null) {
       autonomousCommand.cancel();
     }
+    timer.start();
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   /** This function is called once when test mode is enabled. */
   @Override
@@ -161,7 +178,8 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override
@@ -181,11 +199,12 @@ public class Robot extends LoggedRobot {
     Logger.recordOutput(
         "FieldSimulation/Robot", RobotContainer.driveSimulation.getSimulatedDriveTrainPose());
 
-    double currentScore =
-        SmartDashboard.getNumber("MapleSim/MatchData/Breakdown/blue Alliance/TotalFuelInHub", 0);
+    double currentScore = SmartDashboard.getNumber("MapleSim/MatchData/Breakdown/blue Alliance/TotalFuelInHub", 0);
     if (currentScore != lastScore) {
       lastScore = currentScore;
       SmartDashboard.putNumber("LastScoreTime", robotContainer.simShotTimer.get());
     }
+
+    robotContainer.updateMechanism();
   }
 }

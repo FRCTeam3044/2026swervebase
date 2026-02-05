@@ -14,4 +14,6 @@ public interface TurretIO {
   public default void setAngle(double angle) {}
 
   public default void updateInputs(TurretIOInputsAutoLogged inputs) {}
+
+  public default void resetAngle() {}
 }
