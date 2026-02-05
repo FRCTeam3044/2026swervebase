@@ -1,11 +1,15 @@
 package frc.robot.subsystems.kicker;
 
+import static frc.robot.subsystems.kicker.KickerConfig.*;
 import static frc.robot.subsystems.kicker.KickerConstants.*;
 import static frc.robot.util.SparkUtil.ifOk;
+import static frc.robot.util.SparkUtil.tryUntilOk;
 
+import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import java.util.function.DoubleSupplier;
 
 public class KickerIOSpark implements KickerIO {
@@ -14,6 +18,21 @@ public class KickerIOSpark implements KickerIO {
 
   private RelativeEncoder encoderOne = motorOne.getEncoder();
   private RelativeEncoder encoderTwo = motorTwo.getEncoder();
+
+  public KickerIOSpark() {
+    tryUntilOk(
+        motorOne,
+        5,
+        () ->
+            motorOne.configure(
+                motorConfigOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+    tryUntilOk(
+        motorTwo,
+        5,
+        () ->
+            motorTwo.configure(
+                motorConfigTwo, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+  }
 
   @Override
   public void updateInputs(KickerIOInputs inputs) {

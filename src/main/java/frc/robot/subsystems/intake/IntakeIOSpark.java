@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake;
 
+import static frc.robot.subsystems.intake.IntakeConfig.*;
 import static frc.robot.subsystems.intake.IntakeConstants.*;
 import static frc.robot.util.SparkUtil.ifOk;
 
@@ -7,12 +8,9 @@ import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-
-import me.nabdev.oxconfig.sampleClasses.ConfigurablePIDController;
-
 import com.revrobotics.spark.SparkMax;
-
 import java.util.function.DoubleSupplier;
+import me.nabdev.oxconfig.sampleClasses.ConfigurablePIDController;
 
 public class IntakeIOSpark implements IntakeIO {
   private final SparkMax motorOne = new SparkMax(canIdOne, MotorType.kBrushless);
@@ -23,16 +21,16 @@ public class IntakeIOSpark implements IntakeIO {
   private RelativeEncoder encoderOne = motorOne.getEncoder();
   private RelativeEncoder encoderTwo = motorTwo.getEncoder();
 
-  private ConfigurablePIDController intakeController = new ConfigurablePIDController(0.0, 0.0, 0.0,
-      "Intake Position Controller");
+  private ConfigurablePIDController intakeController =
+      new ConfigurablePIDController(0.0, 0.0, 0.0, "Intake Position Controller");
 
   private double targetPosition;
 
   public IntakeIOSpark() {
     motorOne.configure(
-        IntakeConfig.motorConfigOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        motorConfigOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     motorTwo.configure(
-        IntakeConfig.motorConfigTwo, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        motorConfigTwo, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   @Override
@@ -43,7 +41,7 @@ public class IntakeIOSpark implements IntakeIO {
 
     ifOk(
         motorOne,
-        new DoubleSupplier[] { motorOne::getAppliedOutput, motorOne::getBusVoltage },
+        new DoubleSupplier[] {motorOne::getAppliedOutput, motorOne::getBusVoltage},
         (values) -> inputs.appliedVoltage = values[0] * values[1]);
 
     ifOk(motorTwo, motorTwo::getOutputCurrent, (value) -> inputs.currentApms = value);
@@ -51,7 +49,7 @@ public class IntakeIOSpark implements IntakeIO {
 
     ifOk(
         motorTwo,
-        new DoubleSupplier[] { motorTwo::getAppliedOutput, motorTwo::getBusVoltage },
+        new DoubleSupplier[] {motorTwo::getAppliedOutput, motorTwo::getBusVoltage},
         (values) -> inputs.appliedVoltage = values[0] * values[1]);
 
     motorOne.set(intakeController.calculate(encoderOne.getPosition(), targetPosition));

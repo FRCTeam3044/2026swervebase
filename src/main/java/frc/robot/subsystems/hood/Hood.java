@@ -9,7 +9,8 @@ import org.littletonrobotics.junction.Logger;
 public class Hood extends SubsystemBase {
   private final HoodIO io;
   private final HoodIOInputsAutoLogged inputs = new HoodIOInputsAutoLogged();
-  private final ConfigurableParameter<Double> angle = new ConfigurableParameter<>(0.0, "Hood angle");
+  private final ConfigurableParameter<Double> angle =
+      new ConfigurableParameter<>(0.0, "Hood angle");
 
   public Hood(HoodIO io) {
     this.io = io;
