@@ -24,12 +24,12 @@ public class NeutralZone extends State {
       Shooter shooter) {
     super(stateMachine);
 
-    startWhenActive(intake.moveIntake(null));
-    driverController.leftTrigger().whileTrue(intake.runRollers(null));
-    startWhenActive(spindexer.setSpeed(0));
-    startWhenActive(kicker.runKicker(null));
+    startWhenActive(intake.moveIntake());
+    driverController.leftTrigger().whileTrue(intake.runRollers());
+    startWhenActive(spindexer.setSpeed());
+    startWhenActive(kicker.runKicker());
     startWhenActive(hood.moveHood(null));
     startWhenActive(turret.rotate(null));
-    driverController.rightTrigger().whileTrue(shooter.runShooter(null));
+    driverController.rightTrigger().whileTrue(shooter.runShooter());
   }
 }

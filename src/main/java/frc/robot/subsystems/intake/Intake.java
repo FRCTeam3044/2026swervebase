@@ -13,7 +13,7 @@ public class Intake extends SubsystemBase {
   private ConfigurableParameter<Double> intakeRollerSpeed =
       new ConfigurableParameter<Double>(0.5, "Intake roller speed");
 
-        private ConfigurableParameter<Double> intakeSpeed =
+  private ConfigurableParameter<Double> intakeSpeed =
       new ConfigurableParameter<Double>(0.5, "Intake speed");
 
   public Intake(IntakeIO io) {

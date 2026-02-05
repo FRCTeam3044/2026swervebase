@@ -19,17 +19,19 @@ public class ShooterIOSpark implements ShooterIO {
     tryUntilOk(
         motor,
         5,
-        () -> motor.configure(
-            ShooterConfig.motorConfig,
-            ResetMode.kResetSafeParameters,
-            PersistMode.kPersistParameters));
+        () ->
+            motor.configure(
+                ShooterConfig.motorConfig,
+                ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters));
     tryUntilOk(
         motor2,
         5,
-        () -> motor2.configure(
-            ShooterConfig.motorConfig,
-            ResetMode.kResetSafeParameters,
-            PersistMode.kPersistParameters));
+        () ->
+            motor2.configure(
+                ShooterConfig.motorConfig,
+                ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters));
   }
 
   @Override

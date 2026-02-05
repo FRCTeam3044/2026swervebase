@@ -25,9 +25,9 @@ public class InactiveHub extends State {
     super(stateMachine);
 
     startWhenActive(Commands.run(() -> driverController.setRumble(RumbleType.kBothRumble, 0)));
-    startWhenActive(intake.moveIntake(null));
-    driverController.leftTrigger().whileTrue(intake.runRollers(null));
-    startWhenActive(spindexer.setSpeed(0)); // TODO: change to slow spin
-    startWhenActive(kicker.runKicker(null)); // TODO: change to keeping fuel in place
+    startWhenActive(intake.moveIntake());
+    driverController.leftTrigger().whileTrue(intake.runRollers());
+    startWhenActive(spindexer.setSpeed());
+    startWhenActive(kicker.runKicker());
   }
 }

@@ -4,15 +4,13 @@ import static frc.robot.subsystems.kicker.KickerConstants.canIdOne;
 import static frc.robot.subsystems.kicker.KickerConstants.canIdTwo;
 import static frc.robot.util.SparkUtil.ifOk;
 
-import java.util.function.DoubleSupplier;
-
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-
+import java.util.function.DoubleSupplier;
 
 public class IntakeIOSpark implements IntakeIO {
-      private final SparkMax motorOne = new SparkMax(canIdOne, MotorType.kBrushless);
+  private final SparkMax motorOne = new SparkMax(canIdOne, MotorType.kBrushless);
   public final SparkMax motorTwo = new SparkMax(canIdTwo, MotorType.kBrushless);
 
   private RelativeEncoder encoderOne = motorOne.getEncoder();
@@ -42,8 +40,8 @@ public class IntakeIOSpark implements IntakeIO {
     motorOne.set(speed);
   }
 
-    @Override
-    public void setSpeedRollers(double speed) {
-        motorTwo.set(speed);
-    }
+  @Override
+  public void setSpeedRollers(double speed) {
+    motorTwo.set(speed);
+  }
 }

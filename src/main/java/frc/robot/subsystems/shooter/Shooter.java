@@ -9,7 +9,8 @@ import org.littletonrobotics.junction.Logger;
 public class Shooter extends SubsystemBase {
   private final ShooterIO io;
   private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
-  private final ConfigurableParameter<Double> speed = new ConfigurableParameter<>(0.0, "shooter speed");
+  private final ConfigurableParameter<Double> speed =
+      new ConfigurableParameter<>(0.0, "shooter speed");
 
   public Shooter(ShooterIO io) {
     this.io = io;
