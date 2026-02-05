@@ -5,12 +5,12 @@ import static frc.robot.util.SparkUtil.ifOk;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkFlex;
 import java.util.function.DoubleSupplier;
 
 public class KickerIOSpark implements KickerIO {
-  private final SparkMax motorOne = new SparkMax(canIdOne, MotorType.kBrushless);
-  public final SparkMax motorTwo = new SparkMax(canIdTwo, MotorType.kBrushless);
+  private final SparkFlex motorOne = new SparkFlex(canIdOne, MotorType.kBrushless); // vortex
+  public final SparkFlex motorTwo = new SparkFlex(canIdTwo, MotorType.kBrushless);
 
   private RelativeEncoder encoderOne = motorOne.getEncoder();
   private RelativeEncoder encoderTwo = motorTwo.getEncoder();
