@@ -6,12 +6,12 @@ import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkFlex;
 import edu.wpi.first.math.MathUtil;
 import me.nabdev.oxconfig.sampleClasses.ConfigurablePIDController;
 
 public class TurretIOSpark implements TurretIO {
-  private final SparkMax motor = new SparkMax(TurretConstants.canId, MotorType.kBrushless);
+  private final SparkFlex motor = new SparkFlex(TurretConstants.canId, MotorType.kBrushless); // vortex
 
   private final RelativeEncoder encoder = motor.getEncoder();
 

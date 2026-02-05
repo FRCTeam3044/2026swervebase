@@ -1,17 +1,17 @@
 package frc.robot.subsystems.turret;
 
-import com.revrobotics.sim.SparkMaxSim;
+import com.revrobotics.sim.SparkFlexSim;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkFlex;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class TurretIOSim implements TurretIO {
-  private SparkMax sparkMax = new SparkMax(52, MotorType.kBrushless);
+  private SparkFlex sparkFlex = new SparkFlex(52, MotorType.kBrushless);
   private DCMotor gearBox = DCMotor.getNEO(2);
-  private SparkMaxSim sparkMaxSim = new SparkMaxSim(sparkMax, gearBox);
+  private SparkFlexSim sparkFlexSim = new SparkFlexSim(sparkFlex, gearBox);
 
   SingleJointedArmSim turretSim =
       new SingleJointedArmSim(gearBox, 5.0, 1.0, 0.3, Math.PI, -Math.PI, true, 0, null);
