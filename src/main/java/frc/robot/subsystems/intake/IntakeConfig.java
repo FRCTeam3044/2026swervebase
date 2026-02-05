@@ -12,6 +12,6 @@ public class IntakeConfig {
 
   static {
     motorConfigOne.idleMode(IdleMode.kCoast).smartCurrentLimit(currentLimit);
-    motorConfigTwo.idleMode(IdleMode.kCoast).follow(canIdOne);
+    motorConfigTwo.idleMode(IdleMode.kCoast).smartCurrentLimit(currentLimit).follow(canIdOne);
   }
 }
