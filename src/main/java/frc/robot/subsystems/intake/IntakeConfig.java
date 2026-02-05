@@ -11,7 +11,11 @@ public class IntakeConfig {
   public static SparkMaxConfig motorConfigTwo = new SparkMaxConfig();
 
   static {
-    motorConfigOne.idleMode(IdleMode.kCoast).smartCurrentLimit(currentLimit);
-    motorConfigTwo.idleMode(IdleMode.kCoast).smartCurrentLimit(currentLimit).follow(canIdOne);
+    motorConfigOne.idleMode(IdleMode.kCoast)
+      .smartCurrentLimit(currentLimit);
+    motorConfigTwo.idleMode(IdleMode.kCoast)
+      .smartCurrentLimit(currentLimit)
+      .smartCurrentLimit(currentLimit)
+      .follow(canIdOne);
   }
 }

@@ -7,7 +7,8 @@ public class KickerConfig {
   public static SparkMaxConfig motorConfig = new SparkMaxConfig();
 
   static {
-    motorConfig.idleMode(IdleMode.kCoast);
-    motorConfig.idleMode(IdleMode.kCoast);
+    motorConfig
+      .idleMode(IdleMode.kCoast)
+      .smartCurrentLimit(KickerConstants.currentLimit);
   }
 }
