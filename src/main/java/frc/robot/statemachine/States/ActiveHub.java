@@ -24,11 +24,11 @@ public class ActiveHub extends State {
       Shooter shooter) {
     super(stateMachine);
 
-    startWhenActive(intake.moveIntake());
+    startWhenActive(intake.intakeBottom());
     driverController.leftTrigger().whileTrue(intake.runRollers());
     startWhenActive(spindexer.setSpeed());
     startWhenActive(kicker.runKicker());
-    startWhenActive(hood.moveHood(null));
+    startWhenActive(hood.moveHood());
     startWhenActive(turret.rotate(null));
     driverController.rightTrigger().whileTrue(shooter.runShooter());
   }
