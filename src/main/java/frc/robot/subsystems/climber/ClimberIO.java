@@ -5,4 +5,6 @@ public interface ClimberIO {
 
   // Set speed;
   public default void setSpeed(double speed) {}
+
+  public default void setClimberPos(int height) {}
 }
