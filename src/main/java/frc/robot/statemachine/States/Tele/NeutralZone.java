@@ -1,4 +1,4 @@
-package frc.robot.statemachine.States;
+package frc.robot.statemachine.States.Tele;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.statemachine.StateMachine;
@@ -24,12 +24,12 @@ public class NeutralZone extends State {
       Shooter shooter) {
     super(stateMachine);
 
-    startWhenActive(intake.moveIntake(null));
-    driverController.leftTrigger().whileTrue(intake.runRollers(null));
-    startWhenActive(spindexer.setSpeed(0));
-    startWhenActive(kicker.runKicker(null));
-    startWhenActive(hood.moveHood(null));
+    startWhenActive(intake.intakeBottom());
+    t(driverController.leftTrigger()).whileTrue(intake.runRollers());
+    startWhenActive(spindexer.setSpeed());
+    startWhenActive(kicker.runKicker());
+    startWhenActive(hood.moveHood());
     startWhenActive(turret.rotate(null));
-    driverController.rightTrigger().whileTrue(shooter.runShooter(null));
+    t(driverController.rightTrigger()).whileTrue(shooter.runShooter());
   }
 }
