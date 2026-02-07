@@ -4,9 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import me.nabdev.oxconfig.ConfigurableParameter;
-
-import java.util.function.DoubleSupplier;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Hood extends SubsystemBase {
@@ -33,8 +30,6 @@ public class Hood extends SubsystemBase {
             this)
         .withName("Set Hood Angle");
   }
-
-
 
   public double getHoodAngle() {
     return inputs.hoodAngleRads;

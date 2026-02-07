@@ -33,7 +33,7 @@ public class AutoTargetUtil {
     AllianceColor allianceColor = AllianceUtil.getAlliance();
 
     if ((drive.getPose().getX() < redSideLine
-        && (allianceColor == AllianceColor.RED || allianceColor == AllianceColor.UNKNOWN))
+            && (allianceColor == AllianceColor.RED || allianceColor == AllianceColor.UNKNOWN))
         || (drive.getPose().getX() > blueSideLine
             && (allianceColor == AllianceColor.BLUE || allianceColor == AllianceColor.UNKNOWN))) {
       return true;

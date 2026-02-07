@@ -11,6 +11,7 @@ import frc.robot.subsystems.kicker.Kicker;
 import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.turret.Turret;
 import me.nabdev.oxidation.State;
+import me.nabdev.oxidation.util.SmartXboxController;
 
 public class InactiveHub extends State {
   public InactiveHub(
@@ -23,6 +24,7 @@ public class InactiveHub extends State {
       Turret turret,
       Hood hood) {
     super(stateMachine);
+    SmartXboxController controller = new SmartXboxController(driverController, loop);
 
     startWhenActive(
         Commands.waitSeconds(1)
@@ -31,7 +33,7 @@ public class InactiveHub extends State {
                     () -> driverController.setRumble(RumbleType.kBothRumble, 1),
                     () -> driverController.setRumble(RumbleType.kBothRumble, 0))));
     startWhenActive(intake.intakeBottom());
-    t(driverController.leftTrigger()).whileTrue(intake.runRollers());
+    controller.leftTrigger().whileTrue(intake.runRollers());
     startWhenActive(spindexer.setSpeed());
     startWhenActive(kicker.runKicker());
   }
