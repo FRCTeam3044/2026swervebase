@@ -11,10 +11,8 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import me.nabdev.oxconfig.sampleClasses.ConfigurableProfiledPIDController;
 
-public class HoodIOSpark implements HoodIO { // Outlines the HoodIOSpark class
-  private final SparkMax motor = new SparkMax(HoodConstants.canId, MotorType.kBrushless); // Creates a new sparkmax
-                                                                                          // motor and puts it into
-                                                                                          // "motor"
+public class HoodIOSpark implements HoodIO {
+  private final SparkMax motor = new SparkMax(HoodConstants.canId, MotorType.kBrushless);
 
   private final ConfigurableProfiledPIDController hoodController = new ConfigurableProfiledPIDController(
       0.0, 0.1, 0.0, new Constraints(0, 0), "Hood Controller");
