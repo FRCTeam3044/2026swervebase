@@ -10,8 +10,10 @@ package frc.robot;
 import com.revrobotics.util.StatusLogger;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.util.AllianceUtil;
 import me.nabdev.oxconfig.OxConfig;
 import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -106,6 +108,9 @@ public class Robot extends LoggedRobot {
 
     robotContainer.stateMachine.periodic();
 
+    SmartDashboard.putData(CommandScheduler.getInstance());
+
+    SmartDashboard.putString("Alliance", AllianceUtil.getAlliance().toString());
     // Return to non-RT thread priority (do not modify the first argument)
     // Threads.setCurrentThreadPriority(false, 10);
   }
@@ -116,11 +121,14 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    AllianceUtil.setAlliance();
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    AllianceUtil.setAlliance();
     autonomousCommand = robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -136,6 +144,7 @@ public class Robot extends LoggedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    AllianceUtil.setAlliance();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -153,6 +162,7 @@ public class Robot extends LoggedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
+    AllianceUtil.setAlliance();
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
   }
@@ -167,8 +177,6 @@ public class Robot extends LoggedRobot {
     SimulatedArena.getInstance().resetFieldForAuto();
   }
 
-  /** This function is called periodically whilst in simulation. */
-  @Override
   public void simulationPeriodic() {
     SimulatedArena.getInstance().simulationPeriodic();
 

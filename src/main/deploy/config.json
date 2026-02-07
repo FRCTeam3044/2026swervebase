@@ -1,1 +1,105 @@
-{}
+{
+  "presentation": {
+    "Hood angle": {
+      "comment": "Auto-Generated",
+      "value": "0.0"
+    },
+    "Kicker motor 2 speed": {
+      "comment": "Auto-Generated",
+      "value": "0.0"
+    },
+    "Intake bottom position": {
+      "comment": "Auto-Generated",
+      "value": "0.5"
+    },
+    "Spindexer speed": {
+      "comment": "Auto-Generated",
+      "value": "0.5"
+    },
+    "Intake top position": {
+      "comment": "Auto-Generated",
+      "value": "0.5"
+    },
+    "Intake roller speed": {
+      "comment": "Auto-Generated",
+      "value": "0.5"
+    },
+    "shooter speed": {
+      "comment": "Auto-Generated",
+      "value": "0.0"
+    },
+    "Kicker motor 1 speed": {
+      "comment": "Auto-Generated",
+      "value": "0.0"
+    }
+  },
+  "mode": "competition",
+  "simulation": {
+    "Hood angle": {
+      "comment": "Auto-Generated",
+      "value": "0.0"
+    },
+    "Kicker motor 2 speed": {
+      "comment": "Auto-Generated",
+      "value": "0.0"
+    },
+    "Intake bottom position": {
+      "comment": "Auto-Generated",
+      "value": "0.5"
+    },
+    "Spindexer speed": {
+      "comment": "Auto-Generated",
+      "value": "0.5"
+    },
+    "Intake top position": {
+      "comment": "Auto-Generated",
+      "value": "0.5"
+    },
+    "Intake roller speed": {
+      "comment": "Auto-Generated",
+      "value": "0.5"
+    },
+    "shooter speed": {
+      "comment": "Auto-Generated",
+      "value": "0.0"
+    },
+    "Kicker motor 1 speed": {
+      "comment": "Auto-Generated",
+      "value": "0.0"
+    }
+  },
+  "competition": {
+    "Hood angle": {
+      "comment": "Auto-Generated",
+      "value": "0.0"
+    },
+    "Kicker motor 2 speed": {
+      "comment": "Auto-Generated",
+      "value": "0.0"
+    },
+    "Intake bottom position": {
+      "comment": "Auto-Generated",
+      "value": "0.5"
+    },
+    "Spindexer speed": {
+      "comment": "Auto-Generated",
+      "value": "0.5"
+    },
+    "Intake top position": {
+      "comment": "Auto-Generated",
+      "value": "0.5"
+    },
+    "Intake roller speed": {
+      "comment": "Auto-Generated",
+      "value": "0.5"
+    },
+    "shooter speed": {
+      "comment": "Auto-Generated",
+      "value": "0.0"
+    },
+    "Kicker motor 1 speed": {
+      "comment": "Auto-Generated",
+      "value": "0.0"
+    }
+  }
+}

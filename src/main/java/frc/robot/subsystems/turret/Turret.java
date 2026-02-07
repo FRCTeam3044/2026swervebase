@@ -21,7 +21,7 @@ public class Turret extends SubsystemBase {
   }
 
   public Command rotate(DoubleSupplier angle) {
-    return Commands.run(() -> io.setAngle(angle.getAsDouble()), this);
+    return Commands.run(() -> io.setAngle(angle.getAsDouble()), this).withName("Set Turret Angle");
   }
 
   public double getAngle(double angle) {

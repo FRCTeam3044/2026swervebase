@@ -199,7 +199,7 @@ public class RobotContainer {
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
-    autoTargetUtil = new AutoTargetUtil();
+    autoTargetUtil = new AutoTargetUtil(drive);
     stateMachine =
         new StateMachine(
             controller, drive, intake, spindexer, kicker, shooter, turret, hood, autoTargetUtil);

@@ -23,6 +23,6 @@ public class Shooter extends SubsystemBase {
   }
 
   public Command runShooter() {
-    return Commands.run(() -> io.setSpeed(speed.get()), this);
+    return Commands.run(() -> io.setSpeed(speed.get()), this).withName("Run Shooter");
   }
 }

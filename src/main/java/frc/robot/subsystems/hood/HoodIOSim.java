@@ -41,7 +41,6 @@ public class HoodIOSim implements HoodIO {
 
   @Override
   public void updateInputs(HoodIOInputs inputs) {
-    System.out.println(sparkMax.getAppliedOutput());
     m_hoodSim.setInput(sparkMax.getAppliedOutput() * RobotController.getBatteryVoltage());
     m_hoodSim.update(0.020);
     RoboRioSim.setVInVoltage(

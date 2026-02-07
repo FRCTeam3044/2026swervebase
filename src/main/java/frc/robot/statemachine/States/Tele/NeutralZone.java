@@ -29,7 +29,6 @@ public class NeutralZone extends State {
     startWhenActive(spindexer.setSpeed());
     startWhenActive(kicker.runKicker());
     startWhenActive(hood.moveHood());
-    startWhenActive(turret.rotate(null));
     t(driverController.rightTrigger()).whileTrue(shooter.runShooter());
   }
 }
