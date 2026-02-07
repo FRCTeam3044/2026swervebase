@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
-import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
@@ -149,7 +149,7 @@ public class Drive extends SubsystemBase {
     }
 
     poseEstimator.addVisionMeasurement(
-        Robot.robotContainer.driveSimulation.getSimulatedDriveTrainPose(),
+        RobotContainer.driveSimulation.getSimulatedDriveTrainPose(),
         sampleTimestamps[sampleCount - 1]);
 
     // Update gyro alert
@@ -238,8 +238,16 @@ public class Drive extends SubsystemBase {
 
   /** Returns the measured chassis speeds of the robot. */
   @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
-  private ChassisSpeeds getChassisSpeeds() {
+  public ChassisSpeeds getChassisSpeeds() {
     return kinematics.toChassisSpeeds(getModuleStates());
+  }
+
+  public ChassisSpeeds getFieldRelativeChassisSpeeds() {
+    return RobotContainer.driveSimulation.getDriveTrainSimulatedChassisSpeedsFieldRelative();
+  }
+
+  public ChassisSpeeds getRobotRelativeChassisSpeeds() {
+    return RobotContainer.driveSimulation.getDriveTrainSimulatedChassisSpeedsRobotRelative();
   }
 
   /** Returns the position of each module in radians. */

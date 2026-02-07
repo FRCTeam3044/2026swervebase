@@ -10,6 +10,7 @@ import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.turret.Turret;
 import me.nabdev.oxidation.State;
+import me.nabdev.oxidation.util.SmartXboxController;
 
 public class ActiveHub extends State {
   public ActiveHub(
@@ -23,13 +24,14 @@ public class ActiveHub extends State {
       Hood hood,
       Shooter shooter) {
     super(stateMachine);
+    SmartXboxController controller = new SmartXboxController(driverController, loop);
 
     startWhenActive(intake.intakeBottom());
-    t(driverController.leftTrigger()).whileTrue(intake.runRollers());
+    controller.leftTrigger().whileTrue(intake.runRollers());
     startWhenActive(spindexer.setSpeed());
     startWhenActive(kicker.runKicker());
     startWhenActive(hood.moveHood());
-    startWhenActive(turret.rotate(null));
-    t(driverController.rightTrigger()).whileTrue(shooter.runShooter());
+    // startWhenActive(turret.rotate());
+    controller.rightTrigger().whileTrue(shooter.runShooter());
   }
 }

@@ -1,9 +1,8 @@
 package frc.robot.subsystems.turret;
 
-import edu.wpi.first.units.measure.Angle;
-
 import static edu.wpi.first.units.Units.Degrees;
 
+import edu.wpi.first.units.measure.Angle;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface TurretIO {
@@ -17,12 +16,9 @@ public interface TurretIO {
     public double driveRelEncoder = 0.0;
   }
 
-  public default void setAngle(double angle) {
-  }
+  public default void setAngle(double angle) {}
 
-  public default void updateInputs(TurretIOInputsAutoLogged inputs) {
-  }
+  public default void updateInputs(TurretIOInputsAutoLogged inputs) {}
 
-  public default void resetAngle() {
-  }
+  public default void resetAngle() {}
 }
