@@ -1,15 +1,22 @@
 package frc.robot.subsystems.shooter;
 
+import static frc.robot.subsystems.shooter.ShooterConstants.*;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 public class ShooterConfig {
-  public static SparkFlexConfig motorConfig = new SparkFlexConfig();
+  public static SparkFlexConfig leaderConfig = new SparkFlexConfig();
+  public static SparkFlexConfig followerConfig = new SparkFlexConfig();
 
   static {
-    motorConfig
+    leaderConfig
         .idleMode(IdleMode.kCoast)
-        .smartCurrentLimit(ShooterConstants.currentLimit)
-        .inverted(true);
+        .smartCurrentLimit(currentLimit);
+
+    followerConfig
+        .idleMode(IdleMode.kCoast)
+        .smartCurrentLimit(currentLimit)
+        .inverted(true)
+        .follow(leaderCanId);
   }
 }
