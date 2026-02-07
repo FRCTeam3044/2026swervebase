@@ -10,8 +10,7 @@ public class Spindexer extends SubsystemBase {
   private final SpindexerIO io;
   private final SpindexerIOInputsAutoLogged inputs = new SpindexerIOInputsAutoLogged();
 
-  private ConfigurableParameter<Double> spindexerSpeed =
-      new ConfigurableParameter<Double>(0.5, "Spindexer speed");
+  private ConfigurableParameter<Double> spindexerSpeed = new ConfigurableParameter<Double>(0.5, "Spindexer speed");
 
   public Spindexer(SpindexerIO io) {
     this.io = io;
@@ -23,7 +22,7 @@ public class Spindexer extends SubsystemBase {
     Logger.processInputs("Spindexer", inputs);
   }
 
-  public Command setSpeed() {
+  public Command run() {
     return Commands.run(() -> io.setSpeed(spindexerSpeed.get()), this).withName("Run Spindexer");
   }
 }

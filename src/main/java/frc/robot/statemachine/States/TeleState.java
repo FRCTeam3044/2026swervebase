@@ -1,8 +1,5 @@
 package frc.robot.statemachine.States;
 
-import org.ironmaple.simulation.SimulatedArena;
-import org.ironmaple.simulation.seasonspecific.rebuilt2026.Arena2026Rebuilt;
-
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
@@ -12,6 +9,8 @@ import frc.robot.util.AllianceUtil.AllianceColor;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 import me.nabdev.oxidation.util.SmartXboxController;
+import org.ironmaple.simulation.SimulatedArena;
+import org.ironmaple.simulation.seasonspecific.rebuilt2026.Arena2026Rebuilt;
 
 public class TeleState extends State {
   public TeleState(
@@ -32,8 +31,9 @@ public class TeleState extends State {
         .b()
         .onTrue(
             Commands.runOnce(
-                () -> ((Arena2026Rebuilt) SimulatedArena.getInstance())
-                    .outpostDump(AllianceUtil.getAlliance() == AllianceColor.BLUE))
+                    () ->
+                        ((Arena2026Rebuilt) SimulatedArena.getInstance())
+                            .outpostDump(AllianceUtil.getAlliance() == AllianceColor.BLUE))
                 .ignoringDisable(true));
   }
 }

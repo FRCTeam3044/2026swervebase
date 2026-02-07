@@ -39,7 +39,7 @@ public class TestState extends State {
     testController.y().whileTrue(intake.runRollers());
     testController.leftBumper().whileTrue(kicker.runKicker());
     testController.rightBumper().whileTrue(shooter.runShooter());
-    testController.leftTrigger().whileTrue(spindexer.setSpeed());
+    testController.leftTrigger().whileTrue(spindexer.run());
     // testController.rightTrigger().whileTrue(turret.rotate(null));
     Command joystickDrive = DriveCommands.joystickDrive(drive, leftY, leftX, rightX, false);
     startWhenActive(joystickDrive);

@@ -34,7 +34,7 @@ public class InactiveHub extends State {
                     () -> driverController.setRumble(RumbleType.kBothRumble, 0))));
     startWhenActive(intake.intakeBottom());
     controller.leftTrigger().whileTrue(intake.runRollers());
-    startWhenActive(spindexer.setSpeed());
+    startWhenActive(spindexer.run());
     startWhenActive(kicker.runKicker());
   }
 }
