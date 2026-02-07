@@ -15,7 +15,12 @@ public interface KickerIO {
     public double appliedVoltage = 0.0;
   }
 
-  public default void setSpeed(double speedOne, double speedTwo) {}
+  public default void setTopPercent(double percent) {
+  }
 
-  public default void updateInputs(KickerIOInputs inputs) {}
+  public default void setBottomPercent(double percent) {
+  }
+
+  public default void updateInputs(KickerIOInputs inputs) {
+  }
 }

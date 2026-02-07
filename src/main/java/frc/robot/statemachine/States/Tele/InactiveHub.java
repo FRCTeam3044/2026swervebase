@@ -35,6 +35,6 @@ public class InactiveHub extends State {
     startWhenActive(intake.intakeBottom());
     controller.leftTrigger().whileTrue(intake.runRollers());
     startWhenActive(spindexer.setSpeed());
-    startWhenActive(kicker.runKicker());
+    // startWhenActive(kicker.runKicker());
   }
 }

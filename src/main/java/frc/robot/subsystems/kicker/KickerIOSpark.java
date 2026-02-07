@@ -23,15 +23,13 @@ public class KickerIOSpark implements KickerIO {
     tryUntilOk(
         motorOne,
         5,
-        () ->
-            motorOne.configure(
-                motorConfigOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        () -> motorOne.configure(
+            motorConfigOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
     tryUntilOk(
         motorTwo,
         5,
-        () ->
-            motorTwo.configure(
-                motorConfigTwo, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        () -> motorTwo.configure(
+            motorConfigTwo, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
   }
 
   @Override
@@ -41,7 +39,7 @@ public class KickerIOSpark implements KickerIO {
 
     ifOk(
         motorOne,
-        new DoubleSupplier[] {motorOne::getAppliedOutput, motorOne::getBusVoltage},
+        new DoubleSupplier[] { motorOne::getAppliedOutput, motorOne::getBusVoltage },
         (values) -> inputs.appliedVoltage = values[0] * values[1]);
 
     ifOk(motorTwo, motorTwo::getOutputCurrent, (value) -> inputs.currentApms = value);
@@ -49,13 +47,17 @@ public class KickerIOSpark implements KickerIO {
 
     ifOk(
         motorTwo,
-        new DoubleSupplier[] {motorTwo::getAppliedOutput, motorTwo::getBusVoltage},
+        new DoubleSupplier[] { motorTwo::getAppliedOutput, motorTwo::getBusVoltage },
         (values) -> inputs.appliedVoltage = values[0] * values[1]);
   }
 
   @Override
-  public void setSpeed(double speedOne, double speedTwo) {
-    motorOne.set(speedOne);
-    motorTwo.set(speedTwo);
+  public void setTopPercent(double percent) {
+    motorOne.set(percent);
+  }
+
+  @Override
+  public void setBottomPercent(double percent) {
+    motorTwo.set(percent);
   }
 }
