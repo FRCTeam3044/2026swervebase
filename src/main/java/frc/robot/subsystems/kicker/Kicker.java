@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import me.nabdev.oxconfig.ConfigurableParameter;
+
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Kicker extends SubsystemBase {
@@ -29,4 +32,6 @@ public class Kicker extends SubsystemBase {
   public Command runKicker() {
     return Commands.run(() -> io.setSpeed(speedOne.get(), speedTwo.get()), this);
   }
+
+
 }
