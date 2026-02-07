@@ -32,14 +32,17 @@ public class Intake extends SubsystemBase {
   }
 
   public Command intakeTop() {
-    return Commands.run(() -> io.setIntakePosition(intakeTopPosition.get()), this);
+    return Commands.run(() -> io.setIntakePosition(intakeTopPosition.get()), this)
+        .withName("Intake to Top");
   }
 
   public Command intakeBottom() {
-    return Commands.run(() -> io.setIntakePosition(intakeBottomPosition.get()), this);
+    return Commands.run(() -> io.setIntakePosition(intakeBottomPosition.get()), this)
+        .withName("Intake to Bottom");
   }
 
   public Command runRollers() {
-    return Commands.run(() -> io.setSpeedRollers(intakeRollerSpeed.get()), this);
+    return Commands.run(() -> io.setSpeedRollers(intakeRollerSpeed.get()), this)
+        .withName("Run Intake Rollers");
   }
 }

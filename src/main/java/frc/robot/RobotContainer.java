@@ -198,8 +198,6 @@ public class RobotContainer {
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices");
 
-        autoTargetUtil = new AutoTargetUtil(drive);
-
         DriverStation.getGameSpecificMessage();
 
         // Set up SysId routines
@@ -218,6 +216,7 @@ public class RobotContainer {
         autoChooser.addOption(
                 "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
+        autoTargetUtil = new AutoTargetUtil(drive);
         stateMachine = new StateMachine(
                 controller, drive, intake, spindexer, kicker, shooter, turret, hood, autoTargetUtil);
 
@@ -234,6 +233,7 @@ public class RobotContainer {
     }
 
     /**
+     * >>>>>>> e79278fd8585cba97a93791aea6239123cafd4dc
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
      * @return the command to run in autonomous

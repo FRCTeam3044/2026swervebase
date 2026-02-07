@@ -30,7 +30,8 @@ public class Kicker extends SubsystemBase {
   }
 
   public Command runKicker() {
-    return Commands.run(() -> io.setSpeed(speedOne.get(), speedTwo.get()), this);
+    return Commands.run(() -> io.setSpeed(speedOne.get(), speedTwo.get()), this)
+        .withName("Run Kicker");
   }
 
 

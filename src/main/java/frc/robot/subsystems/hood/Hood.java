@@ -27,10 +27,11 @@ public class Hood extends SubsystemBase {
 
   public Command moveHood() {
     return Commands.run(
-        () -> {
-          io.setAngle(angle.get());
-        },
-        this);
+            () -> {
+              io.setAngle(angle.get());
+            },
+            this)
+        .withName("Set Hood Angle");
   }
 
 

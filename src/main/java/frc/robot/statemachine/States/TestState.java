@@ -17,10 +17,9 @@ import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 import me.nabdev.oxidation.util.SmartXboxController;
 
-
 public class TestState extends State {
   public TestState(StateMachineBase stateMachine, CommandXboxController TestController, Drive drive, Hood hood,
-        Intake intake, Kicker kicker, Shooter shooter, Spindexer spindexer, Turret turret) {
+      Intake intake, Kicker kicker, Shooter shooter, Spindexer spindexer, Turret turret) {
     super(stateMachine);
     SmartXboxController testController = new SmartXboxController(TestController, loop);
     DoubleSupplier rightX = () -> -MathUtil.applyDeadband(TestController.getRightX(), 0.1);
@@ -34,24 +33,21 @@ public class TestState extends State {
     t(testController.leftBumper()).whileTrue(kicker.runKicker());
     t(testController.rightBumper()).whileTrue(shooter.runShooter());
     t(testController.leftTrigger()).whileTrue(spindexer.setSpeed());
-    t(testController.rightTrigger()).whileTrue(turret.rotate(null));
+    // t(testController.rightTrigger()).whileTrue(turret.rotate(null));
     Command joystickDrive = DriveCommands.joystickDrive(drive, leftY, leftX, rightX, false);
     startWhenActive(joystickDrive);
 
-      
-    
-
-      /*
-       * Button Binding:
-       * A = Hood Move
-       * B = Intake Top Move
-       * X = Intake Bottom Move
-       * Y = Intake Roller Spin
-       * LB = Kicker Move
-       * RB = Shooter shoot
-       * LT = Spindexer spin
-       * RT = Turret rotate 
-       * Joystick = Drive 
-       */
+    /*
+     * Button Binding:
+     * A = Hood Move
+     * B = Intake Top Move
+     * X = Intake Bottom Move
+     * Y = Intake Roller Spin
+     * LB = Kicker Move
+     * RB = Shooter shoot
+     * LT = Spindexer spin
+     * RT = Turret rotate
+     * Joystick = Drive
+     */
   }
 }
