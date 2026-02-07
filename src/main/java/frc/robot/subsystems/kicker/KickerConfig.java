@@ -1,8 +1,9 @@
 package frc.robot.subsystems.kicker;
 
+import static frc.robot.subsystems.kicker.KickerConstants.*;
+
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
-import static frc.robot.subsystems.kicker.KickerConstants.*;
 
 public class KickerConfig {
   public static SparkFlexConfig motorConfigOne = new SparkFlexConfig();

@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.statemachine.StateMachine;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.drive.GyroIO;
@@ -40,6 +41,22 @@ import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.hood.HoodIO;
 import frc.robot.subsystems.hood.HoodIOSim;
 import frc.robot.subsystems.hood.HoodIOSpark;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOSpark;
+import frc.robot.subsystems.kicker.Kicker;
+import frc.robot.subsystems.kicker.KickerIO;
+import frc.robot.subsystems.kicker.KickerIOSpark;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterIO;
+import frc.robot.subsystems.shooter.ShooterIOSpark;
+import frc.robot.subsystems.spindexer.Spindexer;
+import frc.robot.subsystems.spindexer.SpindexerIO;
+import frc.robot.subsystems.spindexer.SpindexerIOSpark;
+import frc.robot.subsystems.turret.Turret;
+import frc.robot.subsystems.turret.TurretIO;
+import frc.robot.subsystems.turret.TurretIOSpark;
+import frc.robot.util.AutoTargetUtil;
 import org.ironmaple.simulation.IntakeSimulation;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -57,6 +74,14 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private final Hood hood;
+  private final Intake intake;
+  private final Spindexer spindexer;
+  private final Kicker kicker;
+  private final Shooter shooter;
+  private final Turret turret;
+
+  public final StateMachine stateMachine;
+  public final AutoTargetUtil autoTargetUtil;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -86,6 +111,11 @@ public class RobotContainer {
                 new ModuleIOSpark(3),
                 (pose) -> {});
         hood = new Hood(new HoodIOSpark());
+        intake = new Intake(new IntakeIOSpark());
+        shooter = new Shooter(new ShooterIOSpark());
+        spindexer = new Spindexer(new SpindexerIOSpark());
+        kicker = new Kicker(new KickerIOSpark());
+        turret = new Turret(new TurretIOSpark());
         break;
 
       case SIM:
@@ -122,6 +152,11 @@ public class RobotContainer {
                 driveSimulation::setSimulationWorldPose);
         drive.setPose(new Pose2d(2, 2, new Rotation2d()));
         hood = new Hood(new HoodIOSim());
+        intake = new Intake(new IntakeIO() {});
+        shooter = new Shooter(new ShooterIO() {});
+        spindexer = new Spindexer(new SpindexerIO() {});
+        kicker = new Kicker(new KickerIO() {});
+        turret = new Turret(new TurretIO() {});
         break;
 
       default:
@@ -135,6 +170,11 @@ public class RobotContainer {
                 new ModuleIO() {},
                 (pose) -> {});
         hood = new Hood(new HoodIO() {});
+        intake = new Intake(new IntakeIO() {});
+        shooter = new Shooter(new ShooterIO() {});
+        spindexer = new Spindexer(new SpindexerIO() {});
+        kicker = new Kicker(new KickerIO() {});
+        turret = new Turret(new TurretIO() {});
         break;
     }
 
@@ -158,6 +198,11 @@ public class RobotContainer {
         "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
+    autoTargetUtil = new AutoTargetUtil();
+    stateMachine =
+        new StateMachine(
+            controller, drive, intake, spindexer, kicker, shooter, turret, hood, autoTargetUtil);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -189,8 +234,6 @@ public class RobotContainer {
             () -> -controller.getLeftY(),
             () -> -controller.getLeftX(),
             () -> -controller.getRightX()));
-
-    controller.leftBumper().onTrue(hood.moveHood());
 
     // Lock t 0° when A button is held
     controller

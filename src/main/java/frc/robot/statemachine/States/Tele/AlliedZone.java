@@ -1,4 +1,4 @@
-package frc.robot.statemachine.States;
+package frc.robot.statemachine.States.Tele;
 
 import frc.robot.statemachine.StateMachine;
 import me.nabdev.oxidation.State;

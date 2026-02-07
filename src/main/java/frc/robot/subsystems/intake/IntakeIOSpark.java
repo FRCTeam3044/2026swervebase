@@ -22,16 +22,24 @@ public class IntakeIOSpark implements IntakeIO {
   private RelativeEncoder encoderOne = motorOne.getEncoder();
   private RelativeEncoder encoderTwo = motorTwo.getEncoder();
 
-  private ConfigurablePIDController intakeController = new ConfigurablePIDController(0.0, 0.0, 0.0,
-      "Intake Position Controller");
+  private ConfigurablePIDController intakeController =
+      new ConfigurablePIDController(0.0, 0.0, 0.0, "Intake Position Controller");
 
   private double targetPosition;
 
   public IntakeIOSpark() {
-    tryUntilOk(motorOne, 5, () -> motorOne.configure(
-        motorConfigOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
-    tryUntilOk(motorTwo, 5, () -> motorTwo.configure(
-        motorConfigTwo, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+    tryUntilOk(
+        motorOne,
+        5,
+        () ->
+            motorOne.configure(
+                motorConfigOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+    tryUntilOk(
+        motorTwo,
+        5,
+        () ->
+            motorTwo.configure(
+                motorConfigTwo, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
   }
 
   @Override
@@ -42,7 +50,7 @@ public class IntakeIOSpark implements IntakeIO {
 
     ifOk(
         motorOne,
-        new DoubleSupplier[] { motorOne::getAppliedOutput, motorOne::getBusVoltage },
+        new DoubleSupplier[] {motorOne::getAppliedOutput, motorOne::getBusVoltage},
         (values) -> inputs.appliedVoltage = values[0] * values[1]);
 
     ifOk(motorTwo, motorTwo::getOutputCurrent, (value) -> inputs.currentApms = value);
@@ -50,7 +58,7 @@ public class IntakeIOSpark implements IntakeIO {
 
     ifOk(
         motorTwo,
-        new DoubleSupplier[] { motorTwo::getAppliedOutput, motorTwo::getBusVoltage },
+        new DoubleSupplier[] {motorTwo::getAppliedOutput, motorTwo::getBusVoltage},
         (values) -> inputs.appliedVoltage = values[0] * values[1]);
 
     motorOne.set(intakeController.calculate(encoderOne.getPosition(), targetPosition));
