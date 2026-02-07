@@ -9,19 +9,27 @@ package frc.robot.subsystems.vision;
 
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 /** IO implementation for real PhotonVision hardware. */
 public class VisionIOPhotonVision implements VisionIO {
   protected final PhotonCamera camera;
   protected final Transform3d robotToCamera;
+  private ArrayList<PhotonCamera> m_cameras = new ArrayList<PhotonCamera>();
 
   /**
    * Creates a new VisionIOPhotonVision.
@@ -56,7 +64,8 @@ public class VisionIOPhotonVision implements VisionIO {
       if (result.multitagResult.isPresent()) { // Multitag result
         var multitagResult = result.multitagResult.get();
 
-        // Calculate robot pose
+        // 676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767
+        // Calculate robot pose using multitag result
         Transform3d fieldToCamera = multitagResult.estimatedPose.best;
         Transform3d fieldToRobot = fieldToCamera.plus(robotToCamera.inverse());
         Pose3d robotPose = new Pose3d(fieldToRobot.getTranslation(), fieldToRobot.getRotation());
@@ -120,6 +129,31 @@ public class VisionIOPhotonVision implements VisionIO {
     int i = 0;
     for (int id : tagIds) {
       inputs.tagIds[i++] = id;
+    }
+  }
+
+    public PhotonPipelineResult getLatestResult(int cameraIndex) {
+        return camera.getLatestResult();
+    }
+
+  public boolean hasTargets(Pose2d estimatedPose, int cameraIndex) {
+    PhotonPipelineResult result = getLatestResult(cameraIndex);
+    boolean hasTargets = result.hasTargets();
+    if (!hasTargets) {
+      return false;
+    }
+    return true;
+  }
+
+  public Pose2d getEstimatedPose(int cameraIndex) {
+    PhotonPipelineResult result = getLatestResult(cameraIndex);
+    if (!result.hasTargets()) {
+      return null;
+    }
+    var target = result.getBestTarget();
+    var tagPose = aprilTagLayout.getTagPose(target.fiducialId);
+    if (tagPose.isEmpty()) {
+      return null;
     }
   }
 }
