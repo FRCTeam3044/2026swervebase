@@ -1,4 +1,4 @@
-package frc.robot.statemachine.States;
+package frc.robot.statemachine.States.Tele;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -24,9 +24,14 @@ public class InactiveHub extends State {
       Hood hood) {
     super(stateMachine);
 
-    startWhenActive(Commands.run(() -> driverController.setRumble(RumbleType.kBothRumble, 0)));
+    startWhenActive(
+        Commands.waitSeconds(1)
+            .deadlineFor(
+                Commands.runEnd(
+                    () -> driverController.setRumble(RumbleType.kBothRumble, 1),
+                    () -> driverController.setRumble(RumbleType.kBothRumble, 0))));
     startWhenActive(intake.intakeBottom());
-    driverController.leftTrigger().whileTrue(intake.runRollers());
+    t(driverController.leftTrigger()).whileTrue(intake.runRollers());
     startWhenActive(spindexer.setSpeed());
     startWhenActive(kicker.runKicker());
   }

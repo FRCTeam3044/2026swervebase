@@ -1,4 +1,4 @@
-package frc.robot.statemachine.States;
+package frc.robot.statemachine.States.Tele;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.statemachine.StateMachine;
@@ -11,8 +11,8 @@ import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.turret.Turret;
 import me.nabdev.oxidation.State;
 
-public class ActiveHub extends State {
-  public ActiveHub(
+public class NeutralZone extends State {
+  public NeutralZone(
       StateMachine stateMachine,
       CommandXboxController driverController,
       Drive drive,
@@ -25,11 +25,11 @@ public class ActiveHub extends State {
     super(stateMachine);
 
     startWhenActive(intake.intakeBottom());
-    driverController.leftTrigger().whileTrue(intake.runRollers());
+    t(driverController.leftTrigger()).whileTrue(intake.runRollers());
     startWhenActive(spindexer.setSpeed());
     startWhenActive(kicker.runKicker());
     startWhenActive(hood.moveHood());
-    startWhenActive(turret.rotate(null));
-    driverController.rightTrigger().whileTrue(shooter.runShooter());
+    // startWhenActive(turret.rotate(null));
+    t(driverController.rightTrigger()).whileTrue(shooter.runShooter());
   }
 }

@@ -1,5 +1,3 @@
 package frc.robot.subsystems.climber;
 
-public class ClimberIOSpark {
-    
-}
+public class ClimberIOSpark implements ClimberIO {}

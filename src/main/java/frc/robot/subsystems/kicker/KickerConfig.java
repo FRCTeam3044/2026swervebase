@@ -1,5 +1,7 @@
 package frc.robot.subsystems.kicker;
 
+import static frc.robot.subsystems.kicker.KickerConstants.*;
+
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
@@ -12,6 +14,6 @@ public class KickerConfig {
     motorConfigTwo
         .idleMode(IdleMode.kCoast)
         .smartCurrentLimit(KickerConstants.currentLimit)
-        .follow(KickerConstants.canIdTwo);
+        .follow(canIdOne);
   }
 }

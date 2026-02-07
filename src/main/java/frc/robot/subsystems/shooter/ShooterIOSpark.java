@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter;
 
+import static frc.robot.subsystems.shooter.ShooterConfig.*;
+import static frc.robot.subsystems.shooter.ShooterConstants.*;
 import static frc.robot.util.SparkUtil.tryUntilOk;
 
 import com.revrobotics.PersistMode;
@@ -9,39 +11,34 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 public class ShooterIOSpark implements ShooterIO {
-  public final SparkFlex motor = new SparkFlex(ShooterConstants.kMotorPort, MotorType.kBrushless);
-  public final SparkFlex motor2 = new SparkFlex(ShooterConstants.kMotorPort2, MotorType.kBrushless);
+  public final SparkFlex leaderMotor = new SparkFlex(leaderCanId, MotorType.kBrushless);
+  public final SparkFlex followerMotor = new SparkFlex(followerCanId, MotorType.kBrushless);
 
-  private final RelativeEncoder encoder = motor.getEncoder();
+  private final RelativeEncoder encoder = leaderMotor.getEncoder();
 
   public ShooterIOSpark() {
     tryUntilOk(
-        motor,
+        leaderMotor,
         5,
         () ->
-            motor.configure(
-                ShooterConfig.motorConfig,
-                ResetMode.kResetSafeParameters,
-                PersistMode.kPersistParameters));
+            leaderMotor.configure(
+                leaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
     tryUntilOk(
-        motor2,
+        followerMotor,
         5,
         () ->
-            motor2.configure(
-                ShooterConfig.motorConfig,
-                ResetMode.kResetSafeParameters,
-                PersistMode.kPersistParameters));
+            followerMotor.configure(
+                followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
   }
 
   @Override
   public void setSpeed(double speed) {
-    motor.set(speed);
-    motor2.set(-speed);
+    leaderMotor.set(speed);
   }
 
   @Override
   public void updateInputs(ShooterIOInputs inputs) {
     inputs.velocity = encoder.getVelocity();
-    inputs.current = motor.getOutputCurrent();
+    inputs.current = leaderMotor.getOutputCurrent();
   }
 }

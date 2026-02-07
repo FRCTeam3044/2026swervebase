@@ -1,9 +1,8 @@
 package frc.robot.subsystems.climber;
 
 public interface ClimberIO {
-    public static class ClimberIOInputs {
-    }
-    // Movemoter, set speed, position, 
-    public default void setSpeed(double speed) {}
+  public static class ClimberIOInputs {}
 
+  // Set speed;
+  public default void setSpeed(double speed) {}
 }
