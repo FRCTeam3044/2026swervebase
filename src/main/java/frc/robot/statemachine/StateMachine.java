@@ -26,80 +26,80 @@ import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 
 public class StateMachine extends StateMachineBase {
+        String autoWinner = DriverStation.getGameSpecificMessage();
+        AllianceColor allianceColor = AllianceUtil.getAlliance();
 
-  public StateMachine(
-      CommandXboxController driverController,
-      Drive drive,
-      Intake intake,
-      Spindexer spindexer,
-      Kicker kicker,
-      Shooter shooter,
-      Turret turret,
-      Hood hood,
-      AutoTargetUtil autoTargetUtil) {
-    super();
+        public StateMachine(
+                        CommandXboxController driverController,
+                        Drive drive,
+                        Intake intake,
+                        Spindexer spindexer,
+                        Kicker kicker,
+                        Shooter shooter,
+                        Turret turret,
+                        Hood hood,
+                        AutoTargetUtil autoTargetUtil) {
+                super();
 
-    Timer timer = Robot.timer;
+                Timer timer = Robot.timer;
 
-    BooleanSupplier transitionShift = () -> timer.get() >= 0 && timer.get() < 10;
-    BooleanSupplier shiftOne = () -> timer.get() >= 10 && timer.get() < 35;
-    BooleanSupplier shiftTwo = () -> timer.get() >= 35 && timer.get() < 60;
-    BooleanSupplier shiftThree = () -> timer.get() >= 60 && timer.get() < 85;
-    BooleanSupplier shiftFour = () -> timer.get() >= 85 && timer.get() < 110;
-    BooleanSupplier endGame = () -> timer.get() >= 110;
+                BooleanSupplier transitionShift = () -> timer.get() >= 0 && timer.get() < 10;
+                BooleanSupplier shiftOne = () -> timer.get() >= 10 && timer.get() < 35;
+                BooleanSupplier shiftTwo = () -> timer.get() >= 35 && timer.get() < 60;
+                BooleanSupplier shiftThree = () -> timer.get() >= 60 && timer.get() < 85;
+                BooleanSupplier shiftFour = () -> timer.get() >= 85 && timer.get() < 110;
+                BooleanSupplier endGame = () -> timer.get() >= 110;
 
-    BooleanSupplier wonAuto =
-        () -> {
-          String autoWinner = DriverStation.getGameSpecificMessage();
-          AllianceColor allianceColor = AllianceUtil.getAlliance();
-          return ((autoWinner == "R") && (allianceColor == AllianceColor.RED))
-              || ((autoWinner == "B") && (allianceColor == AllianceColor.BLUE));
-        };
+                BooleanSupplier wonAuto = () -> {
+                        String autoWinner = DriverStation.getGameSpecificMessage();
+                        AllianceColor allianceColor = AllianceUtil.getAlliance();
+                        return ((autoWinner == "R") && (allianceColor == AllianceColor.RED))
+                                        || ((autoWinner == "B") && (allianceColor == AllianceColor.BLUE));
+                };
 
-    BooleanSupplier hubIsActive =
-        () -> {
-          return AllianceUtil.getAlliance() == AllianceColor.UNKNOWN
-              || transitionShift.getAsBoolean()
-              || endGame.getAsBoolean()
-              || (wonAuto.getAsBoolean() && (shiftTwo.getAsBoolean() || shiftFour.getAsBoolean()))
-              || (!wonAuto.getAsBoolean()
-                  && (shiftOne.getAsBoolean() || shiftThree.getAsBoolean()));
-        };
+                BooleanSupplier hubIsActive = () -> {
+                        return AllianceUtil.getAlliance() == AllianceColor.UNKNOWN
+                                        || transitionShift.getAsBoolean()
+                                        || endGame.getAsBoolean()
+                                        || (wonAuto.getAsBoolean()
+                                                        && (shiftTwo.getAsBoolean() || shiftFour.getAsBoolean()))
+                                        || (!wonAuto.getAsBoolean()
+                                                        && (shiftOne.getAsBoolean() || shiftThree.getAsBoolean()));
+                };
 
-    DisabledState disabled = new DisabledState(this);
-    currentState = disabled;
-    State teleop = new TeleState(this);
-    State test = new TestState(this);
+                DisabledState disabled = new DisabledState(this);
+                currentState = disabled;
+                State teleop = new TeleState(this);
+                State test = new TestState(this, driverController, drive, hood, intake, kicker, shooter, spindexer,
+                                turret);
 
-    this.registerToRootState(test, teleop, disabled);
+                this.registerToRootState(test, teleop, disabled);
 
-    // Teleop States
-    AlliedZone alliedZone = new AlliedZone(this);
-    NeutralZone neutralZone =
-        new NeutralZone(
-            this, driverController, drive, intake, spindexer, kicker, turret, hood, shooter);
-    ActiveHub activeHub =
-        new ActiveHub(
-            this, driverController, drive, intake, spindexer, kicker, turret, hood, shooter);
-    InactiveHub inactiveHub =
-        new InactiveHub(this, driverController, drive, intake, spindexer, kicker, turret, hood);
+                // Teleop States
+                AlliedZone alliedZone = new AlliedZone(this);
+                NeutralZone neutralZone = new NeutralZone(
+                                this, driverController, drive, intake, spindexer, kicker, turret, hood, shooter);
+                ActiveHub activeHub = new ActiveHub(
+                                this, driverController, drive, intake, spindexer, kicker, turret, hood, shooter);
+                InactiveHub inactiveHub = new InactiveHub(this, driverController, drive, intake, spindexer, kicker,
+                                turret, hood);
 
-    teleop.withDefaultChild(alliedZone).withChild(neutralZone);
+                teleop.withDefaultChild(alliedZone).withChild(neutralZone);
 
-    alliedZone.withChild(activeHub, hubIsActive, 0, "Active Hub");
-    alliedZone.withChild(inactiveHub, () -> !hubIsActive.getAsBoolean(), 1, "Inactive Hub");
+                alliedZone.withChild(activeHub, hubIsActive, 0, "Active Hub");
+                alliedZone.withChild(inactiveHub, () -> !hubIsActive.getAsBoolean(), 1, "Inactive Hub");
 
-    alliedZone.withTransition(
-        neutralZone, () -> autoTargetUtil.inNeutralZone(), 0, "Drive into Neutral Zone");
-    neutralZone.withTransition(
-        alliedZone, () -> autoTargetUtil.inAllianceZone(), 0, "Drive into Allied Zone");
+                alliedZone.withTransition(
+                                neutralZone, () -> autoTargetUtil.inNeutralZone(), 0, "Drive into Neutral Zone");
+                neutralZone.withTransition(
+                                alliedZone, () -> autoTargetUtil.inAllianceZone(), 0, "Drive into Allied Zone");
 
-    activeHub.withTransition(
-        inactiveHub, () -> !hubIsActive.getAsBoolean(), 0, "Hub becomes inactive");
-    inactiveHub.withTransition(activeHub, hubIsActive, 0, "Hub becomes active");
+                activeHub.withTransition(
+                                inactiveHub, () -> !hubIsActive.getAsBoolean(), 0, "Hub becomes inactive");
+                inactiveHub.withTransition(activeHub, hubIsActive, 0, "Hub becomes active");
 
-    teleop.withModeTransitions(disabled, teleop, test);
-    test.withModeTransitions(disabled, teleop, test);
-    disabled.withModeTransitions(disabled, teleop, test);
-  }
+                teleop.withModeTransitions(disabled, teleop, test);
+                test.withModeTransitions(disabled, teleop, test);
+                disabled.withModeTransitions(disabled, teleop, test);
+        }
 }

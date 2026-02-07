@@ -1,5 +1,6 @@
 package frc.robot.subsystems.turret;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,11 +21,11 @@ public class Turret extends SubsystemBase {
     Logger.processInputs("Turret", inputs);
   }
 
-  public Command rotate(DoubleSupplier angle) {
-    return Commands.run(() -> io.setAngle(angle.getAsDouble()), this).withName("Set Turret Angle");
+  public Command setAngle(DoubleSupplier angle) {
+    return Commands.run(() -> io.setAngle(angle.getAsDouble()), this);
   }
 
-  public double getAngle(double angle) {
+  public Angle getAngle() {
     return inputs.angle;
   }
 }
