@@ -4,7 +4,7 @@ import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 
 public class AutoClimb extends State {
-    public AutoClimb(StateMachineBase stateMachine) {
-        super(stateMachine);
-    }
+  public AutoClimb(StateMachineBase stateMachine) {
+    super(stateMachine);
+  }
 }

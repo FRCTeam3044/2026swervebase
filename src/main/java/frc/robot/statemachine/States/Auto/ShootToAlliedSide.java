@@ -4,9 +4,9 @@ import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 
 public class ShootToAlliedSide extends State {
-    public ShootToAlliedSide(StateMachineBase stateMachine) {
-        super(stateMachine);
+  public ShootToAlliedSide(StateMachineBase stateMachine) {
+    super(stateMachine);
 
-        // Drive to neutral zone
-    }
+    // Drive to neutral zone
+  }
 }

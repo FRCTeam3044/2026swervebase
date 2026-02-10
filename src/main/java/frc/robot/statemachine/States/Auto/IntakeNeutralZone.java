@@ -5,11 +5,11 @@ import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 
 public class IntakeNeutralZone extends State {
-    public IntakeNeutralZone(StateMachineBase stateMachine, Intake intake) {
-        super(stateMachine);
+  public IntakeNeutralZone(StateMachineBase stateMachine, Intake intake) {
+    super(stateMachine);
 
-        // Drive to neutral zone
+    // Drive to neutral zone
 
-        startWhenActive(intake.intakeBottom());
-    }
+    startWhenActive(intake.intakeBottom());
+  }
 }

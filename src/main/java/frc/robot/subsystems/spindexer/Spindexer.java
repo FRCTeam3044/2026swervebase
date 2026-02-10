@@ -10,7 +10,8 @@ public class Spindexer extends SubsystemBase {
   private final SpindexerIO io;
   private final SpindexerIOInputsAutoLogged inputs = new SpindexerIOInputsAutoLogged();
 
-  private ConfigurableParameter<Double> spindexerSpeed = new ConfigurableParameter<Double>(0.5, "Spindexer speed");
+  private ConfigurableParameter<Double> spindexerSpeed =
+      new ConfigurableParameter<Double>(0.5, "Spindexer speed");
 
   public Spindexer(SpindexerIO io) {
     this.io = io;
