@@ -6,7 +6,7 @@ import edu.wpi.first.math.MathUtil;
 
 
 public class ClimberIOSpark implements ClimberIO {
-    private final SparkMax motor = new SparkMax(); //Fill in later
+    private final SparkMax motor = new SparkMax(ClimberConstants.canId, null); //Fill in later
 
     private final RelativeEncoder climbEncoder = motor.getEncoder();
     // No current angle because it will be 0'd
