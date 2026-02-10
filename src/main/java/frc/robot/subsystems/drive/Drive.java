@@ -303,4 +303,11 @@ public class Drive extends SubsystemBase {
   public double getMaxAngularSpeedRadPerSec() {
     return maxSpeedMetersPerSec / driveBaseRadius;
   }
+
+  public ChassisSpeeds getVelocity() {
+    return kinematics.toChassisSpeeds(getModuleStates());
+  }
+  public SwerveDriveKinematics getKinematics() {
+    return kinematics;
+  }
 }
