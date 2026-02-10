@@ -9,15 +9,11 @@ package frc.robot.subsystems.vision;
 
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
-import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,7 +25,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 public class VisionIOPhotonVision implements VisionIO {
   protected final PhotonCamera camera;
   protected final Transform3d robotToCamera;
-  private ArrayList<PhotonCamera> m_cameras = new ArrayList<PhotonCamera>();
+  // private ArrayList<PhotonCamera> m_cameras = new ArrayList<PhotonCamera>();
 
   /**
    * Creates a new VisionIOPhotonVision.
@@ -64,7 +60,6 @@ public class VisionIOPhotonVision implements VisionIO {
       if (result.multitagResult.isPresent()) { // Multitag result
         var multitagResult = result.multitagResult.get();
 
-        // 676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767676767
         // Calculate robot pose using multitag result
         Transform3d fieldToCamera = multitagResult.estimatedPose.best;
         Transform3d fieldToRobot = fieldToCamera.plus(robotToCamera.inverse());
@@ -132,9 +127,9 @@ public class VisionIOPhotonVision implements VisionIO {
     }
   }
 
-    public PhotonPipelineResult getLatestResult(int cameraIndex) {
-        return camera.getLatestResult();
-    }
+  public PhotonPipelineResult getLatestResult(int cameraIndex) {
+    return camera.getLatestResult();
+  }
 
   public boolean hasTargets(Pose2d estimatedPose, int cameraIndex) {
     PhotonPipelineResult result = getLatestResult(cameraIndex);
@@ -147,13 +142,10 @@ public class VisionIOPhotonVision implements VisionIO {
 
   public Pose2d getEstimatedPose(int cameraIndex) {
     PhotonPipelineResult result = getLatestResult(cameraIndex);
+    Pose2d estimatedPose = new Pose2d();
     if (!result.hasTargets()) {
       return null;
     }
-    var target = result.getBestTarget();
-    var tagPose = aprilTagLayout.getTagPose(target.fiducialId);
-    if (tagPose.isEmpty()) {
-      return null;
-    }
+    return estimatedPose;
   }
 }
