@@ -11,6 +11,7 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -57,7 +58,10 @@ import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.turret.TurretIO;
 import frc.robot.subsystems.turret.TurretIOSpark;
 import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.vision.VisionIOPhotonVision;
+import frc.robot.subsystems.vision.Vision.VisionConsumer;
 import frc.robot.util.AutoTargetUtil;
 import org.ironmaple.simulation.IntakeSimulation;
 import org.ironmaple.simulation.SimulatedArena;
@@ -81,6 +85,7 @@ public class RobotContainer {
   private final Kicker kicker;
   private final Shooter shooter;
   private final Turret turret;
+  private final Vision vision;
 
   public final StateMachine stateMachine;
   public final AutoTargetUtil autoTargetUtil;
@@ -118,6 +123,7 @@ public class RobotContainer {
         spindexer = new Spindexer(new SpindexerIOSpark());
         kicker = new Kicker(new KickerIOSpark());
         turret = new Turret(new TurretIOSpark());
+        vision = new Vision(drive.accept(null, 0, null), new VisionIOPhotonVision("vision", VisionConstants.robotToCameraTransform));
         break;
 
       case SIM:

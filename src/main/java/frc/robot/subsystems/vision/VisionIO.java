@@ -9,6 +9,7 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+
 import org.littletonrobotics.junction.AutoLog;
 
 public interface VisionIO {
@@ -19,6 +20,10 @@ public interface VisionIO {
         new TargetObservation(Rotation2d.kZero, Rotation2d.kZero);
     public PoseObservation[] poseObservations = new PoseObservation[0];
     public int[] tagIds = new int[0];
+  }
+
+  public static VisionIOInputs createInputs() {
+    return new VisionIOInputs();
   }
 
   /** Represents the angle to a simple target, not used for pose estimation. */

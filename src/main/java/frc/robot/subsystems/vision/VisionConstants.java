@@ -52,4 +52,6 @@ public class VisionConstants {
 
     
   public static Object activeCameras;
+
+  public static Transform3d robotToCameraTransform;
 }
