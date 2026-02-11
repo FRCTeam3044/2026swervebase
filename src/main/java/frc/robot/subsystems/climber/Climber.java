@@ -9,9 +9,9 @@ public class Climber extends SubsystemBase {
   private final ClimberIO io; // Brings in the Climber IO interface
   private final ConfigurableParameter<Double> speed =
       new ConfigurableParameter<>(0.0, "Climber speed");
-  private final ConfigurableParameter<Integer> topPosition = new ConfigurableParameter<>(0, "Top climber position");
-  private final ConfigurableParameter<Integer> bottomPosition = new ConfigurableParameter<>(0, "Bottom climber position");
-  private final ConfigurableParameter<Integer> climbPosition = new ConfigurableParameter<>(0, "Climb position");
+  private final ConfigurableParameter<Double> topPosition = new ConfigurableParameter<>(0.0, "Top climber position");
+  private final ConfigurableParameter<Double> bottomPosition = new ConfigurableParameter<>(0.0, "Bottom climber position");
+  private final ConfigurableParameter<Double> climbPosition = new ConfigurableParameter<>(0.0, "Climb position");
 
   public Climber(ClimberIO io) { // idk just needed for climberio to be final
     this.io = io;
@@ -29,7 +29,7 @@ public class Climber extends SubsystemBase {
     return Commands.run(
         () -> {
             io.setClimberPos(topPosition.get());
-        },
+        }, 
     this);
 
   }
