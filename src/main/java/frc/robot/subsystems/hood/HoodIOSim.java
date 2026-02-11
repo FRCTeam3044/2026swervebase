@@ -19,20 +19,21 @@ public class HoodIOSim implements HoodIO {
 
   public double currentTarget;
 
-  public final SingleJointedArmSim m_hoodSim = new SingleJointedArmSim(
-      // Simulated motor
-      gearBox,
-      // Gear ratio
-      1.0,
-      // Moment of inertia of the hood
-      0.002,
-      0.3,
-      // Minimum angle (radians)
-      -Math.PI,
-      // Maximum angle (radians)
-      Math.PI,
-      true,
-      0);
+  public final SingleJointedArmSim m_hoodSim =
+      new SingleJointedArmSim(
+          // Simulated motor
+          gearBox,
+          // Gear ratio
+          1.0,
+          // Moment of inertia of the hood
+          0.002,
+          0.3,
+          // Minimum angle (radians)
+          -Math.PI,
+          // Maximum angle (radians)
+          Math.PI,
+          true,
+          0);
 
   private final PIDController m_controller = new PIDController(1, 0, 0);
   // ArmFeedforward m_feedforward = new ArmFeedforward(/* kS */ 0, /* kG */ 0, /*
@@ -46,8 +47,8 @@ public class HoodIOSim implements HoodIO {
         BatterySim.calculateDefaultBatteryLoadedVoltage(m_hoodSim.getCurrentDrawAmps()));
     sparkMaxSim.iterate(
         ((m_hoodSim.getVelocityRadPerSec()
-            / (
-            /* drumRadius */ 1.0 * 2.0 * Math.PI * /* motorReduction */ 1.0))
+                / (
+                /* drumRadius */ 1.0 * 2.0 * Math.PI * /* motorReduction */ 1.0))
             * 60.0),
         RobotController.getBatteryVoltage(),
         0.02);
