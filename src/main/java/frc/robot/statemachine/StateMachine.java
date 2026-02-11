@@ -34,114 +34,123 @@ import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 
 public class StateMachine extends StateMachineBase {
-    String autoWinner = DriverStation.getGameSpecificMessage();
-    AllianceColor allianceColor = AllianceUtil.getAlliance();
+  String autoWinner = DriverStation.getGameSpecificMessage();
+  AllianceColor allianceColor = AllianceUtil.getAlliance();
 
-    public StateMachine(
-            CommandXboxController driverController,
-            Drive drive,
-            Intake intake,
-            Spindexer spindexer,
-            Kicker kicker,
-            Shooter shooter,
-            Turret turret,
-            Hood hood,
-            AutoTargetUtil autoTargetUtil) {
-        super();
+  public StateMachine(
+      CommandXboxController driverController,
+      Drive drive,
+      Intake intake,
+      Spindexer spindexer,
+      Kicker kicker,
+      Shooter shooter,
+      Turret turret,
+      Hood hood,
+      AutoTargetUtil autoTargetUtil) {
+    super();
 
-        Timer timer = Robot.timer;
+    Timer timer = Robot.timer;
 
-        BooleanSupplier transitionShift = () -> timer.get() >= 0 && timer.get() < 10;
-        BooleanSupplier shiftOne = () -> timer.get() >= 10 && timer.get() < 35;
-        BooleanSupplier shiftTwo = () -> timer.get() >= 35 && timer.get() < 60;
-        BooleanSupplier shiftThree = () -> timer.get() >= 60 && timer.get() < 85;
-        BooleanSupplier shiftFour = () -> timer.get() >= 85 && timer.get() < 110;
-        BooleanSupplier endGame = () -> timer.get() >= 110;
+    BooleanSupplier transitionShift = () -> timer.get() >= 0 && timer.get() < 10;
+    BooleanSupplier shiftOne = () -> timer.get() >= 10 && timer.get() < 35;
+    BooleanSupplier shiftTwo = () -> timer.get() >= 35 && timer.get() < 60;
+    BooleanSupplier shiftThree = () -> timer.get() >= 60 && timer.get() < 85;
+    BooleanSupplier shiftFour = () -> timer.get() >= 85 && timer.get() < 110;
+    BooleanSupplier endGame = () -> timer.get() >= 110;
 
-        BooleanSupplier wonAuto = () -> {
-            String autoWinner = DriverStation.getGameSpecificMessage();
-            AllianceColor allianceColor = AllianceUtil.getAlliance();
-            return ((autoWinner == "R") && (allianceColor == AllianceColor.RED))
-                    || ((autoWinner == "B") && (allianceColor == AllianceColor.BLUE));
+    BooleanSupplier wonAuto =
+        () -> {
+          String autoWinner = DriverStation.getGameSpecificMessage();
+          AllianceColor allianceColor = AllianceUtil.getAlliance();
+          return ((autoWinner == "R") && (allianceColor == AllianceColor.RED))
+              || ((autoWinner == "B") && (allianceColor == AllianceColor.BLUE));
         };
 
-        BooleanSupplier hubIsActive = () -> {
-            return AllianceUtil.getAlliance() == AllianceColor.UNKNOWN
-                    || transitionShift.getAsBoolean()
-                    || endGame.getAsBoolean()
-                    || (wonAuto.getAsBoolean() && (shiftTwo.getAsBoolean() || shiftFour.getAsBoolean()))
-                    || (!wonAuto.getAsBoolean()
-                            && (shiftOne.getAsBoolean() || shiftThree.getAsBoolean()));
+    BooleanSupplier hubIsActive =
+        () -> {
+          return AllianceUtil.getAlliance() == AllianceColor.UNKNOWN
+              || transitionShift.getAsBoolean()
+              || endGame.getAsBoolean()
+              || (wonAuto.getAsBoolean() && (shiftTwo.getAsBoolean() || shiftFour.getAsBoolean()))
+              || (!wonAuto.getAsBoolean()
+                  && (shiftOne.getAsBoolean() || shiftThree.getAsBoolean()));
         };
 
-        State disabled = new DisabledState(this);
-        currentState = disabled;
-        State teleop = new TeleState(this, driverController, drive);
-        State test = new TestState(
-                this, driverController, drive, hood, intake, kicker, shooter, spindexer, turret);
-        State auto = new AutoState(this);
+    State disabled = new DisabledState(this);
+    currentState = disabled;
+    State teleop = new TeleState(this, driverController, drive);
+    State test =
+        new TestState(
+            this, driverController, drive, hood, intake, kicker, shooter, spindexer, turret);
+    State auto = new AutoState(this);
 
-        this.registerToRootState(test, teleop, disabled, auto);
+    this.registerToRootState(test, teleop, disabled, auto);
 
-        // Teleop States
-        AlliedZone alliedZone = new AlliedZone(this);
-        NeutralZone neutralZone = new NeutralZone(
-                this, driverController, drive, intake, spindexer, kicker, turret, hood, shooter);
-        ActiveHub activeHub = new ActiveHub(
-                this, driverController, drive, intake, spindexer, kicker, turret, hood, shooter);
-        InactiveHub inactiveHub = new InactiveHub(this, driverController, drive, intake, spindexer, kicker, turret,
-                hood);
+    // Teleop States
+    AlliedZone alliedZone = new AlliedZone(this);
+    NeutralZone neutralZone =
+        new NeutralZone(
+            this, driverController, drive, intake, spindexer, kicker, turret, hood, shooter);
+    ActiveHub activeHub =
+        new ActiveHub(
+            this, driverController, drive, intake, spindexer, kicker, turret, hood, shooter);
+    InactiveHub inactiveHub =
+        new InactiveHub(this, driverController, drive, intake, spindexer, kicker, turret, hood);
 
-        teleop.withDefaultChild(alliedZone).withChild(neutralZone);
+    teleop.withDefaultChild(alliedZone).withChild(neutralZone);
 
-        alliedZone.withChild(activeHub, hubIsActive, 0, "Active Hub");
-        alliedZone.withChild(inactiveHub, () -> !hubIsActive.getAsBoolean(), 1, "Inactive Hub");
+    alliedZone.withChild(activeHub, hubIsActive, 0, "Active Hub");
+    alliedZone.withChild(inactiveHub, () -> !hubIsActive.getAsBoolean(), 1, "Inactive Hub");
 
-        alliedZone.withTransition(
-                neutralZone, () -> autoTargetUtil.inNeutralZone(), 0, "Drive into Neutral Zone");
-        neutralZone.withTransition(
-                alliedZone, () -> autoTargetUtil.inAllianceZone(), 0, "Drive into Allied Zone");
+    alliedZone.withTransition(
+        neutralZone, () -> autoTargetUtil.inNeutralZone(), 0, "Drive into Neutral Zone");
+    neutralZone.withTransition(
+        alliedZone, () -> autoTargetUtil.inAllianceZone(), 0, "Drive into Allied Zone");
 
-        activeHub.withTransition(
-                inactiveHub, () -> !hubIsActive.getAsBoolean(), 0, "Hub becomes inactive");
-        inactiveHub.withTransition(activeHub, hubIsActive, 0, "Hub becomes active");
+    activeHub.withTransition(
+        inactiveHub, () -> !hubIsActive.getAsBoolean(), 0, "Hub becomes inactive");
+    inactiveHub.withTransition(activeHub, hubIsActive, 0, "Hub becomes active");
 
-        teleop.withModeTransitions(disabled, teleop, test);
-        test.withModeTransitions(disabled, teleop, test);
-        disabled.withModeTransitions(disabled, teleop, test);
+    teleop.withModeTransitions(disabled, teleop, test);
+    test.withModeTransitions(disabled, teleop, test);
+    disabled.withModeTransitions(disabled, teleop, test);
 
-        // Autonomous work
+    // Autonomous work
 
-        AutoClimb autoClimb = new AutoClimb(this);
-        IntakeAllianceZone intakeAllianceZone = new IntakeAllianceZone(this);
-        IntakeNeutralZone intakeNeutralZone = new IntakeNeutralZone(this, intake);
-        ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this);
-        ShootToHub shootHub = new ShootToHub(this, drive, intake, spindexer, kicker, turret, hood, shooter);
+    AutoClimb autoClimb = new AutoClimb(this);
+    IntakeAllianceZone intakeAllianceZone = new IntakeAllianceZone(this);
+    IntakeNeutralZone intakeNeutralZone = new IntakeNeutralZone(this, intake);
+    ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this);
+    ShootToHub shootHub =
+        new ShootToHub(this, drive, intake, spindexer, kicker, turret, hood, shooter);
 
-        auto.withDefaultChild(shootHub)
-                .withChild(autoClimb)
-                .withChild(intakeAllianceZone)
-                .withChild(intakeNeutralZone)
-                .withChild(shootToAlliedSide);
+    auto.withDefaultChild(shootHub)
+        .withChild(autoClimb)
+        .withChild(intakeAllianceZone)
+        .withChild(intakeNeutralZone)
+        .withChild(shootToAlliedSide);
 
-        ArrayList<AutoSteps> testAutoRoutine = new ArrayList<>();
-        testAutoRoutine.add(AutoSteps.ShootToHub);
-        testAutoRoutine.add(AutoSteps.IntakeNeutralZone);
-        testAutoRoutine.add(AutoSteps.ShootToHub);
-        testAutoRoutine.add(AutoSteps.AutoClimb);
+    ArrayList<AutoSteps> testAutoRoutine = new ArrayList<>();
+    testAutoRoutine.add(AutoSteps.ShootToHub);
+    testAutoRoutine.add(AutoSteps.IntakeNeutralZone);
+    testAutoRoutine.add(AutoSteps.ShootToHub);
+    testAutoRoutine.add(AutoSteps.AutoClimb);
 
-        // TODO: Add in all supplier conditions
-        intakeAllianceZone.withTransition(autoClimb, () -> false, 0, "ALlied intake to climb")
-                .withTransition(shootHub, () -> false, 1, "Allied intake to shoot");
+    // TODO: Add in all supplier conditions
+    intakeAllianceZone
+        .withTransition(autoClimb, () -> false, 0, "ALlied intake to climb")
+        .withTransition(shootHub, () -> false, 1, "Allied intake to shoot");
 
-        intakeNeutralZone.withTransition(autoClimb, () -> false, 0, "Neutral intake to climb")
-                .withTransition(shootToAlliedSide, () -> false, 0, "Neutral intake to neutral shot")
-                .withTransition(shootHub, () -> false, 0, "Neutral intake to hub shot");
+    intakeNeutralZone
+        .withTransition(autoClimb, () -> false, 0, "Neutral intake to climb")
+        .withTransition(shootToAlliedSide, () -> false, 0, "Neutral intake to neutral shot")
+        .withTransition(shootHub, () -> false, 0, "Neutral intake to hub shot");
 
-        shootHub.withTransition(autoClimb, () -> false, 0, "Hub shot to climb")
-                .withTransition(intakeAllianceZone, () -> false, 0, "Hub shot to allied intake")
-                .withTransition(intakeNeutralZone, () -> false, 0, "Hub shot to neutral intake");
+    shootHub
+        .withTransition(autoClimb, () -> false, 0, "Hub shot to climb")
+        .withTransition(intakeAllianceZone, () -> false, 0, "Hub shot to allied intake")
+        .withTransition(intakeNeutralZone, () -> false, 0, "Hub shot to neutral intake");
 
-        shootToAlliedSide.withTransition(autoClimb, () -> false, 0, "Neutral shot to climb");
-    }
+    shootToAlliedSide.withTransition(autoClimb, () -> false, 0, "Neutral shot to climb");
+  }
 }
