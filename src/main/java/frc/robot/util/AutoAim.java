@@ -1,52 +1,41 @@
 package frc.robot.util;
 
+import static edu.wpi.first.units.Units.RPM;
+
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.kicker.Kicker;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.turret.Turret;
+import frc.robot.util.ShotCalculator.ShootingParameters;
+import me.nabdev.oxconfig.ConfigurableParameter;
+
 public class AutoAim {
-  private PolynomialRegression speedRegression;
-  private PolynomialRegression angleRegression;
-  private AimMode mode;
+  private Turret turret;
+  private Shooter shooter;
+  private Hood hood;
 
-  public enum AimMode {
-    Linear,
-    Polynomial,
+  private ShootingParameters parameters = new ShootingParameters(true, new Rotation2d(), 0, 0);
+
+  private ConfigurableParameter<Double> shooterDisengagedProportion = new ConfigurableParameter<>(0.5,
+      "ShooterDisengagedProportion");
+
+  public void periodic() {
+    parameters = ShotCalculator.getInstance().getParameters();
   }
 
-  public double[] sampleDistances = new double[] {1.445, 2.006, 2.313, 2.931, 3.326, 4.437, 5.577};
-
-  public double[] sampleSpeeds = new double[] {7.5, 7.7, 7.7, 7.9, 8.2, 8.5, 9.0};
-
-  public double[] sampleAngles = new double[] {80.0, 77.0, 75.0, 71.0, 69.0, 63.0, 57.0};
-
-  public AutoAim(AimMode mode) {
-    this.mode = mode;
-    switch (mode) {
-      case Linear:
-        throw new UnsupportedOperationException("Linear mode not implemented yet");
-      case Polynomial:
-        speedRegression = new PolynomialRegression(sampleDistances, sampleSpeeds, 4);
-        angleRegression = new PolynomialRegression(sampleDistances, sampleAngles, 4);
-        break;
-    }
-  }
-
-  public double calculateAngle(double distanceMeters) {
-    switch (mode) {
-      case Linear:
-        throw new UnsupportedOperationException("Linear mode not implemented yet");
-      case Polynomial:
-        return angleRegression.predict(distanceMeters);
-    }
-
-    return -1;
-  }
-
-  public double calculateSpeed(double distanceMeters) {
-    switch (mode) {
-      case Linear:
-        throw new UnsupportedOperationException("Linear mode not implemented yet");
-      case Polynomial:
-        return speedRegression.predict(distanceMeters);
-    }
-
-    return -1;
+  public Command autoAimCmd(BooleanSupplier shooterEngaged) {
+    return Commands.parallel(
+        turret.setAngle(() -> parameters.turretAngle().getMeasure()),
+        hood.setPosition(() -> parameters.hoodPosition()),
+        shooter.runSpeed(() -> RPM.of(parameters.flywheelSpeed() * shooterDisengagedProportion.get())));
   }
 }
