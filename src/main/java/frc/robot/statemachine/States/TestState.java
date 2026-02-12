@@ -32,7 +32,7 @@ public class TestState extends State implements ConfigurableClass {
       "Test Hood Position");
 
   public TestState(
-      StateMachineBase stateMachine,
+      StateMachineBase stateMachine, //Setting base variables 
       CommandXboxController controllerOne,
       CommandXboxController controllerTwo,
       Drive drive,
@@ -58,6 +58,7 @@ public class TestState extends State implements ConfigurableClass {
      * A = Hood (left joystick Y)
      * B = Shooter (Right joystick Y)
      * X = Turret (Left joystick X)
+     * Y = Climber (Left joystick Y)
      * 
      * Other Subsystems:
      * LB = Intake Top
@@ -67,13 +68,15 @@ public class TestState extends State implements ConfigurableClass {
      * RT = Kicker Block
      */
 
+     //
     DoubleSupplier rightY = () -> -MathUtil.applyDeadband(controllerOne.getRightY(), DriveCommands.DEADBAND);
     DoubleSupplier leftY = () -> -MathUtil.applyDeadband(controllerOne.getLeftY(), DriveCommands.DEADBAND);
     DoubleSupplier leftX = () -> -MathUtil.applyDeadband(controllerOne.getLeftX(), DriveCommands.DEADBAND);
 
-    testControllerOne.a().whileTrue(hood.setPosition(hoodPosition::get));
-    testControllerOne.b().whileTrue(shooter.runSpeed(() -> RPM.of(shooterPosition.get())));
-    testControllerOne.x().whileTrue(turret.setAngle(() -> Degrees.of(turretPosition.get())));
+    testControllerOne.a().whileTrue(hood.setPosition(hoodPosition::get)); //When A is pressed, the hood will move to the position specified by the hoodPosition parameter
+    testControllerOne.b().whileTrue(shooter.runSpeed(() -> RPM.of(shooterPosition.get()))); //When B is pressed, the shooter will run at the speed specified by the shooterPosition parameter
+    testControllerOne.x().whileTrue(turret.setAngle(() -> Degrees.of(turretPosition.get()))); //When X is pressed, the turret will move to the angle specified by the turretPosition parameter
+    testControllerOne.y().WhileTrue();// -------------------------------------------------------
 
     testControllerTwo.a().whileTrue(hood.runPercent(leftY));
     testControllerTwo.b().whileTrue(shooter.runPercent(rightY));
