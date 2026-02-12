@@ -24,7 +24,7 @@ public class AutoTargetUtil {
   }
 
   public boolean inNeutralZone() {
-    if (drive.getPose().getX() > redSideLine && drive.getPose().getX() < blueSideLine) {
+    if (drive.getPose().getX() < redSideLine && drive.getPose().getX() > blueSideLine) {
       return true;
     }
     return false;
