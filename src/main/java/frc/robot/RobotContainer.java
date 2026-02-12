@@ -62,6 +62,7 @@ import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.turret.TurretIO;
 import frc.robot.subsystems.turret.TurretIOSim;
 import frc.robot.subsystems.turret.TurretIOSpark;
+import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoAim;
 import frc.robot.util.AutoTargetUtil;
 import org.ironmaple.simulation.IntakeSimulation;
@@ -221,6 +222,8 @@ public class RobotContainer {
                 });
                 break;
         }
+
+        AllianceUtil.setRobot(drive::getPose);
 
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices");

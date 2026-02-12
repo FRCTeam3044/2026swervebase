@@ -9,17 +9,18 @@ import frc.robot.util.AllianceUtil.AllianceColor;
 public class AutoTargetUtil {
   private final Drive drive;
 
-  final double redSideLine = 4.57482575;
-  final double blueSideLine = 11.96622575;
+  final double blueSideLine = 4.57482575;
+  final double redSideLine = 11.96622575;
 
   private Pose3d hub = new Pose3d(new Translation3d(4.62, 8.069 / 2.0, 2), new Rotation3d());
+  private Pose3d topAllianceTarget = new Pose3d(new Translation3d(4.62, 8.069 / 2.0, 2), new Rotation3d());
 
   public AutoTargetUtil(Drive drive) {
     this.drive = drive;
   }
 
   public Pose3d getHub() {
-    return hub;
+    return AllianceUtil.getPose3dForAlliance(hub);
   }
 
   public boolean inNeutralZone() {
@@ -32,9 +33,9 @@ public class AutoTargetUtil {
   public boolean inAllianceZone() {
     AllianceColor allianceColor = AllianceUtil.getAlliance();
 
-    if ((drive.getPose().getX() < redSideLine
-            && (allianceColor == AllianceColor.RED || allianceColor == AllianceColor.UNKNOWN))
-        || (drive.getPose().getX() > blueSideLine
+    if ((drive.getPose().getX() > redSideLine
+        && (allianceColor == AllianceColor.RED || allianceColor == AllianceColor.UNKNOWN))
+        || (drive.getPose().getX() < blueSideLine
             && (allianceColor == AllianceColor.BLUE || allianceColor == AllianceColor.UNKNOWN))) {
       return true;
     }
@@ -43,8 +44,8 @@ public class AutoTargetUtil {
 
   public boolean inOpponentZone() {
     AllianceColor allianceColor = AllianceUtil.getAlliance();
-    if ((drive.getPose().getX() < redSideLine && allianceColor == AllianceColor.BLUE)
-        || (drive.getPose().getX() > blueSideLine && allianceColor == AllianceColor.RED)) {
+    if ((drive.getPose().getX() > redSideLine && allianceColor == AllianceColor.BLUE)
+        || (drive.getPose().getX() < blueSideLine && allianceColor == AllianceColor.RED)) {
       return true;
     }
     return false;

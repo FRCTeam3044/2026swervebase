@@ -1,7 +1,9 @@
 package frc.robot.util;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.drive.DriveConstants;
@@ -56,18 +58,35 @@ public class AllianceUtil {
   // (Math.PI / 2)));
   // }
 
+  // Mirrored
+  // public static final Vertex mapBlueVertexToRed(Vertex bluePose) {
+  // return new Vertex(
+  // DriveConstants.pathfinder.map.fieldx - bluePose.x,
+  // DriveConstants.pathfinder.map.fieldy - bluePose.y);
+  // }
+
   // Rotated
   public static final Pose2d mapBluePoseToRed(Pose2d bluePose) {
     return new Pose2d(
         DriveConstants.pathfinder.map.fieldx - bluePose.getX(),
         DriveConstants.pathfinder.map.fieldy - bluePose.getY(),
-        new Rotation2d((bluePose.getRotation().getRadians() + Math.PI) % (2 * Math.PI)));
+        new Rotation2d(bluePose.getRotation().getRadians() + Math.PI));
   }
 
+  // Rotated
   public static final Vertex mapBlueVertexToRed(Vertex bluePose) {
     return new Vertex(
         DriveConstants.pathfinder.map.fieldx - bluePose.x,
         DriveConstants.pathfinder.map.fieldy - bluePose.y);
+  }
+
+  public static final Pose3d mapBluePoseToRed(Pose3d bluePose) {
+    return new Pose3d(
+        DriveConstants.pathfinder.map.fieldx - bluePose.getX(),
+        DriveConstants.pathfinder.map.fieldy - bluePose.getY(),
+        bluePose.getZ(),
+        new Rotation3d(bluePose.getRotation().getX(), bluePose.getRotation().getY(),
+            (bluePose.getRotation().getZ() + Math.PI) % (2 * Math.PI)));
   }
 
   public static Pose2d getPoseForAlliance(Pose2d bluePose) {
@@ -77,8 +96,25 @@ public class AllianceUtil {
     } else if (alliance == AllianceColor.RED) {
       return redPose;
     } else {
-      if (robotPose.get().getTranslation().getDistance(bluePose.getTranslation())
-          < robotPose.get().getTranslation().getDistance(redPose.getTranslation())) {
+      if (robotPose.get().getTranslation().getDistance(bluePose.getTranslation()) < robotPose.get().getTranslation()
+          .getDistance(redPose.getTranslation())) {
+        return bluePose;
+      } else {
+        return redPose;
+      }
+    }
+  }
+
+  public static Pose3d getPose3dForAlliance(Pose3d bluePose) {
+    Pose3d redPose = mapBluePoseToRed(bluePose);
+    if (alliance == AllianceColor.BLUE) {
+      return bluePose;
+    } else if (alliance == AllianceColor.RED) {
+      return redPose;
+    } else {
+      if (robotPose.get().getTranslation().getDistance(bluePose.getTranslation().toTranslation2d()) < robotPose.get()
+          .getTranslation()
+          .getDistance(redPose.getTranslation().toTranslation2d())) {
         return bluePose;
       } else {
         return redPose;
@@ -93,8 +129,8 @@ public class AllianceUtil {
     } else if (alliance == AllianceColor.RED) {
       return redPose;
     } else {
-      if (robotPose.get().getTranslation().getDistance(bluePose.asPose2d().getTranslation())
-          < robotPose.get().getTranslation().getDistance(redPose.asPose2d().getTranslation())) {
+      if (robotPose.get().getTranslation().getDistance(bluePose.asPose2d().getTranslation()) < robotPose.get()
+          .getTranslation().getDistance(redPose.asPose2d().getTranslation())) {
         return bluePose;
       } else {
         return redPose;
