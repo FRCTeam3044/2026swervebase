@@ -10,6 +10,7 @@ import frc.robot.subsystems.kicker.Kicker;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.turret.Turret;
+import frc.robot.subsystems.climber.Climber;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.RPM;
@@ -41,7 +42,8 @@ public class TestState extends State implements ConfigurableClass {
       Kicker kicker,
       Shooter shooter,
       Spindexer spindexer,
-      Turret turret) {
+      Turret turret,
+      Climber climber) {
     super(stateMachine);
     SmartXboxController testControllerOne = new SmartXboxController(controllerOne, loop);
     SmartXboxController testControllerTwo = new SmartXboxController(controllerTwo, loop);
@@ -58,14 +60,22 @@ public class TestState extends State implements ConfigurableClass {
      * A = Hood (left joystick Y)
      * B = Shooter (Right joystick Y)
      * X = Turret (Left joystick X)
-     * Y = Climber (Left joystick Y)
      * 
      * Other Subsystems:
-     * LB = Intake Top
-     * RB = Intake Bottom
-     * Y = Intake Roller Spin
-     * LT = Kicker Shoot
-     * RT = Kicker Block
+     * 1LB = Intake Top
+     * 1RB = Intake Bottom
+     * 1Y = Intake Roller Spin
+     * 1LT = Kicker Shoot
+     * 1RT = Kicker Block
+     * 2LB = Climber Top
+     * 2RB = Climber Bottom
+     * 2LT = Climber Climb Position
+     * 
+     * 
+     * A = Climber top position
+     * B = Climber climb position
+     * X = Climber goes to bottom position
+     * Y = Climber runs at speed (Left Joystick Y)
      */
 
      //
@@ -75,8 +85,15 @@ public class TestState extends State implements ConfigurableClass {
 
     testControllerOne.a().whileTrue(hood.setPosition(hoodPosition::get)); //When A is pressed, the hood will move to the position specified by the hoodPosition parameter
     testControllerOne.b().whileTrue(shooter.runSpeed(() -> RPM.of(shooterPosition.get()))); //When B is pressed, the shooter will run at the speed specified by the shooterPosition parameter
-    testControllerOne.x().whileTrue(turret.setAngle(() -> Degrees.of(turretPosition.get()))); //When X is pressed, the turret will move to the angle specified by the turretPosition parameter
-    testControllerOne.y().WhileTrue();// -------------------------------------------------------
+    //testControllerOne.x().whileTrue(turret.setAngle(() -> Degrees.of(turretPosition.get()))); //When X is pressed, the turret will move to the angle specified by the turretPosition parameter
+    
+    //Testing stuff
+    testControllerOne.x().and(testControllerOne.y()).whileTrue(climber.climberTop());// When y is pressed, set climber pos to top-------------------------------------------------------
+    testControllerOne.b().and(testControllerTwo.b()).whileTrue(climber.climberPulledUp()); // When b is pressed, climber goes to pulled up position
+    testControllerOne.x().and(testControllerOne.a()).whileTrue(climber.climberBottom()); // When x is pressed, climber goes to bottom position
+
+    testControllerOne.y(). whileTrue(climber.setSpeedWParameter(leftY)); // Sets the speed of the climber motor to the amount the joystick is moved
+    // End testing stuff
 
     testControllerTwo.a().whileTrue(hood.runPercent(leftY));
     testControllerTwo.b().whileTrue(shooter.runPercent(rightY));
@@ -84,7 +101,7 @@ public class TestState extends State implements ConfigurableClass {
 
     testControllerOne.leftBumper().or(testControllerTwo.leftBumper()).whileTrue(intake.intakeTop());
     testControllerOne.rightBumper().or(testControllerTwo.rightBumper()).whileTrue(intake.intakeBottom());
-    testControllerOne.y().or(testControllerTwo.y()).whileTrue(intake.runRollers());
+    testControllerOne.y().whileTrue(intake.runRollers());
     testControllerOne.leftTrigger().or(testControllerTwo.leftTrigger()).whileTrue(kicker.shootKicker());
     testControllerOne.rightTrigger().or(testControllerTwo.rightTrigger()).whileTrue(kicker.blockKicker());
 

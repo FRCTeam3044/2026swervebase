@@ -1,6 +1,8 @@
 package frc.robot.subsystems.climber;
 import static frc.robot.util.SparkUtil.ifOk;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.sim.TalonFXSimState.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLimitSwitch;
