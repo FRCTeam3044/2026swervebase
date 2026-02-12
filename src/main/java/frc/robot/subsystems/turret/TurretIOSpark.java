@@ -52,7 +52,7 @@ public class TurretIOSpark implements TurretIO {
                 PersistMode.kPersistParameters));
   }
 
-  public void updateInputs(TurretIOInputsAutoLogged inputs) {
+  public void updateInputs(TurretIOInputs inputs) {
     ifOk(motor, driveRelEncoder::getPosition, (value) -> inputs.driveRelEncoder = value);
     ifOk(
         motor,
