@@ -10,7 +10,6 @@ import static frc.robot.subsystems.climber.ClimberConstants.*;
 import edu.wpi.first.math.MathUtil;
 import me.nabdev.oxconfig.ConfigurableParameter;
 
-
 public class ClimberIOSpark implements ClimberIO {
     private final SparkMax motor = new SparkMax(canId, MotorType.kBrushless); //Fill in later
 
