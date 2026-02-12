@@ -126,6 +126,8 @@ public class Robot extends LoggedRobot {
             .getTranslation()
             .getDistance(
                 robotContainer.autoTargetUtil.getHub().getTranslation().toTranslation2d()));
+
+    robotContainer.autoAim.periodic();
   }
 
   /** This function is called once when the robot is disabled. */

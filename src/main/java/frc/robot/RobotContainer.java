@@ -10,6 +10,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -111,11 +112,12 @@ public class RobotContainer {
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
 
-    private static RobotContainer instance;
+    public static RobotContainer instance = null;
 
     public static RobotContainer getInstance() {
         if (instance == null) {
             instance = new RobotContainer();
+            System.out.println(instance);
         }
         return instance;
     }
@@ -290,10 +292,10 @@ public class RobotContainer {
                                     pose.getTranslation(),
                                     new Translation2d(),
                                     driveSimulation.getDriveTrainSimulatedChassisSpeedsFieldRelative(),
-                                    pose.getRotation(),
+                                    Rotation2d.fromDegrees(turret.getAngle().in(Degrees)),
                                     Inches.of(15),
-                                    MetersPerSecond.of(7),
-                                    Degrees.of(60)));
+                                    MetersPerSecond.of(shooter.getSpeed().in(RPM)),
+                                    Degrees.of(hood.getPosition())));
         });
 
     }

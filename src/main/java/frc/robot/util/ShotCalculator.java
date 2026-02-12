@@ -25,8 +25,6 @@ import org.littletonrobotics.junction.Logger;
 public class ShotCalculator {
     private static ShotCalculator instance;
 
-    private Rotation2d lastTurretAngle;
-    private double lasthoodPosition;
     private Rotation2d turretAngle;
     private double hoodPosition = Double.NaN;
 
@@ -125,13 +123,6 @@ public class ShotCalculator {
         // Calculate parameters accounted for imparted velocity
         turretAngle = target.minus(lookaheadPose.getTranslation()).getAngle();
         hoodPosition = shothoodPositionMap.get(lookaheadTurretToTargetDistance).getDegrees();
-        if (lastTurretAngle == null)
-            lastTurretAngle = turretAngle;
-        if (Double.isNaN(lasthoodPosition))
-            lasthoodPosition = hoodPosition;
-
-        lastTurretAngle = turretAngle;
-        lasthoodPosition = hoodPosition;
         latestParameters = new ShootingParameters(
                 lookaheadTurretToTargetDistance >= minDistance
                         && lookaheadTurretToTargetDistance <= maxDistance,

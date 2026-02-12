@@ -30,6 +30,7 @@ public class AutoAim {
   }
 
   public void periodic() {
+    ShotCalculator.getInstance().clearShootingParameters();
     parameters = ShotCalculator.getInstance().getParameters();
   }
 
@@ -37,6 +38,9 @@ public class AutoAim {
     return Commands.parallel(
         turret.setAngle(() -> parameters.turretAngle().getMeasure()),
         hood.setPosition(() -> parameters.hoodPosition()),
-        shooter.runSpeed(() -> RPM.of(parameters.flywheelSpeed() * shooterDisengagedProportion.get())));
+        shooter.runSpeed(
+            () -> RPM.of(
+                parameters.flywheelSpeed() * (shooterEngaged.getAsBoolean() ? 1 : shooterDisengagedProportion.get()))))
+        .withName("Auto Aim");
   }
 }

@@ -1,16 +1,11 @@
 package frc.robot.subsystems.kicker;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import me.nabdev.oxconfig.ConfigurableParameter;
-
-import org.ironmaple.simulation.SimulatedArena;
-import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly;
 import org.littletonrobotics.junction.Logger;
 
 public class Kicker extends SubsystemBase {
@@ -36,8 +31,8 @@ public class Kicker extends SubsystemBase {
 
   public Command shootKicker() {
     if (Robot.isSimulation()) {
-      return Commands.repeatingSequence(RobotContainer.getInstance().simShootFuel(),
-          Commands.waitSeconds(0.5));
+      return Commands.deferredProxy(() -> Commands.repeatingSequence(RobotContainer.getInstance().simShootFuel(),
+          Commands.waitSeconds(0.2)));
     }
     return Commands.run(
         () -> {
