@@ -6,9 +6,14 @@
 // at the root directory of this project.
 
 package frc.robot.subsystems.drive;
+<<<<<<< HEAD
 import edu.wpi.first.math.trajectory.Trajectory.State;
 import edu.wpi.first.math.trajectory.Trajectory;
+=======
+
+>>>>>>> 7d8a24bdaf70d19e4fc21dcf4c240065fde076c9
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,6 +21,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+<<<<<<< HEAD
+=======
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.Trajectory.State;
+>>>>>>> 7d8a24bdaf70d19e4fc21dcf4c240065fde076c9
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -26,10 +36,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
+<<<<<<< HEAD
 import me.nabdev.oxconfig.ConfigurableParameter;
 import me.nabdev.pathfinding.structures.Path;
 import me.nabdev.pathfinding.structures.Vector;
 import me.nabdev.pathfinding.structures.Vertex;
+=======
+import frc.robot.RobotContainer;
+import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
+>>>>>>> 7d8a24bdaf70d19e4fc21dcf4c240065fde076c9
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -37,6 +52,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+
+import org.ironmaple.simulation.SimulatedArena;
+import org.littletonrobotics.junction.Logger;
+
+import me.nabdev.oxconfig.ConfigurableParameter;
+import me.nabdev.pathfinding.structures.Path;
+import me.nabdev.pathfinding.structures.Vector;
+import me.nabdev.pathfinding.structures.Vertex;
 
 public class DriveCommands {
   private static final double DEADBAND = 0.1;
@@ -49,6 +72,7 @@ public class DriveCommands {
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
   private static final double WHEEL_RADIUS_RAMP_RATE = 0.05; // Rad/Sec^2
 
+<<<<<<< HEAD
   private static ConfigurableParameter<Double> pathfindingMaxSpeed = new ConfigurableParameter<>(4.8,
           "Pathfinding Max Speed");
   private static ConfigurableParameter<Double> pathfindingMaxAccel = new ConfigurableParameter<>(2.0,
@@ -60,6 +84,18 @@ public class DriveCommands {
   private static ConfigurableParameter<Double> pathfindingRotationMaxSlowSpeed = new ConfigurableParameter<>(
           Math.PI / 8,
           "Pathfinding Max Rotation Slow Speed");
+=======
+  private static ConfigurableParameter<Double> pathfindingMaxSpeed =
+      new ConfigurableParameter<>(4.8, "Pathfinding Max Speed");
+  private static ConfigurableParameter<Double> pathfindingMaxAccel =
+      new ConfigurableParameter<>(2.0, "Pathfinding Max Accel");
+  private static ConfigurableParameter<Double> pathfindingMaxAccelAuto =
+      new ConfigurableParameter<>(5.0, "Pathfinding Max Accel (Auto)");
+  private static ConfigurableParameter<Double> pathfindingRotationMaxSpeed =
+      new ConfigurableParameter<>(Math.PI / 2, "Pathfinding Max Rotation Speed");
+  private static ConfigurableParameter<Double> pathfindingRotationMaxSlowSpeed =
+      new ConfigurableParameter<>(Math.PI / 8, "Pathfinding Max Rotation Slow Speed");
+>>>>>>> 7d8a24bdaf70d19e4fc21dcf4c240065fde076c9
 
   private DriveCommands() {}
 
@@ -320,12 +356,16 @@ public class DriveCommands {
   }
 
   private static TrajectoryConfig getTrajectoryConfig(Drive drive, Path path) {
-    TrajectoryConfig config = new TrajectoryConfig(pathfindingMaxSpeed.get(),
-            DriverStation.isAutonomous() ? pathfindingMaxAccelAuto.get() : pathfindingMaxAccel.get());
+    TrajectoryConfig config =
+        new TrajectoryConfig(
+            pathfindingMaxSpeed.get(),
+            DriverStation.isAutonomous()
+                ? pathfindingMaxAccelAuto.get()
+                : pathfindingMaxAccel.get());
 
-    ChassisSpeeds chassisSpeed = ChassisSpeeds.fromRobotRelativeSpeeds(drive.getVelocity(), drive.getRotation());
-    Vector velocity = new Vector(chassisSpeed.vxMetersPerSecond,
-      chassisSpeed.vyMetersPerSecond);
+    ChassisSpeeds chassisSpeed =
+        ChassisSpeeds.fromRobotRelativeSpeeds(drive.getVelocity(), drive.getRotation());
+    Vector velocity = new Vector(chassisSpeed.vxMetersPerSecond, chassisSpeed.vyMetersPerSecond);
     Vertex start = path.getStart();
     Vertex nextWaypoint = path.size() > 0 ? path.get(0) : path.getTarget();
     Vector pathDir = start.createVectorTo(nextWaypoint).normalize();
@@ -340,30 +380,88 @@ public class DriveCommands {
     config.setKinematics(drive.getKinematics());
     // config.setStartVelocity(10);
     return config;
-    }
-
-  
-    public static Trajectory generateTrajectory(Drive drive, Pose2d start, Pose2d end) {
-        try {
-            Path path = DriveConstants.pathfinder.generatePath(start, end);
-            TrajectoryConfig config = getTrajectoryConfig(drive, path);
-            return path.asTrajectory(config);
-        } catch (Exception e) {
-            DriverStation.reportWarning("Failed to generate path: " + start + " to " + end,
-                    e.getStackTrace());
-            return null;
-        }
-      }
-
-    private static Trajectory generateTrajectory(Drive drive, Pose2d end) {
-      return generateTrajectory(drive, drive.getPose(), end);
   }
 
-    public static Command goToPoint(Drive drive, Supplier<Pose2d> pose, Supplier<Rotation2d> rotation) {
-      return Commands.deferredProxy(() -> {
-          Pose2d curPose = pose.get();
-          return followTrajectory(drive, generateTrajectory(drive, curPose), rotation,
-                  null, false);
-      }).withName("Go To Point");
+  public static Trajectory generateTrajectory(Drive drive, Pose2d start, Pose2d end) {
+    try {
+      Path path = DriveConstants.pathfinder.generatePath(start, end);
+      TrajectoryConfig config = getTrajectoryConfig(drive, path);
+      return path.asTrajectory(config);
+    } catch (Exception e) {
+      DriverStation.reportWarning(
+          "Failed to generate path: " + start + " to " + end, e.getStackTrace());
+      return null;
+    }
+  }
+
+  private static Trajectory generateTrajectory(Drive drive, Pose2d end) {
+    return generateTrajectory(drive, drive.getPose(), end);
+  }
+
+   private static Command followTrajectory(Drive drive, Trajectory traj, Supplier<Rotation2d> desiredRotation,
+            DoubleSupplier joystickRot, boolean useJoystick) {
+
+        // Ensure parameters are not null
+        if (traj == null) {
+            return Commands.none();
+        }
+
+        Supplier<Rotation2d> desiredRot = desiredRotation;
+        if (useJoystick) {
+            desiredRot = drive::getRotation;
+            requireNonNullParam(joystickRot, "desiredRotationSpeed", "followTrajectory");
+        } else {
+            requireNonNullParam(desiredRotation, "desiredRotation", "followTrajectory");
+        }
+        Timer timer = new Timer();
+        HolonomicDriveController m_controller = DriveConstants.driveController;
+
+        // Change down
+        final Supplier<Rotation2d> desiredRotationSupplier = desiredRot;
+        return Commands.run(() -> {
+            double curTime = timer.get();
+            State desiredState = traj.sample(curTime);
+            Logger.recordOutput("Trajectory Desired Velocity", desiredState.velocityMetersPerSecond);
+            Logger.recordOutput("Trajectory Desired Pose", new Pose2d(desiredState.poseMeters.getX(),
+                    desiredState.poseMeters.getY(), desiredRotationSupplier.get()));
+            ChassisSpeeds targetChassisSpeeds = m_controller.calculate(drive.getPose(), desiredState,
+                    desiredRotationSupplier.get());
+                targetChassisSpeeds.omegaRadiansPerSecond = MathUtil.clamp(targetChassisSpeeds.omegaRadiansPerSecond,
+                        -pathfindingRotationMaxSlowSpeed.get(), pathfindingRotationMaxSlowSpeed.get());
+
+
+            if (useJoystick) {
+                double omega = MathUtil.applyDeadband(joystickRot.getAsDouble(), DEADBAND);
+
+                // Square rotation value for more precise control
+                omega = Math.copySign(omega * omega, omega);
+                targetChassisSpeeds.omegaRadiansPerSecond = omega * drive.getMaxAngularSpeedRadPerSec();
+            }
+            drive.runVelocity(targetChassisSpeeds);
+        }, drive).beforeStarting(() -> {
+            timer.restart();
+            RobotContainer.fieldSim.getObject("Path").setTrajectory(traj);
+            Logger.recordOutput("Current Trajectory", traj);
+        }).until(() -> timer.hasElapsed(traj.getTotalTimeSeconds()))
+                .finallyDo(timer::stop).withName("Follow Trajectory");
+    };
+
+
+
+  private static Command goToPoint(
+      Drive drive,
+      Pose2d pose,
+      Supplier<Rotation2d> desiredRotation,
+      DoubleSupplier joystickRot,
+      boolean useJoystick) {
+    return Commands.deferredProxy(
+            () ->
+                followTrajectory(
+                    drive,
+                    generateTrajectory(drive, pose),
+                    desiredRotation,
+                    joystickRot,
+                    useJoystick))
+        .withName("Go To Point");
   }
 }
