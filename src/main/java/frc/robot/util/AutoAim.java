@@ -14,14 +14,20 @@ import frc.robot.util.ShotCalculator.ShootingParameters;
 import me.nabdev.oxconfig.ConfigurableParameter;
 
 public class AutoAim {
-  private Turret turret;
-  private Shooter shooter;
-  private Hood hood;
+  private final Turret turret;
+  private final Shooter shooter;
+  private final Hood hood;
 
   private ShootingParameters parameters = new ShootingParameters(true, new Rotation2d(), 0, 0);
 
   private ConfigurableParameter<Double> shooterDisengagedProportion = new ConfigurableParameter<>(0.5,
       "ShooterDisengagedProportion");
+
+  public AutoAim(Turret turret, Shooter shooter, Hood hood) {
+    this.turret = turret;
+    this.shooter = shooter;
+    this.hood = hood;
+  }
 
   public void periodic() {
     parameters = ShotCalculator.getInstance().getParameters();
