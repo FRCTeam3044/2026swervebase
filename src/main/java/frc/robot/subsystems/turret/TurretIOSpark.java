@@ -13,6 +13,7 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import me.nabdev.oxconfig.sampleClasses.ConfigurablePIDController;
 import yams.units.EasyCRT;
@@ -23,32 +24,28 @@ public class TurretIOSpark implements TurretIO {
 
   private final RelativeEncoder driveRelEncoder = motor.getEncoder();
   private final AbsoluteEncoder driveAbsEncoder = motor.getAbsoluteEncoder();
-  private final DutyCycleEncoder secondaryAbsEncoder =
-      new DutyCycleEncoder(secondaryAbsEncoderDioChannel);
-  private final ConfigurablePIDController pidController =
-      new ConfigurablePIDController(0.0, 0.1, 0.0, "Turret");
+  private final DutyCycleEncoder secondaryAbsEncoder = new DutyCycleEncoder(secondaryAbsEncoderDioChannel);
+  private final ConfigurablePIDController pidController = new ConfigurablePIDController(0.0, 0.1, 0.0, "Turret");
   private final EasyCRT crt;
 
   private double currentAngleDeg;
 
   public TurretIOSpark() {
-    EasyCRTConfig crtConfig =
-        new EasyCRTConfig(
-                () -> Rotations.of(driveAbsEncoder.getPosition()),
-                () -> Rotations.of(secondaryAbsEncoder.get()))
-            .withCommonDriveGear(1, turretTeeth, primaryEncoderTeeth, secondaryEncoderTeeth)
-            .withMatchTolerance(Degrees.of(0.1))
-            .withMechanismRange(Degrees.of(0), Degrees.of(360));
+    EasyCRTConfig crtConfig = new EasyCRTConfig(
+        () -> Rotations.of(driveAbsEncoder.getPosition()),
+        () -> Rotations.of(secondaryAbsEncoder.get()))
+        .withCommonDriveGear(1, turretTeeth, primaryEncoderTeeth, secondaryEncoderTeeth)
+        .withMatchTolerance(Degrees.of(0.1))
+        .withMechanismRange(Degrees.of(0), Degrees.of(360));
     crt = new EasyCRT(crtConfig);
 
     tryUntilOk(
         motor,
         5,
-        () ->
-            motor.configure(
-                TurretConfig.motorConfig,
-                ResetMode.kResetSafeParameters,
-                PersistMode.kPersistParameters));
+        () -> motor.configure(
+            TurretConfig.motorConfig,
+            ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters));
   }
 
   public void updateInputs(TurretIOInputsAutoLogged inputs) {
@@ -62,8 +59,13 @@ public class TurretIOSpark implements TurretIO {
   }
 
   @Override
-  public void setAngle(double targetAngle) {
-    motor.set(MathUtil.clamp(pidController.calculate(currentAngleDeg, targetAngle), -1.0, 1.0));
+  public void setAngle(Angle targetAngle) {
+    motor.set(MathUtil.clamp(pidController.calculate(currentAngleDeg, targetAngle.in(Degrees)), -1.0, 1.0));
+  }
+
+  @Override
+  public void setPercent(double percent) {
+    motor.set(percent);
   }
 
   @Override

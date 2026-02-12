@@ -14,27 +14,27 @@ import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.util.SmartXboxController;
 
 public class InactiveHub extends State {
-  public InactiveHub(
-      StateMachine stateMachine,
-      CommandXboxController driverController,
-      Drive drive,
-      Intake intake,
-      Spindexer spindexer,
-      Kicker kicker,
-      Turret turret,
-      Hood hood) {
-    super(stateMachine);
-    SmartXboxController controller = new SmartXboxController(driverController, loop);
+    public InactiveHub(
+            StateMachine stateMachine,
+            CommandXboxController driverController,
+            Drive drive,
+            Intake intake,
+            Spindexer spindexer,
+            Kicker kicker,
+            Turret turret,
+            Hood hood) {
+        super(stateMachine);
+        SmartXboxController controller = new SmartXboxController(driverController, loop);
 
-    startWhenActive(
-        Commands.waitSeconds(1)
-            .deadlineFor(
-                Commands.runEnd(
-                    () -> driverController.setRumble(RumbleType.kBothRumble, 1),
-                    () -> driverController.setRumble(RumbleType.kBothRumble, 0))));
-    startWhenActive(intake.intakeBottom());
-    controller.leftTrigger().whileTrue(intake.runRollers());
-    startWhenActive(spindexer.run());
-    startWhenActive(kicker.runKicker());
-  }
+        startWhenActive(
+                Commands.waitSeconds(1)
+                        .deadlineFor(
+                                Commands.runEnd(
+                                        () -> driverController.setRumble(RumbleType.kBothRumble, 1),
+                                        () -> driverController.setRumble(RumbleType.kBothRumble, 0))));
+        startWhenActive(intake.intakeBottom());
+        controller.leftTrigger().whileTrue(intake.runRollers());
+        startWhenActive(spindexer.setSpeed());
+        // startWhenActive(kicker.runKicker());
+    }
 }

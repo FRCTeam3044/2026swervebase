@@ -16,9 +16,16 @@ public interface TurretIO {
     public double driveRelEncoder = 0.0;
   }
 
-  public default void setAngle(double angle) {}
+  public default void setAngle(Angle angle) {
+  }
 
-  public default void updateInputs(TurretIOInputsAutoLogged inputs) {}
+  public default void setPercent(double percent) {
 
-  public default void resetAngle() {}
+  }
+
+  public default void updateInputs(TurretIOInputsAutoLogged inputs) {
+  }
+
+  public default void resetAngle() {
+  }
 }
