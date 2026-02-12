@@ -28,16 +28,9 @@ public class Climber extends SubsystemBase {
   public Command climberTop() { // Command factory for moving climber to top pos
     return Commands.run(
         () -> {
-<<<<<<< HEAD
           io.setClimberPos(topPosition.get());
         },
         this);
-=======
-            io.setClimberPos(topPosition.get());
-        },this);
-
-  >>>>>>>origin/main
-
   }
 
   public Command climberBottom() { // Command factory for moving climber to bottom pos

@@ -22,14 +22,10 @@ public class ShootToHub extends State {
       Shooter shooter) {
     super(stateMachine);
 
-        // Drive into alliance zone
-        startWhenActive(intake.intakeTop());
-        startWhenActive(spindexer.run());
-        startWhenActive(kicker.runKicker());
-        startWhenActive(hood.moveHood());
-        startWhenActive(turret.setAngle(null));
-        t(/* Robot is in alliance zone */ () -> false).onTrue(shooter.runShooter());
-
-        
-    }
+    // Drive into alliance zone
+    startWhenActive(intake.intakeTop());
+    startWhenActive(spindexer.run());
+    startWhenActive(kicker.shootKicker());
+    startWhenActive(turret.setAngle(null));
+  }
 }
