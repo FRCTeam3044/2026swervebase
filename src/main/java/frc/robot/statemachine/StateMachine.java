@@ -133,22 +133,20 @@ public class StateMachine extends StateMachineBase {
                 testAutoRoutine.add(AutoSteps.IntakeNeutralZone);
                 testAutoRoutine.add(AutoSteps.ShootToHub);
                 testAutoRoutine.add(AutoSteps.AutoClimb);
+                AutoSteps currentStep;
 
-                // TODO: Add in all supplier conditions
-                intakeAllianceZone
-                                .withTransition(autoClimb, () -> false, 0, "ALlied intake to climb")
-                                .withTransition(shootHub, () -> false, 1, "Allied intake to shoot");
+                // TODO: Add "completed" boolean suppliers
+                autoClimb.withTransition(auto, () -> false, 0, "Climb to auto");
+                shootHub.withTransition(auto, () -> false, 0, "Shoot hub to auto");
+                shootToAlliedSide.withTransition(auto, () -> false, 0, "Neutral shot to auto");
+                intakeAllianceZone.withTransition(auto, () -> false, 0, "Allied intake to shot");
+                intakeNeutralZone.withTransition(auto, () -> false, 0, "Neutral intake to shot");
 
-                intakeNeutralZone
-                                .withTransition(autoClimb, () -> false, 0, "Neutral intake to climb")
-                                .withTransition(shootToAlliedSide, () -> false, 0, "Neutral intake to neutral shot")
-                                .withTransition(shootHub, () -> false, 0, "Neutral intake to hub shot");
-
-                shootHub
-                                .withTransition(autoClimb, () -> false, 0, "Hub shot to climb")
-                                .withTransition(intakeAllianceZone, () -> false, 0, "Hub shot to allied intake")
-                                .withTransition(intakeNeutralZone, () -> false, 0, "Hub shot to neutral intake");
-
-                shootToAlliedSide.withTransition(autoClimb, () -> false, 0, "Neutral shot to climb");
+                // TODO: Add "next in line" boolean suppliers
+                auto.withTransition(autoClimb, () -> false, 0, "Auto to climb");
+                auto.withTransition(shootHub, () -> false, 0, "Auto to hub shot");
+                auto.withTransition(shootToAlliedSide, () -> false, 0, "Auto to neutral shot");
+                auto.withTransition(intakeAllianceZone, () -> false, 0, "Auto to allied intake");
+                auto.withTransition(intakeNeutralZone, () -> false, 0, "Auto to neutral intake");
         }
 }
