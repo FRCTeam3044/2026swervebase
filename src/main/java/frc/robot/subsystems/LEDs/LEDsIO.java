@@ -25,4 +25,7 @@ public interface LEDsIO {
 
   public default void setOff() {}
   ;
+
+  public default void setBlinkingColor(Color color) {}
+  ;
 }

@@ -40,6 +40,6 @@ public class TeleState extends State {
                             .outpostDump(AllianceUtil.getAlliance() == AllianceColor.BLUE))
                 .ignoringDisable(true));
 
-    startWhenActive(leds.setPurple());
+    startWhenActive(leds.setBlinkingOrange());
   }
 }

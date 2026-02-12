@@ -15,6 +15,7 @@ public class LEDsIORio implements LEDsIO {
   private final AddressableLED LEDStrip = new AddressableLED(PWM);
   private final AddressableLEDBuffer buffer = new AddressableLEDBuffer(length);
 
+  private final double blinkSpeed = 0.25;
   private final double spinSpeed = 30;
 
   public LEDsIORio() {
@@ -35,6 +36,16 @@ public class LEDsIORio implements LEDsIO {
     LEDPattern step = LEDPattern.steps(Map.of(0, color1, 0.46, color2, 0.5, color1, 0.96, color2));
     LEDPattern pattern = step.scrollAtRelativeSpeed(Percent.per(Seconds).of(spinSpeed));
     pattern.applyTo(buffer);
+    LEDStrip.setData(buffer);
+  }
+
+  @Override
+  public void setBlinkingColor(Color color) {
+    // Create and apply the base blinking pattern
+    LEDPattern base = LEDPattern.solid(color);
+    LEDPattern pattern = base.blink(Seconds.of(blinkSpeed));
+    pattern.applyTo(buffer);
+
     LEDStrip.setData(buffer);
   }
 }
