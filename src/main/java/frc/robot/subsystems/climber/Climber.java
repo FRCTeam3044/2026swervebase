@@ -3,18 +3,19 @@ package frc.robot.subsystems.climber;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.function.DoubleSupplier;
 import me.nabdev.oxconfig.ConfigurableParameter;
 
 public class Climber extends SubsystemBase {
   private final ClimberIO io; // Brings in the Climber IO interface
   private final ConfigurableParameter<Double> speed =
       new ConfigurableParameter<>(0.0, "Climber speed");
-  private final ConfigurableParameter<Integer> topPosition =
-      new ConfigurableParameter<>(0, "Top climber position");
-  private final ConfigurableParameter<Integer> bottomPosition =
-      new ConfigurableParameter<>(0, "Bottom climber position");
-  private final ConfigurableParameter<Integer> climbPosition =
-      new ConfigurableParameter<>(0, "Climb position");
+  private final ConfigurableParameter<Double> topPosition =
+      new ConfigurableParameter<>(0.0, "Top climber position");
+  private final ConfigurableParameter<Double> bottomPosition =
+      new ConfigurableParameter<>(0.0, "Bottom climber position");
+  private final ConfigurableParameter<Double> climbPosition =
+      new ConfigurableParameter<>(0.0, "Climb position");
 
   public Climber(ClimberIO io) { // idk just needed for climberio to be final
     this.io = io;
@@ -29,13 +30,19 @@ public class Climber extends SubsystemBase {
         this);
   }
 
+  public Command setSpeedWParameter(DoubleSupplier speedParameter) {
+    return Commands.run(
+        () -> {
+          io.setSpeed(speedParameter.getAsDouble());
+        });
+  }
+
   public Command climberTop() { // Command factory for moving climber to top pos
     return Commands.run(
         () -> {
-            io.setClimberPos(topPosition.get());
-        }, 
-    this);
-
+          io.setClimberPos(topPosition.get());
+        },
+        this);
   }
 
   public Command climberBottom() { // Command factory for moving climber to bottom pos

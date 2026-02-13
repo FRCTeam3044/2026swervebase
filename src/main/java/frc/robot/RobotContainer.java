@@ -24,6 +24,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.statemachine.StateMachine;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberIOSpark;
 import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.LEDs.LEDsIO;
 import frc.robot.subsystems.LEDs.LEDsIORio;
@@ -75,6 +78,7 @@ public class RobotContainer {
   private final Kicker kicker;
   private final Shooter shooter;
   private final Turret turret;
+  private final Climber climber;
   public final LEDs LEDs;
 
   public final StateMachine stateMachine;
@@ -116,6 +120,7 @@ public class RobotContainer {
         spindexer = new Spindexer(new SpindexerIOSpark());
         kicker = new Kicker(new KickerIOSpark());
         turret = new Turret(new TurretIOSpark());
+        climber = new Climber(new ClimberIOSpark());
         LEDs = new LEDs(new LEDsIORio());
         break;
 
@@ -158,6 +163,7 @@ public class RobotContainer {
         spindexer = new Spindexer(new SpindexerIO() {});
         kicker = new Kicker(new KickerIO() {});
         turret = new Turret(new TurretIO() {});
+        climber = new Climber(new ClimberIO() {});
         LEDs = new LEDs(new LEDsIORio());
         break;
 
@@ -177,6 +183,7 @@ public class RobotContainer {
         spindexer = new Spindexer(new SpindexerIO() {});
         kicker = new Kicker(new KickerIO() {});
         turret = new Turret(new TurretIO() {});
+        climber = new Climber(new ClimberIO() {});
         LEDs = new LEDs(new LEDsIO() {});
         break;
     }
@@ -214,6 +221,7 @@ public class RobotContainer {
             shooter,
             turret,
             hood,
+            climber,
             LEDs,
             autoTargetUtil);
 

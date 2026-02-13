@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.RPM;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
+import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
@@ -31,7 +32,7 @@ public class TestState extends State implements ConfigurableClass {
       new ConfigurableClassParam<>(this, 0.0, "Test Hood Position");
 
   public TestState(
-      StateMachineBase stateMachine,
+      StateMachineBase stateMachine, // Setting base variables
       CommandXboxController controllerOne,
       CommandXboxController controllerTwo,
       Drive drive,
@@ -41,7 +42,9 @@ public class TestState extends State implements ConfigurableClass {
       Shooter shooter,
       Spindexer spindexer,
       Turret turret,
+      Climber climber,
       LEDs leds) {
+
     super(stateMachine);
     SmartXboxController testControllerOne = new SmartXboxController(controllerOne, loop);
     SmartXboxController testControllerTwo = new SmartXboxController(controllerTwo, loop);
@@ -65,8 +68,16 @@ public class TestState extends State implements ConfigurableClass {
      * Y = Intake Roller Spin
      * LT = Kicker Shoot
      * RT = Kicker Block
+     *
+     * POV Up = Climber Top
+     * POV Down = Climber Down
+     * POV Right = Climber ClimbPosition
+     * POV Left = Manual move (Joystick Right)
+     *
      */
 
+    //
+    
     DoubleSupplier rightY =
         () -> -MathUtil.applyDeadband(controllerOne.getRightY(), DriveCommands.DEADBAND);
     DoubleSupplier leftY =
@@ -74,9 +85,51 @@ public class TestState extends State implements ConfigurableClass {
     DoubleSupplier leftX =
         () -> -MathUtil.applyDeadband(controllerOne.getLeftX(), DriveCommands.DEADBAND);
 
-    testControllerOne.a().whileTrue(hood.setPosition(hoodPosition::get));
-    testControllerOne.b().whileTrue(shooter.runSpeed(() -> RPM.of(shooterPosition.get())));
-    testControllerOne.x().whileTrue(turret.setAngle(() -> Degrees.of(turretPosition.get())));
+    testControllerOne
+        .a()
+        .whileTrue(
+            hood.setPosition(
+                hoodPosition
+                    ::get)); // When A is pressed, the hood will move to the position specified by
+    // the hoodPosition parameter
+    testControllerOne
+        .b()
+        .whileTrue(
+            shooter.runSpeed(
+                () ->
+                    RPM.of(
+                        shooterPosition
+                            .get()))); // When B is pressed, the shooter will run at the speed
+    // specified by the shooterPosition parameter
+    testControllerOne
+        .x()
+        .whileTrue(
+            turret.setAngle(
+                () ->
+                    Degrees.of(
+                        turretPosition
+                            .get()))); // When X is pressed, the turret will move to the angle
+    // specified by the turretPosition parameter
+
+    // Testing stuff
+    testControllerOne
+        .povUp()
+        .whileTrue(climber.climberTop()); // When y is pressed, set climber pos to
+    // top-------------------------------------------------------
+    testControllerOne
+        .povRight()
+        .whileTrue(
+            climber.climberPulledUp()); // When b is pressed, climber goes to pulled up position
+    testControllerOne
+        .povDown()
+        .whileTrue(climber.climberBottom()); // When x is pressed, climber goes to bottom position
+
+    testControllerOne
+        .povLeft()
+        .whileTrue(
+            climber.setSpeedWParameter(
+                rightY)); // Sets the speed of the climber motor to the amount the joystick is moved
+    // End testing stuff
 
     testControllerTwo.a().whileTrue(hood.runPercent(leftY));
     testControllerTwo.b().whileTrue(shooter.runPercent(rightY));
@@ -87,6 +140,7 @@ public class TestState extends State implements ConfigurableClass {
         .rightBumper()
         .or(testControllerTwo.rightBumper())
         .whileTrue(intake.intakeBottom());
+    testControllerOne.y().whileTrue(intake.runRollers());
     testControllerOne.y().or(testControllerTwo.y()).whileTrue(intake.runRollers());
     testControllerOne
         .leftTrigger()
@@ -105,7 +159,7 @@ public class TestState extends State implements ConfigurableClass {
             () -> -controllerOne.getLeftX(),
             () -> -controllerOne.getRightX(),
             false));
-
+            
     startWhenActive(leds.defaultPattern());
   }
 
