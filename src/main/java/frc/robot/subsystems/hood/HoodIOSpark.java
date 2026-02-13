@@ -1,7 +1,7 @@
 package frc.robot.subsystems.hood;
 
-import static frc.robot.util.SparkUtil.tryUntilOk;
 import static frc.robot.util.SparkUtil.ifOk;
+import static frc.robot.util.SparkUtil.tryUntilOk;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
@@ -14,8 +14,9 @@ import me.nabdev.oxconfig.sampleClasses.ConfigurableProfiledPIDController;
 public class HoodIOSpark implements HoodIO {
   private final SparkMax motor = new SparkMax(HoodConstants.canId, MotorType.kBrushless);
 
-  private final ConfigurableProfiledPIDController hoodController = new ConfigurableProfiledPIDController(
-      0.0, 0.1, 0.0, new Constraints(0, 0), "Hood Controller");
+  private final ConfigurableProfiledPIDController hoodController =
+      new ConfigurableProfiledPIDController(
+          0.0, 0.1, 0.0, new Constraints(0, 0), "Hood Controller");
 
   private final RelativeEncoder hoodEncoder = motor.getEncoder();
   private double setpoint;
@@ -24,10 +25,11 @@ public class HoodIOSpark implements HoodIO {
     tryUntilOk(
         motor,
         5,
-        () -> motor.configure(
-            HoodConfig.hoodConfig,
-            ResetMode.kResetSafeParameters,
-            PersistMode.kPersistParameters));
+        () ->
+            motor.configure(
+                HoodConfig.hoodConfig,
+                ResetMode.kResetSafeParameters,
+                PersistMode.kPersistParameters));
   }
 
   public void updateInputs(HoodIOInputs inputs) {

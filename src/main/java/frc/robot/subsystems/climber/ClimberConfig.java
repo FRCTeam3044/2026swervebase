@@ -4,11 +4,9 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 public class ClimberConfig {
-    public static SparkMaxConfig climberConfig = new SparkMaxConfig();
+  public static SparkMaxConfig climberConfig = new SparkMaxConfig();
 
-    static {
-        climberConfig
-            .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(ClimberConstants.currentLimit);
-    }
+  static {
+    climberConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(ClimberConstants.currentLimit);
+  }
 }
