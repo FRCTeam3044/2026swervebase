@@ -12,6 +12,7 @@ import frc.robot.statemachine.States.Tele.InactiveHub;
 import frc.robot.statemachine.States.Tele.NeutralZone;
 import frc.robot.statemachine.States.TeleState;
 import frc.robot.statemachine.States.TestState;
+import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
@@ -43,6 +44,7 @@ public class StateMachine extends StateMachineBase {
             Shooter shooter,
             Turret turret,
             Hood hood,
+            Climber climber,
             LEDs leds,
             AutoTargetUtil autoTargetUtil,
             AutoAim autoAim) {
@@ -87,6 +89,7 @@ public class StateMachine extends StateMachineBase {
                 shooter,
                 spindexer,
                 turret,
+                climber,
                 leds);
 
         this.registerToRootState(test, teleop, disabled);

@@ -7,14 +7,10 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
@@ -25,11 +21,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.statemachine.StateMachine;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberIOSpark;
 import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.LEDs.LEDsIO;
 import frc.robot.subsystems.LEDs.LEDsIORio;
@@ -53,22 +51,18 @@ import frc.robot.subsystems.kicker.KickerIO;
 import frc.robot.subsystems.kicker.KickerIOSpark;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
-import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOSpark;
 import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.spindexer.SpindexerIO;
 import frc.robot.subsystems.spindexer.SpindexerIOSpark;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.turret.TurretIO;
-import frc.robot.subsystems.turret.TurretIOSim;
 import frc.robot.subsystems.turret.TurretIOSpark;
-import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoAim;
 import frc.robot.util.AutoTargetUtil;
 import org.ironmaple.simulation.IntakeSimulation;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
-import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -89,11 +83,12 @@ public class RobotContainer {
     private final Kicker kicker;
     private final Shooter shooter;
     private final Turret turret;
+    private final Climber climber;
     public final LEDs LEDs;
-    public final AutoAim autoAim;
 
     public final StateMachine stateMachine;
     public final AutoTargetUtil autoTargetUtil;
+    public final AutoAim autoAim;
 
     // Controller
     private final CommandXboxController controllerOne = new CommandXboxController(0);
@@ -113,20 +108,10 @@ public class RobotContainer {
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
 
-    public static RobotContainer instance = null;
-
-    public static RobotContainer getInstance() {
-        if (instance == null) {
-            instance = new RobotContainer();
-            System.out.println(instance);
-        }
-        return instance;
-    }
-
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
-    RobotContainer() {
+    public RobotContainer() {
         switch (Constants.currentMode) {
             case REAL:
                 // Real robot, instantiate hardware IO implementations
@@ -144,6 +129,7 @@ public class RobotContainer {
                 spindexer = new Spindexer(new SpindexerIOSpark());
                 kicker = new Kicker(new KickerIOSpark());
                 turret = new Turret(new TurretIOSpark());
+                climber = new Climber(new ClimberIOSpark());
                 LEDs = new LEDs(new LEDsIORio());
                 break;
 
@@ -180,13 +166,15 @@ public class RobotContainer {
                 hood = new Hood(new HoodIOSim());
                 intake = new Intake(new IntakeIO() {
                 });
-                shooter = new Shooter(new ShooterIOSim() {
+                shooter = new Shooter(new ShooterIO() {
                 });
                 spindexer = new Spindexer(new SpindexerIO() {
                 });
                 kicker = new Kicker(new KickerIO() {
                 });
-                turret = new Turret(new TurretIOSim() {
+                turret = new Turret(new TurretIO() {
+                });
+                climber = new Climber(new ClimberIO() {
                 });
                 LEDs = new LEDs(new LEDsIORio());
                 break;
@@ -218,12 +206,12 @@ public class RobotContainer {
                 });
                 turret = new Turret(new TurretIO() {
                 });
+                climber = new Climber(new ClimberIO() {
+                });
                 LEDs = new LEDs(new LEDsIO() {
                 });
                 break;
         }
-
-        AllianceUtil.setRobot(drive::getPose);
 
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices");
@@ -259,6 +247,7 @@ public class RobotContainer {
                 shooter,
                 turret,
                 hood,
+                climber,
                 LEDs,
                 autoTargetUtil,
                 autoAim);
@@ -282,24 +271,5 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return autoChooser.get();
-    }
-
-    public Command simShootFuel() {
-        return Commands.runOnce(() -> {
-            if (!intakeSimulation.obtainGamePieceFromIntake())
-                return;
-            Pose2d pose = driveSimulation.getSimulatedDriveTrainPose();
-            SimulatedArena.getInstance()
-                    .addGamePieceProjectile(
-                            new RebuiltFuelOnFly(
-                                    pose.getTranslation(),
-                                    new Translation2d(),
-                                    driveSimulation.getDriveTrainSimulatedChassisSpeedsFieldRelative(),
-                                    Rotation2d.fromDegrees(turret.getAngle().in(Degrees)),
-                                    Inches.of(15),
-                                    MetersPerSecond.of(shooter.getSpeed().in(RPM)),
-                                    Degrees.of(hood.getPosition())));
-        });
-
     }
 }
