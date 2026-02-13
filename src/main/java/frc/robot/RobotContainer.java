@@ -7,10 +7,14 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
@@ -21,6 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
@@ -51,18 +56,22 @@ import frc.robot.subsystems.kicker.KickerIO;
 import frc.robot.subsystems.kicker.KickerIOSpark;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
+import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOSpark;
 import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.spindexer.SpindexerIO;
 import frc.robot.subsystems.spindexer.SpindexerIOSpark;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.turret.TurretIO;
+import frc.robot.subsystems.turret.TurretIOSim;
 import frc.robot.subsystems.turret.TurretIOSpark;
+import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoAim;
 import frc.robot.util.AutoTargetUtil;
 import org.ironmaple.simulation.IntakeSimulation;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
+import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -108,10 +117,19 @@ public class RobotContainer {
     // Dashboard inputs
     private final LoggedDashboardChooser<Command> autoChooser;
 
+    private static RobotContainer instance;
+
+    public static RobotContainer getInstance() {
+        if (instance == null) {
+            instance = new RobotContainer();
+        }
+        return instance;
+    }
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
-    public RobotContainer() {
+    private RobotContainer() {
         switch (Constants.currentMode) {
             case REAL:
                 // Real robot, instantiate hardware IO implementations
@@ -166,13 +184,13 @@ public class RobotContainer {
                 hood = new Hood(new HoodIOSim());
                 intake = new Intake(new IntakeIO() {
                 });
-                shooter = new Shooter(new ShooterIO() {
+                shooter = new Shooter(new ShooterIOSim() {
                 });
                 spindexer = new Spindexer(new SpindexerIO() {
                 });
                 kicker = new Kicker(new KickerIO() {
                 });
-                turret = new Turret(new TurretIO() {
+                turret = new Turret(new TurretIOSim() {
                 });
                 climber = new Climber(new ClimberIO() {
                 });
@@ -212,6 +230,8 @@ public class RobotContainer {
                 });
                 break;
         }
+
+        AllianceUtil.setRobot(drive::getPose);
 
         // Set up auto routines
         autoChooser = new LoggedDashboardChooser<>("Auto Choices");
@@ -271,5 +291,24 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return autoChooser.get();
+    }
+
+    public Command simShootFuel() {
+        return Commands.runOnce(() -> {
+            // if (!intakeSimulation.obtainGamePieceFromIntake())
+            // return;
+            Pose2d pose = driveSimulation.getSimulatedDriveTrainPose();
+            SimulatedArena.getInstance()
+                    .addGamePieceProjectile(
+                            new RebuiltFuelOnFly(
+                                    pose.getTranslation(),
+                                    new Translation2d(),
+                                    driveSimulation.getDriveTrainSimulatedChassisSpeedsFieldRelative(),
+                                    Rotation2d.fromDegrees(turret.getAngle().in(Degrees)),
+                                    Inches.of(15),
+                                    MetersPerSecond.of(shooter.getSpeed().in(RPM)),
+                                    Degrees.of(hood.getPosition())));
+        });
+
     }
 }
