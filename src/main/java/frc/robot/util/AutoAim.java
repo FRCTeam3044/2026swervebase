@@ -17,30 +17,46 @@ public class AutoAim {
   private final Turret turret;
   private final Shooter shooter;
   private final Hood hood;
+  private final AutoTargetUtil autoTargetUtil;
 
   private ShootingParameters parameters = new ShootingParameters(true, new Rotation2d(), 0, 0);
 
   private ConfigurableParameter<Double> shooterDisengagedProportion = new ConfigurableParameter<>(0.5,
       "ShooterDisengagedProportion");
 
-  public AutoAim(Turret turret, Shooter shooter, Hood hood) {
+  public AutoAim(Turret turret, Shooter shooter, Hood hood, AutoTargetUtil autoTargetUtil) {
     this.turret = turret;
     this.shooter = shooter;
     this.hood = hood;
+    this.autoTargetUtil = autoTargetUtil;
   }
 
   public void periodic() {
     ShotCalculator.getInstance().clearShootingParameters();
-    parameters = ShotCalculator.getInstance().getParameters();
+    if (autoTargetUtil.inNeutralZone()) {
+      parameters = ShotCalculator.getInstance().getParameters(autoTargetUtil.getAllianceZoneTarget(), true);
+    } else {
+      parameters = ShotCalculator.getInstance().getParameters(autoTargetUtil.getHub(), false);
+    }
   }
 
-  public Command autoAimCmd(BooleanSupplier shooterEngaged) {
+  public Command aimHub(BooleanSupplier shooterEngaged) {
     return Commands.parallel(
         turret.setAngle(() -> parameters.turretAngle().getMeasure()),
         hood.setPosition(() -> parameters.hoodPosition()),
         shooter.runSpeed(
             () -> RPM.of(
                 parameters.flywheelSpeed() * (shooterEngaged.getAsBoolean() ? 1 : shooterDisengagedProportion.get()))))
-        .withName("Auto Aim");
+        .withName("Auto Aim at Hub");
+  }
+
+  public Command aimAllianceZone(BooleanSupplier shooterEngaged) {
+    return Commands.parallel(
+        turret.setAngle(() -> parameters.turretAngle().getMeasure()),
+        hood.setPosition(() -> parameters.hoodPosition()),
+        shooter.runSpeed(
+            () -> RPM.of(
+                parameters.flywheelSpeed() * (shooterEngaged.getAsBoolean() ? 1 : shooterDisengagedProportion.get()))))
+        .withName("Auto Aim at AZ");
   }
 }

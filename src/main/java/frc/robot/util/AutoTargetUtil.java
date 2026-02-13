@@ -13,7 +13,8 @@ public class AutoTargetUtil {
   final double redSideLine = 11.96622575;
 
   private Pose3d hub = new Pose3d(new Translation3d(4.62, 8.069 / 2.0, 2), new Rotation3d());
-  private Pose3d topAllianceTarget = new Pose3d(new Translation3d(4.62, 8.069 / 2.0, 2), new Rotation3d());
+  private Pose3d outpostAllianceTarget = new Pose3d(new Translation3d(3.3, 1.7, 2), new Rotation3d());
+  private Pose3d depotAllianceTarget = new Pose3d(new Translation3d(3.3, 6.3, 2), new Rotation3d());
 
   public AutoTargetUtil(Drive drive) {
     this.drive = drive;
@@ -21,6 +22,18 @@ public class AutoTargetUtil {
 
   public Pose3d getHub() {
     return AllianceUtil.getPose3dForAlliance(hub);
+  }
+
+  public Pose3d getAllianceZoneTarget() {
+    // pick whichever target is closer
+    Pose3d depotTarget = AllianceUtil.getPose3dForAlliance(depotAllianceTarget);
+    Pose3d outpostTarget = AllianceUtil.getPose3dForAlliance(outpostAllianceTarget);
+    if (drive.getPose().getTranslation().getDistance(depotTarget.getTranslation().toTranslation2d()) < drive
+        .getPose().getTranslation().getDistance(outpostTarget.getTranslation().toTranslation2d())) {
+      return depotTarget;
+    } else {
+      return outpostTarget;
+    }
   }
 
   public boolean inNeutralZone() {

@@ -94,7 +94,8 @@ public class StateMachine extends StateMachineBase {
         // Teleop States
         AlliedZone alliedZone = new AlliedZone(this);
         NeutralZone neutralZone = new NeutralZone(
-                this, driverController, drive, intake, spindexer, kicker, turret, hood, shooter);
+                this, driverController, operatorBoard, drive, intake, spindexer, kicker, turret, hood, shooter,
+                autoAim);
         ActiveHub activeHub = new ActiveHub(
                 this, driverController, operatorBoard, drive, intake, spindexer, kicker, turret, hood, shooter,
                 autoAim);
