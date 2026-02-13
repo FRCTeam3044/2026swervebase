@@ -27,6 +27,9 @@ import frc.robot.statemachine.StateMachine;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.climber.ClimberIOSpark;
+import frc.robot.subsystems.LEDs.LEDs;
+import frc.robot.subsystems.LEDs.LEDsIO;
+import frc.robot.subsystems.LEDs.LEDsIORio;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.drive.GyroIO;
@@ -76,6 +79,7 @@ public class RobotContainer {
   private final Shooter shooter;
   private final Turret turret;
   private final Climber climber;
+  public final LEDs LEDs;
 
   public final StateMachine stateMachine;
   public final AutoTargetUtil autoTargetUtil;
@@ -117,6 +121,7 @@ public class RobotContainer {
         kicker = new Kicker(new KickerIOSpark());
         turret = new Turret(new TurretIOSpark());
         climber = new Climber(new ClimberIOSpark());
+        LEDs = new LEDs(new LEDsIORio());
         break;
 
       case SIM:
@@ -159,6 +164,7 @@ public class RobotContainer {
         kicker = new Kicker(new KickerIO() {});
         turret = new Turret(new TurretIO() {});
         climber = new Climber(new ClimberIO() {});
+        LEDs = new LEDs(new LEDsIORio());
         break;
 
       default:
@@ -178,6 +184,7 @@ public class RobotContainer {
         kicker = new Kicker(new KickerIO() {});
         turret = new Turret(new TurretIO() {});
         climber = new Climber(new ClimberIO() {});
+        LEDs = new LEDs(new LEDsIO() {});
         break;
     }
 
@@ -215,6 +222,7 @@ public class RobotContainer {
             turret,
             hood,
             climber,
+            LEDs,
             autoTargetUtil);
 
     mech = new Mechanism2d(3, 3);

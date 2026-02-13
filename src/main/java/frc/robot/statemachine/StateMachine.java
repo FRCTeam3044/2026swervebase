@@ -12,6 +12,7 @@ import frc.robot.statemachine.States.Tele.NeutralZone;
 import frc.robot.statemachine.States.TeleState;
 import frc.robot.statemachine.States.TestState;
 import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.intake.Intake;
@@ -41,6 +42,7 @@ public class StateMachine extends StateMachineBase {
       Turret turret,
       Hood hood,
       Climber climber,
+      LEDs leds,
       AutoTargetUtil autoTargetUtil) {
     super();
 
@@ -71,9 +73,9 @@ public class StateMachine extends StateMachineBase {
                   && (shiftOne.getAsBoolean() || shiftThree.getAsBoolean()));
         };
 
-    DisabledState disabled = new DisabledState(this);
+    DisabledState disabled = new DisabledState(this, leds);
     currentState = disabled;
-    State teleop = new TeleState(this, driverController, drive);
+    State teleop = new TeleState(this, driverController, drive, leds);
     State test =
         new TestState(
             this,
@@ -86,7 +88,8 @@ public class StateMachine extends StateMachineBase {
             shooter,
             spindexer,
             turret,
-            climber);
+            climber,
+            leds);
 
     this.registerToRootState(test, teleop, disabled);
 

@@ -7,6 +7,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.intake.Intake;
@@ -41,7 +42,9 @@ public class TestState extends State implements ConfigurableClass {
       Shooter shooter,
       Spindexer spindexer,
       Turret turret,
-      Climber climber) {
+      Climber climber,
+      LEDs leds) {
+
     super(stateMachine);
     SmartXboxController testControllerOne = new SmartXboxController(controllerOne, loop);
     SmartXboxController testControllerTwo = new SmartXboxController(controllerTwo, loop);
@@ -74,6 +77,7 @@ public class TestState extends State implements ConfigurableClass {
      */
 
     //
+    
     DoubleSupplier rightY =
         () -> -MathUtil.applyDeadband(controllerOne.getRightY(), DriveCommands.DEADBAND);
     DoubleSupplier leftY =
@@ -137,6 +141,7 @@ public class TestState extends State implements ConfigurableClass {
         .or(testControllerTwo.rightBumper())
         .whileTrue(intake.intakeBottom());
     testControllerOne.y().whileTrue(intake.runRollers());
+    testControllerOne.y().or(testControllerTwo.y()).whileTrue(intake.runRollers());
     testControllerOne
         .leftTrigger()
         .or(testControllerTwo.leftTrigger())
@@ -154,6 +159,8 @@ public class TestState extends State implements ConfigurableClass {
             () -> -controllerOne.getLeftX(),
             () -> -controllerOne.getRightX(),
             false));
+            
+    startWhenActive(leds.defaultPattern());
   }
 
   @Override
