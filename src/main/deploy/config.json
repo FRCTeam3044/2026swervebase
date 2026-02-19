@@ -1,1 +1,153 @@
-{}
+{
+    "presentation": {
+        "Bottom climber position": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "ShooterDisengagedProportion": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
+        "Intake bottom position": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
+        "Kicker top shoot speed": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "Top climber position": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "Kicker top block speed": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "Climb position": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "Spindexer speed": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
+        "Intake top position": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
+        "Climber speed": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "Intake roller speed": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
+        "Kicker bottom speed": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        }
+    },
+    "mode": "competition",
+    "simulation": {
+        "Bottom climber position": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "ShooterDisengagedProportion": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
+        "Intake bottom position": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
+        "Kicker top shoot speed": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "Top climber position": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "Kicker top block speed": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "Climb position": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "Spindexer speed": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
+        "Intake top position": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
+        "Climber speed": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "Intake roller speed": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
+        "Kicker bottom speed": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        }
+    },
+    "competition": {
+        "Bottom climber position": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "ShooterDisengagedProportion": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
+        "Intake bottom position": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
+        "Kicker top shoot speed": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "Top climber position": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "Kicker top block speed": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "Climb position": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "Spindexer speed": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
+        "Intake top position": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
+        "Climber speed": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
+        "Intake roller speed": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
+        "Kicker bottom speed": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        }
+    }
+}

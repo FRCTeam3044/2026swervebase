@@ -29,7 +29,11 @@ public class Shooter extends SubsystemBase {
 
   public Command runPercent(DoubleSupplier percent) {
     return Commands.runEnd(
-            () -> io.setPercent(percent.getAsDouble()), () -> io.setPercent(0.0), this)
+        () -> io.setPercent(percent.getAsDouble()), () -> io.setPercent(0.0), this)
         .withName("Run Shooter At Percent");
+  }
+
+  public AngularVelocity getSpeed() {
+    return inputs.leaderVelocity;
   }
 }
