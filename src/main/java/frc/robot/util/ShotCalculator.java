@@ -20,6 +20,9 @@ import edu.wpi.first.math.interpolation.InverseInterpolator;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Robot;
 import lombok.experimental.ExtensionMethod;
+
+import java.io.FileNotFoundException;
+
 import org.littletonrobotics.junction.Logger;
 
 @ExtensionMethod({ GeomUtil.class })
@@ -45,11 +48,7 @@ public class ShotCalculator {
     // Cache parameters
     private ShootingParameters latestParameters = null;
 
-    private static double minDistance;
-    private static double maxDistance;
-
-    private static double minDistanceSecondary;
-    private static double maxDistanceSecondary;
+    private static AutoAimDataManager dm;
 
     private static double phaseDelay;
     private static final InterpolatingTreeMap<Double, Rotation2d> shothoodPositionMap = new InterpolatingTreeMap<>(
@@ -75,11 +74,12 @@ public class ShotCalculator {
     public static double[] timesSecondary = new double[] { 1.0, 0.98, 0.9605, 0.98, 0.96, 1.119 };
 
     static {
-        minDistance = distances[0];
-        maxDistance = distances[distances.length - 1];
-
-        minDistanceSecondary = distancesSecondary[0];
-        maxDistanceSecondary = distancesSecondary[distancesSecondary.length - 1];
+        try {
+            dm = new AutoAimDataManager();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         phaseDelay = 0.03;
 
         for (int i = 0; i < distances.length; i++) {
@@ -133,7 +133,7 @@ public class ShotCalculator {
         Pose2d lookaheadPose = turretPosition;
         double lookaheadTurretToTargetDistance = turretToTargetDistance;
         for (int i = 0; i < 20; i++) {
-            timeOfFlight = getTimeOfFlightMap(secondaryValues).get(lookaheadTurretToTargetDistance);
+            timeOfFlight = dm.getTimeOfFlightMap(secondaryValues).get(lookaheadTurretToTargetDistance);
             double offsetX = turretVelocityX * timeOfFlight;
             double offsetY = turretVelocityY * timeOfFlight;
             lookaheadPose = new Pose2d(
@@ -144,14 +144,13 @@ public class ShotCalculator {
 
         // Calculate parameters accounted for imparted velocity
         turretAngle = target.minus(lookaheadPose.getTranslation()).getAngle();
-        hoodPosition = getShotHoodPositionMap(secondaryValues).get(lookaheadTurretToTargetDistance).getDegrees();
+        hoodPosition = dm.getShotHoodPositionMap(secondaryValues).get(lookaheadTurretToTargetDistance);
         latestParameters = new ShootingParameters(
-                lookaheadTurretToTargetDistance >= getMinDistance(secondaryValues)
-                        && lookaheadTurretToTargetDistance <= getMaxDistance(secondaryValues),
+                lookaheadTurretToTargetDistance >= dm.getMinDistance(secondaryValues)
+                        && lookaheadTurretToTargetDistance <= dm.getMaxDistance(secondaryValues),
                 turretAngle,
                 hoodPosition,
-                getShotFlywheelSpeedMap(secondaryValues).get(lookaheadTurretToTargetDistance));
-
+                dm.getShotFlywheelSpeedMap(secondaryValues).get(lookaheadTurretToTargetDistance));
         // Log calculated values
         Logger.recordOutput("ShotCalculator/LookaheadPose", lookaheadPose);
         Logger.recordOutput("ShotCalculator/TurretToTargetDistance", lookaheadTurretToTargetDistance);
@@ -162,25 +161,5 @@ public class ShotCalculator {
 
     public void clearShootingParameters() {
         latestParameters = null;
-    }
-
-    private static InterpolatingDoubleTreeMap getShotFlywheelSpeedMap(boolean secondary) {
-        return secondary ? shotFlywheelSpeedMapSecondary : shotFlywheelSpeedMap;
-    }
-
-    private static InterpolatingTreeMap<Double, Rotation2d> getShotHoodPositionMap(boolean secondary) {
-        return secondary ? shothoodPositionMapSecondary : shothoodPositionMap;
-    }
-
-    private static InterpolatingDoubleTreeMap getTimeOfFlightMap(boolean secondary) {
-        return secondary ? timeOfFlightMapSecondary : timeOfFlightMap;
-    }
-
-    private static double getMinDistance(boolean secondary) {
-        return secondary ? minDistanceSecondary : minDistance;
-    }
-
-    private static double getMaxDistance(boolean secondary) {
-        return secondary ? maxDistanceSecondary : maxDistance;
     }
 }
