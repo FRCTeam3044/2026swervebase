@@ -2,6 +2,8 @@ package frc.robot.util;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -66,6 +68,13 @@ public class AutoAimDataManager {
             hoodPositionMap.put(distance, hoodPosition);
             timeOfFlightMap.put(distance, shotTime);
         }
+        if (shots.length() == 0) {
+            flywheelSpeedMap.put(0.0, 0.0);
+            hoodPositionMap.put(0.0, 0.0);
+            timeOfFlightMap.put(0.0, 0.0);
+            minDistance = 0.0;
+            maxDistance = 0.0;
+        }
         if (mz) {
             mzTreeMapRecord = new TreeMapRecord(flywheelSpeedMap, hoodPositionMap, timeOfFlightMap, minDistance,
                     maxDistance);
@@ -73,11 +82,17 @@ public class AutoAimDataManager {
             azTreeMapRecord = new TreeMapRecord(flywheelSpeedMap, hoodPositionMap, timeOfFlightMap, minDistance,
                     maxDistance);
         }
+
+        try (FileWriter file = new FileWriter(Filesystem.getDeployDirectory() + (mz ? "/mzaim.json" : "/azaim.json"))) {
+            file.write(config.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void addShot(double distance, double hoodPosition, double shooterSpeed, double shotTime) {
+    public void addShot(double distance, double hoodPosition, double shooterSpeed) {
         JSONObject recordJson = new JSONObject().put("distance", distance).put("hoodPosition", hoodPosition)
-                .put("shooterSpeed", shooterSpeed).put("shotTime", shotTime)
+                .put("shooterSpeed", shooterSpeed).put("shotTime", 0)
                 .put("timestamp", System.currentTimeMillis());
         if (mzCalibrationMode.get()) {
             mzConfig.getJSONArray("shots")

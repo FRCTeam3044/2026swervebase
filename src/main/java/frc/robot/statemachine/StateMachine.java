@@ -87,8 +87,8 @@ public class StateMachine extends StateMachineBase {
 
                 this.registerToRootState(test, teleop, disabled);
                 // Test States
-                State calibration = new CalibrationState(this, driverController, shooter, turret, hood, kicker,
-                                spindexer);
+                State calibration = new CalibrationState(this, driverController, drive, shooter, turret, hood, kicker,
+                                spindexer, autoTargetUtil);
                 State normalTest = new NormalTestState(this, driverController, operatorController, drive, hood, intake,
                                 kicker,
                                 shooter, spindexer, turret, climber, leds);

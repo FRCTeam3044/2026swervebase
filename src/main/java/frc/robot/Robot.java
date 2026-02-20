@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.util.AllianceUtil;
+import frc.robot.util.ShotCalculator;
 import me.nabdev.oxconfig.OxConfig;
 import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -128,6 +129,8 @@ public class Robot extends LoggedRobot {
                 robotContainer.autoTargetUtil.getHub().getTranslation().toTranslation2d()));
 
     robotContainer.autoAim.periodic();
+
+    ShotCalculator.periodic();
   }
 
   /** This function is called once when the robot is disabled. */

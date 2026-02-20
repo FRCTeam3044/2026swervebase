@@ -14,9 +14,6 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
-import edu.wpi.first.math.interpolation.InverseInterpolator;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Robot;
 import lombok.experimental.ExtensionMethod;
@@ -48,51 +45,22 @@ public class ShotCalculator {
     // Cache parameters
     private ShootingParameters latestParameters = null;
 
-    private static AutoAimDataManager dm;
+    public static AutoAimDataManager dm;
 
-    private static double phaseDelay;
-    private static final InterpolatingTreeMap<Double, Rotation2d> shothoodPositionMap = new InterpolatingTreeMap<>(
-            InverseInterpolator.forDouble(), Rotation2d::interpolate);
-    private static final InterpolatingDoubleTreeMap shotFlywheelSpeedMap = new InterpolatingDoubleTreeMap();
-    private static final InterpolatingDoubleTreeMap timeOfFlightMap = new InterpolatingDoubleTreeMap();
-
-    private static final InterpolatingTreeMap<Double, Rotation2d> shothoodPositionMapSecondary = new InterpolatingTreeMap<>(
-            InverseInterpolator.forDouble(), Rotation2d::interpolate);
-    private static final InterpolatingDoubleTreeMap shotFlywheelSpeedMapSecondary = new InterpolatingDoubleTreeMap();
-    private static final InterpolatingDoubleTreeMap timeOfFlightMapSecondary = new InterpolatingDoubleTreeMap();
+    private static double phaseDelay = 0.03;
 
     public static Transform3d robotToTurret = new Transform3d(0, 0, 0.381, Rotation3d.kZero);
-
-    public static double[] distances = new double[] { 1.01, 1.665, 2.1307, 3.0156, 4.4437, 5.598 };
-    public static double[] angles = new double[] { 82.0, 76.0, 72.0, 65.0, 55.0, 55.0 };
-    public static double[] speeds = new double[] { 7.0, 7.0, 7.1, 7.5, 8.2, 9.0 };
-    public static double[] times = new double[] { 1.0, 0.98, 0.9605, 0.98, 0.96, 1.119 };
-
-    public static double[] distancesSecondary = new double[] { 1.01, 1.665, 2.1307, 3.0156, 4.4437, 5.598 };
-    public static double[] anglesSecondary = new double[] { 82.0, 76.0, 72.0, 65.0, 55.0, 55.0 };
-    public static double[] speedsSecondary = new double[] { 7.0, 7.0, 7.1, 7.5, 8.2, 9.0 };
-    public static double[] timesSecondary = new double[] { 1.0, 0.98, 0.9605, 0.98, 0.96, 1.119 };
 
     static {
         try {
             dm = new AutoAimDataManager();
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        phaseDelay = 0.03;
+    }
 
-        for (int i = 0; i < distances.length; i++) {
-            shothoodPositionMap.put(distances[i], Rotation2d.fromDegrees(angles[i]));
-            shotFlywheelSpeedMap.put(distances[i], speeds[i]);
-            timeOfFlightMap.put(distances[i], times[i]);
-        }
-
-        for (int i = 0; i < distancesSecondary.length; i++) {
-            shothoodPositionMapSecondary.put(distancesSecondary[i], Rotation2d.fromDegrees(anglesSecondary[i]));
-            shotFlywheelSpeedMapSecondary.put(distancesSecondary[i], speedsSecondary[i]);
-            timeOfFlightMapSecondary.put(distancesSecondary[i], timesSecondary[i]);
-        }
+    public static void periodic() {
+        dm.periodic();
     }
 
     public ShootingParameters getParameters(Pose3d targetPose, boolean secondaryValues) {

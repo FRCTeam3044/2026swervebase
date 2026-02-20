@@ -1,18 +1,1 @@
-{
-    "shots": [
-        {
-            "distance": 0.0,
-            "hoodPosition": 0.0,
-            "shooterSpeed": 0.0,
-            "shotTime": 0.0,
-            "timestamp": 0.0
-        },
-        {
-            "distance": 1.0,
-            "hoodPosition": 0.0,
-            "shooterSpeed": 0.0,
-            "shotTime": 0.0,
-            "timestamp": 0.0
-        }
-    ]
-}
+{"shots":[{"hoodPosition":82,"distance":1.01,"shotTime":1,"shooterSpeed":7,"timestamp":1771608995835},{"hoodPosition":76,"distance":1.665,"shotTime":0.98,"shooterSpeed":7,"timestamp":1771608996196},{"hoodPosition":72,"distance":2.1307,"shotTime":0.9605,"shooterSpeed":7.1,"timestamp":1771608996475},{"hoodPosition":65,"distance":3.0156,"shotTime":0.98,"shooterSpeed":7.5,"timestamp":1771608996794},{"hoodPosition":55,"distance":4.4437,"shotTime":0.96,"shooterSpeed":8.2,"timestamp":1771608997135},{"hoodPosition":55,"distance":5.598,"shotTime":1.119,"shooterSpeed":9,"timestamp":1771608997416}]}
