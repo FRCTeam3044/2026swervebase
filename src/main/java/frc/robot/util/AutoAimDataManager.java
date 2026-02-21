@@ -94,14 +94,16 @@ public class AutoAimDataManager {
         JSONObject recordJson = new JSONObject().put("distance", distance).put("hoodPosition", hoodPosition)
                 .put("shooterSpeed", shooterSpeed).put("shotTime", 0)
                 .put("timestamp", System.currentTimeMillis());
-        if (mzCalibrationMode.get()) {
+
+        boolean mzMode = mzCalibrationMode.get();
+        if (mzMode) {
             mzConfig.getJSONArray("shots")
                     .put(recordJson);
-        } else if (calibrationMode.get()) {
+        } else {
             azConfig.getJSONArray("shots")
                     .put(recordJson);
         }
-        updateFromJson(mzCalibrationMode.get());
+        updateFromJson(mzMode);
     }
 
     public void periodic() {
@@ -115,12 +117,14 @@ public class AutoAimDataManager {
             JSONTokener tokener = new JSONTokener(azSet);
             azConfig = new JSONObject(tokener);
             updateFromJson(false);
+            SmartDashboard.putString("AzAutoAimSet", "");
         }
         String mzSet = SmartDashboard.getString("MzAutoAimSet", "");
         if (!mzSet.isEmpty()) {
             JSONTokener tokener = new JSONTokener(mzSet);
             mzConfig = new JSONObject(tokener);
             updateFromJson(true);
+            SmartDashboard.putString("MzAutoAimSet", "");
         }
     }
 

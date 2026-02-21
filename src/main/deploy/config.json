@@ -110,6 +110,10 @@
             "comment": "Auto-Generated",
             "value": "0.0"
         },
+        "CalibrationShotTurretAngle": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "TestMode/Test Shooter Speed": "0.0",
         "Spindexer speed": {
             "comment": "Auto-Generated",
@@ -117,7 +121,7 @@
         },
         "Shooter Midzone Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Climber speed": {
             "comment": "Auto-Generated",
@@ -142,6 +146,10 @@
         "CalibrationState/Test Parameter 91": "0",
         "CalibrationState/Test Parameter 92": "0",
         "CalibrationState/Test Parameter 93": "0",
+        "CalibrationShotHoodPosition": {
+            "comment": "Auto-Generated",
+            "value": "0.15"
+        },
         "CalibrationState/Test Parameter 36": "0",
         "CalibrationState/Test Parameter 37": "0",
         "CalibrationState/Test Parameter 38": "0",
@@ -149,15 +157,19 @@
         "CalibrationState/Test Parameter 43": "0",
         "CalibrationState/Test Parameter 44": "0",
         "CalibrationState/Test Parameter 45": "0",
+        "CalibrationShotFlywheelSpeed": {
+            "comment": "Auto-Generated",
+            "value": "2500"
+        },
         "CalibrationState/Test Parameter 46": "0",
         "CalibrationState/Test Parameter 40": "0",
         "CalibrationState/Test Parameter 41": "0",
         "CalibrationState/Test Parameter 42": "0",
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "false"
+            "value": "true"
         },
-        "CalibrationState/CalibrationShotHoodPosition": "0.5",
+        "CalibrationState/CalibrationShotHoodPosition": "111",
         "CalibrationState/Test Parameter 29": "0",
         "Intake top position": {
             "comment": "Auto-Generated",
@@ -294,6 +306,10 @@
             "comment": "Auto-Generated",
             "value": "0.0"
         },
+        "CalibrationShotTurretAngle": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "TestMode/Test Shooter Speed": "0.0",
         "Spindexer speed": {
             "comment": "Auto-Generated",
@@ -301,7 +317,7 @@
         },
         "Shooter Midzone Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Climber speed": {
             "comment": "Auto-Generated",
@@ -326,6 +342,10 @@
         "CalibrationState/Test Parameter 91": "0",
         "CalibrationState/Test Parameter 92": "0",
         "CalibrationState/Test Parameter 93": "0",
+        "CalibrationShotHoodPosition": {
+            "comment": "Auto-Generated",
+            "value": "0.15"
+        },
         "CalibrationState/Test Parameter 36": "0",
         "CalibrationState/Test Parameter 37": "0",
         "CalibrationState/Test Parameter 38": "0",
@@ -333,6 +353,10 @@
         "CalibrationState/Test Parameter 43": "0",
         "CalibrationState/Test Parameter 44": "0",
         "CalibrationState/Test Parameter 45": "0",
+        "CalibrationShotFlywheelSpeed": {
+            "comment": "Auto-Generated",
+            "value": "2500"
+        },
         "CalibrationState/Test Parameter 46": "0",
         "CalibrationState/Test Parameter 40": "0",
         "CalibrationState/Test Parameter 41": "0",
@@ -341,7 +365,7 @@
             "comment": "Auto-Generated",
             "value": "true"
         },
-        "CalibrationState/CalibrationShotHoodPosition": "0.5",
+        "CalibrationState/CalibrationShotHoodPosition": "11",
         "CalibrationState/Test Parameter 29": "0",
         "Intake top position": {
             "comment": "Auto-Generated",
@@ -477,6 +501,10 @@
             "comment": "Auto-Generated",
             "value": "0.0"
         },
+        "CalibrationShotTurretAngle": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "TestMode/Test Shooter Speed": "0.0",
         "Spindexer speed": {
             "comment": "Auto-Generated",
@@ -484,7 +512,7 @@
         },
         "Shooter Midzone Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Climber speed": {
             "comment": "Auto-Generated",
@@ -509,6 +537,10 @@
         "CalibrationState/Test Parameter 91": "0",
         "CalibrationState/Test Parameter 92": "0",
         "CalibrationState/Test Parameter 93": "0",
+        "CalibrationShotHoodPosition": {
+            "comment": "Auto-Generated",
+            "value": "0.15"
+        },
         "CalibrationState/Test Parameter 36": "0",
         "CalibrationState/Test Parameter 37": "0",
         "CalibrationState/Test Parameter 38": "0",
@@ -516,15 +548,19 @@
         "CalibrationState/Test Parameter 43": "0",
         "CalibrationState/Test Parameter 44": "0",
         "CalibrationState/Test Parameter 45": "0",
+        "CalibrationShotFlywheelSpeed": {
+            "comment": "Auto-Generated",
+            "value": "2500"
+        },
         "CalibrationState/Test Parameter 46": "0",
         "CalibrationState/Test Parameter 40": "0",
         "CalibrationState/Test Parameter 41": "0",
         "CalibrationState/Test Parameter 42": "0",
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "false"
+            "value": "true"
         },
-        "CalibrationState/CalibrationShotHoodPosition": "0.5",
+        "CalibrationState/CalibrationShotHoodPosition": "1",
         "CalibrationState/Test Parameter 29": "0",
         "Intake top position": {
             "comment": "Auto-Generated",
