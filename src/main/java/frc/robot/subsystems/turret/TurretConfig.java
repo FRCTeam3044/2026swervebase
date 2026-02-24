@@ -1,6 +1,7 @@
 package frc.robot.subsystems.turret;
 
 import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SoftLimitConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -12,13 +13,19 @@ public class TurretConfig {
 
   static {
     EncoderConfig encoderConfig = new EncoderConfig();
+    SoftLimitConfig softLimits = new SoftLimitConfig();
     // Enable after we find the max mechanism range
     // encoderConfig.positionConversionFactor((maxAngle.in(Degrees) -
     // minAngle.in(Degrees)) / (maxPosition - minPosition));
+    // softLimits.forwardSoftLimitEnabled(true);
+    // softLimits.forwardSoftLimit(TurretConstants.maxPosition);
+    // softLimits.reverseSoftLimitEnabled(true);
+    // softLimits.reverseSoftLimit(TurretConstants.minPosition);
 
     motorConfig
         .idleMode(IdleMode.kBrake)
         .smartCurrentLimit(TurretConstants.currentLimit)
+        .apply(softLimits)
         .apply(encoderConfig)
         .inverted(true);
   }
