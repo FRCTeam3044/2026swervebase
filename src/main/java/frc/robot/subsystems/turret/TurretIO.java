@@ -3,6 +3,8 @@ package frc.robot.subsystems.turret;
 import static edu.wpi.first.units.Units.Degrees;
 
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Voltage;
+
 import org.littletonrobotics.junction.AutoLog;
 
 public interface TurretIO {
@@ -17,6 +19,10 @@ public interface TurretIO {
   }
 
   public default void setAngle(Angle angle) {
+  }
+
+  public default void setVoltage(Voltage volts) {
+
   }
 
   public default void setPercent(double percent) {

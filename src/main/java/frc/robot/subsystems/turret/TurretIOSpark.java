@@ -2,6 +2,7 @@ package frc.robot.subsystems.turret;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.subsystems.turret.TurretConstants.*;
 import static frc.robot.util.SparkUtil.ifOk;
 import static frc.robot.util.SparkUtil.tryUntilOk;
@@ -14,6 +15,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import me.nabdev.oxconfig.sampleClasses.ConfigurablePIDController;
 import yams.units.EasyCRT;
@@ -78,6 +80,11 @@ public class TurretIOSpark implements TurretIO {
     motor.set(
         MathUtil.clamp(
             pidController.calculate(currentAngle.in(Degrees), targetAngle.in(Degrees)), -1.0, 1.0));
+  }
+
+  @Override
+  public void setVoltage(Voltage volts) {
+    motor.setVoltage(volts.in(Volts));
   }
 
   @Override

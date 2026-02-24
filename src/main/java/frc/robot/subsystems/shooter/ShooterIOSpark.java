@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter;
 
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.subsystems.shooter.ShooterConfig.*;
 import static frc.robot.subsystems.shooter.ShooterConstants.*;
 import static frc.robot.util.SparkUtil.ifOk;
@@ -12,6 +13,7 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Voltage;
 import me.nabdev.oxconfig.sampleClasses.ConfigurablePIDController;
 
 public class ShooterIOSpark implements ShooterIO {
@@ -46,6 +48,11 @@ public class ShooterIOSpark implements ShooterIO {
     double leaderSetpoint = speed.in(RPM);
     this.targetSpeed = speed;
     leaderMotor.set(controller.calculate(leaderEncoder.getVelocity(), leaderSetpoint));
+  }
+
+  @Override
+  public void setVoltage(Voltage volts) {
+    leaderMotor.setVoltage(volts.in(Volts));
   }
 
   @Override

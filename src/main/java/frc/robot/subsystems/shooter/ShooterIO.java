@@ -3,6 +3,8 @@ package frc.robot.subsystems.shooter;
 import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Voltage;
+
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ShooterIO {
@@ -16,6 +18,8 @@ public interface ShooterIO {
   }
 
   public default void setSpeed(AngularVelocity speed) {}
+
+  public default void setVoltage(Voltage volts) {}
 
   public default void setPercent(double percent) {}
 
