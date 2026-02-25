@@ -66,7 +66,7 @@ public class CalibrationState extends State {
                 controller.rightTrigger().whileFalse(kicker.blockKicker());
                 startWhenActive(kicker.blockKicker().onlyWhile(controller.rightTrigger().negate())
                                 .withName("Block Kicker"));
-                startWhenActive(spindexer.setSpeed());
+                startWhenActive(spindexer.run());
 
                 controller.a().onTrue(Commands.runOnce(() -> {
                         Pose3d targetPose = targetPoseSupplier.get();

@@ -5,7 +5,7 @@ import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.DriveCommands;
+import frc.robot.subsystems.drive.DriveCommands;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.drive.Drive;
@@ -90,7 +90,7 @@ public class NormalTestState extends State implements ConfigurableClass {
                 testControllerOne.a().whileTrue(hood.setPosition(hoodPosition::get));
                 testControllerOne.b().whileTrue(shooter.runSpeed(() -> RPM.of(shooterSpeed.get())));
                 testControllerOne.x().whileTrue(turret.setAngle(() -> Degrees.of(turretPosition.get())));
-                testControllerOne.y().whileTrue(spindexer.setSpeed());
+                testControllerOne.y().whileTrue(spindexer.run());
 
                 testControllerOne.povUp().whileTrue(climber.climberTop());
                 testControllerOne

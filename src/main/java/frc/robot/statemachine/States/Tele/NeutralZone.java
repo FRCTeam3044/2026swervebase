@@ -32,7 +32,7 @@ public class NeutralZone extends State {
 
     startWhenActive(intake.intakeBottom());
     controller.leftTrigger().whileTrue(intake.runRollers());
-    startWhenActive(spindexer.setSpeed());
+    startWhenActive(spindexer.run());
     startWhenActive(
         autoAim.aimAllianceZone(() -> operatorBoard.getRawButton(1)));
     controller.rightTrigger().whileTrue(kicker.shootKicker());

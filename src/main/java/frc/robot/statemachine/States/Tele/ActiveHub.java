@@ -31,7 +31,7 @@ public class ActiveHub extends State {
 
     startWhenActive(intake.intakeBottom());
     controller.leftTrigger().whileTrue(intake.runRollers());
-    startWhenActive(spindexer.setSpeed());
+    startWhenActive(spindexer.run());
     startWhenActive(
         autoAim.aimHub(() -> operatorBoard.getRawButton(1)));
     controller.rightTrigger().whileTrue(kicker.shootKicker());

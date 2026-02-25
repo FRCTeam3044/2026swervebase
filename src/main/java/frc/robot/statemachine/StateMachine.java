@@ -15,7 +15,7 @@ import frc.robot.statemachine.States.AutoState;
 import frc.robot.statemachine.States.CalibrationState;
 import frc.robot.statemachine.States.DisabledState;
 import frc.robot.statemachine.States.NormalTestState;
-import frc.robot.statemachine.States.SysIDState;
+// import frc.robot.statemachine.States.SysIDState;
 import frc.robot.statemachine.States.Tele.ActiveHub;
 import frc.robot.statemachine.States.Tele.AlliedZone;
 import frc.robot.statemachine.States.Tele.InactiveHub;
@@ -48,6 +48,10 @@ import me.nabdev.oxidation.StateMachineBase;
 public class StateMachine extends StateMachineBase {
         String autoWinner = DriverStation.getGameSpecificMessage();
         AllianceColor allianceColor = AllianceUtil.getAlliance();
+
+        ArrayList<AutoSteps> testAutoRoutine = new ArrayList<AutoSteps>();
+
+        AutoSteps currentStep;
 
         public StateMachine(
                         CommandXboxController driverController,
@@ -160,12 +164,19 @@ public class StateMachine extends StateMachineBase {
                                 .withChild(intakeNeutralZone)
                                 .withChild(shootToAlliedSide);
 
-                ArrayList<AutoSteps> testAutoRoutine = new ArrayList<>();
                 testAutoRoutine.add(AutoSteps.ShootToHub);
                 testAutoRoutine.add(AutoSteps.IntakeNeutralZone);
                 testAutoRoutine.add(AutoSteps.ShootToHub);
                 testAutoRoutine.add(AutoSteps.AutoClimb);
-                AutoSteps currentStep;
+                currentStep = testAutoRoutine.get(0);
+
+                if (AutoSteps.IntakeNeutralZone.getCondition().getAsBoolean()) {
+                        currentStep = testAutoRoutine.get(1);
+                } else if (AutoSteps.AutoClimb.getCondition().getAsBoolean()) {
+                        currentStep = testAutoRoutine.get(2);
+                } else if (AutoSteps.AutoClimb.getCondition().getAsBoolean()) {
+                        currentStep = testAutoRoutine.get(3);
+                }
 
                 // TODO: Add "completed" boolean suppliers
                 autoClimb.withTransition(auto, () -> false, 0, "Climb to auto");
@@ -175,11 +186,14 @@ public class StateMachine extends StateMachineBase {
                 intakeNeutralZone.withTransition(auto, () -> false, 0, "Neutral intake to shot");
 
                 // TODO: Add "next in line" boolean suppliers
-                auto.withTransition(autoClimb, () -> false, 0, "Auto to climb");
-                auto.withTransition(shootHub, () -> false, 0, "Auto to hub shot");
-                auto.withTransition(shootToAlliedSide, () -> false, 0, "Auto to neutral shot");
-                auto.withTransition(intakeAllianceZone, () -> false, 0, "Auto to allied intake");
-                auto.withTransition(intakeNeutralZone, () -> false, 0, "Auto to neutral intake");
+                auto.withTransition(autoClimb, () -> currentStep == AutoSteps.AutoClimb, 0, "Auto to climb");
+                auto.withTransition(shootHub, () -> currentStep == AutoSteps.ShootToHub, 0, "Auto to hub shot");
+                auto.withTransition(shootToAlliedSide, () -> currentStep == AutoSteps.ShootToAlliedSide, 0,
+                                "Auto to neutral shot");
+                auto.withTransition(intakeAllianceZone, () -> currentStep == AutoSteps.IntakeAllianceZone, 0,
+                                "Auto to allied intake");
+                auto.withTransition(intakeNeutralZone,
+                                () -> currentStep == AutoSteps.IntakeNeutralZone, 0, "Auto to neutral intake");
 
                 // For SYSID (comment out for normal autos)
                 // MAKE SURE YOU ADD AUTO TO THE REGISTER TO ROOT STATE
