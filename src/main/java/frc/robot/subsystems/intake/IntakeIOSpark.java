@@ -61,12 +61,13 @@ public class IntakeIOSpark implements IntakeIO {
         new DoubleSupplier[] { motorTwo::getAppliedOutput, motorTwo::getBusVoltage },
         (values) -> inputs.appliedVoltage = values[0] * values[1]);
 
-    motorOne.set(intakeController.calculate(encoderOne.getPosition(), targetPosition));
+    inputs.targetPosition = targetPosition;
   }
 
   @Override
   public void setIntakePosition(double position) {
     targetPosition = position;
+    motorOne.set(intakeController.calculate(encoderOne.getPosition(), targetPosition));
   }
 
   @Override
