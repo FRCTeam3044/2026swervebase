@@ -70,6 +70,11 @@ public class IntakeIOSpark implements IntakeIO {
   }
 
   @Override
+  public void setIntakeSpeed(double speed) {
+    motorOne.set(speed);
+  }
+
+  @Override
   public void setSpeedRollers(double speed) {
     rollerMotor.set(speed);
   }

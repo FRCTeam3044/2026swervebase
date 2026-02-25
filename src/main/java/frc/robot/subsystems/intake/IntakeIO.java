@@ -15,10 +15,15 @@ public interface IntakeIO {
     public double appliedVoltage = 0.0;
   }
 
-  public default void setIntakePosition(double angle) {}
+  public default void setIntakePosition(double angle) {
+  }
 
-  public default void setSpeedRollers(double speed) {}
+  public default void setIntakeSpeed(double speed) {
+  }
 
-  public default void updateInputs(IntakeIOInputs inputs) {}
-  ;
+  public default void setSpeedRollers(double speed) {
+  }
+
+  public default void updateInputs(IntakeIOInputs inputs) {
+  };
 }
