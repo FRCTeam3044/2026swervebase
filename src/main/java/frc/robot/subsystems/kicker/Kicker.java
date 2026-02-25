@@ -32,7 +32,7 @@ public class Kicker extends SubsystemBase {
   public Command shootKicker() {
     if (Robot.isSimulation()) {
       return Commands.deferredProxy(() -> Commands.repeatingSequence(RobotContainer.getInstance().simShootFuel(),
-          Commands.waitSeconds(0.2)));
+          Commands.waitSeconds(0.2)).withName("Sim shoot fuel")).withName("Sim shoot fuel proxy");
     }
     return Commands.run(
         () -> {

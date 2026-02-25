@@ -122,7 +122,7 @@ public class DriveConstants {
     public static final Distance mapleBumperSize = Constants.currentMode == Constants.Mode.SIM ? Inches.of(36.25)
             : bumperSize;
 
-    public static final Pathfinder pathfinder = (new PathfinderBuilder(Field.EMPTY_FIELD))
+    public static final Pathfinder pathfinder = (new PathfinderBuilder(Field.REBUILT_2026_TRENCH))
             .setNormalizeCorners(false)
             .setCornerDist(1)
             .setCornerPointSpacing(0.06)

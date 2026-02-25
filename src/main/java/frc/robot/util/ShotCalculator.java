@@ -14,12 +14,12 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
-import edu.wpi.first.math.interpolation.InverseInterpolator;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Robot;
 import lombok.experimental.ExtensionMethod;
+
+import java.io.FileNotFoundException;
+
 import org.littletonrobotics.junction.Logger;
 
 @ExtensionMethod({ GeomUtil.class })
@@ -45,54 +45,22 @@ public class ShotCalculator {
     // Cache parameters
     private ShootingParameters latestParameters = null;
 
-    private static double minDistance;
-    private static double maxDistance;
+    public static AutoAimDataManager dm;
 
-    private static double minDistanceSecondary;
-    private static double maxDistanceSecondary;
-
-    private static double phaseDelay;
-    private static final InterpolatingTreeMap<Double, Rotation2d> shothoodPositionMap = new InterpolatingTreeMap<>(
-            InverseInterpolator.forDouble(), Rotation2d::interpolate);
-    private static final InterpolatingDoubleTreeMap shotFlywheelSpeedMap = new InterpolatingDoubleTreeMap();
-    private static final InterpolatingDoubleTreeMap timeOfFlightMap = new InterpolatingDoubleTreeMap();
-
-    private static final InterpolatingTreeMap<Double, Rotation2d> shothoodPositionMapSecondary = new InterpolatingTreeMap<>(
-            InverseInterpolator.forDouble(), Rotation2d::interpolate);
-    private static final InterpolatingDoubleTreeMap shotFlywheelSpeedMapSecondary = new InterpolatingDoubleTreeMap();
-    private static final InterpolatingDoubleTreeMap timeOfFlightMapSecondary = new InterpolatingDoubleTreeMap();
+    private static double phaseDelay = 0.03;
 
     public static Transform3d robotToTurret = new Transform3d(0, 0, 0.381, Rotation3d.kZero);
 
-    public static double[] distances = new double[] { 1.01, 1.665, 2.1307, 3.0156, 4.4437, 5.598 };
-    public static double[] angles = new double[] { 82.0, 76.0, 72.0, 65.0, 55.0, 55.0 };
-    public static double[] speeds = new double[] { 7.0, 7.0, 7.1, 7.5, 8.2, 9.0 };
-    public static double[] times = new double[] { 1.0, 0.98, 0.9605, 0.98, 0.96, 1.119 };
-
-    public static double[] distancesSecondary = new double[] { 1.01, 1.665, 2.1307, 3.0156, 4.4437, 5.598 };
-    public static double[] anglesSecondary = new double[] { 82.0, 76.0, 72.0, 65.0, 55.0, 55.0 };
-    public static double[] speedsSecondary = new double[] { 7.0, 7.0, 7.1, 7.5, 8.2, 9.0 };
-    public static double[] timesSecondary = new double[] { 1.0, 0.98, 0.9605, 0.98, 0.96, 1.119 };
-
     static {
-        minDistance = distances[0];
-        maxDistance = distances[distances.length - 1];
-
-        minDistanceSecondary = distancesSecondary[0];
-        maxDistanceSecondary = distancesSecondary[distancesSecondary.length - 1];
-        phaseDelay = 0.03;
-
-        for (int i = 0; i < distances.length; i++) {
-            shothoodPositionMap.put(distances[i], Rotation2d.fromDegrees(angles[i]));
-            shotFlywheelSpeedMap.put(distances[i], speeds[i]);
-            timeOfFlightMap.put(distances[i], times[i]);
+        try {
+            dm = new AutoAimDataManager();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
+    }
 
-        for (int i = 0; i < distancesSecondary.length; i++) {
-            shothoodPositionMapSecondary.put(distancesSecondary[i], Rotation2d.fromDegrees(anglesSecondary[i]));
-            shotFlywheelSpeedMapSecondary.put(distancesSecondary[i], speedsSecondary[i]);
-            timeOfFlightMapSecondary.put(distancesSecondary[i], timesSecondary[i]);
-        }
+    public static void periodic() {
+        dm.periodic();
     }
 
     public ShootingParameters getParameters(Pose3d targetPose, boolean secondaryValues) {
@@ -133,7 +101,7 @@ public class ShotCalculator {
         Pose2d lookaheadPose = turretPosition;
         double lookaheadTurretToTargetDistance = turretToTargetDistance;
         for (int i = 0; i < 20; i++) {
-            timeOfFlight = getTimeOfFlightMap(secondaryValues).get(lookaheadTurretToTargetDistance);
+            timeOfFlight = dm.getTimeOfFlightMap(secondaryValues).get(lookaheadTurretToTargetDistance);
             double offsetX = turretVelocityX * timeOfFlight;
             double offsetY = turretVelocityY * timeOfFlight;
             lookaheadPose = new Pose2d(
@@ -144,14 +112,13 @@ public class ShotCalculator {
 
         // Calculate parameters accounted for imparted velocity
         turretAngle = target.minus(lookaheadPose.getTranslation()).getAngle();
-        hoodPosition = getShotHoodPositionMap(secondaryValues).get(lookaheadTurretToTargetDistance).getDegrees();
+        hoodPosition = dm.getShotHoodPositionMap(secondaryValues).get(lookaheadTurretToTargetDistance);
         latestParameters = new ShootingParameters(
-                lookaheadTurretToTargetDistance >= getMinDistance(secondaryValues)
-                        && lookaheadTurretToTargetDistance <= getMaxDistance(secondaryValues),
+                lookaheadTurretToTargetDistance >= dm.getMinDistance(secondaryValues)
+                        && lookaheadTurretToTargetDistance <= dm.getMaxDistance(secondaryValues),
                 turretAngle,
                 hoodPosition,
-                getShotFlywheelSpeedMap(secondaryValues).get(lookaheadTurretToTargetDistance));
-
+                dm.getShotFlywheelSpeedMap(secondaryValues).get(lookaheadTurretToTargetDistance));
         // Log calculated values
         Logger.recordOutput("ShotCalculator/LookaheadPose", lookaheadPose);
         Logger.recordOutput("ShotCalculator/TurretToTargetDistance", lookaheadTurretToTargetDistance);
@@ -162,25 +129,5 @@ public class ShotCalculator {
 
     public void clearShootingParameters() {
         latestParameters = null;
-    }
-
-    private static InterpolatingDoubleTreeMap getShotFlywheelSpeedMap(boolean secondary) {
-        return secondary ? shotFlywheelSpeedMapSecondary : shotFlywheelSpeedMap;
-    }
-
-    private static InterpolatingTreeMap<Double, Rotation2d> getShotHoodPositionMap(boolean secondary) {
-        return secondary ? shothoodPositionMapSecondary : shothoodPositionMap;
-    }
-
-    private static InterpolatingDoubleTreeMap getTimeOfFlightMap(boolean secondary) {
-        return secondary ? timeOfFlightMapSecondary : timeOfFlightMap;
-    }
-
-    private static double getMinDistance(boolean secondary) {
-        return secondary ? minDistanceSecondary : minDistance;
-    }
-
-    private static double getMaxDistance(boolean secondary) {
-        return secondary ? maxDistanceSecondary : maxDistance;
     }
 }

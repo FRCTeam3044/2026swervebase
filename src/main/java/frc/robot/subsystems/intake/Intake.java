@@ -10,13 +10,13 @@ public class Intake extends SubsystemBase {
   private final IntakeIO io;
   private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
 
-  private ConfigurableParameter<Double> intakeRollerSpeed =
-      new ConfigurableParameter<Double>(0.5, "Intake roller speed");
+  private ConfigurableParameter<Double> intakeRollerSpeed = new ConfigurableParameter<Double>(0.5,
+      "Intake roller speed");
 
-  private ConfigurableParameter<Double> intakeTopPosition =
-      new ConfigurableParameter<Double>(0.5, "Intake top position");
-  private ConfigurableParameter<Double> intakeBottomPosition =
-      new ConfigurableParameter<Double>(0.5, "Intake bottom position");
+  private ConfigurableParameter<Double> intakeTopPosition = new ConfigurableParameter<Double>(0.5,
+      "Intake top position");
+  private ConfigurableParameter<Double> intakeDeploySpeed = new ConfigurableParameter<Double>(0.5,
+      "Intake deploy speed");
 
   public Intake(IntakeIO io) {
     this.io = io;
@@ -34,12 +34,12 @@ public class Intake extends SubsystemBase {
   }
 
   public Command intakeBottom() {
-    return Commands.run(() -> io.setIntakePosition(intakeBottomPosition.get()), this)
+    return Commands.runEnd(() -> io.setIntakeSpeed(intakeDeploySpeed.get()), () -> io.setIntakeSpeed(0), this)
         .withName("Intake to Bottom");
   }
 
   public Command runRollers() {
-    return Commands.run(() -> io.setSpeedRollers(intakeRollerSpeed.get()), this)
+    return Commands.runEnd(() -> io.setSpeedRollers(intakeRollerSpeed.get()), () -> io.setSpeedRollers(0), this)
         .withName("Run Intake Rollers");
   }
 }
