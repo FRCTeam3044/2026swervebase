@@ -1,15 +1,15 @@
 package frc.robot.subsystems.hood;
 
-// import com.revrobotics.RelativeEncoder;
-// import com.revrobotics.sim.SparkMaxSim;
-// import com.revrobotics.spark.SparkLowLevel.MotorType;
-// import com.revrobotics.spark.SparkMax;
-// import edu.wpi.first.math.controller.PIDController;
-// import edu.wpi.first.math.system.plant.DCMotor;
-// import edu.wpi.first.wpilibj.RobotController;
-// import edu.wpi.first.wpilibj.simulation.BatterySim;
-// import edu.wpi.first.wpilibj.simulation.RoboRioSim;
-// import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+// mport com.revrobotics.RelativeEncoder;
+// mport com.revrobotics.sim.SparkMaxSim;
+// mport com.revrobotics.spark.SparkLowLevel.MotorType;
+// mport com.revrobotics.spark.SparkMax;
+// mport edu.wpi.first.math.controller.PIDController;
+// mport edu.wpi.first.math.system.plant.DCMotor;
+// mport edu.wpi.first.wpilibj.RobotController;
+// mport edu.wpi.first.wpilibj.simulation.BatterySim;
+// mport edu.wpi.first.wpilibj.simulation.RoboRioSim;
+// mport edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class HoodIOSim implements HoodIO {
   // private SparkMax sparkMax = new SparkMax(50, MotorType.kBrushless);
@@ -40,8 +40,8 @@ public class HoodIOSim implements HoodIO {
   // // kV */ 1);
 
   // @Override
-  // public void updateInputs(HoodIOInputs inputs) {
-  // m_hoodSim.setInput(sparkMax.getAppliedOutput() *
+  public void updateInputs(HoodIOInputs inputs) {
+  // zm_hoodSim.setInput(sparkMax.getAppliedOutput() *
   // RobotController.getBatteryVoltage());
   // m_hoodSim.update(0.020);
   // RoboRioSim.setVInVoltage(
