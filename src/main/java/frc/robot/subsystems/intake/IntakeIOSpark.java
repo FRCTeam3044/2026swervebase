@@ -14,16 +14,16 @@ import java.util.function.DoubleSupplier;
 import me.nabdev.oxconfig.sampleClasses.ConfigurablePIDController;
 
 public class IntakeIOSpark implements IntakeIO {
-  private final SparkMax motorOne = new SparkMax(canIdOne, MotorType.kBrushless);
-  public final SparkMax motorTwo = new SparkMax(canIdTwo, MotorType.kBrushless);
+  private final SparkMax motorOne = new SparkMax(motorIdOne, MotorType.kBrushless);
+  public final SparkMax motorTwo = new SparkMax(motorIdTwo, MotorType.kBrushless);
 
-  private SparkMax bagMotor = new SparkMax(bagId, MotorType.kBrushed);
+  private SparkMax rollerMotor = new SparkMax(rollerId, MotorType.kBrushless);
 
   private RelativeEncoder encoderOne = motorOne.getEncoder();
   private RelativeEncoder encoderTwo = motorTwo.getEncoder();
 
-  private ConfigurablePIDController intakeController =
-      new ConfigurablePIDController(0.0, 0.0, 0.0, "Intake Position Controller");
+  private ConfigurablePIDController intakeController = new ConfigurablePIDController(0.0, 0.0, 0.0,
+      "Intake Position Controller");
 
   private double targetPosition;
 
@@ -31,15 +31,15 @@ public class IntakeIOSpark implements IntakeIO {
     tryUntilOk(
         motorOne,
         5,
-        () ->
-            motorOne.configure(
-                motorConfigOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        () -> motorOne.configure(
+            motorConfigOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
     tryUntilOk(
         motorTwo,
         5,
-        () ->
-            motorTwo.configure(
-                motorConfigTwo, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        () -> motorTwo.configure(
+            motorConfigTwo, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+    tryUntilOk(rollerMotor, 5, () -> rollerMotor.configure(
+        rollerMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
   }
 
   @Override
@@ -50,7 +50,7 @@ public class IntakeIOSpark implements IntakeIO {
 
     ifOk(
         motorOne,
-        new DoubleSupplier[] {motorOne::getAppliedOutput, motorOne::getBusVoltage},
+        new DoubleSupplier[] { motorOne::getAppliedOutput, motorOne::getBusVoltage },
         (values) -> inputs.appliedVoltage = values[0] * values[1]);
 
     ifOk(motorTwo, motorTwo::getOutputCurrent, (value) -> inputs.currentApms = value);
@@ -58,7 +58,7 @@ public class IntakeIOSpark implements IntakeIO {
 
     ifOk(
         motorTwo,
-        new DoubleSupplier[] {motorTwo::getAppliedOutput, motorTwo::getBusVoltage},
+        new DoubleSupplier[] { motorTwo::getAppliedOutput, motorTwo::getBusVoltage },
         (values) -> inputs.appliedVoltage = values[0] * values[1]);
 
     motorOne.set(intakeController.calculate(encoderOne.getPosition(), targetPosition));
@@ -71,6 +71,6 @@ public class IntakeIOSpark implements IntakeIO {
 
   @Override
   public void setSpeedRollers(double speed) {
-    bagMotor.set(speed);
+    rollerMotor.set(speed);
   }
 }

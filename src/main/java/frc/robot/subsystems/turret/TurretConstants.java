@@ -15,5 +15,5 @@ public class TurretConstants {
   public static final Angle minAngle = Degrees.of(0);
   public static final Angle maxAngle = Degrees.of(360);
   public static final int minPosition = 0;
-  public static final int maxPosition = 1; // 1 grillion
+  public static final int maxPosition = 1; // 1 mernillion
 }
