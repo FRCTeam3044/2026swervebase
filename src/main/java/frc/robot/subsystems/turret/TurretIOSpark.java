@@ -1,6 +1,7 @@
 package frc.robot.subsystems.turret;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.subsystems.turret.TurretConstants.*;
@@ -70,6 +71,7 @@ public class TurretIOSpark implements TurretIO {
     inputs.crtAngle = Degrees.of(crt.getAngleOptional().get().in(Degrees));
     inputs.rawTargetAngle = rawTargetAngle;
     inputs.computedTargetAngle = computedTargetAngle;
+    inputs.angularVelocity = DegreesPerSecond.of(driveRelEncoder.getVelocity());
     currentAngle = inputs.angle;
   }
 
@@ -85,7 +87,8 @@ public class TurretIOSpark implements TurretIO {
     // < 360 degrees
     this.computedTargetAngle = Degrees.of(MathUtil.clamp(targetAngle.in(Degrees), minAngle.in(Degrees),
         maxAngle.in(Degrees)));
-    motor.set(pidController.calculate(currentAngle.in(Degrees), targetAngle.in(Degrees)) + feedforward.calculate(0, 0));
+    motor.set(pidController.calculate(currentAngle.in(Degrees), computedTargetAngle.in(Degrees))
+        + feedforward.calculate(pidController.getSetpoint().velocity));
   }
 
   @Override

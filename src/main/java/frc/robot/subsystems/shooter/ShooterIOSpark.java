@@ -12,9 +12,12 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
-import me.nabdev.oxconfig.sampleClasses.ConfigurablePIDController;
+import me.nabdev.oxconfig.sampleClasses.ConfigurableProfiledPIDController;
 
 public class ShooterIOSpark implements ShooterIO {
   public final SparkFlex leaderMotor = new SparkFlex(leaderCanId, MotorType.kBrushless);
@@ -22,32 +25,31 @@ public class ShooterIOSpark implements ShooterIO {
 
   private final RelativeEncoder leaderEncoder = leaderMotor.getEncoder();
   private final RelativeEncoder followerEncoder = followerMotor.getEncoder();
-  private ConfigurablePIDController controller =
-      new ConfigurablePIDController(0.0, 0.0, 0.0, "Shooter Speed Controller");
+  private ConfigurableProfiledPIDController controller = new ConfigurableProfiledPIDController(0.0, 0.0, 0.0,
+      new Constraints(maxVelocity, maxAcceleration), "Shooter Speed Controller");
 
   private AngularVelocity targetSpeed = RPM.of(0);
+  SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV);
 
   public ShooterIOSpark() {
     tryUntilOk(
         leaderMotor,
         5,
-        () ->
-            leaderMotor.configure(
-                leaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        () -> leaderMotor.configure(
+            leaderConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
     tryUntilOk(
         followerMotor,
         5,
-        () ->
-            followerMotor.configure(
-                followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        () -> followerMotor.configure(
+            followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
   }
 
-  // TODO: Feedforward and sysid?
   @Override
   public void setSpeed(AngularVelocity speed) {
     double leaderSetpoint = speed.in(RPM);
     this.targetSpeed = speed;
-    leaderMotor.set(controller.calculate(leaderEncoder.getVelocity(), leaderSetpoint));
+    leaderMotor
+        .set(controller.calculate(leaderEncoder.getVelocity(), leaderSetpoint) + feedforward.calculate(leaderSetpoint));
   }
 
   @Override

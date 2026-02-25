@@ -15,8 +15,10 @@ public class TurretConfig {
     EncoderConfig encoderConfig = new EncoderConfig();
     SoftLimitConfig softLimits = new SoftLimitConfig();
     // Enable after we find the max mechanism range
-    // encoderConfig.positionConversionFactor((maxAngle.in(Degrees) -
-    // minAngle.in(Degrees)) / (maxPosition - minPosition));
+    // double conversionFactor = (maxAngle.in(Degrees) - minAngle.in(Degrees)) /
+    // (maxPosition - minPosition);
+    // encoderConfig.positionConversionFactor(conversionFactor)
+    // .velocityConversionFactor(conversionFactor);
     // softLimits.forwardSoftLimitEnabled(true);
     // softLimits.forwardSoftLimit(TurretConstants.maxPosition);
     // softLimits.reverseSoftLimitEnabled(true);
