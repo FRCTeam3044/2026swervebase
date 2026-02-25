@@ -3,6 +3,8 @@ package frc.robot.subsystems.kicker;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import me.nabdev.oxconfig.ConfigurableParameter;
 import org.littletonrobotics.junction.Logger;
 
@@ -28,16 +30,26 @@ public class Kicker extends SubsystemBase {
   }
 
   public Command shootKicker() {
-    return Commands.run(() -> {
-      io.setTopPercent(topShootSpeed.get());
-      io.setBottomPercent(bottomSpeed.get());
-    }, this).withName("Run Kicker");
+    if (Robot.isSimulation()) {
+      return Commands.deferredProxy(() -> Commands.repeatingSequence(RobotContainer.getInstance().simShootFuel(),
+          Commands.waitSeconds(0.2)).withName("Sim shoot fuel")).withName("Sim shoot fuel proxy");
+    }
+    return Commands.run(
+        () -> {
+          io.setTopPercent(topShootSpeed.get());
+          io.setBottomPercent(bottomSpeed.get());
+        },
+        this)
+        .withName("Run Kicker");
   }
 
   public Command blockKicker() {
-    return Commands.run(() -> {
-      io.setTopPercent(topBlockSpeed.get());
-      io.setBottomPercent(bottomSpeed.get());
-    }, this).withName("Block Kicker");
+    return Commands.run(
+        () -> {
+          io.setTopPercent(topBlockSpeed.get());
+          io.setBottomPercent(bottomSpeed.get());
+        },
+        this)
+        .withName("Block Kicker");
   }
 }

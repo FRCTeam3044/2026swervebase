@@ -21,8 +21,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -34,6 +32,10 @@ import me.nabdev.pathfinding.structures.Vector;
 import me.nabdev.pathfinding.structures.Vertex;
 import frc.robot.RobotContainer;
 import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveConstants;
+import frc.robot.util.AllianceUtil;
+import frc.robot.util.AllianceUtil.AllianceColor;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -114,18 +116,18 @@ public class DriveCommands {
             drive.runVelocity(speeds);
             return;
           }
-          boolean isFlipped = DriverStation.getAlliance().isPresent()
-              && DriverStation.getAlliance().get() == Alliance.Red;
+          boolean isFlipped = AllianceUtil.getAlliance() == AllianceColor.RED;
           Rotation2d rotation = new Rotation2d();
+
           if (Constants.currentMode == Mode.SIM) {
-            rotation = new Rotation2d(Math.PI / 2);
+            rotation = new Rotation2d(3 * Math.PI / 2);
           } else if (isFlipped) {
             rotation = new Rotation2d(Math.PI);
           }
           drive.runVelocity(
               ChassisSpeeds.fromFieldRelativeSpeeds(
                   speeds,
-                  isFlipped ? drive.getRotation().plus(rotation) : drive.getRotation()));
+                  drive.getRotation().plus(rotation)));
         },
         drive)
         .withName("Joystick Drive");
@@ -168,8 +170,7 @@ public class DriveCommands {
               linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
               linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
               omega);
-          boolean isFlipped = DriverStation.getAlliance().isPresent()
-              && DriverStation.getAlliance().get() == Alliance.Red;
+          boolean isFlipped = AllianceUtil.getAlliance() == AllianceColor.RED;
           drive.runVelocity(
               ChassisSpeeds.fromFieldRelativeSpeeds(
                   speeds,

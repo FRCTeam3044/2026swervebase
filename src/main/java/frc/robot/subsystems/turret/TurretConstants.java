@@ -5,7 +5,7 @@ import static edu.wpi.first.units.Units.Degrees;
 import edu.wpi.first.units.measure.Angle;
 
 public class TurretConstants {
-  public static final int canId = 0;
+  public static final int canId = 15;
   public static final int currentLimit = 40;
   public static final int secondaryAbsEncoderDioChannel = 1;
 
@@ -15,5 +15,11 @@ public class TurretConstants {
   public static final Angle minAngle = Degrees.of(0);
   public static final Angle maxAngle = Degrees.of(360);
   public static final int minPosition = 0;
-  public static final int maxPosition = 1; // 1 grillion
+  public static final int maxPosition = 1; // 1 mernillion
+
+  public static final double kS = 0.0;
+  public static final double kV = 0.0;
+
+  public static final double maxVelocity = 360;
+  public static final double maxAcceleration = 360;
 }

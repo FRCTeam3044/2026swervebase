@@ -11,9 +11,9 @@ import com.revrobotics.util.StatusLogger;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.util.AllianceUtil;
+import frc.robot.util.ShotCalculator;
 import me.nabdev.oxconfig.OxConfig;
 import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -25,13 +25,15 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the
+ * name of this class or
+ * the package after creating this project, you must also update the
+ * build.gradle file in the
  * project.
  */
 public class Robot extends LoggedRobot {
-  private Command autonomousCommand;
   public static RobotContainer robotContainer;
 
   public static Timer timer = new Timer();
@@ -86,7 +88,7 @@ public class Robot extends LoggedRobot {
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
-    robotContainer = new RobotContainer();
+    robotContainer = RobotContainer.getInstance();
 
     OxConfig.initialize();
     robotContainer.stateMachine.onStartup();
@@ -118,57 +120,54 @@ public class Robot extends LoggedRobot {
 
     Logger.recordOutput(
         "Distance from target",
-        robotContainer
-            .drive
+        robotContainer.drive
             .getPose()
             .getTranslation()
             .getDistance(
                 robotContainer.autoTargetUtil.getHub().getTranslation().toTranslation2d()));
+
+    robotContainer.autoAim.periodic();
+
+    ShotCalculator.periodic();
   }
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+  }
 
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {
     AllianceUtil.setAlliance();
+    robotContainer.turret.resetAngle();
   }
 
-  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+  /**
+   * This autonomous runs the autonomous command selected by your
+   * {@link RobotContainer} class.
+   */
   @Override
   public void autonomousInit() {
     AllianceUtil.setAlliance();
-    autonomousCommand = robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
-    if (autonomousCommand != null) {
-      CommandScheduler.getInstance().schedule(autonomousCommand);
-    }
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
     AllianceUtil.setAlliance();
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    if (autonomousCommand != null) {
-      autonomousCommand.cancel();
-    }
     timer.start();
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+  }
 
   /** This function is called once when test mode is enabled. */
   @Override
@@ -180,7 +179,8 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override
@@ -200,8 +200,7 @@ public class Robot extends LoggedRobot {
     Logger.recordOutput(
         "FieldSimulation/Robot", RobotContainer.driveSimulation.getSimulatedDriveTrainPose());
 
-    double currentScore =
-        SmartDashboard.getNumber("MapleSim/MatchData/Breakdown/blue Alliance/TotalFuelInHub", 0);
+    double currentScore = SmartDashboard.getNumber("MapleSim/MatchData/Breakdown/blue Alliance/TotalFuelInHub", 0);
     if (currentScore != lastScore) {
       lastScore = currentScore;
       SmartDashboard.putNumber("LastScoreTime", robotContainer.simShotTimer.get());

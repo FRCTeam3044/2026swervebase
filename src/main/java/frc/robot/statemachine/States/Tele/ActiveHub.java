@@ -1,5 +1,6 @@
 package frc.robot.statemachine.States.Tele;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.statemachine.StateMachine;
 import frc.robot.subsystems.drive.Drive;
@@ -9,6 +10,7 @@ import frc.robot.subsystems.kicker.Kicker;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.turret.Turret;
+import frc.robot.util.AutoAim;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.util.SmartXboxController;
 
@@ -16,22 +18,22 @@ public class ActiveHub extends State {
   public ActiveHub(
       StateMachine stateMachine,
       CommandXboxController driverController,
+      GenericHID operatorBoard,
       Drive drive,
       Intake intake,
       Spindexer spindexer,
       Kicker kicker,
       Turret turret,
       Hood hood,
-      Shooter shooter) {
+      Shooter shooter, AutoAim autoAim) {
     super(stateMachine);
     SmartXboxController controller = new SmartXboxController(driverController, loop);
 
     startWhenActive(intake.intakeBottom());
     controller.leftTrigger().whileTrue(intake.runRollers());
-    startWhenActive(spindexer.run());
-    // startWhenActive(kicker.runKicker());
-    // startWhenActive(hood.moveHood());
-    // startWhenActive(turret.rotate());
-    // controller.rightTrigger().whileTrue(shooter.runShooter());
+    startWhenActive(spindexer.setSpeed());
+    startWhenActive(
+        autoAim.aimHub(() -> operatorBoard.getRawButton(1)));
+    controller.rightTrigger().whileTrue(kicker.shootKicker());
   }
 }

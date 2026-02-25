@@ -9,12 +9,9 @@ public interface HoodIO {
     public double setpoint = 0.0;
   }
 
-  public default void setPosition(double position) {
-  }
+  public default void setPosition(double position) {}
 
-  public default void setPercent(double percent) {
-  }
+  public default void setPercent(double percent) {}
 
-  public default void updateInputs(HoodIOInputs inputs) {
-  }
+  public default void updateInputs(HoodIOInputs inputs) {}
 }

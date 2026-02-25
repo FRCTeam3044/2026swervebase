@@ -7,12 +7,16 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.subsystems.drive.DriveCommands;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
@@ -22,9 +26,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.statemachine.StateMachine;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.ClimberIO;
+import frc.robot.subsystems.climber.ClimberIOSpark;
+import frc.robot.subsystems.LEDs.LEDs;
+import frc.robot.subsystems.LEDs.LEDsIO;
+import frc.robot.subsystems.LEDs.LEDsIORio;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveCommands;
 import frc.robot.subsystems.drive.DriveConstants;
@@ -46,17 +57,22 @@ import frc.robot.subsystems.kicker.KickerIO;
 import frc.robot.subsystems.kicker.KickerIOSpark;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterIO;
+import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOSpark;
 import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.spindexer.SpindexerIO;
 import frc.robot.subsystems.spindexer.SpindexerIOSpark;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.turret.TurretIO;
+import frc.robot.subsystems.turret.TurretIOSim;
 import frc.robot.subsystems.turret.TurretIOSpark;
+import frc.robot.util.AllianceUtil;
+import frc.robot.util.AutoAim;
 import frc.robot.util.AutoTargetUtil;
 import org.ironmaple.simulation.IntakeSimulation;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
+import org.ironmaple.simulation.seasonspecific.rebuilt2026.RebuiltFuelOnFly;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -76,14 +92,18 @@ public class RobotContainer {
         private final Spindexer spindexer;
         private final Kicker kicker;
         private final Shooter shooter;
-        private final Turret turret;
-        public static Field2d fieldSim = new Field2d();
+        public final Turret turret;
+        private final Climber climber;
+        public final LEDs LEDs;
+
         public final StateMachine stateMachine;
         public final AutoTargetUtil autoTargetUtil;
+        public final AutoAim autoAim;
 
         // Controller
         private final CommandXboxController controllerOne = new CommandXboxController(0);
         private final CommandXboxController controllerTwo = new CommandXboxController(1);
+        private final GenericHID operatorBoard = new GenericHID(2);
 
         public static SwerveDriveSimulation driveSimulation = null;
         public IntakeSimulation intakeSimulation = null;
@@ -96,12 +116,21 @@ public class RobotContainer {
         private final MechanismLigament2d shooterSim;
         private final MechanismLigament2d hoodSim;
         // Dashboard inputs
-        private final LoggedDashboardChooser<Command> autoChooser;
+        private final LoggedDashboardChooser<Command> sysidChooser;
+
+        private static RobotContainer instance;
+
+        public static RobotContainer getInstance() {
+                if (instance == null) {
+                        instance = new RobotContainer();
+                }
+                return instance;
+        }
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
-        public RobotContainer() {
+        private RobotContainer() {
                 switch (Constants.currentMode) {
                         case REAL:
                                 // Real robot, instantiate hardware IO implementations
@@ -119,6 +148,8 @@ public class RobotContainer {
                                 spindexer = new Spindexer(new SpindexerIOSpark());
                                 kicker = new Kicker(new KickerIOSpark());
                                 turret = new Turret(new TurretIOSpark());
+                                climber = new Climber(new ClimberIOSpark());
+                                LEDs = new LEDs(new LEDsIORio());
                                 break;
 
                         case SIM:
@@ -154,14 +185,17 @@ public class RobotContainer {
                                 hood = new Hood(new HoodIOSim());
                                 intake = new Intake(new IntakeIO() {
                                 });
-                                shooter = new Shooter(new ShooterIO() {
+                                shooter = new Shooter(new ShooterIOSim() {
                                 });
                                 spindexer = new Spindexer(new SpindexerIO() {
                                 });
                                 kicker = new Kicker(new KickerIO() {
                                 });
-                                turret = new Turret(new TurretIO() {
+                                turret = new Turret(new TurretIOSim() {
                                 });
+                                climber = new Climber(new ClimberIO() {
+                                });
+                                LEDs = new LEDs(new LEDsIORio());
                                 break;
 
                         default:
@@ -191,35 +225,78 @@ public class RobotContainer {
                                 });
                                 turret = new Turret(new TurretIO() {
                                 });
+                                climber = new Climber(new ClimberIO() {
+                                });
+                                LEDs = new LEDs(new LEDsIO() {
+                                });
                                 break;
                 }
 
+                AllianceUtil.setRobot(drive::getPose);
+
                 // Set up auto routines
-                autoChooser = new LoggedDashboardChooser<>("Auto Choices");
+                sysidChooser = new LoggedDashboardChooser<>("SysId Choices");
 
                 DriverStation.getGameSpecificMessage();
 
                 // Set up SysId routines
-                autoChooser.addOption(
+                sysidChooser.addOption(
                                 "Drive Wheel Radius Characterization",
                                 DriveCommands.wheelRadiusCharacterization(drive));
-                autoChooser.addOption(
+                sysidChooser.addOption(
                                 "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
-                autoChooser.addOption(
+                sysidChooser.addOption(
                                 "Drive SysId (Quasistatic Forward)",
                                 drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-                autoChooser.addOption(
+                sysidChooser.addOption(
                                 "Drive SysId (Quasistatic Reverse)",
                                 drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-                autoChooser.addOption(
+                sysidChooser.addOption(
                                 "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-                autoChooser.addOption(
+                sysidChooser.addOption(
                                 "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
+                sysidChooser.addOption(
+                                "Shooter SysId (Quasistatic Forward)",
+                                shooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+                sysidChooser.addOption(
+                                "Shooter SysId (Quasistatic Reverse)",
+                                shooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+                sysidChooser.addOption(
+                                "Shooter SysId (Dynamic Forward)",
+                                shooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
+                sysidChooser.addOption(
+                                "Shooter SysId (Dynamic Reverse)",
+                                shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
+                sysidChooser.addOption(
+                                "Turret SysId (Quasistatic Forward)",
+                                turret.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+                sysidChooser.addOption(
+                                "Turret SysId (Quasistatic Reverse)",
+                                turret.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+                sysidChooser.addOption(
+                                "Turret SysId (Dynamic Forward)", turret.sysIdDynamic(SysIdRoutine.Direction.kForward));
+                sysidChooser.addOption(
+                                "Turret SysId (Dynamic Reverse)", turret.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+
                 autoTargetUtil = new AutoTargetUtil(drive);
+                autoAim = new AutoAim(turret, shooter, hood, autoTargetUtil);
                 stateMachine = new StateMachine(
-                                controllerOne, controllerTwo, drive, intake, spindexer, kicker, shooter, turret, hood,
-                                autoTargetUtil);
+                                controllerOne,
+                                controllerTwo,
+                                operatorBoard,
+                                drive,
+                                intake,
+                                spindexer,
+                                kicker,
+                                shooter,
+                                turret,
+                                hood,
+                                climber,
+                                LEDs,
+                                autoTargetUtil,
+                                autoAim, sysidChooser);
 
                 mech = new Mechanism2d(3, 3);
                 root = mech.getRoot("Shooter", 1.5, 0);
@@ -233,12 +310,23 @@ public class RobotContainer {
                 hoodSim.setAngle(hood.getPosition());
         }
 
-        /**
-         * Use this to pass the autonomous command to the main {@link Robot} class.
-         *
-         * @return the command to run in autonomous
-         */
-        public Command getAutonomousCommand() {
-                return autoChooser.get();
+        public Command simShootFuel() {
+                return Commands.runOnce(() -> {
+                        // if (!intakeSimulation.obtainGamePieceFromIntake())
+                        // return;
+                        Pose2d pose = driveSimulation.getSimulatedDriveTrainPose();
+                        SimulatedArena.getInstance()
+                                        .addGamePieceProjectile(
+                                                        new RebuiltFuelOnFly(
+                                                                        pose.getTranslation(),
+                                                                        new Translation2d(),
+                                                                        driveSimulation.getDriveTrainSimulatedChassisSpeedsFieldRelative(),
+                                                                        Rotation2d.fromDegrees(
+                                                                                        turret.getAngle().in(Degrees)),
+                                                                        Inches.of(15),
+                                                                        MetersPerSecond.of(shooter.getSpeed().in(RPM)),
+                                                                        Degrees.of(hood.getPosition())));
+                });
+
         }
 }

@@ -1,7 +1,7 @@
 package frc.robot.subsystems.hood;
 
-import static frc.robot.util.SparkUtil.tryUntilOk;
 import static frc.robot.util.SparkUtil.ifOk;
+import static frc.robot.util.SparkUtil.tryUntilOk;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
@@ -16,9 +16,8 @@ public class HoodIOSpark implements HoodIO { // Outlines the HoodIOSpark class
       HoodConstants.canId,
       MotorType.kBrushless); // Creates a new sparkmax motor and puts it into "motor"
 
-  private final ConfigurableProfiledPIDController hoodController = // Creates a new PID controller type
-      new ConfigurableProfiledPIDController(
-          0.0, 0.1, 0.0, new Constraints(0, 0), "Hood Controller");
+  private final ConfigurableProfiledPIDController hoodController = new ConfigurableProfiledPIDController(
+      0.0, 0.1, 0.0, new Constraints(0, 0), "Hood Controller");
 
   private final RelativeEncoder hoodEncoder = motor.getEncoder(); // Creates RelativeEncoder and sets it to
                                                                   // "hoodEncoder"

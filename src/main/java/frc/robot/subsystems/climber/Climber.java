@@ -3,6 +3,7 @@ package frc.robot.subsystems.climber;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.function.DoubleSupplier;
 import me.nabdev.oxconfig.ConfigurableParameter;
 
 public class Climber extends SubsystemBase {
@@ -23,6 +24,13 @@ public class Climber extends SubsystemBase {
           io.setSpeed(speed.get());
         },
         this);
+  }
+
+  public Command setSpeedWParameter(DoubleSupplier speedParameter) {
+    return Commands.run(
+        () -> {
+          io.setSpeed(speedParameter.getAsDouble());
+        });
   }
 
   public Command climberTop() { // Command factory for moving climber to top pos
