@@ -8,6 +8,9 @@ public class ShooterConstants {
   public static final double kS = 0.0;
   public static final double kV = 0.0;
 
-  public static final double maxVelocity = 360;
+  // since these are used to constrain a profiled PID controller of velocity, the
+  // "velocity" constraint is actually acceleration and the "acceleration"
+  // constraint is actually jolt
+  public static final double maxJolt = 360;
   public static final double maxAcceleration = 360;
 }
