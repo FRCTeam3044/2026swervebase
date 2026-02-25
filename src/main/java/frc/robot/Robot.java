@@ -140,6 +140,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledPeriodic() {
     AllianceUtil.setAlliance();
+    robotContainer.turret.resetAngle();
   }
 
   /**

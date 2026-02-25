@@ -91,7 +91,7 @@ public class RobotContainer {
         private final Spindexer spindexer;
         private final Kicker kicker;
         private final Shooter shooter;
-        private final Turret turret;
+        public final Turret turret;
         private final Climber climber;
         public final LEDs LEDs;
 

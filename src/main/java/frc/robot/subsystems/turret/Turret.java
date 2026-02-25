@@ -72,6 +72,10 @@ public class Turret extends SubsystemBase {
         .withName("Run Turret At Percent");
   }
 
+  public void resetAngle() {
+    io.resetAngle();
+  }
+
   public Angle getAngle() {
     return inputs.angle;
   }
