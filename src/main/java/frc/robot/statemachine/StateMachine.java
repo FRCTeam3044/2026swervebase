@@ -140,10 +140,10 @@ public class StateMachine extends StateMachineBase {
                 // For SYSID (comment out for normal autos)
                 // MAKE SURE YOU ADD AUTO TO THE REGISTER TO ROOT STATE
 
-                SysIDState auto = new SysIDState(this, chooser);
-                teleop.withModeTransitions(disabled, teleop, auto, test);
-                test.withModeTransitions(disabled, teleop, auto, test);
-                disabled.withModeTransitions(disabled, teleop, auto, test);
-                auto.withModeTransitions(disabled, teleop, auto, test);
+                // SysIDState auto = new SysIDState(this, chooser);
+                // teleop.withModeTransitions(disabled, teleop, auto, test);
+                // test.withModeTransitions(disabled, teleop, auto, test);
+                // disabled.withModeTransitions(disabled, teleop, auto, test);
+                // auto.withModeTransitions(disabled, teleop, auto, test);
         }
 }
