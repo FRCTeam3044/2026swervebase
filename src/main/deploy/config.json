@@ -85,6 +85,10 @@
         "CalibrationState/Test Parameter 77": "0",
         "CalibrationState/Test Parameter 78": "0",
         "CalibrationState/Test Parameter 79": "0",
+        "Intake deploy speed": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
         "CalibrationState/Test Parameter 72": "0",
         "CalibrationState/Test Parameter 73": "0",
         "CalibrationState/Test Parameter 74": "0",
@@ -188,6 +192,10 @@
         "CalibrationState/Test Parameter 34": "0",
         "CalibrationState/Test Parameter 35": "0",
         "CalibrationState/Test Parameter 30": "0",
+        "Shooter at speed tolerance (RPM)": {
+            "comment": "Auto-Generated",
+            "value": "5.0"
+        },
         "Kicker top block speed": {
             "comment": "Auto-Generated",
             "value": "0.0"
@@ -281,6 +289,10 @@
         "CalibrationState/Test Parameter 77": "0",
         "CalibrationState/Test Parameter 78": "0",
         "CalibrationState/Test Parameter 79": "0",
+        "Intake deploy speed": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
         "CalibrationState/Test Parameter 72": "0",
         "CalibrationState/Test Parameter 73": "0",
         "CalibrationState/Test Parameter 74": "0",
@@ -384,6 +396,10 @@
         "CalibrationState/Test Parameter 34": "0",
         "CalibrationState/Test Parameter 35": "0",
         "CalibrationState/Test Parameter 30": "0",
+        "Shooter at speed tolerance (RPM)": {
+            "comment": "Auto-Generated",
+            "value": "5.0"
+        },
         "Kicker top block speed": {
             "comment": "Auto-Generated",
             "value": "0.0"
@@ -476,6 +492,10 @@
         "CalibrationState/Test Parameter 77": "0",
         "CalibrationState/Test Parameter 78": "0",
         "CalibrationState/Test Parameter 79": "0",
+        "Intake deploy speed": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
         "CalibrationState/Test Parameter 72": "0",
         "CalibrationState/Test Parameter 73": "0",
         "CalibrationState/Test Parameter 74": "0",
@@ -579,6 +599,10 @@
         "CalibrationState/Test Parameter 34": "0",
         "CalibrationState/Test Parameter 35": "0",
         "CalibrationState/Test Parameter 30": "0",
+        "Shooter at speed tolerance (RPM)": {
+            "comment": "Auto-Generated",
+            "value": "5.0"
+        },
         "Kicker top block speed": {
             "comment": "Auto-Generated",
             "value": "0.0"
