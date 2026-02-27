@@ -1,7 +1,6 @@
 package frc.robot.subsystems.shooter;
 
 import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecondPerSecond;
 
 import edu.wpi.first.units.measure.AngularAcceleration;
