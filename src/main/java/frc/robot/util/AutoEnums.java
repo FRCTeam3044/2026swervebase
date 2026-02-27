@@ -7,11 +7,12 @@ public class AutoEnums {
   }
 
   public enum AutoSteps {
-    AutoClimb(() -> false),
-    ShootToHub(() -> false),
-    ShootToAlliedSide(() -> false),
-    IntakeNeutralZone(() -> false),
-    IntakeAllianceZone(() -> false);
+    // These conditions are the END conditions
+    AutoClimb(/* Auto is finished */ () -> false),
+    ShootToHub(/* Hopper is empty */() -> false),
+    ShootToAlliedSide(/* Hopper is empty */() -> false),
+    IntakeNeutralZone(/* Hopper is full */() -> false),
+    IntakeAllianceZone(/* Hopper is full */() -> false);
 
     private final BooleanSupplier condition;
 

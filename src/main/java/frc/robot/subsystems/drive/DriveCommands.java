@@ -412,7 +412,7 @@ public class DriveCommands {
         .finallyDo(timer::stop).withName("Follow Trajectory");
   };
 
-  private static Command goToPoint(
+  public static Command goToPoint(
       Drive drive,
       Pose2d pose,
       Supplier<Rotation2d> desiredRotation,

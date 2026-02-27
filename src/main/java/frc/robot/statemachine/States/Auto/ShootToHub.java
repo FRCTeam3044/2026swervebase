@@ -1,6 +1,7 @@
 package frc.robot.statemachine.States.Auto;
 
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveCommands;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.kicker.Kicker;
@@ -22,8 +23,8 @@ public class ShootToHub extends State {
       Shooter shooter) {
     super(stateMachine);
 
-    // Drive into alliance zone
-    startWhenActive(intake.intakeTop());
+    startWhenActive(DriveCommands.goToPoint(drive, null, null, null, false));
+    startWhenActive(intake.intakeBottom());
     startWhenActive(spindexer.run());
     startWhenActive(kicker.shootKicker());
     startWhenActive(turret.setAngle(null));
