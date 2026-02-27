@@ -52,6 +52,7 @@ public class StateMachine extends StateMachineBase {
         ArrayList<AutoSteps> testAutoRoutine = new ArrayList<AutoSteps>();
 
         AutoSteps currentStep;
+        int index;
 
         public StateMachine(
                         CommandXboxController driverController,
@@ -168,24 +169,24 @@ public class StateMachine extends StateMachineBase {
                 testAutoRoutine.add(AutoSteps.IntakeNeutralZone);
                 testAutoRoutine.add(AutoSteps.ShootToHub);
                 testAutoRoutine.add(AutoSteps.AutoClimb);
-                currentStep = testAutoRoutine.get(0);
+                currentStep = testAutoRoutine.get(index);
 
-                if (AutoSteps.IntakeNeutralZone.getCondition().getAsBoolean()) {
-                        currentStep = testAutoRoutine.get(1);
-                } else if (AutoSteps.AutoClimb.getCondition().getAsBoolean()) {
-                        currentStep = testAutoRoutine.get(2);
-                } else if (AutoSteps.AutoClimb.getCondition().getAsBoolean()) {
-                        currentStep = testAutoRoutine.get(3);
-                }
+                BooleanSupplier currentStateComplete = () -> {
+                        if (currentStep.getCondition().getAsBoolean()) {
+                                index = index + 1;
+                                currentStep = testAutoRoutine.get(index);
+                                return true;
+                        } else {
+                                return false;
+                        }
+                };
 
-                // TODO: Add "completed" boolean suppliers
-                autoClimb.withTransition(auto, () -> false, 0, "Climb to auto");
-                shootHub.withTransition(auto, () -> false, 0, "Shoot hub to auto");
-                shootToAlliedSide.withTransition(auto, () -> false, 0, "Neutral shot to auto");
-                intakeAllianceZone.withTransition(auto, () -> false, 0, "Allied intake to shot");
-                intakeNeutralZone.withTransition(auto, () -> false, 0, "Neutral intake to shot");
+                autoClimb.withTransition(auto, currentStateComplete, 0, "Climb to auto");
+                shootHub.withTransition(auto, currentStateComplete, 0, "Shoot hub to auto");
+                shootToAlliedSide.withTransition(auto, currentStateComplete, 0, "Neutral shot to auto");
+                intakeAllianceZone.withTransition(auto, currentStateComplete, 0, "Allied intake to shot");
+                intakeNeutralZone.withTransition(auto, currentStateComplete, 0, "Neutral intake to shot");
 
-                // TODO: Add "next in line" boolean suppliers
                 auto.withTransition(autoClimb, () -> currentStep == AutoSteps.AutoClimb, 0, "Auto to climb");
                 auto.withTransition(shootHub, () -> currentStep == AutoSteps.ShootToHub, 0, "Auto to hub shot");
                 auto.withTransition(shootToAlliedSide, () -> currentStep == AutoSteps.ShootToAlliedSide, 0,
