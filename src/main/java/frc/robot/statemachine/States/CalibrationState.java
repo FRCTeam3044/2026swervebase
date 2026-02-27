@@ -68,7 +68,7 @@ public class CalibrationState extends State {
                                 .withName("Block Kicker"));
                 startWhenActive(spindexer.setSpeed());
 
-                controller.a().onTrue(Commands.runOnce(() -> {
+                controller.rightTrigger().onTrue(Commands.runOnce(() -> {
                         Pose3d targetPose = targetPoseSupplier.get();
                         Translation2d target = targetPose.getTranslation().toTranslation2d();
                         Pose2d turretPosition = turretPoseSupplier.get();
