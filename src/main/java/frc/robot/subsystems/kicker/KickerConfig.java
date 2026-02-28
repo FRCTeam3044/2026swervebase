@@ -14,6 +14,6 @@ public class KickerConfig {
     motorConfigTwo
         .idleMode(IdleMode.kCoast)
         .smartCurrentLimit(KickerConstants.currentLimit)
-        .follow(canIdOne);
+        .follow(topMotorId);
   }
 }
