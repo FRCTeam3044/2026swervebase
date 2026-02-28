@@ -14,7 +14,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Distance;
-import frc.robot.Constants;
 import me.nabdev.pathfinding.Pathfinder;
 import me.nabdev.pathfinding.PathfinderBuilder;
 import me.nabdev.pathfinding.utilities.FieldLoader.Field;
@@ -120,15 +119,13 @@ public class DriveConstants {
                                                         KilogramSquareMeters.of(0.02),
                                                         wheelCOF));
 
-        public static final Distance bumperSize = Inches.of(36.125);
-        public static final Distance mapleBumperSize = Constants.currentMode == Constants.Mode.SIM ? Inches.of(36.25)
-                        : bumperSize;
+        public static final Distance mapleBumperSize = Inches.of(35);
 
         public static final Pathfinder pathfinder = (new PathfinderBuilder(Field.REBUILT_2026_TRENCH))
                         .setNormalizeCorners(false)
                         .setCornerDist(1)
                         .setCornerPointSpacing(0.06)
-                        .setRobotLength(mapleBumperSize.in(Meters) + 0.35)
-                        .setRobotWidth(mapleBumperSize.in(Meters) + 0.35)
+                        .setRobotLength(mapleBumperSize.in(Meters))
+                        .setRobotWidth(mapleBumperSize.in(Meters))
                         .build();
 }
