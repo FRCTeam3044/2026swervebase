@@ -17,10 +17,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Distance;<<<<<<<HEAD
 import frc.robot.Constants;
 import me.nabdev.oxconfig.sampleClasses.ConfigurablePIDController;
-import me.nabdev.oxconfig.sampleClasses.ConfigurableProfiledPIDController;
+import me.nabdev.oxconfig.sampleClasses.ConfigurableProfiledPIDController;=======>>>>>>>origin/main
 import me.nabdev.pathfinding.Pathfinder;
 import me.nabdev.pathfinding.PathfinderBuilder;
 import me.nabdev.pathfinding.utilities.FieldLoader.Field;
@@ -29,10 +29,15 @@ import org.ironmaple.simulation.drivesims.configs.DriveTrainSimulationConfig;
 import org.ironmaple.simulation.drivesims.configs.SwerveModuleSimulationConfig;
 
 public class DriveConstants {
+        <<<<<<<HEAD
         public static final double maxSpeedMetersPerSec = 4.8;
         public static final double odometryFrequency = 100.0; // Hz
         public static final double trackWidth = Units.inchesToMeters(26.5);
-        public static final double wheelBase = Units.inchesToMeters(26.5);
+        public static final double wheelBase = Units.inchesToMeters(26.5);=======
+        public static final double maxSpeedMetersPerSec = 5;
+        public static final double odometryFrequency = 100.0; // Hz
+        public static final double trackWidth = Units.inchesToMeters(24);
+        public static final double wheelBase = Units.inchesToMeters(24);>>>>>>>origin/main
         public static final double driveBaseRadius = Math.hypot(trackWidth / 2.0, wheelBase / 2.0);
         public static final Translation2d[] moduleTranslations = new Translation2d[] {
                         new Translation2d(trackWidth / 2.0, wheelBase / 2.0),
@@ -55,6 +60,7 @@ public class DriveConstants {
         public static final int frontRightDriveCanId = 12;
         public static final int backRightDriveCanId = 17;
 
+        <<<<<<<HEAD
         public static final int frontLeftTurnCanId = 8;
         public static final int backLeftTurnCanId = 5;
         public static final int frontRightTurnCanId = 1;
@@ -64,7 +70,18 @@ public class DriveConstants {
         public static final int driveMotorCurrentLimit = 50;
         public static final double wheelRadiusMeters = Units.inchesToMeters(1.5);
         public static final double driveMotorReduction = (45.0 * 22.0) / (14.0 * 15.0); // MAXSwerve with 14 pinion
-                                                                                        // teeth
+        =======
+        public static final int frontLeftTurnCanId = 5;
+        public static final int backLeftTurnCanId = 8;
+        public static final int frontRightTurnCanId = 2;
+        public static final int backRightTurnCanId = 1;
+
+        // Drive motor configuration
+        public static final int driveMotorCurrentLimit = 60;
+        public static final double wheelRadiusMeters = Units.inchesToMeters(1.4425);
+        public static final double driveMotorReduction = (45.0 * 22.0) / (12.0 * 15.0); // MAXSwerve with 14 pinion
+        >>>>>>>origin/main
+        // teeth
         // and 22 spur teeth
         public static final DCMotor driveGearbox = DCMotor.getNeoVortex(1);
 
@@ -157,3 +174,8 @@ public class DriveConstants {
                         .setRobotWidth(mapleBumperSize.in(Meters))
                         .build();
 }
+
+
+        
+
+        

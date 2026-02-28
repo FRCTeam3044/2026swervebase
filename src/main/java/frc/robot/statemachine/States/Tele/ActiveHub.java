@@ -1,6 +1,5 @@
 package frc.robot.statemachine.States.Tele;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.statemachine.StateMachine;
 import frc.robot.subsystems.drive.Drive;
@@ -15,10 +14,12 @@ import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.util.SmartXboxController;
 
 public class ActiveHub extends State {
+
   public ActiveHub(
       StateMachine stateMachine,
       CommandXboxController driverController,
-      GenericHID operatorBoard,
+      // GenericHID operatorBoard,
+      CommandXboxController operatorController,
       Drive drive,
       Intake intake,
       Spindexer spindexer,

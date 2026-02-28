@@ -26,7 +26,7 @@ public class ShooterIOSpark implements ShooterIO {
   private final RelativeEncoder leaderEncoder = leaderMotor.getEncoder();
   private final RelativeEncoder followerEncoder = followerMotor.getEncoder();
   private ConfigurableProfiledPIDController controller = new ConfigurableProfiledPIDController(0.0, 0.0, 0.0,
-      new Constraints(maxVelocity, maxAcceleration), "Shooter Speed Controller");
+      new Constraints(maxAcceleration, maxJolt), "Shooter Speed Controller");
 
   private AngularVelocity targetSpeed = RPM.of(0);
   SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV);

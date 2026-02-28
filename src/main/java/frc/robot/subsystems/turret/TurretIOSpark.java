@@ -72,6 +72,8 @@ public class TurretIOSpark implements TurretIO {
     inputs.rawTargetAngle = rawTargetAngle;
     inputs.computedTargetAngle = computedTargetAngle;
     inputs.angularVelocity = DegreesPerSecond.of(driveRelEncoder.getVelocity());
+    inputs.targetAngularVelocity = DegreesPerSecond.of(pidController.getSetpoint().velocity);
+    inputs.profileTargetPosition = Degrees.of(pidController.getSetpoint().position);
     currentAngle = inputs.angle;
   }
 

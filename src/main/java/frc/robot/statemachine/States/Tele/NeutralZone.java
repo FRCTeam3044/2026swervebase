@@ -3,6 +3,7 @@ package frc.robot.statemachine.States.Tele;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.statemachine.StateMachine;
+import frc.robot.statemachine.States.TeleState;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.intake.Intake;
@@ -34,7 +35,7 @@ public class NeutralZone extends State {
     controller.leftTrigger().whileTrue(intake.runRollers());
     startWhenActive(spindexer.run());
     startWhenActive(
-        autoAim.aimAllianceZone(() -> operatorBoard.getRawButton(1)));
+        autoAim.aimAllianceZone(() -> TeleState.shooterEngaged));
     controller.rightTrigger().whileTrue(kicker.shootKicker());
   }
 }

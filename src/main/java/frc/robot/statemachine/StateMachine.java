@@ -100,7 +100,8 @@ public class StateMachine extends StateMachineBase {
 
                 DisabledState disabled = new DisabledState(this, leds);
                 currentState = disabled;
-                State teleop = new TeleState(this, driverController, drive, leds);
+                State teleop = new TeleState(this, driverController, operatorController, drive, climber, intake,
+                                spindexer, leds);
                 State test = new TestState(this);
                 State auto = new AutoState(this);
 
@@ -120,13 +121,14 @@ public class StateMachine extends StateMachineBase {
                                 "Enter Calibration Mode");
 
                 // Teleop States
-                AlliedZone alliedZone = new AlliedZone(this);
+                AlliedZone alliedZone = new AlliedZone(this, autoAim);
                 NeutralZone neutralZone = new NeutralZone(
                                 this, driverController, operatorBoard, drive, intake, spindexer, kicker, turret, hood,
                                 shooter,
                                 autoAim);
                 ActiveHub activeHub = new ActiveHub(
-                                this, driverController, operatorBoard, drive, intake, spindexer, kicker, turret, hood,
+                                this, driverController, operatorController, drive, intake, spindexer, kicker, turret,
+                                hood,
                                 shooter,
                                 autoAim);
                 InactiveHub inactiveHub = new InactiveHub(this, driverController, drive, intake, spindexer, kicker,

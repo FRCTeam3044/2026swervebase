@@ -11,7 +11,6 @@ import frc.robot.subsystems.kicker.Kicker;
 import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.turret.Turret;
 import me.nabdev.oxidation.State;
-import me.nabdev.oxidation.util.SmartXboxController;
 
 public class InactiveHub extends State {
     public InactiveHub(

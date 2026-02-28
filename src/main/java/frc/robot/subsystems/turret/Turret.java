@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.subsystems.turret.TurretConstants.maxAngle;
 import static frc.robot.subsystems.turret.TurretConstants.minAngle;
@@ -38,9 +39,9 @@ public class Turret extends SubsystemBase {
         .andThen(sysId.quasistatic(direction))
         .until(() -> {
           if (direction == SysIdRoutine.Direction.kForward) {
-            return inputs.angle.gt(maxAngle);
+            return inputs.angle.gt(maxAngle.minus(Degrees.of(10)));
           } else {
-            return inputs.angle.lt(minAngle);
+            return inputs.angle.lt(minAngle.plus(Degrees.of(10)));
           }
         });
   }
@@ -48,9 +49,9 @@ public class Turret extends SubsystemBase {
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return run(() -> io.setVoltage(Volts.of(0.0))).withTimeout(1.0).andThen(sysId.dynamic(direction)).until(() -> {
       if (direction == SysIdRoutine.Direction.kForward) {
-        return inputs.angle.gt(maxAngle);
+        return inputs.angle.gt(maxAngle.minus(Degrees.of(10)));
       } else {
-        return inputs.angle.lt(minAngle);
+        return inputs.angle.lt(minAngle.plus(Degrees.of(10)));
       }
     });
 

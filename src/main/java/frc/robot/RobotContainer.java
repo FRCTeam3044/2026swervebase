@@ -11,6 +11,7 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RPM;
+import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -66,6 +67,9 @@ import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.turret.TurretIO;
 import frc.robot.subsystems.turret.TurretIOSim;
 import frc.robot.subsystems.turret.TurretIOSpark;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoAim;
 import frc.robot.util.AutoTargetUtil;
@@ -97,6 +101,7 @@ public class RobotContainer {
         private final Shooter shooter;
         public final Turret turret;
         private final Climber climber;
+        private final Vision vision;
         public final LEDs LEDs;
 
         public final StateMachine stateMachine;
@@ -147,6 +152,12 @@ public class RobotContainer {
                                                 new ModuleIOSpark(3),
                                                 (pose) -> {
                                                 });
+                                vision = new Vision(
+                                                drive::addVisionMeasurement,
+                                                new VisionIOPhotonVision(portCamName, robotToPortCam),
+                                                new VisionIOPhotonVision(starCamName, robotToStarCam),
+                                                new VisionIOPhotonVision(foreCamName, robotToForeCam),
+                                                new VisionIOPhotonVision(aftCamName, robotToAftCam));
                                 hood = new Hood(new HoodIOSpark());
                                 intake = new Intake(new IntakeIOSpark());
                                 shooter = new Shooter(new ShooterIOSpark());
@@ -154,7 +165,8 @@ public class RobotContainer {
                                 kicker = new Kicker(new KickerIOSpark());
                                 turret = new Turret(new TurretIOSpark());
                                 climber = new Climber(new ClimberIOSpark());
-                                LEDs = new LEDs(new LEDsIO() {
+                                LEDs = new LEDs(/* new LEDsIORio() */ new LEDsIO() {
+
                                 });
                                 break;
 
@@ -187,6 +199,11 @@ public class RobotContainer {
                                                 new ModuleIOSim(driveSimulation.getModules()[2]),
                                                 new ModuleIOSim(driveSimulation.getModules()[3]),
                                                 driveSimulation::setSimulationWorldPose);
+                                vision = new Vision(drive::addVisionMeasurement, new VisionIO() {
+                                }, new VisionIO() {
+                                }, new VisionIO() {
+                                }, new VisionIO() {
+                                });
                                 drive.setPose(new Pose2d(2, 2, new Rotation2d()));
                                 hood = new Hood(new HoodIOSim());
                                 intake = new Intake(new IntakeIO() {
@@ -220,6 +237,11 @@ public class RobotContainer {
                                                 },
                                                 (pose) -> {
                                                 });
+                                vision = new Vision(drive::addVisionMeasurement, new VisionIO() {
+                                }, new VisionIO() {
+                                }, new VisionIO() {
+                                }, new VisionIO() {
+                                });
                                 hood = new Hood(new HoodIO() {
                                 });
                                 intake = new Intake(new IntakeIO() {

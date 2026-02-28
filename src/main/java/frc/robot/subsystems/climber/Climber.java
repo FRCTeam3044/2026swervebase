@@ -18,10 +18,13 @@ public class Climber extends SubsystemBase {
     this.io = io;
   }
 
-  public Command setSpeed() { // Command factory for setting the speed of climber motor. Use for testing
-    return Commands.run(
+  public Command setSpeed(boolean forward) { // Command factory for setting the speed of climber motor. Use for testing
+    return Commands.runEnd(
         () -> {
-          io.setSpeed(speed.get());
+          io.setSpeed(forward ? speed.get() : -speed.get());
+        },
+        () -> {
+          io.setSpeed(0);
         },
         this);
   }

@@ -4,41 +4,64 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.LEDs.LEDs;
+import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.util.AllianceUtil;
-import frc.robot.util.AllianceUtil.AllianceColor;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.spindexer.Spindexer;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 import me.nabdev.oxidation.util.SmartXboxController;
-import org.ironmaple.simulation.SimulatedArena;
-import org.ironmaple.simulation.seasonspecific.rebuilt2026.Arena2026Rebuilt;
 
 public class TeleState extends State {
-  public TeleState(
-      StateMachineBase stateMachine,
-      CommandXboxController driverController,
-      Drive drive,
-      LEDs leds) {
-    super(stateMachine);
-    SmartXboxController controller = new SmartXboxController(driverController, loop);
 
-    startWhenActive(
-        DriveCommands.joystickDrive(
-            drive,
-            () -> -driverController.getLeftY(),
-            () -> -driverController.getLeftX(),
-            () -> -driverController.getRightX(),
-            true));
+    public static boolean shooterEngaged = false;
 
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
-    controller
-        .b()
-        .onTrue(
-            Commands.runOnce(
-                () -> ((Arena2026Rebuilt) SimulatedArena.getInstance())
-                    .outpostDump(AllianceUtil.getAlliance() == AllianceColor.BLUE))
-                .ignoringDisable(true));
+    public TeleState(
+            StateMachineBase stateMachine,
+            CommandXboxController driverController,
+            CommandXboxController operatorController,
+            Drive drive,
+            Climber climber,
+            Intake intake,
+            Spindexer spindexer,
+            LEDs leds) {
+        super(stateMachine);
+        SmartXboxController controller = new SmartXboxController(driverController, loop);
+        SmartXboxController operator = new SmartXboxController(operatorController, loop);
 
-    startWhenActive(leds.setBlinkingOrange());
-  }
+        startWhenActive(
+                DriveCommands.joystickDrive(
+                        drive,
+                        () -> -driverController.getLeftY(),
+                        () -> -driverController.getLeftX(),
+                        () -> -driverController.getRightX(),
+                        true));
+
+        operator.leftTrigger()
+                .onTrue(Commands.runOnce(() -> shooterEngaged = !shooterEngaged).withName("Toggle shooter engaged"));
+
+        controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+
+        operator.povUp().whileTrue(climber.setSpeed(true));
+        operator.povDown().whileTrue(climber.setSpeed(false));
+        operator.a().whileTrue(intake.intakeTop());
+        operator.a().whileFalse(intake.intakeBottom());
+        operator.a().whileFalse(intake.runRollers());
+
+        startWhenActive(intake.intakeBottom().onlyIf(operatorController.a().negate()));
+        startWhenActive(intake.runRollers().onlyIf(operatorController.a().negate()));
+
+        startWhenActive(spindexer.setSpeed());
+
+        // controller
+        // .b()
+        // .onTrue(
+        // Commands.runOnce(
+        // () ->
+        // ((Arena2026Rebuilt) SimulatedArena.getInstance())
+        // .outpostDump(AllianceUtil.getAlliance() == AllianceColor.BLUE))
+        // .ignoringDisable(true));
+
+        startWhenActive(leds.setBlinkingOrange());
+    }
 }
