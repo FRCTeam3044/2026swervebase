@@ -8,6 +8,10 @@
 package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.Temperature;
+
+import static edu.wpi.first.units.Units.Celsius;
+
 import org.littletonrobotics.junction.AutoLog;
 
 public interface GyroIO {
@@ -16,9 +20,11 @@ public interface GyroIO {
     public boolean connected = false;
     public Rotation2d yawPosition = Rotation2d.kZero;
     public double yawVelocityRadPerSec = 0.0;
+    public Temperature temperature = Celsius.of(0);
     public double[] odometryYawTimestamps = new double[] {};
     public Rotation2d[] odometryYawPositions = new Rotation2d[] {};
   }
 
-  public default void updateInputs(GyroIOInputs inputs) {}
+  public default void updateInputs(GyroIOInputs inputs) {
+  }
 }
