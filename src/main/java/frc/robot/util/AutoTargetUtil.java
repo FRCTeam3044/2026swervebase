@@ -1,6 +1,8 @@
 package frc.robot.util;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import frc.robot.subsystems.drive.Drive;
@@ -18,25 +20,29 @@ public class AutoTargetUtil {
   private Pose3d outpostAllianceTarget = new Pose3d(new Translation3d(3.3, 1.7, 2), new Rotation3d());
   private Pose3d depotAllianceTarget = new Pose3d(new Translation3d(3.3, 6.3, 2), new Rotation3d());
 
-  static {
-    Obstacle blueAllianceZone = Obstacle.createObstacle(
-        new Vertex(11.96622575, 0),
-        new Vertex(11.96622575, 8.0692625),
-        new Vertex(16.5410515, 8.0692625),
-        new Vertex(16.5410515, 0));
+  private static Pose2d testNeutralZonePosition = new Pose2d(7, 4, Rotation2d.fromDegrees(0));
 
-    Obstacle redAllianceZone = Obstacle.createObstacle(
-        new Vertex(0, 0),
-        new Vertex(0, 8.0692625),
-        new Vertex(4.54942575, 8.0692625),
-        new Vertex(4.54942575, 0));
+  private static Pose2d leftTower = new Pose2d(1.1445875, 3.26602725, Rotation2d.fromDegrees(0));
+  private static Pose2d middleTower = new Pose2d(1.1445875, 3.74570625, Rotation2d.fromDegrees(0));
+  private static Pose2d rightTower = new Pose2d(1.1445875, 4.22538525, Rotation2d.fromDegrees(0));
 
-    Obstacle neutralZone = Obstacle.createObstacle(
-        new Vertex(4.54942575, 0),
-        new Vertex(4.54942575, 8.0692625),
-        new Vertex(11.96622575, 8.0692625),
-        new Vertex(11.96622575, 0));
-  }
+  private static Obstacle redAllianceZone = Obstacle.createObstacle(
+      new Vertex(11.96622575, 0),
+      new Vertex(11.96622575, 8.0692625),
+      new Vertex(16.5410515, 8.0692625),
+      new Vertex(16.5410515, 0));
+
+  private static Obstacle blueAllianceZone = Obstacle.createObstacle(
+      new Vertex(0, 0),
+      new Vertex(0, 8.0692625),
+      new Vertex(4.54942575, 8.0692625),
+      new Vertex(4.54942575, 0));
+
+  public static Obstacle neutralZone = Obstacle.createObstacle(
+      new Vertex(4.54942575, 0),
+      new Vertex(4.54942575, 8.0692625),
+      new Vertex(11.96622575, 8.0692625),
+      new Vertex(11.96622575, 0));
 
   public AutoTargetUtil(Drive drive) {
     this.drive = drive;
@@ -44,6 +50,22 @@ public class AutoTargetUtil {
 
   public Pose3d getHub() {
     return AllianceUtil.getPose3dForAlliance(hub);
+  }
+
+  public static Pose2d getNeutralZone() {
+    return AllianceUtil.getPoseForAlliance(testNeutralZonePosition);
+  }
+
+  public static Pose2d getLeftTower() {
+    return AllianceUtil.getPoseForAlliance(leftTower);
+  }
+
+  public static Obstacle allianceSide() {
+    if (AllianceUtil.getAlliance() == AllianceColor.BLUE) {
+      return blueAllianceZone;
+    } else {
+      return redAllianceZone;
+    }
   }
 
   public Pose3d getAllianceZoneTarget() {

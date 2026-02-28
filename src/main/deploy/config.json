@@ -1,5 +1,11 @@
 {
     "presentation": {
+        "Pathfinding X Controller/I": "0.0",
+        "Pathfinding X Controller/D": "0.0",
+        "Pathfinding Max Accel": {
+            "comment": "Auto-Generated",
+            "value": "2.0"
+        },
         "CalibrationState/Test Parameter 58": "0",
         "CalibrationState/Test Parameter 59": "0",
         "CalibrationState/Test Parameter 6": "0",
@@ -43,18 +49,26 @@
         "CalibrationState/Test Parameter 50": "0",
         "CalibrationState/Test Parameter 51": "0",
         "CalibrationState/Test Parameter 52": "0",
+        "Pathfinding Max Accel (Auto)": {
+            "comment": "Auto-Generated",
+            "value": "5.0"
+        },
         "CalibrationState/Test Parameter 53": "0",
         "CalibrationState/CalibrationShotFlywheelSpeed": "3000.0",
         "CalibrationState/Test Parameter 106": "0",
         "CalibrationState/Test Parameter 107": "0",
         "CalibrationState/Test Parameter 104": "0",
+        "Pathfinding Y Controller/I": "0.0",
         "CalibrationState/Test Parameter 105": "0",
         "CalibrationState/Test Parameter 108": "0",
+        "Pathfinding Theta Controller/I": "0.0",
         "CalibrationState/Test Parameter 109": "0",
+        "Pathfinding Theta Controller/P": "0.0",
         "CalibrationState/Test Parameter 102": "0",
         "CalibrationState/Test Parameter 103": "0",
         "CalibrationState/Test Parameter 100": "0",
         "CalibrationState/Test Parameter 101": "0",
+        "Pathfinding Y Controller/D": "0.0",
         "CalibrationState/Test Parameter 87": "0",
         "CalibrationState/Test Parameter 88": "0",
         "CalibrationState/Test Parameter 89": "0",
@@ -66,6 +80,7 @@
         "CalibrationState/Test Parameter 80": "0",
         "CalibrationState/Test Parameter 81": "0",
         "CalibrationState/Test Parameter 82": "0",
+        "Pathfinding Theta Controller/D": "0.0",
         "Intake roller speed": {
             "comment": "Auto-Generated",
             "value": "0.5"
@@ -85,12 +100,17 @@
         "CalibrationState/Test Parameter 77": "0",
         "CalibrationState/Test Parameter 78": "0",
         "CalibrationState/Test Parameter 79": "0",
+        "Intake deploy speed": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
         "CalibrationState/Test Parameter 72": "0",
         "CalibrationState/Test Parameter 73": "0",
         "CalibrationState/Test Parameter 74": "0",
         "CalibrationState/Test Parameter 75": "0",
         "CalibrationState/Test Parameter 70": "0",
         "CalibrationState/Test Parameter 71": "0",
+        "Pathfinding Y Controller/P": "0.0",
         "CalibrationState/Test Parameter 18": "0",
         "CalibrationState/Test Parameter 19": "0",
         "CalibrationState/Test Parameter 14": "0",
@@ -133,6 +153,10 @@
         "CalibrationState/Test Parameter 99": "0",
         "CalibrationState/CalibrationShotTurretAngle": "0.0",
         "CalibrationState/Test Parameter 12": "0",
+        "Pathfinding Max Speed": {
+            "comment": "Auto-Generated",
+            "value": "4.8"
+        },
         "CalibrationState/Test Parameter 13": "0",
         "CalibrationState/Test Parameter 94": "0",
         "Kicker top shoot speed": {
@@ -165,6 +189,10 @@
         "CalibrationState/Test Parameter 40": "0",
         "CalibrationState/Test Parameter 41": "0",
         "CalibrationState/Test Parameter 42": "0",
+        "Pathfinding Max Rotation Speed": {
+            "comment": "Auto-Generated",
+            "value": "1.5707963267948966"
+        },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
             "value": "true"
@@ -188,14 +216,25 @@
         "CalibrationState/Test Parameter 34": "0",
         "CalibrationState/Test Parameter 35": "0",
         "CalibrationState/Test Parameter 30": "0",
+        "Shooter at speed tolerance (RPM)": {
+            "comment": "Auto-Generated",
+            "value": "5.0"
+        },
         "Kicker top block speed": {
             "comment": "Auto-Generated",
             "value": "0.0"
         },
-        "CalibrationState/Test Parameter 31": "0"
+        "CalibrationState/Test Parameter 31": "0",
+        "Pathfinding X Controller/P": "0.0"
     },
     "mode": "competition",
     "simulation": {
+        "Pathfinding X Controller/I": "0.0",
+        "Pathfinding X Controller/D": "0.0",
+        "Pathfinding Max Accel": {
+            "comment": "Auto-Generated",
+            "value": "2.0"
+        },
         "CalibrationState/Test Parameter 58": "0",
         "CalibrationState/Test Parameter 59": "0",
         "CalibrationState/Test Parameter 6": "0",
@@ -239,18 +278,26 @@
         "CalibrationState/Test Parameter 50": "0",
         "CalibrationState/Test Parameter 51": "0",
         "CalibrationState/Test Parameter 52": "0",
+        "Pathfinding Max Accel (Auto)": {
+            "comment": "Auto-Generated",
+            "value": "5.0"
+        },
         "CalibrationState/Test Parameter 53": "0",
         "CalibrationState/CalibrationShotFlywheelSpeed": "3000.0",
         "CalibrationState/Test Parameter 106": "0",
         "CalibrationState/Test Parameter 107": "0",
         "CalibrationState/Test Parameter 104": "0",
+        "Pathfinding Y Controller/I": "0.0",
         "CalibrationState/Test Parameter 105": "0",
         "CalibrationState/Test Parameter 108": "0",
+        "Pathfinding Theta Controller/I": "0.0",
         "CalibrationState/Test Parameter 109": "0",
+        "Pathfinding Theta Controller/P": "0.0",
         "CalibrationState/Test Parameter 102": "0",
         "CalibrationState/Test Parameter 103": "0",
         "CalibrationState/Test Parameter 100": "0",
         "CalibrationState/Test Parameter 101": "0",
+        "Pathfinding Y Controller/D": "0.0",
         "CalibrationState/Test Parameter 87": "0",
         "CalibrationState/Test Parameter 88": "0",
         "CalibrationState/Test Parameter 89": "0",
@@ -262,6 +309,7 @@
         "CalibrationState/Test Parameter 80": "0",
         "CalibrationState/Test Parameter 81": "0",
         "CalibrationState/Test Parameter 82": "0",
+        "Pathfinding Theta Controller/D": "0.0",
         "Intake roller speed": {
             "comment": "Auto-Generated",
             "value": "0.5"
@@ -281,12 +329,17 @@
         "CalibrationState/Test Parameter 77": "0",
         "CalibrationState/Test Parameter 78": "0",
         "CalibrationState/Test Parameter 79": "0",
+        "Intake deploy speed": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
         "CalibrationState/Test Parameter 72": "0",
         "CalibrationState/Test Parameter 73": "0",
         "CalibrationState/Test Parameter 74": "0",
         "CalibrationState/Test Parameter 75": "0",
         "CalibrationState/Test Parameter 70": "0",
         "CalibrationState/Test Parameter 71": "0",
+        "Pathfinding Y Controller/P": "0.0",
         "CalibrationState/Test Parameter 18": "0",
         "CalibrationState/Test Parameter 19": "0",
         "CalibrationState/Test Parameter 14": "0",
@@ -329,6 +382,10 @@
         "CalibrationState/Test Parameter 99": "0",
         "CalibrationState/CalibrationShotTurretAngle": "0.0",
         "CalibrationState/Test Parameter 12": "0",
+        "Pathfinding Max Speed": {
+            "comment": "Auto-Generated",
+            "value": "4.8"
+        },
         "CalibrationState/Test Parameter 13": "0",
         "CalibrationState/Test Parameter 94": "0",
         "Kicker top shoot speed": {
@@ -361,6 +418,10 @@
         "CalibrationState/Test Parameter 40": "0",
         "CalibrationState/Test Parameter 41": "0",
         "CalibrationState/Test Parameter 42": "0",
+        "Pathfinding Max Rotation Speed": {
+            "comment": "Auto-Generated",
+            "value": "1.5707963267948966"
+        },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
             "value": "true"
@@ -384,13 +445,24 @@
         "CalibrationState/Test Parameter 34": "0",
         "CalibrationState/Test Parameter 35": "0",
         "CalibrationState/Test Parameter 30": "0",
+        "Shooter at speed tolerance (RPM)": {
+            "comment": "Auto-Generated",
+            "value": "5.0"
+        },
         "Kicker top block speed": {
             "comment": "Auto-Generated",
             "value": "0.0"
         },
-        "CalibrationState/Test Parameter 31": "0"
+        "CalibrationState/Test Parameter 31": "0",
+        "Pathfinding X Controller/P": "0.0"
     },
     "competition": {
+        "Pathfinding X Controller/I": "0.0",
+        "Pathfinding X Controller/D": "0.0",
+        "Pathfinding Max Accel": {
+            "comment": "Auto-Generated",
+            "value": "2.0"
+        },
         "CalibrationState/Test Parameter 58": "0",
         "CalibrationState/Test Parameter 59": "0",
         "CalibrationState/Test Parameter 6": "0",
@@ -434,18 +506,26 @@
         "CalibrationState/Test Parameter 50": "0",
         "CalibrationState/Test Parameter 51": "0",
         "CalibrationState/Test Parameter 52": "0",
+        "Pathfinding Max Accel (Auto)": {
+            "comment": "Auto-Generated",
+            "value": "5.0"
+        },
         "CalibrationState/Test Parameter 53": "0",
         "CalibrationState/CalibrationShotFlywheelSpeed": "3000.0",
         "CalibrationState/Test Parameter 106": "0",
         "CalibrationState/Test Parameter 107": "0",
         "CalibrationState/Test Parameter 104": "0",
+        "Pathfinding Y Controller/I": "0.0",
         "CalibrationState/Test Parameter 105": "0",
         "CalibrationState/Test Parameter 108": "0",
+        "Pathfinding Theta Controller/I": "0.0",
         "CalibrationState/Test Parameter 109": "0",
+        "Pathfinding Theta Controller/P": "0.0",
         "CalibrationState/Test Parameter 102": "0",
         "CalibrationState/Test Parameter 103": "0",
         "CalibrationState/Test Parameter 100": "0",
         "CalibrationState/Test Parameter 101": "0",
+        "Pathfinding Y Controller/D": "0.0",
         "CalibrationState/Test Parameter 87": "0",
         "CalibrationState/Test Parameter 88": "0",
         "CalibrationState/Test Parameter 89": "0",
@@ -457,6 +537,7 @@
         "CalibrationState/Test Parameter 80": "0",
         "CalibrationState/Test Parameter 81": "0",
         "CalibrationState/Test Parameter 82": "0",
+        "Pathfinding Theta Controller/D": "0.0",
         "Intake roller speed": {
             "comment": "Auto-Generated",
             "value": "0.5"
@@ -476,12 +557,17 @@
         "CalibrationState/Test Parameter 77": "0",
         "CalibrationState/Test Parameter 78": "0",
         "CalibrationState/Test Parameter 79": "0",
+        "Intake deploy speed": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
         "CalibrationState/Test Parameter 72": "0",
         "CalibrationState/Test Parameter 73": "0",
         "CalibrationState/Test Parameter 74": "0",
         "CalibrationState/Test Parameter 75": "0",
         "CalibrationState/Test Parameter 70": "0",
         "CalibrationState/Test Parameter 71": "0",
+        "Pathfinding Y Controller/P": "0.0",
         "CalibrationState/Test Parameter 18": "0",
         "CalibrationState/Test Parameter 19": "0",
         "CalibrationState/Test Parameter 14": "0",
@@ -524,6 +610,10 @@
         "CalibrationState/Test Parameter 99": "0",
         "CalibrationState/CalibrationShotTurretAngle": "0.0",
         "CalibrationState/Test Parameter 12": "0",
+        "Pathfinding Max Speed": {
+            "comment": "Auto-Generated",
+            "value": "4.8"
+        },
         "CalibrationState/Test Parameter 13": "0",
         "CalibrationState/Test Parameter 94": "0",
         "Kicker top shoot speed": {
@@ -556,6 +646,10 @@
         "CalibrationState/Test Parameter 40": "0",
         "CalibrationState/Test Parameter 41": "0",
         "CalibrationState/Test Parameter 42": "0",
+        "Pathfinding Max Rotation Speed": {
+            "comment": "Auto-Generated",
+            "value": "1.5707963267948966"
+        },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
             "value": "true"
@@ -579,10 +673,15 @@
         "CalibrationState/Test Parameter 34": "0",
         "CalibrationState/Test Parameter 35": "0",
         "CalibrationState/Test Parameter 30": "0",
+        "Shooter at speed tolerance (RPM)": {
+            "comment": "Auto-Generated",
+            "value": "5.0"
+        },
         "Kicker top block speed": {
             "comment": "Auto-Generated",
             "value": "0.0"
         },
-        "CalibrationState/Test Parameter 31": "0"
+        "CalibrationState/Test Parameter 31": "0",
+        "Pathfinding X Controller/P": "0.0"
     }
 }

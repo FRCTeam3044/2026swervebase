@@ -104,7 +104,7 @@ public class StateMachine extends StateMachineBase {
                 State test = new TestState(this);
                 State auto = new AutoState(this);
 
-                this.registerToRootState(test, teleop, disabled);
+                this.registerToRootState(test, teleop, disabled, auto);
                 // Test States
                 State calibration = new CalibrationState(this, driverController, drive, shooter, turret, hood, kicker,
                                 spindexer, autoTargetUtil);
@@ -153,11 +153,12 @@ public class StateMachine extends StateMachineBase {
 
                 // Autonomous work
 
-                AutoClimb autoClimb = new AutoClimb(this);
-                IntakeAllianceZone intakeAllianceZone = new IntakeAllianceZone(this);
-                IntakeNeutralZone intakeNeutralZone = new IntakeNeutralZone(this, intake);
-                ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this);
-                ShootToHub shootHub = new ShootToHub(this, drive, intake, spindexer, kicker, turret, hood, shooter);
+                AutoClimb autoClimb = new AutoClimb(this, drive);
+                IntakeAllianceZone intakeAllianceZone = new IntakeAllianceZone(this, drive);
+                IntakeNeutralZone intakeNeutralZone = new IntakeNeutralZone(this, drive, intake);
+                ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this, drive);
+                ShootToHub shootHub = new ShootToHub(this, drive, intake, spindexer, kicker, turret, hood, shooter,
+                                autoAim);
 
                 auto.withDefaultChild(shootHub)
                                 .withChild(autoClimb)
