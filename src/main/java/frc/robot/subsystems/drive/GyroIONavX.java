@@ -18,7 +18,7 @@ import com.studica.frc.Navx;
 
 /** IO implementation for NavX. */
 public class GyroIONavX implements GyroIO {
-  private final Navx navX = new Navx(Navx.Port.kUSB1);
+  private final Navx navX = new Navx(Navx.Port.kUSB2);
   private final Queue<Double> yawPositionQueue;
   private final Queue<Double> yawTimestampQueue;
 
