@@ -24,12 +24,12 @@ public class KickerIOSpark implements KickerIO {
         topMotor,
         5,
         () -> topMotor.configure(
-            motorConfigOne, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+            topMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
     tryUntilOk(
         bottomMotor,
         5,
         () -> bottomMotor.configure(
-            motorConfigTwo, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+            bottomMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
   }
 
   @Override

@@ -3,7 +3,7 @@ package frc.robot.subsystems.shooter;
 public class ShooterConstants {
   public static final int leaderCanId = 19;
   public static final int followerCanId = 20;
-  public static final int currentLimit = 40;
+  public static final int currentLimit = 80;
 
   public static final double kS = 0.0;
   public static final double kV = 0.0;
