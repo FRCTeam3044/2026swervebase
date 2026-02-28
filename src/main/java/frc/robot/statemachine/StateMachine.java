@@ -147,9 +147,10 @@ public class StateMachine extends StateMachineBase {
                                 inactiveHub, () -> !hubIsActive.getAsBoolean(), 0, "Hub becomes inactive");
                 inactiveHub.withTransition(activeHub, hubIsActive, 0, "Hub becomes active");
 
-                teleop.withModeTransitions(disabled, teleop, test);
-                test.withModeTransitions(disabled, teleop, test);
-                disabled.withModeTransitions(disabled, teleop, test);
+                teleop.withModeTransitions(disabled, teleop, auto, test);
+                test.withModeTransitions(disabled, teleop, auto, test);
+                auto.withModeTransitions(disabled, teleop, auto, test);
+                disabled.withModeTransitions(disabled, teleop, auto, test);
 
                 // Autonomous work
 
@@ -159,12 +160,6 @@ public class StateMachine extends StateMachineBase {
                 ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this, drive);
                 ShootToHub shootHub = new ShootToHub(this, drive, intake, spindexer, kicker, turret, hood, shooter,
                                 autoAim);
-
-                auto.withDefaultChild(shootHub)
-                                .withChild(autoClimb)
-                                .withChild(intakeAllianceZone)
-                                .withChild(intakeNeutralZone)
-                                .withChild(shootToAlliedSide);
 
                 testAutoRoutine.add(AutoSteps.ShootToHub);
                 testAutoRoutine.add(AutoSteps.IntakeNeutralZone);
@@ -182,20 +177,21 @@ public class StateMachine extends StateMachineBase {
                         }
                 };
 
+                auto.withChild(shootHub, () -> currentStep == AutoSteps.ShootToHub, 0, "Auto to hub shot")
+                                .withChild(autoClimb, () -> currentStep == AutoSteps.AutoClimb, 0, "Auto to climb")
+                                .withChild(intakeAllianceZone, () -> currentStep == AutoSteps.IntakeAllianceZone, 0,
+                                                "Auto to allied intake")
+                                .withChild(intakeNeutralZone,
+                                                () -> currentStep == AutoSteps.IntakeNeutralZone, 0,
+                                                "Auto to neutral intake")
+                                .withChild(shootToAlliedSide, () -> currentStep == AutoSteps.ShootToAlliedSide, 0,
+                                                "Auto to neutral shot");
+
                 autoClimb.withTransition(auto, currentStateComplete, 0, "Climb to auto");
                 shootHub.withTransition(auto, currentStateComplete, 0, "Shoot hub to auto");
                 shootToAlliedSide.withTransition(auto, currentStateComplete, 0, "Neutral shot to auto");
                 intakeAllianceZone.withTransition(auto, currentStateComplete, 0, "Allied intake to shot");
                 intakeNeutralZone.withTransition(auto, currentStateComplete, 0, "Neutral intake to shot");
-
-                auto.withTransition(autoClimb, () -> currentStep == AutoSteps.AutoClimb, 0, "Auto to climb");
-                auto.withTransition(shootHub, () -> currentStep == AutoSteps.ShootToHub, 0, "Auto to hub shot");
-                auto.withTransition(shootToAlliedSide, () -> currentStep == AutoSteps.ShootToAlliedSide, 0,
-                                "Auto to neutral shot");
-                auto.withTransition(intakeAllianceZone, () -> currentStep == AutoSteps.IntakeAllianceZone, 0,
-                                "Auto to allied intake");
-                auto.withTransition(intakeNeutralZone,
-                                () -> currentStep == AutoSteps.IntakeNeutralZone, 0, "Auto to neutral intake");
 
                 // For SYSID (comment out for normal autos)
                 // MAKE SURE YOU ADD AUTO TO THE REGISTER TO ROOT STATE

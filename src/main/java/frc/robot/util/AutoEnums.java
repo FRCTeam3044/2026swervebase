@@ -2,6 +2,8 @@ package frc.robot.util;
 
 import java.util.function.BooleanSupplier;
 
+import frc.robot.RobotContainer;
+
 public class AutoEnums {
   public AutoEnums() {
   }
@@ -9,10 +11,11 @@ public class AutoEnums {
   public enum AutoSteps {
     // These conditions are the END conditions
     AutoClimb(/* Auto is finished */ () -> false),
-    ShootToHub(/* Hopper is empty */() -> false),
-    ShootToAlliedSide(/* Hopper is empty */() -> false),
-    IntakeNeutralZone(/* Hopper is full */() -> false),
-    IntakeAllianceZone(/* Hopper is full */() -> false);
+    ShootToHub(/* Hopper is empty */ () -> RobotContainer.getInstance().autoStateTimer.get() > 5),
+    ShootToAlliedSide(/* Hopper is empty */ () -> false),
+    IntakeNeutralZone(/* Hopper is full */ () -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil
+        .getNeutralZone())),
+    IntakeAllianceZone(/* Hopper is full */ () -> false);
 
     private final BooleanSupplier condition;
 

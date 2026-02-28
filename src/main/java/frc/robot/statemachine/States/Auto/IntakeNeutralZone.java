@@ -1,5 +1,9 @@
 package frc.robot.statemachine.States.Auto;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.Function;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;

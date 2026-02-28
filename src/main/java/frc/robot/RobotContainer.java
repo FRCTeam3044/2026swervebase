@@ -113,6 +113,8 @@ public class RobotContainer {
 
         public Timer simShotTimer = new Timer();
 
+        public Timer autoStateTimer = new Timer();
+
         // private ConfigurableP
         private final Mechanism2d mech;
         private final MechanismRoot2d root;
@@ -152,7 +154,8 @@ public class RobotContainer {
                                 kicker = new Kicker(new KickerIOSpark());
                                 turret = new Turret(new TurretIOSpark());
                                 climber = new Climber(new ClimberIOSpark());
-                                LEDs = new LEDs(new LEDsIORio());
+                                LEDs = new LEDs(new LEDsIO() {
+                                });
                                 break;
 
                         case SIM:
@@ -198,7 +201,8 @@ public class RobotContainer {
                                 });
                                 climber = new Climber(new ClimberIO() {
                                 });
-                                LEDs = new LEDs(new LEDsIORio());
+                                LEDs = new LEDs(new LEDsIO() {
+                                });
                                 break;
 
                         default:

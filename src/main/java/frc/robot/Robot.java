@@ -12,7 +12,9 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.util.AllianceUtil;
+import frc.robot.util.PathfindingDebugUtils;
 import frc.robot.util.ShotCalculator;
 import me.nabdev.oxconfig.OxConfig;
 import org.ironmaple.simulation.SimulatedArena;
@@ -161,6 +163,14 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopInit() {
     AllianceUtil.setAlliance();
+
+    PathfindingDebugUtils.drawLines("Field Map",
+        DriveConstants.pathfinder.visualizeEdges(),
+        DriveConstants.pathfinder.visualizeVertices());
+
+    PathfindingDebugUtils.drawLines("Field Map Inflated",
+        DriveConstants.pathfinder.visualizeEdges(),
+        DriveConstants.pathfinder.visualizeInflatedVertices());
     timer.start();
   }
 

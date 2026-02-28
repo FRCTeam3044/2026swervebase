@@ -33,10 +33,14 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
 import frc.robot.RobotContainer;
+import frc.robot.commands.DriveCommands;
+import frc.robot.util.AutoTargetUtil;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
+import java.util.function.Function;
+
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -61,6 +65,11 @@ public class Drive extends SubsystemBase {
   private SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(kinematics, rawGyroRotation,
       lastModulePositions, Pose2d.kZero);
   private final Consumer<Pose2d> resetSimulationPoseCallBack;
+
+  public boolean atPose(Pose2d pose) {
+    double distance = pose.getTranslation().getDistance(AutoTargetUtil.getNeutralZone().getTranslation());
+    return distance < DriveCommands.pathfindingTolerance.get();
+  };
 
   public Drive(
       GyroIO gyroIO,

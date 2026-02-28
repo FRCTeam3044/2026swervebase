@@ -5,6 +5,9 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.RobotContainer;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
@@ -15,7 +18,6 @@ import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.util.AutoAim;
 import frc.robot.util.AutoTargetUtil;
-import me.nabdev.oxconfig.ConfigurableParameter;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 import me.nabdev.pathfinding.structures.Obstacle;
@@ -34,8 +36,6 @@ public class ShootToHub extends State {
       AutoAim autoAim) {
     super(stateMachine);
 
-    ConfigurableParameter<Double> positionTolerance = new ConfigurableParameter<Double>(1.0, "Pathfinding tolerance");
-
     Supplier<Pose2d> targetSupplier = () -> {
       Obstacle allianceZone = AutoTargetUtil.allianceSide();
       Vertex robotPos = new Vertex(drive.getPose());
@@ -44,14 +44,16 @@ public class ShootToHub extends State {
 
     BooleanSupplier atPosition = () -> {
       double distance = drive.getPose().getTranslation().getDistance(targetSupplier.get().getTranslation());
-      return distance < positionTolerance.get();
+      return distance < DriveCommands.pathfindingTolerance.get();
     };
 
     startWhenActive(DriveCommands.goToPoint(drive, targetSupplier, () -> Rotation2d.fromDegrees(0)));
     startWhenActive(intake.intakeBottom());
     startWhenActive(spindexer.run());
     startWhenActive(kicker.blockKicker());
-    t(atPosition).onTrue(kicker.shootKicker());
-    t(atPosition).onTrue(autoAim.aimHub(() -> true));
+    t(atPosition)
+        .onTrue(Commands.deferredProxy(() -> Commands.runOnce(RobotContainer.getInstance().autoStateTimer::restart)));
+    t(atPosition).whileTrue(kicker.shootKicker());
+    t(atPosition).whileTrue(autoAim.aimHub(() -> true));
   }
 }
