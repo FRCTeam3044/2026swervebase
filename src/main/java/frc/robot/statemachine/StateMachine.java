@@ -9,7 +9,6 @@ import frc.robot.Robot;
 import frc.robot.statemachine.States.CalibrationState;
 import frc.robot.statemachine.States.DisabledState;
 import frc.robot.statemachine.States.NormalTestState;
-import frc.robot.statemachine.States.SysIDState;
 import frc.robot.statemachine.States.Tele.ActiveHub;
 import frc.robot.statemachine.States.Tele.AlliedZone;
 import frc.robot.statemachine.States.Tele.InactiveHub;
@@ -87,7 +86,8 @@ public class StateMachine extends StateMachineBase {
 
                 DisabledState disabled = new DisabledState(this, leds);
                 currentState = disabled;
-                State teleop = new TeleState(this, driverController, drive, leds);
+                State teleop = new TeleState(this, driverController, operatorController, drive, climber, intake,
+                                spindexer, leds);
                 State test = new TestState(this);
 
                 this.registerToRootState(test, teleop, disabled);
@@ -106,13 +106,14 @@ public class StateMachine extends StateMachineBase {
                                 "Enter Calibration Mode");
 
                 // Teleop States
-                AlliedZone alliedZone = new AlliedZone(this);
+                AlliedZone alliedZone = new AlliedZone(this, autoAim);
                 NeutralZone neutralZone = new NeutralZone(
                                 this, driverController, operatorBoard, drive, intake, spindexer, kicker, turret, hood,
                                 shooter,
                                 autoAim);
                 ActiveHub activeHub = new ActiveHub(
-                                this, driverController, operatorBoard, drive, intake, spindexer, kicker, turret, hood,
+                                this, driverController, operatorController, drive, intake, spindexer, kicker, turret,
+                                hood,
                                 shooter,
                                 autoAim);
                 InactiveHub inactiveHub = new InactiveHub(this, driverController, drive, intake, spindexer, kicker,

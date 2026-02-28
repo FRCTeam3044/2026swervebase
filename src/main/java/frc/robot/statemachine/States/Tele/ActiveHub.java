@@ -1,6 +1,5 @@
 package frc.robot.statemachine.States.Tele;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.statemachine.StateMachine;
 import frc.robot.subsystems.drive.Drive;
@@ -15,10 +14,12 @@ import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.util.SmartXboxController;
 
 public class ActiveHub extends State {
+
   public ActiveHub(
       StateMachine stateMachine,
       CommandXboxController driverController,
-      GenericHID operatorBoard,
+      // GenericHID operatorBoard,
+      CommandXboxController operatorController,
       Drive drive,
       Intake intake,
       Spindexer spindexer,
@@ -27,13 +28,7 @@ public class ActiveHub extends State {
       Hood hood,
       Shooter shooter, AutoAim autoAim) {
     super(stateMachine);
-    SmartXboxController controller = new SmartXboxController(driverController, loop);
-
-    startWhenActive(intake.intakeBottom());
-    controller.leftTrigger().whileTrue(intake.runRollers());
-    startWhenActive(spindexer.setSpeed());
-    startWhenActive(
-        autoAim.aimHub(() -> operatorBoard.getRawButton(1)));
-    controller.rightTrigger().whileTrue(kicker.shootKicker());
+    SmartXboxController operator = new SmartXboxController(operatorController, loop);
+    operator.rightTrigger().whileTrue(kicker.shootKicker());
   }
 }

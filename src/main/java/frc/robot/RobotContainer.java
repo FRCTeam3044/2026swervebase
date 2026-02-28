@@ -159,7 +159,9 @@ public class RobotContainer {
                                 kicker = new Kicker(new KickerIOSpark());
                                 turret = new Turret(new TurretIOSpark());
                                 climber = new Climber(new ClimberIOSpark());
-                                LEDs = new LEDs(new LEDsIORio());
+                                LEDs = new LEDs(/* new LEDsIORio() */ new LEDsIO() {
+
+                                });
                                 break;
 
                         case SIM:
