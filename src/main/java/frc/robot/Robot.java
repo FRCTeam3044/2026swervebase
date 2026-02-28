@@ -88,9 +88,12 @@ public class Robot extends LoggedRobot {
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
+    System.out.println("Constructing RobotContainer...");
     robotContainer = RobotContainer.getInstance();
+    System.out.println("Initializing OxConfig...");
 
     OxConfig.initialize();
+    System.out.println("Starting state machine...");
     robotContainer.stateMachine.onStartup();
   }
 
