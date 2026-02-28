@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Robot;
 import frc.robot.statemachine.States.Auto.AutoClimb;
+import frc.robot.statemachine.States.Auto.EmptyState;
 import frc.robot.statemachine.States.Auto.IntakeAllianceZone;
 import frc.robot.statemachine.States.Auto.IntakeNeutralZone;
 import frc.robot.statemachine.States.Auto.ShootToAlliedSide;
@@ -156,17 +157,16 @@ public class StateMachine extends StateMachineBase {
 
                 // Autonomous work
 
+                EmptyState emptyState = new EmptyState(this);
                 AutoClimb autoClimb = new AutoClimb(this, drive);
                 IntakeAllianceZone intakeAllianceZone = new IntakeAllianceZone(this, drive);
                 IntakeNeutralZone intakeNeutralZone = new IntakeNeutralZone(this, drive, intake);
-                ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this, drive);
+                ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this, drive, autoAim);
                 ShootToHub shootHub = new ShootToHub(this, drive, intake, spindexer, kicker, turret, hood, shooter,
                                 autoAim);
 
-                testAutoRoutine.add(AutoSteps.ShootToHub);
                 testAutoRoutine.add(AutoSteps.IntakeNeutralZone);
-                testAutoRoutine.add(AutoSteps.ShootToHub);
-                testAutoRoutine.add(AutoSteps.AutoClimb);
+                testAutoRoutine.add(AutoSteps.EmptyState);
                 currentStep = testAutoRoutine.get(index);
 
                 BooleanSupplier currentStateComplete = () -> {
@@ -187,13 +187,16 @@ public class StateMachine extends StateMachineBase {
                                                 () -> currentStep == AutoSteps.IntakeNeutralZone, 0,
                                                 "Auto to neutral intake")
                                 .withChild(shootToAlliedSide, () -> currentStep == AutoSteps.ShootToAlliedSide, 0,
-                                                "Auto to neutral shot");
+                                                "Auto to neutral shot")
+                                .withChild(emptyState, () -> currentStep == AutoSteps.EmptyState, 0,
+                                                "Auto to empty state");
 
                 autoClimb.withTransition(auto, currentStateComplete, 0, "Climb to auto");
                 shootHub.withTransition(auto, currentStateComplete, 0, "Shoot hub to auto");
                 shootToAlliedSide.withTransition(auto, currentStateComplete, 0, "Neutral shot to auto");
                 intakeAllianceZone.withTransition(auto, currentStateComplete, 0, "Allied intake to shot");
                 intakeNeutralZone.withTransition(auto, currentStateComplete, 0, "Neutral intake to shot");
+                emptyState.withTransition(auto, currentStateComplete, 0, "Empty to auto");
 
                 // For SYSID (comment out for normal autos)
                 // MAKE SURE YOU ADD AUTO TO THE REGISTER TO ROOT STATE

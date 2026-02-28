@@ -347,7 +347,7 @@
         "CalibrationState/Test Parameter 75": "0",
         "CalibrationState/Test Parameter 70": "0",
         "CalibrationState/Test Parameter 71": "0",
-        "Pathfinding Y Controller/P": "0.0",
+        "Pathfinding Y Controller/P": "10.0",
         "CalibrationState/Test Parameter 18": "0",
         "CalibrationState/Test Parameter 19": "0",
         "CalibrationState/Test Parameter 14": "0",
@@ -462,7 +462,7 @@
             "value": "0.0"
         },
         "CalibrationState/Test Parameter 31": "0",
-        "Pathfinding X Controller/P": "0.0"
+        "Pathfinding X Controller/P": "10.0"
     },
     "competition": {
         "Pathfinding X Controller/I": "0.0",

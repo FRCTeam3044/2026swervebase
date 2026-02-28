@@ -69,7 +69,7 @@ public class DriveCommands {
                         Math.PI / 2,
                         "Pathfinding Max Rotation Speed");
 
-        public static ConfigurableParameter<Double> pathfindingTolerance = new ConfigurableParameter<Double>(1.0,
+        public static ConfigurableParameter<Double> pathfindingTolerance = new ConfigurableParameter<Double>(0.5,
                         "Pathfinding tolerance");
 
         private DriveCommands() {
@@ -408,7 +408,7 @@ public class DriveCommands {
                         drive.runVelocity(targetChassisSpeeds);
                 }, drive).beforeStarting(() -> {
                         timer.restart();
-                        RobotContainer.fieldSim.getObject("Path").setTrajectory(traj);
+                        // RobotContainer.fieldSim.getObject("Path").setTrajectory(traj);
                         Logger.recordOutput("Current Trajectory", traj);
                 }).until(() -> timer.hasElapsed(traj.getTotalTimeSeconds()))
                                 .finallyDo(timer::stop).withName("Follow Trajectory");

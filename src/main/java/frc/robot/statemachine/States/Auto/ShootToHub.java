@@ -51,6 +51,7 @@ public class ShootToHub extends State {
     startWhenActive(intake.intakeBottom());
     startWhenActive(spindexer.run());
     startWhenActive(kicker.blockKicker());
+    t(atPosition).whileTrue(Commands.run(() -> drive.stop()));
     t(atPosition)
         .onTrue(Commands.deferredProxy(() -> Commands.runOnce(RobotContainer.getInstance().autoStateTimer::restart)));
     t(atPosition).whileTrue(kicker.shootKicker());

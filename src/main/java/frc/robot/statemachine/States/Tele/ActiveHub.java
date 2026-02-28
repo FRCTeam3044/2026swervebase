@@ -28,13 +28,7 @@ public class ActiveHub extends State {
       Hood hood,
       Shooter shooter, AutoAim autoAim) {
     super(stateMachine);
-    SmartXboxController controller = new SmartXboxController(driverController, loop);
-
-    startWhenActive(intake.intakeBottom());
-    controller.leftTrigger().whileTrue(intake.runRollers());
-    startWhenActive(spindexer.run());
-    startWhenActive(
-        autoAim.aimHub(() -> operatorBoard.getRawButton(1)));
-    controller.rightTrigger().whileTrue(kicker.shootKicker());
+    SmartXboxController operator = new SmartXboxController(operatorController, loop);
+    operator.rightTrigger().whileTrue(kicker.shootKicker());
   }
 }

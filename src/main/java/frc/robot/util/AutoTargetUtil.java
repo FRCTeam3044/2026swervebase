@@ -26,23 +26,20 @@ public class AutoTargetUtil {
   private static Pose2d middleTower = new Pose2d(1.1445875, 3.74570625, Rotation2d.fromDegrees(0));
   private static Pose2d rightTower = new Pose2d(1.1445875, 4.22538525, Rotation2d.fromDegrees(0));
 
+  private static Pose2d rightNeutral = new Pose2d(9.5, 6, Rotation2d.fromDegrees(60));
+  private static Pose2d leftNeutral = new Pose2d(9.5, 1.5, Rotation2d.fromDegrees(60));
+
   private static Obstacle redAllianceZone = Obstacle.createObstacle(
-      new Vertex(11.96622575, 0),
-      new Vertex(11.96622575, 8.0692625),
+      new Vertex(12.5, 0),
+      new Vertex(12.5, 8.0692625),
       new Vertex(16.5410515, 8.0692625),
       new Vertex(16.5410515, 0));
 
   private static Obstacle blueAllianceZone = Obstacle.createObstacle(
       new Vertex(0, 0),
       new Vertex(0, 8.0692625),
-      new Vertex(4.54942575, 8.0692625),
-      new Vertex(4.54942575, 0));
-
-  public static Obstacle neutralZone = Obstacle.createObstacle(
-      new Vertex(4.54942575, 0),
-      new Vertex(4.54942575, 8.0692625),
-      new Vertex(11.96622575, 8.0692625),
-      new Vertex(11.96622575, 0));
+      new Vertex(4, 8.0692625),
+      new Vertex(4, 0));
 
   public AutoTargetUtil(Drive drive) {
     this.drive = drive;
@@ -50,6 +47,14 @@ public class AutoTargetUtil {
 
   public Pose3d getHub() {
     return AllianceUtil.getPose3dForAlliance(hub);
+  }
+
+  public static Pose2d getRightNeutral() {
+    return AllianceUtil.getPoseForAlliance(rightNeutral);
+  }
+
+  public static Pose2d getLeftNeutral() {
+    return AllianceUtil.getPoseForAlliance(leftNeutral);
   }
 
   public static Pose2d getNeutralZone() {

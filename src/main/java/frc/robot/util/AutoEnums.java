@@ -13,9 +13,10 @@ public class AutoEnums {
     AutoClimb(/* Auto is finished */ () -> false),
     ShootToHub(/* Hopper is empty */ () -> RobotContainer.getInstance().autoStateTimer.get() > 5),
     ShootToAlliedSide(/* Hopper is empty */ () -> false),
-    IntakeNeutralZone(/* Hopper is full */ () -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil
-        .getNeutralZone())),
-    IntakeAllianceZone(/* Hopper is full */ () -> false);
+    IntakeNeutralZone(
+        /* Hopper is full */ () -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getRightNeutral())),
+    IntakeAllianceZone(/* Hopper is full */ () -> false),
+    EmptyState(() -> false);
 
     private final BooleanSupplier condition;
 

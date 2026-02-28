@@ -23,17 +23,11 @@ public class InactiveHub extends State {
             Turret turret,
             Hood hood) {
         super(stateMachine);
-        SmartXboxController controller = new SmartXboxController(driverController, loop);
-
         startWhenActive(
                 Commands.waitSeconds(1)
                         .deadlineFor(
                                 Commands.runEnd(
                                         () -> driverController.setRumble(RumbleType.kBothRumble, 1),
                                         () -> driverController.setRumble(RumbleType.kBothRumble, 0))));
-        startWhenActive(intake.intakeBottom());
-        controller.leftTrigger().whileTrue(intake.runRollers());
-        startWhenActive(spindexer.run());
-        // startWhenActive(kicker.runKicker());
     }
 }

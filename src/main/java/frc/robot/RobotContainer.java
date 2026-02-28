@@ -89,8 +89,6 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-        // Field sim
-        public static Field2d fieldSim = new Field2d();
 
         // Subsystems
         public final Drive drive;

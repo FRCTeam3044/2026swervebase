@@ -51,7 +51,7 @@ public class TeleState extends State {
         startWhenActive(intake.intakeBottom().onlyIf(operatorController.a().negate()));
         startWhenActive(intake.runRollers().onlyIf(operatorController.a().negate()));
 
-        startWhenActive(spindexer.setSpeed());
+        startWhenActive(spindexer.run());
 
         // controller
         // .b()
