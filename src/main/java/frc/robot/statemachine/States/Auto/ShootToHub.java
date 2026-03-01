@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.RobotContainer;
 import frc.robot.commands.DriveCommands;
+import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.intake.Intake;
@@ -33,7 +34,8 @@ public class ShootToHub extends State {
       Turret turret,
       Hood hood,
       Shooter shooter,
-      AutoAim autoAim) {
+      AutoAim autoAim,
+      Climber climber) {
     super(stateMachine);
 
     Supplier<Pose2d> targetSupplier = () -> {
@@ -42,19 +44,16 @@ public class ShootToHub extends State {
       return allianceZone.calculateNearestPoint(robotPos).asPose2d();
     };
 
-    BooleanSupplier atPosition = () -> {
-      double distance = drive.getPose().getTranslation().getDistance(targetSupplier.get().getTranslation());
-      return distance < DriveCommands.pathfindingTolerance.get();
-    };
-
+    startWhenActive(climber.climberBottom());
     startWhenActive(DriveCommands.goToPoint(drive, targetSupplier, () -> Rotation2d.fromDegrees(0)));
     startWhenActive(intake.intakeBottom());
     startWhenActive(spindexer.run());
     startWhenActive(kicker.blockKicker());
-    t(atPosition).whileTrue(Commands.run(() -> drive.stop()));
-    t(atPosition)
+    t(() -> drive.atPose(targetSupplier.get())).whileTrue(Commands.run(() -> drive.stop()));
+    t(() -> drive.atPose(targetSupplier
+        .get()))
         .onTrue(Commands.deferredProxy(() -> Commands.runOnce(RobotContainer.getInstance().autoStateTimer::restart)));
-    t(atPosition).whileTrue(kicker.shootKicker());
-    t(atPosition).whileTrue(autoAim.aimHub(() -> true));
+    t(() -> drive.atPose(targetSupplier.get())).onTrue(kicker.shootKicker());
+    t(() -> drive.atPose(targetSupplier.get())).onTrue(autoAim.aimHub(() -> true));
   }
 }

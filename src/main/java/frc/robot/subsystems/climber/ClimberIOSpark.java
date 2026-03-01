@@ -21,6 +21,7 @@ public class ClimberIOSpark implements ClimberIO {
   private final ConfigurableParameter<Double> runSpeedDown = new ConfigurableParameter<>(-0.0,
       "Climber Motor Running Speed");
 
+  @Override
   public void updateInputs(ClimberIOInputs inputs) {
     if (bottomLimit.isPressed()) {
       inputs.bottomLimitPressed = true;
@@ -31,10 +32,12 @@ public class ClimberIOSpark implements ClimberIO {
   }
 
   // Skipping the HoodIOSpark connecting thing
+  @Override
   public void setSpeed(double speed) {
     motor.set(MathUtil.clamp(speed, -1, 1));
   }
 
+  @Override
   public void setClimberPos(double wantedHeight) {
     double currentPosition = climbEncoder.getPosition(); // Get current position
     if (wantedHeight > currentPosition) {

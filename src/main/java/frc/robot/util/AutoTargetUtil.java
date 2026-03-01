@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.AllianceUtil.AllianceColor;
 import me.nabdev.pathfinding.structures.Obstacle;
+import me.nabdev.pathfinding.structures.Vector;
 import me.nabdev.pathfinding.structures.Vertex;
 
 public class AutoTargetUtil {
@@ -22,9 +23,8 @@ public class AutoTargetUtil {
 
   private static Pose2d testNeutralZonePosition = new Pose2d(7, 4, Rotation2d.fromDegrees(0));
 
-  private static Pose2d leftTower = new Pose2d(1.1445875, 3.26602725, Rotation2d.fromDegrees(0));
-  private static Pose2d middleTower = new Pose2d(1.1445875, 3.74570625, Rotation2d.fromDegrees(0));
-  private static Pose2d rightTower = new Pose2d(1.1445875, 4.22538525, Rotation2d.fromDegrees(0));
+  private static POIData leftTower = POIData.createFromRed(1.06223613, 3.20841229, 1.06223613, 2.60841229);
+  private static POIData rightTower = POIData.createFromRed(1.06223613, 4.28304359, 1.06223613, 4.88304359);
 
   private static Pose2d rightNeutral = new Pose2d(9.5, 6, Rotation2d.fromDegrees(60));
   private static Pose2d leftNeutral = new Pose2d(9.5, 1.5, Rotation2d.fromDegrees(60));
@@ -61,8 +61,12 @@ public class AutoTargetUtil {
     return AllianceUtil.getPoseForAlliance(testNeutralZonePosition);
   }
 
-  public static Pose2d getLeftTower() {
-    return AllianceUtil.getPoseForAlliance(leftTower);
+  public static POIData getLeftTower() {
+    return leftTower;
+  }
+
+  public static POIData getRightTower() {
+    return rightTower;
   }
 
   public static Obstacle allianceSide() {
@@ -111,5 +115,51 @@ public class AutoTargetUtil {
       return true;
     }
     return false;
+  }
+
+  public record POIData(Vertex pos, Vector normal) {
+    public static POIData create(Vertex pos1, Vertex pos2) {
+      return new POIData(pos1, pos2.createVectorFrom(pos1).normalize());
+    }
+
+    public static POIData create(double pos1x, double pos1y, double pos2x, double pos2y) {
+      return create(new Vertex(pos1x, pos1y), new Vertex(pos2x, pos2y));
+    }
+
+    public static POIData createFromRed(double pos1x, double pos1y, double pos2x, double pos2y) {
+      return create(new Vertex(pos1x, pos1y), new Vertex(pos2x, pos2y));
+    }
+
+    public Vector perpindicular(boolean flipped) {
+      if (flipped) {
+        return new Vector(normal().y, -normal().x).normalize();
+      }
+      return new Vector(-normal().y, normal().x).normalize();
+    }
+
+    public Pose2d poseWithRot(double distance, Rotation2d rotation) {
+      Vertex robotPos = pos().moveByVector(normal().scale(distance));
+      return AllianceUtil.getPoseForAlliance(new Pose2d(robotPos.x, robotPos.y, rotation));
+    }
+
+    public Pose2d poseFacing(double distance, boolean flipped) {
+      Vertex robotPos = pos().moveByVector(normal().scale(distance));
+      double sign = flipped ? 1 : -1;
+      Rotation2d rotation = Rotation2d.fromRadians(Math.atan2(sign * normal().y, sign * normal().x));
+      return AllianceUtil.getPoseForAlliance(new Pose2d(robotPos.x, robotPos.y, rotation));
+    }
+
+    public Vertex vertexFacing(double distance) {
+      Vertex robotPos = pos().moveByVector(normal().scale(distance));
+      return AllianceUtil.getVertexForAlliance(robotPos);
+    }
+
+    public Pose2d offsetPoseFacing(double distance, boolean flipped, double offset, boolean perpFlipped) {
+      Vertex robotPos = pos().moveByVector(normal().scale(distance))
+          .moveByVector(perpindicular(perpFlipped).scale(offset));
+      double sign = flipped ? 1 : -1;
+      Rotation2d rotation = Rotation2d.fromRadians(Math.atan2(sign * normal().y, sign * normal().x));
+      return AllianceUtil.getPoseForAlliance(new Pose2d(robotPos.x, robotPos.y, rotation));
+    }
   }
 }

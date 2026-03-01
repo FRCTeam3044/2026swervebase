@@ -4,10 +4,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.function.DoubleSupplier;
+
+import org.littletonrobotics.junction.Logger;
+
 import me.nabdev.oxconfig.ConfigurableParameter;
 
 public class Climber extends SubsystemBase {
   private final ClimberIO io; // Brings in the Climber IO interface
+  private final ClimberIOInputsAutoLogged inputs = new ClimberIOInputsAutoLogged();
+
   private final ConfigurableParameter<Double> speed = new ConfigurableParameter<>(0.0, "Climber speed");
   private final ConfigurableParameter<Double> topPosition = new ConfigurableParameter<>(0.0, "Top climber position");
   private final ConfigurableParameter<Double> bottomPosition = new ConfigurableParameter<>(0.0,
@@ -16,6 +21,12 @@ public class Climber extends SubsystemBase {
 
   public Climber(ClimberIO io) { // idk just needed for climberio to be final
     this.io = io;
+  }
+
+  @Override
+  public void periodic() {
+    io.updateInputs(inputs);
+    Logger.processInputs("Hood", inputs);
   }
 
   public Command setSpeed(boolean forward) { // Command factory for setting the speed of climber motor. Use for testing
@@ -41,7 +52,7 @@ public class Climber extends SubsystemBase {
         () -> {
           io.setClimberPos(topPosition.get());
         },
-        this);
+        this).withName("Climber to top");
   }
 
   public Command climberBottom() { // Command factory for moving climber to bottom pos
@@ -49,7 +60,7 @@ public class Climber extends SubsystemBase {
         () -> {
           io.setClimberPos(bottomPosition.get());
         },
-        this);
+        this).withName("Climber to bottom");
   }
 
   public Command climberPulledUp() { // Command factory for pulling the climber up to set up pos
@@ -57,6 +68,30 @@ public class Climber extends SubsystemBase {
         () -> {
           io.setClimberPos(climbPosition.get());
         },
-        this);
+        this).withName("To climb position");
+  }
+
+  public boolean atBottomPosition() {
+    if (inputs.currentPosition == bottomPosition.get()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean atTopPosition() {
+    if (inputs.currentPosition == topPosition.get()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean atClimbPosition() {
+    if (inputs.currentPosition == climbPosition.get()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

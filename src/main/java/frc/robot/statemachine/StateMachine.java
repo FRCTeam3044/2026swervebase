@@ -158,14 +158,16 @@ public class StateMachine extends StateMachineBase {
                 // Autonomous work
 
                 EmptyState emptyState = new EmptyState(this);
-                AutoClimb autoClimb = new AutoClimb(this, drive);
+                AutoClimb leftClimb = new AutoClimb(this, AutoTargetUtil.getLeftTower(), drive, climber);
+                AutoClimb rightClimb = new AutoClimb(this, AutoTargetUtil.getRightTower(), drive, climber);
                 IntakeAllianceZone intakeAllianceZone = new IntakeAllianceZone(this, drive);
                 IntakeNeutralZone intakeNeutralZone = new IntakeNeutralZone(this, drive, intake);
                 ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this, drive, autoAim);
                 ShootToHub shootHub = new ShootToHub(this, drive, intake, spindexer, kicker, turret, hood, shooter,
-                                autoAim);
+                                autoAim, climber);
 
-                testAutoRoutine.add(AutoSteps.IntakeNeutralZone);
+                testAutoRoutine.add(AutoSteps.ShootToHub);
+                testAutoRoutine.add(AutoSteps.RightClimb);
                 testAutoRoutine.add(AutoSteps.EmptyState);
                 currentStep = testAutoRoutine.get(index);
 
@@ -180,7 +182,9 @@ public class StateMachine extends StateMachineBase {
                 };
 
                 auto.withChild(shootHub, () -> currentStep == AutoSteps.ShootToHub, 0, "Auto to hub shot")
-                                .withChild(autoClimb, () -> currentStep == AutoSteps.AutoClimb, 0, "Auto to climb")
+                                .withChild(leftClimb, () -> currentStep == AutoSteps.LeftClimb, 0, "Auto to left climb")
+                                .withChild(rightClimb, () -> currentStep == AutoSteps.RightClimb, 0,
+                                                "Auto to right climb")
                                 .withChild(intakeAllianceZone, () -> currentStep == AutoSteps.IntakeAllianceZone, 0,
                                                 "Auto to allied intake")
                                 .withChild(intakeNeutralZone,
@@ -191,7 +195,8 @@ public class StateMachine extends StateMachineBase {
                                 .withChild(emptyState, () -> currentStep == AutoSteps.EmptyState, 0,
                                                 "Auto to empty state");
 
-                autoClimb.withTransition(auto, currentStateComplete, 0, "Climb to auto");
+                leftClimb.withTransition(auto, currentStateComplete, 0, "Left climb to auto");
+                rightClimb.withTransition(auto, currentStateComplete, "Right climb to auto");
                 shootHub.withTransition(auto, currentStateComplete, 0, "Shoot hub to auto");
                 shootToAlliedSide.withTransition(auto, currentStateComplete, 0, "Neutral shot to auto");
                 intakeAllianceZone.withTransition(auto, currentStateComplete, 0, "Allied intake to shot");

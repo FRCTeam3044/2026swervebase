@@ -98,7 +98,7 @@ public class RobotContainer {
         private final Kicker kicker;
         private final Shooter shooter;
         public final Turret turret;
-        private final Climber climber;
+        public final Climber climber;
         private final Vision vision;
         public final LEDs LEDs;
 

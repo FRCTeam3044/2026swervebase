@@ -2,10 +2,15 @@ package frc.robot.subsystems.kicker;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import me.nabdev.oxconfig.ConfigurableParameter;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Kicker extends SubsystemBase {
@@ -31,8 +36,10 @@ public class Kicker extends SubsystemBase {
 
   public Command shootKicker() {
     if (Robot.isSimulation()) {
-      return Commands.deferredProxy(() -> Commands.repeatingSequence(RobotContainer.getInstance().simShootFuel(),
-          Commands.waitSeconds(0.2)).withName("Sim shoot fuel")).withName("Sim shoot fuel proxy");
+      HashSet<Subsystem> requirements = new HashSet<>();
+      requirements.add(this);
+      return Commands.defer(() -> Commands.repeatingSequence(RobotContainer.getInstance().simShootFuel(),
+          Commands.waitSeconds(0.2)).withName("Sim shoot fuel"), requirements).withName("Sim shoot fuel proxy");
     }
     return Commands.run(
         () -> {

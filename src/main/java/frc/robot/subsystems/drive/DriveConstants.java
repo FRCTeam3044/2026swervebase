@@ -12,6 +12,7 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -151,4 +152,34 @@ public class DriveConstants {
                         .setRobotLength(mapleBumperSize.in(Meters))
                         .setRobotWidth(mapleBumperSize.in(Meters))
                         .build();
+
+        public static final PIDController xPointController = new ConfigurablePIDController(1, 0, 0,
+                        "X Point Controller");
+        public static final PIDController yPointController = new ConfigurablePIDController(1, 0, 0,
+                        "Point Y Controller");
+        public static final ProfiledPIDController anglePointController = new ConfigurableProfiledPIDController(
+                        6.0,
+                        0,
+                        0,
+                        // new TrapezoidProfile.Constraints(kMaxAngularSpeedRadiansPerSecond.get(),
+                        // kMaxAngularAccelerationRadiansPerSecondSquared.get()),
+                        new TrapezoidProfile.Constraints(8, 20),
+                        "Point Theta Controller");
+
+        public static final HolonomicDriveController pointController = new HolonomicDriveController(
+                        xPointController, yPointController, anglePointController);
+        public static final ProfiledPIDController anglePointControllerFast = new ConfigurableProfiledPIDController(
+                        4.0,
+                        0,
+                        0,
+                        // new TrapezoidProfile.Constraints(kMaxAngularSpeedRadiansPerSecond.get(),
+                        // kMaxAngularAccelerationRadiansPerSecondSquared.get()),
+                        new TrapezoidProfile.Constraints(8, 20),
+                        "Point Theta Controller Fast");
+        public static final Pose2d pointControllerTolerance = new Pose2d(0.027, 0.027, new Rotation2d(0.05));
+        public static final Pose2d pointControllerLooseTolerance = new Pose2d(0.045, 0.045, new Rotation2d(0.06));
+
+        static {
+                pointController.setTolerance(pointControllerTolerance);
+        }
 }

@@ -72,6 +72,10 @@ public class DriveCommands {
         public static ConfigurableParameter<Double> pathfindingTolerance = new ConfigurableParameter<Double>(0.5,
                         "Pathfinding tolerance");
 
+        public static boolean pointControllerConverged = false;
+        public static boolean pointControllerLooseConverged = false;
+        public static boolean pointControllerRotConverged = false;
+
         private DriveCommands() {
         }
 
@@ -453,5 +457,44 @@ public class DriveCommands {
                 config.setKinematics(drive.getKinematics());
                 // config.setStartVelocity(10);
                 return config;
+        }
+
+        public static Command pointControl(Drive drive, Supplier<Pose2d> pose) {
+                return Commands.startRun(() -> {
+                        DriveConstants.anglePointController.reset(drive.getPose().getRotation().getRadians());
+                }, () -> {
+                        Pose2d targetPose = pose.get();
+                        ChassisSpeeds speeds = DriveConstants.pointController.calculate(drive.getPose(), targetPose, 0,
+                                        targetPose.getRotation());
+                        DriveConstants.pointController.setTolerance(DriveConstants.pointControllerTolerance);
+                        if (DriveConstants.pointController.atReference()) {
+                                speeds = new ChassisSpeeds(0, 0, 0);
+                                pointControllerConverged = true;
+                                pointControllerRotConverged = false;
+                        } else {
+                                pointControllerConverged = false;
+                        }
+
+                        if (Math.abs(targetPose.getRotation().minus(drive.getPose().getRotation())
+                                        .getRadians()) < 1) {
+                                pointControllerRotConverged = true;
+                        } else {
+                                pointControllerRotConverged = false;
+                        }
+
+                        DriveConstants.pointController.setTolerance(DriveConstants.pointControllerLooseTolerance);
+                        if (DriveConstants.pointController.atReference()) {
+                                pointControllerLooseConverged = true;
+                        } else {
+                                pointControllerLooseConverged = false;
+                        }
+
+                        drive.runVelocity(speeds);
+                        Logger.recordOutput("PointControllerDist",
+                                        drive.getPose().getTranslation().getDistance(targetPose.getTranslation()));
+                }, drive).finallyDo(() -> {
+                        pointControllerConverged = false;
+                        pointControllerRotConverged = false;
+                }).withName("Point Control");
         }
 }
