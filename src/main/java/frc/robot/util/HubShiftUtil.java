@@ -16,14 +16,25 @@ import lombok.Setter;
 
 public class HubShiftUtil {
     public enum ShiftEnum {
-        TRANSITION,
-        SHIFT1,
-        SHIFT2,
-        SHIFT3,
-        SHIFT4,
-        ENDGAME,
-        AUTO,
-        DISABLED;
+        TRANSITION("Transition"),
+        SHIFT1("Shift 1"),
+        SHIFT2("Shift 2"),
+        SHIFT3("Shift 3"),
+        SHIFT4("Shift 4"),
+        ENDGAME("Endgame"),
+        AUTO("Autonomous"),
+        DISABLED("Disabled");
+
+        private final String name;
+
+        private ShiftEnum(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return this.name;
+        }
     }
 
     public record ShiftInfo(

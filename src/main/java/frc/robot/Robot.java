@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.util.AllianceUtil;
@@ -22,6 +23,7 @@ import frc.robot.util.HubShiftUtil;
 import frc.robot.util.ShotCalculator;
 import frc.robot.util.Elastic.Notification;
 import frc.robot.util.Elastic.NotificationLevel;
+import frc.robot.util.HubShiftUtil.ShiftInfo;
 import me.nabdev.oxconfig.OxConfig;
 import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -45,6 +47,7 @@ public class Robot extends LoggedRobot {
   public static RobotContainer robotContainer;
 
   public static Timer timer = new Timer();
+  private Field2d field = new Field2d();
 
   private final Alert autoWinnerNotSet = new Alert("!!! AUTO WINNER NOT SET !!!", AlertType.kError);
 
@@ -127,14 +130,17 @@ public class Robot extends LoggedRobot {
 
     SmartDashboard.putString("Alliance", AllianceUtil.getAlliance().toString());
 
-    Logger.recordOutput("HubShift/Official", HubShiftUtil.getOfficialShiftInfo());
-    Logger.recordOutput("HubShift/Shifted", HubShiftUtil.getShiftedShiftInfo());
-    SmartDashboard.putString(
-        "Shifts/RemainingShiftTime",
-        String.format("%.1f", Math.max(HubShiftUtil.getShiftedShiftInfo().remainingTime(), 0.0)));
-    SmartDashboard.putBoolean("Shifts/HubActive", HubShiftUtil.getShiftedShiftInfo().active());
-    SmartDashboard.putString(
-        "Shifts/State", HubShiftUtil.getShiftedShiftInfo().currentShift().toString());
+    ShiftInfo official = HubShiftUtil.getOfficialShiftInfo();
+    ShiftInfo shifted = HubShiftUtil.getShiftedShiftInfo();
+    Logger.recordOutput("HubShift/Official", official);
+    Logger.recordOutput("HubShift/Shifted", shifted);
+    publishSchedule("ShiftedShift", shifted);
+    publishSchedule("OfficialShift", official);
+    field.setRobotPose(robotContainer.drive.getPose());
+    SmartDashboard.putData(field);
+    // SmartDashboard.putString(
+    // "ShiftedShift/Text",
+    // String.format("%.1f", Math.max(shifted.remainingTime(), 0.0)));
 
     Logger.recordOutput(
         "Distance from hub target",
@@ -149,10 +155,19 @@ public class Robot extends LoggedRobot {
     ShotCalculator.periodic();
   }
 
+  private void publishSchedule(String key, ShiftInfo info) {
+    SmartDashboard.putBoolean(key + "/Boolean", info.active());
+    SmartDashboard.putString(key + "/.type", "Status Display");
+    SmartDashboard.putNumber(key + "/RemainingTime", Math.max(info.remainingTime(), -3.0));
+    SmartDashboard.putNumber(key + "/ShiftLength", info.elapsedTime() + info.remainingTime());
+    SmartDashboard.putString(key + "/ShiftName", info.currentShift().toString());
+  }
+
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
     HubShiftUtil.initialize();
+    Elastic.selectTab(0);
   }
 
   /** This function is called periodically when disabled. */
@@ -170,6 +185,7 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     AllianceUtil.setAlliance();
     HubShiftUtil.initialize();
+    Elastic.selectTab(1);
   }
 
   /** This function is called periodically during autonomous. */
@@ -186,6 +202,7 @@ public class Robot extends LoggedRobot {
     HubShiftUtil.initialize();
     timer.restart();
     autoWinnerAlerted = false;
+    Elastic.selectTab(1);
   }
 
   /** This function is called periodically during operator control. */
