@@ -29,6 +29,8 @@ import frc.robot.util.AutoAim;
 import frc.robot.util.AutoAimDataManager;
 import frc.robot.util.AllianceUtil.AllianceColor;
 import frc.robot.util.AutoTargetUtil;
+import frc.robot.util.HubShiftUtil;
+
 import java.util.function.BooleanSupplier;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -57,32 +59,6 @@ public class StateMachine extends StateMachineBase {
                         AutoAim autoAim,
                         LoggedDashboardChooser<Command> chooser) {
                 super();
-
-                Timer timer = Robot.timer;
-
-                BooleanSupplier transitionShift = () -> timer.get() >= 0 && timer.get() < 10;
-                BooleanSupplier shiftOne = () -> timer.get() >= 10 && timer.get() < 35;
-                BooleanSupplier shiftTwo = () -> timer.get() >= 35 && timer.get() < 60;
-                BooleanSupplier shiftThree = () -> timer.get() >= 60 && timer.get() < 85;
-                BooleanSupplier shiftFour = () -> timer.get() >= 85 && timer.get() < 110;
-                BooleanSupplier endGame = () -> timer.get() >= 110;
-
-                BooleanSupplier wonAuto = () -> {
-                        String autoWinner = DriverStation.getGameSpecificMessage();
-                        AllianceColor allianceColor = AllianceUtil.getAlliance();
-                        return ((autoWinner == "R") && (allianceColor == AllianceColor.RED))
-                                        || ((autoWinner == "B") && (allianceColor == AllianceColor.BLUE));
-                };
-
-                BooleanSupplier hubIsActive = () -> {
-                        return AllianceUtil.getAlliance() == AllianceColor.UNKNOWN
-                                        || transitionShift.getAsBoolean()
-                                        || endGame.getAsBoolean()
-                                        || (wonAuto.getAsBoolean()
-                                                        && (shiftTwo.getAsBoolean() || shiftFour.getAsBoolean()))
-                                        || (!wonAuto.getAsBoolean()
-                                                        && (shiftOne.getAsBoolean() || shiftThree.getAsBoolean()));
-                };
 
                 DisabledState disabled = new DisabledState(this, leds);
                 currentState = disabled;
@@ -122,8 +98,9 @@ public class StateMachine extends StateMachineBase {
 
                 teleop.withDefaultChild(alliedZone).withChild(neutralZone);
 
-                alliedZone.withChild(activeHub, hubIsActive, 0, "Active Hub");
-                alliedZone.withChild(inactiveHub, () -> !hubIsActive.getAsBoolean(), 1, "Inactive Hub");
+                alliedZone.withChild(activeHub, () -> HubShiftUtil.getShiftedShiftInfo().active(), 0, "Active Hub");
+                alliedZone.withChild(inactiveHub, () -> !HubShiftUtil.getShiftedShiftInfo().active(), 1,
+                                "Inactive Hub");
 
                 alliedZone.withTransition(
                                 neutralZone, () -> autoTargetUtil.inNeutralZone(), 0, "Drive into Neutral Zone");
@@ -131,8 +108,10 @@ public class StateMachine extends StateMachineBase {
                                 alliedZone, () -> autoTargetUtil.inAllianceZone(), 0, "Drive into Allied Zone");
 
                 activeHub.withTransition(
-                                inactiveHub, () -> !hubIsActive.getAsBoolean(), 0, "Hub becomes inactive");
-                inactiveHub.withTransition(activeHub, hubIsActive, 0, "Hub becomes active");
+                                inactiveHub, () -> !HubShiftUtil.getShiftedShiftInfo().active(), 0,
+                                "Hub becomes inactive");
+                inactiveHub.withTransition(activeHub, () -> HubShiftUtil.getShiftedShiftInfo().active(), 0,
+                                "Hub becomes active");
 
                 teleop.withModeTransitions(disabled, teleop, test);
                 test.withModeTransitions(disabled, teleop, test);

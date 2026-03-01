@@ -9,11 +9,19 @@ package frc.robot;
 
 import com.revrobotics.util.StatusLogger;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.util.AllianceUtil;
+import frc.robot.util.Elastic;
+import frc.robot.util.HubShiftUtil;
 import frc.robot.util.ShotCalculator;
+import frc.robot.util.Elastic.Notification;
+import frc.robot.util.Elastic.NotificationLevel;
 import me.nabdev.oxconfig.OxConfig;
 import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -37,6 +45,8 @@ public class Robot extends LoggedRobot {
   public static RobotContainer robotContainer;
 
   public static Timer timer = new Timer();
+
+  private final Alert autoWinnerNotSet = new Alert("!!! AUTO WINNER NOT SET !!!", AlertType.kError);
 
   public Timer getTimer() {
     return timer;
@@ -116,13 +126,18 @@ public class Robot extends LoggedRobot {
     SmartDashboard.putData(CommandScheduler.getInstance());
 
     SmartDashboard.putString("Alliance", AllianceUtil.getAlliance().toString());
-    // Return to non-RT thread priority (do not modify the first argument)
-    // Threads.setCurrentThreadPriority(false, 10);
 
-    Logger.recordOutput("Target", robotContainer.autoTargetUtil.getHub());
+    Logger.recordOutput("HubShift/Official", HubShiftUtil.getOfficialShiftInfo());
+    Logger.recordOutput("HubShift/Shifted", HubShiftUtil.getShiftedShiftInfo());
+    SmartDashboard.putString(
+        "Shifts/RemainingShiftTime",
+        String.format("%.1f", Math.max(HubShiftUtil.getShiftedShiftInfo().remainingTime(), 0.0)));
+    SmartDashboard.putBoolean("Shifts/HubActive", HubShiftUtil.getShiftedShiftInfo().active());
+    SmartDashboard.putString(
+        "Shifts/State", HubShiftUtil.getShiftedShiftInfo().currentShift().toString());
 
     Logger.recordOutput(
-        "Distance from target",
+        "Distance from hub target",
         robotContainer.drive
             .getPose()
             .getTranslation()
@@ -137,6 +152,7 @@ public class Robot extends LoggedRobot {
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
+    HubShiftUtil.initialize();
   }
 
   /** This function is called periodically when disabled. */
@@ -153,6 +169,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     AllianceUtil.setAlliance();
+    HubShiftUtil.initialize();
   }
 
   /** This function is called periodically during autonomous. */
@@ -160,16 +177,34 @@ public class Robot extends LoggedRobot {
   public void autonomousPeriodic() {
   }
 
+  private boolean autoWinnerAlerted = false;
+
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
     AllianceUtil.setAlliance();
-    timer.start();
+    HubShiftUtil.initialize();
+    timer.restart();
+    autoWinnerAlerted = false;
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    if (!(DriverStation.getGameSpecificMessage().length() > 0) && HubShiftUtil.getAllianceWinOverride().isEmpty()
+        && timer
+            .hasElapsed(1.0)) {
+      autoWinnerNotSet.set(true);
+      if (!autoWinnerAlerted) {
+        Elastic.sendNotification(
+            new Notification(NotificationLevel.ERROR, "AUTO WINNER NOT SET!!!!", "MERN YOU NEED TO SET IT MERN", 30000,
+                512, 256));
+        autoWinnerAlerted = true;
+      }
+    } else {
+      autoWinnerNotSet.set(false);
+      autoWinnerAlerted = false;
+    }
   }
 
   /** This function is called once when test mode is enabled. */

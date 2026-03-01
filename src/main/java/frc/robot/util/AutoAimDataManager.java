@@ -27,7 +27,8 @@ public class AutoAimDataManager {
 
     public record TreeMapRecord(InterpolatingDoubleTreeMap flywheelSpeedMap,
             InterpolatingDoubleTreeMap hoodPositionMap,
-            InterpolatingDoubleTreeMap timeOfFlightMap, double minDistance, double maxDistance) {
+            InterpolatingDoubleTreeMap timeOfFlightMap, double minDistance, double maxDistance, double minTimeOfFlight,
+            double maxTimeOfFlight) {
     }
 
     public AutoAimDataManager() throws FileNotFoundException {
@@ -48,6 +49,8 @@ public class AutoAimDataManager {
         JSONArray shots = config.getJSONArray("shots");
         double minDistance = Double.POSITIVE_INFINITY;
         double maxDistance = Double.NEGATIVE_INFINITY;
+        double minTimeOfFlight = Double.POSITIVE_INFINITY;
+        double maxTimeOfFlight = Double.NEGATIVE_INFINITY;
 
         InterpolatingDoubleTreeMap flywheelSpeedMap = new InterpolatingDoubleTreeMap();
         InterpolatingDoubleTreeMap hoodPositionMap = new InterpolatingDoubleTreeMap();
@@ -64,6 +67,12 @@ public class AutoAimDataManager {
             if (distance > maxDistance) {
                 maxDistance = distance;
             }
+            if (shotTime < minTimeOfFlight) {
+                minTimeOfFlight = shotTime;
+            }
+            if (shotTime > maxTimeOfFlight) {
+                maxTimeOfFlight = shotTime;
+            }
             flywheelSpeedMap.put(distance, shooterSpeed);
             hoodPositionMap.put(distance, hoodPosition);
             timeOfFlightMap.put(distance, shotTime);
@@ -77,10 +86,10 @@ public class AutoAimDataManager {
         }
         if (mz) {
             mzTreeMapRecord = new TreeMapRecord(flywheelSpeedMap, hoodPositionMap, timeOfFlightMap, minDistance,
-                    maxDistance);
+                    maxDistance, minTimeOfFlight, maxTimeOfFlight);
         } else {
             azTreeMapRecord = new TreeMapRecord(flywheelSpeedMap, hoodPositionMap, timeOfFlightMap, minDistance,
-                    maxDistance);
+                    maxDistance, minTimeOfFlight, maxTimeOfFlight);
         }
 
         try (FileWriter file = new FileWriter(Filesystem.getDeployDirectory() + (mz ? "/mzaim.json" : "/azaim.json"))) {
@@ -146,5 +155,13 @@ public class AutoAimDataManager {
 
     public double getMaxDistance(boolean mz) {
         return mz ? mzTreeMapRecord.maxDistance() : azTreeMapRecord.maxDistance();
+    }
+
+    public double getMinTimeOfFlight(boolean mz) {
+        return mz ? mzTreeMapRecord.minTimeOfFlight() : azTreeMapRecord.minTimeOfFlight();
+    }
+
+    public double getMaxTimeOfFlight(boolean mz) {
+        return mz ? mzTreeMapRecord.maxTimeOfFlight() : azTreeMapRecord.maxTimeOfFlight();
     }
 }
