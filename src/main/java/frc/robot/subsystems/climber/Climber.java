@@ -19,6 +19,9 @@ public class Climber extends SubsystemBase {
       "Bottom climber position");
   private final ConfigurableParameter<Double> climbPosition = new ConfigurableParameter<>(0.0, "Climb position");
 
+  private final ConfigurableParameter<Double> climbTolerance = new ConfigurableParameter<Double>(0.0,
+      "Climb tolerance");
+
   public Climber(ClimberIO io) { // idk just needed for climberio to be final
     this.io = io;
   }
@@ -72,26 +75,14 @@ public class Climber extends SubsystemBase {
   }
 
   public boolean atBottomPosition() {
-    if (inputs.currentPosition == bottomPosition.get()) {
-      return true;
-    } else {
-      return false;
-    }
+    return (Math.abs((inputs.currentPosition - bottomPosition.get())) < climbTolerance.get());
   }
 
   public boolean atTopPosition() {
-    if (inputs.currentPosition == topPosition.get()) {
-      return true;
-    } else {
-      return false;
-    }
+    return (Math.abs((inputs.currentPosition - topPosition.get())) < climbTolerance.get());
   }
 
   public boolean atClimbPosition() {
-    if (inputs.currentPosition == climbPosition.get()) {
-      return true;
-    } else {
-      return false;
-    }
+    return (Math.abs((inputs.currentPosition - climbPosition.get())) < climbTolerance.get());
   }
 }

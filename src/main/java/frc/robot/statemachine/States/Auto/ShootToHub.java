@@ -44,7 +44,6 @@ public class ShootToHub extends State {
       return allianceZone.calculateNearestPoint(robotPos).asPose2d();
     };
 
-    startWhenActive(climber.climberBottom());
     startWhenActive(DriveCommands.goToPoint(drive, targetSupplier, () -> Rotation2d.fromDegrees(0)));
     startWhenActive(intake.intakeBottom());
     startWhenActive(spindexer.run());

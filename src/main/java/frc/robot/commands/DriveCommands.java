@@ -69,7 +69,7 @@ public class DriveCommands {
                         Math.PI / 2,
                         "Pathfinding Max Rotation Speed");
 
-        public static ConfigurableParameter<Double> pathfindingTolerance = new ConfigurableParameter<Double>(0.5,
+        public static ConfigurableParameter<Double> pathfindingTolerance = new ConfigurableParameter<Double>(0.0,
                         "Pathfinding tolerance");
 
         public static boolean pointControllerConverged = false;

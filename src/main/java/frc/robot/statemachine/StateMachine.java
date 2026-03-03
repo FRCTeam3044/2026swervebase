@@ -52,8 +52,8 @@ public class StateMachine extends StateMachineBase {
 
         ArrayList<AutoSteps> testAutoRoutine = new ArrayList<AutoSteps>();
 
-        AutoSteps currentStep;
-        int index;
+        private AutoSteps currentStep;
+        private int index;
 
         public StateMachine(
                         CommandXboxController driverController,
@@ -158,8 +158,10 @@ public class StateMachine extends StateMachineBase {
                 // Autonomous work
 
                 EmptyState emptyState = new EmptyState(this);
-                AutoClimb leftClimb = new AutoClimb(this, AutoTargetUtil.getLeftTower(), drive, climber);
-                AutoClimb rightClimb = new AutoClimb(this, AutoTargetUtil.getRightTower(), drive, climber);
+                AutoClimb leftClimb = new AutoClimb(this, autoTargetUtil, AutoTargetUtil.getLeftTower(), drive,
+                                climber);
+                AutoClimb rightClimb = new AutoClimb(this, autoTargetUtil, AutoTargetUtil.getRightTower(), drive,
+                                climber);
                 IntakeAllianceZone intakeAllianceZone = new IntakeAllianceZone(this, drive);
                 IntakeNeutralZone intakeNeutralZone = new IntakeNeutralZone(this, drive, intake);
                 ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this, drive, autoAim);
@@ -211,5 +213,10 @@ public class StateMachine extends StateMachineBase {
                 // test.withModeTransitions(disabled, teleop, auto, test);
                 // disabled.withModeTransitions(disabled, teleop, auto, test);
                 // auto.withModeTransitions(disabled, teleop, auto, test);
+        }
+
+        public void autoStateReset() {
+                index = 0;
+                currentStep = testAutoRoutine.get(0);
         }
 }

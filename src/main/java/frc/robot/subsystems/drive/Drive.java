@@ -67,7 +67,7 @@ public class Drive extends SubsystemBase {
   private final Consumer<Pose2d> resetSimulationPoseCallBack;
 
   public boolean atPose(Pose2d pose) {
-    double distance = pose.getTranslation().getDistance(AutoTargetUtil.getNeutralZone().getTranslation());
+    double distance = pose.getTranslation().getDistance(this.getPose().getTranslation());
     return distance < DriveCommands.pathfindingTolerance.get();
   };
 

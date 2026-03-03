@@ -152,6 +152,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     AllianceUtil.setAlliance();
+    robotContainer.stateMachine.autoStateReset();
   }
 
   /** This function is called periodically during autonomous. */

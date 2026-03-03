@@ -156,7 +156,7 @@ public class DriveConstants {
         public static final PIDController xPointController = new ConfigurablePIDController(1, 0, 0,
                         "X Point Controller");
         public static final PIDController yPointController = new ConfigurablePIDController(1, 0, 0,
-                        "Point Y Controller");
+                        "Y Point Controller");
         public static final ProfiledPIDController anglePointController = new ConfigurableProfiledPIDController(
                         6.0,
                         0,
