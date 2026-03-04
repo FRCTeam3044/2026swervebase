@@ -8,9 +8,10 @@ public class KickerConfig {
   public static SparkFlexConfig bottomMotorConfig = new SparkFlexConfig();
 
   static {
-    topMotorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(KickerConstants.topCurrentLimit);
+    topMotorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(KickerConstants.topCurrentLimit,
+        KickerConstants.topCurrentLimit);
     bottomMotorConfig
         .idleMode(IdleMode.kCoast)
-        .smartCurrentLimit(KickerConstants.bottomCurrentLimit);
+        .smartCurrentLimit(KickerConstants.bottomCurrentLimit, KickerConstants.bottomCurrentLimit);
   }
 }

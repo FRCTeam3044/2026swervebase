@@ -6,7 +6,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 // import static edu.wpi.first.units.Units.Degrees;
-// import static frc.robot.subsystems.turret.TurretConstants.*;
+import static frc.robot.subsystems.turret.TurretConstants.*;
 
 public class TurretConfig {
   public static SparkMaxConfig motorConfig = new SparkMaxConfig();
@@ -26,7 +26,7 @@ public class TurretConfig {
 
     motorConfig
         .idleMode(IdleMode.kBrake)
-        .smartCurrentLimit(TurretConstants.currentLimit)
+        .smartCurrentLimit(currentLimit, currentLimit)
         .apply(softLimits)
         .apply(encoderConfig)
         .inverted(true);

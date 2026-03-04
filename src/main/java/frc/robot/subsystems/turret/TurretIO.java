@@ -15,6 +15,7 @@ public interface TurretIO {
     public Angle rawTargetAngle = Degrees.of(0.0);
     public Angle computedTargetAngle = Degrees.of(0.0);
     public Angle crtAngle = Degrees.of(0.0);
+    public boolean crtMissing = false;
     public Angle angle = Degrees.of(0.0);
     public Angle primaryAbsEncoder = Degrees.of(0.0);
     public Angle secondaryAbsEncoder = Degrees.of(0.0);

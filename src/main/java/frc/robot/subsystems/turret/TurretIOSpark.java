@@ -64,7 +64,11 @@ public class TurretIOSpark implements TurretIO {
     ifOk(motor, driveRelEncoder::getPosition, (value) -> inputs.angle = Degrees.of(value));
     inputs.primaryAbsEncoder = getPrimaryAbsEncoderAngle();
     inputs.secondaryAbsEncoder = getSecondaryAbsEncoderAngle();
-    inputs.crtAngle = Degrees.of(crt.getAngleOptional().get().in(Degrees));
+    Optional<Angle> crtAngle = crt.getAngleOptional();
+    inputs.crtMissing = crtAngle.isEmpty();
+    if (crtAngle.isPresent()) {
+      inputs.crtAngle = Degrees.of(crtAngle.get().in(Degrees));
+    }
     inputs.rawTargetAngle = rawTargetAngle;
     inputs.computedTargetAngle = computedTargetAngle;
     inputs.angularVelocity = DegreesPerSecond.of(driveRelEncoder.getVelocity());
