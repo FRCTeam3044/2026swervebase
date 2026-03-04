@@ -9,13 +9,23 @@ package frc.robot;
 
 import com.revrobotics.util.StatusLogger;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.util.AllianceUtil;
 import frc.robot.util.PathfindingDebugUtils;
+import frc.robot.util.Elastic;
+import frc.robot.util.HubShiftUtil;
 import frc.robot.util.ShotCalculator;
+import frc.robot.util.Elastic.Notification;
+import frc.robot.util.Elastic.NotificationLevel;
+import frc.robot.util.HubShiftUtil.ShiftInfo;
 import me.nabdev.oxconfig.OxConfig;
 import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -39,6 +49,9 @@ public class Robot extends LoggedRobot {
   public static RobotContainer robotContainer;
 
   public static Timer timer = new Timer();
+  private Field2d field = new Field2d();
+
+  private final Alert autoWinnerNotSet = new Alert("!!! AUTO WINNER NOT SET !!!", AlertType.kError);
 
   public Timer getTimer() {
     return timer;
@@ -90,9 +103,12 @@ public class Robot extends LoggedRobot {
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
+    System.out.println("Constructing RobotContainer...");
     robotContainer = RobotContainer.getInstance();
+    System.out.println("Initializing OxConfig...");
 
     OxConfig.initialize();
+    System.out.println("Starting state machine...");
     robotContainer.stateMachine.onStartup();
   }
 
@@ -115,13 +131,21 @@ public class Robot extends LoggedRobot {
     SmartDashboard.putData(CommandScheduler.getInstance());
 
     SmartDashboard.putString("Alliance", AllianceUtil.getAlliance().toString());
-    // Return to non-RT thread priority (do not modify the first argument)
-    // Threads.setCurrentThreadPriority(false, 10);
 
-    Logger.recordOutput("Target", robotContainer.autoTargetUtil.getHub());
+    ShiftInfo official = HubShiftUtil.getOfficialShiftInfo();
+    ShiftInfo shifted = HubShiftUtil.getShiftedShiftInfo();
+    Logger.recordOutput("HubShift/Official", official);
+    Logger.recordOutput("HubShift/Shifted", shifted);
+    publishSchedule("ShiftedShift", shifted);
+    publishSchedule("OfficialShift", official);
+    field.setRobotPose(robotContainer.drive.getPose());
+    SmartDashboard.putData(field);
+    // SmartDashboard.putString(
+    // "ShiftedShift/Text",
+    // String.format("%.1f", Math.max(shifted.remainingTime(), 0.0)));
 
     Logger.recordOutput(
-        "Distance from target",
+        "Distance from hub target",
         robotContainer.drive
             .getPose()
             .getTranslation()
@@ -133,9 +157,19 @@ public class Robot extends LoggedRobot {
     ShotCalculator.periodic();
   }
 
+  private void publishSchedule(String key, ShiftInfo info) {
+    SmartDashboard.putBoolean(key + "/Boolean", info.active());
+    SmartDashboard.putString(key + "/.type", "Status Display");
+    SmartDashboard.putNumber(key + "/RemainingTime", Math.max(info.remainingTime(), -3.0));
+    SmartDashboard.putNumber(key + "/ShiftLength", info.elapsedTime() + info.remainingTime());
+    SmartDashboard.putString(key + "/ShiftName", info.currentShift().toString());
+  }
+
   /** This function is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
+    HubShiftUtil.initialize();
+    Elastic.selectTab(0);
   }
 
   /** This function is called periodically when disabled. */
@@ -152,13 +186,16 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     AllianceUtil.setAlliance();
-    robotContainer.stateMachine.autoStateReset();
+    HubShiftUtil.initialize();
+    Elastic.selectTab(1);
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
   }
+
+  private boolean autoWinnerAlerted = false;
 
   /** This function is called once when teleop is enabled. */
   @Override
@@ -173,11 +210,29 @@ public class Robot extends LoggedRobot {
         DriveConstants.pathfinder.visualizeEdges(),
         DriveConstants.pathfinder.visualizeInflatedVertices());
     timer.start();
+    HubShiftUtil.initialize();
+    timer.restart();
+    autoWinnerAlerted = false;
+    Elastic.selectTab(1);
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    if (!(DriverStation.getGameSpecificMessage().length() > 0) && HubShiftUtil.getAllianceWinOverride().isEmpty()
+        && timer
+            .hasElapsed(1.0)) {
+      autoWinnerNotSet.set(true);
+      if (!autoWinnerAlerted) {
+        Elastic.sendNotification(
+            new Notification(NotificationLevel.ERROR, "AUTO WINNER NOT SET!!!!", "MERN YOU NEED TO SET IT MERN", 30000,
+                512, 256));
+        autoWinnerAlerted = true;
+      }
+    } else {
+      autoWinnerNotSet.set(false);
+      autoWinnerAlerted = false;
+    }
   }
 
   /** This function is called once when test mode is enabled. */

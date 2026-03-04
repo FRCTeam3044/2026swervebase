@@ -155,9 +155,11 @@ public class Drive extends SubsystemBase {
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
     }
 
-    poseEstimator.addVisionMeasurement(
-        RobotContainer.driveSimulation.getSimulatedDriveTrainPose(),
-        sampleTimestamps[sampleCount - 1]);
+    if (Constants.currentMode == Mode.SIM) {
+      poseEstimator.addVisionMeasurement(
+          RobotContainer.driveSimulation.getSimulatedDriveTrainPose(),
+          sampleTimestamps[sampleCount - 1]);
+    }
 
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
@@ -262,11 +264,21 @@ public class Drive extends SubsystemBase {
   }
 
   public ChassisSpeeds getFieldRelativeChassisSpeeds() {
-    return RobotContainer.driveSimulation.getDriveTrainSimulatedChassisSpeedsFieldRelative();
+    if (Constants.currentMode == Mode.SIM) {
+      return RobotContainer.driveSimulation.getDriveTrainSimulatedChassisSpeedsFieldRelative();
+    } else {
+      // TODO: Proper!
+      return new ChassisSpeeds();
+    }
   }
 
   public ChassisSpeeds getRobotRelativeChassisSpeeds() {
-    return RobotContainer.driveSimulation.getDriveTrainSimulatedChassisSpeedsRobotRelative();
+    if (Constants.currentMode == Mode.SIM) {
+      return RobotContainer.driveSimulation.getDriveTrainSimulatedChassisSpeedsRobotRelative();
+    } else {
+      // TODO: Proper!
+      return new ChassisSpeeds();
+    }
   }
 
   /** Returns the position of each module in radians. */

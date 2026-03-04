@@ -12,26 +12,40 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Angle;
+
 import java.util.Queue;
 
 import com.studica.frc.Navx;
 
 /** IO implementation for NavX. */
 public class GyroIONavX implements GyroIO {
-  private final Navx navX = new Navx(Navx.Port.kUSB2);
+  private final Navx navX = new Navx(62);
   private final Queue<Double> yawPositionQueue;
   private final Queue<Double> yawTimestampQueue;
 
   public GyroIONavX() {
     yawTimestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue();
     yawPositionQueue = SparkOdometryThread.getInstance().registerSignal(() -> navX.getAngle().in(Degrees));
+
+    navX.enableOptionalMessages(true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false);
   }
 
   @Override
   public void updateInputs(GyroIOInputs inputs) {
-    inputs.connected = true; // NavX library doesn't have a way to check
-    inputs.temperature = navX.getTemperature();
-    inputs.yawPosition = new Rotation2d(navX.getAngle().unaryMinus());
+    Angle yawPosition = navX.getAngle().unaryMinus();
+    // TODO: See if this is correct
+    inputs.connected = !Double.isNaN(yawPosition.baseUnitMagnitude());
+    inputs.yawPosition = new Rotation2d(yawPosition);
     inputs.yawVelocityRadPerSec = Units.degreesToRadians(-navX.getAngularVel()[1].in(RadiansPerSecond));
 
     inputs.odometryYawTimestamps = yawTimestampQueue.stream().mapToDouble((Double value) -> value).toArray();
