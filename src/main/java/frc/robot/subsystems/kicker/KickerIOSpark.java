@@ -9,12 +9,13 @@ import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import java.util.function.DoubleSupplier;
 
 public class KickerIOSpark implements KickerIO {
   private final SparkFlex topMotor = new SparkFlex(topMotorId, MotorType.kBrushless);
-  public final SparkFlex bottomMotor = new SparkFlex(bottomMotorId, MotorType.kBrushless);
+  public final SparkMax bottomMotor = new SparkMax(bottomMotorId, MotorType.kBrushless);
 
   private RelativeEncoder encoderOne = topMotor.getEncoder();
   private RelativeEncoder encoderTwo = bottomMotor.getEncoder();

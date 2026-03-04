@@ -3,24 +3,23 @@ package frc.robot.subsystems.climber;
 import static frc.robot.util.SparkUtil.ifOk;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.math.MathUtil;
 import me.nabdev.oxconfig.ConfigurableParameter;
 
 public class ClimberIOSpark implements ClimberIO {
-  private final SparkMax motor =
-      new SparkMax(ClimberConstants.canId, MotorType.kBrushless); // Fill in later
+  private final SparkFlex motor = new SparkFlex(ClimberConstants.canId, MotorType.kBrushless); // Fill in later
 
   private final RelativeEncoder climbEncoder = motor.getEncoder();
   private final SparkLimitSwitch bottomLimit = motor.getReverseLimitSwitch();
-  private final ConfigurableParameter<Double> runSpeedUp =
-      new ConfigurableParameter<>(0.0, "Climber Motor Running Speed");
+  private final ConfigurableParameter<Double> runSpeedUp = new ConfigurableParameter<>(0.0,
+      "Climber Motor Running Speed");
   // No current angle because it will be 0'd
-  private final ConfigurableParameter<Double> runSpeedDown =
-      new ConfigurableParameter<>(-0.0, "Climber Motor Running Speed");
+  private final ConfigurableParameter<Double> runSpeedDown = new ConfigurableParameter<>(-0.0,
+      "Climber Motor Running Speed");
 
   public void updateInputs(ClimberIOInputs inputs) {
     if (bottomLimit.isPressed()) {
@@ -30,6 +29,7 @@ public class ClimberIOSpark implements ClimberIO {
     inputs.currentPosition = climbEncoder.getPosition();
     ifOk(motor, climbEncoder::getPosition, (value) -> inputs.currentPosition = value);
   }
+
   // Skipping the HoodIOSpark connecting thing
   public void setSpeed(double speed) {
     motor.set(MathUtil.clamp(speed, -1, 1));

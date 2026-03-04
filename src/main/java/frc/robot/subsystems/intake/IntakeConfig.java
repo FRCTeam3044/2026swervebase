@@ -12,7 +12,8 @@ public class IntakeConfig {
 
   static {
     motorConfigOne.idleMode(IdleMode.kCoast).smartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
-    motorConfigTwo.idleMode(IdleMode.kCoast).smartCurrentLimit(stallCurrentLimit, freeCurrentLimit).follow(motorIdOne);
+    motorConfigTwo.idleMode(IdleMode.kCoast).smartCurrentLimit(stallCurrentLimit, freeCurrentLimit).follow(motorIdOne,
+        true);
     rollerMotorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(rollerCurrentLimit, rollerCurrentLimit);
   }
 }
