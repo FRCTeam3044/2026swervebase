@@ -16,7 +16,7 @@ public interface TurretIO {
     public Angle computedTargetAngle = Degrees.of(0.0);
     public Angle crtAngle = Degrees.of(0.0);
     public Angle angle = Degrees.of(0.0);
-    public Angle driveAbsEncoderOne = Degrees.of(0.0);
+    public Angle primaryAbsEncoder = Degrees.of(0.0);
     public Angle secondaryAbsEncoder = Degrees.of(0.0);
     public AngularVelocity angularVelocity = DegreesPerSecond.of(0.0);
     public AngularVelocity targetAngularVelocity = DegreesPerSecond.of(0.0);

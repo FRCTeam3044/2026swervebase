@@ -7,7 +7,11 @@ import edu.wpi.first.units.measure.Angle;
 public class TurretConstants {
   public static final int canId = 15;
   public static final int currentLimit = 40;
+  public static final int primaryAbsEncoderDioChannel = 0;
   public static final int secondaryAbsEncoderDioChannel = 1;
+
+  public static final double primaryAbsEncoderZero = 0.0;
+  public static final double secondaryAbsEncoderZero = 0.0;
 
   public static final int turretTeeth = 200;
   public static final int primaryEncoderTeeth = 22;
