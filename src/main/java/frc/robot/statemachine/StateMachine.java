@@ -2,10 +2,8 @@ package frc.robot.statemachine;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Robot;
 import frc.robot.statemachine.States.CalibrationState;
 import frc.robot.statemachine.States.DisabledState;
 import frc.robot.statemachine.States.NormalTestState;
@@ -30,8 +28,6 @@ import frc.robot.util.AutoAimDataManager;
 import frc.robot.util.AllianceUtil.AllianceColor;
 import frc.robot.util.AutoTargetUtil;
 import frc.robot.util.HubShiftUtil;
-
-import java.util.function.BooleanSupplier;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -69,7 +65,7 @@ public class StateMachine extends StateMachineBase {
                 this.registerToRootState(test, teleop, disabled);
                 // Test States
                 State calibration = new CalibrationState(this, driverController, drive, shooter, turret, hood, kicker,
-                                spindexer, autoTargetUtil);
+                                spindexer, intake, autoTargetUtil);
                 State normalTest = new NormalTestState(this, driverController, operatorController, drive, hood, intake,
                                 kicker,
                                 shooter, spindexer, turret, climber, leds);

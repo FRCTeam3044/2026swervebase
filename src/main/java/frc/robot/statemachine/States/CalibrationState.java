@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Robot;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.kicker.Kicker;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.spindexer.Spindexer;
@@ -36,7 +37,8 @@ public class CalibrationState extends State {
 
         public CalibrationState(StateMachineBase stateMachine, CommandXboxController rawController, Drive drive,
                         Shooter shooter,
-                        Turret turret, Hood hood, Kicker kicker, Spindexer spindexer, AutoTargetUtil autoTargetUtil) {
+                        Turret turret, Hood hood, Kicker kicker, Spindexer spindexer, Intake intake,
+                        AutoTargetUtil autoTargetUtil) {
                 super(stateMachine);
 
                 SmartXboxController controller = new SmartXboxController(rawController, loop);
@@ -67,6 +69,8 @@ public class CalibrationState extends State {
                 startWhenActive(kicker.blockKicker().onlyWhile(controller.rightTrigger().negate())
                                 .withName("Block Kicker"));
                 startWhenActive(spindexer.setSpeed());
+                startWhenActive(intake.runRollers());
+                startWhenActive(intake.intakeBottom());
 
                 controller.rightTrigger().onTrue(Commands.runOnce(() -> {
                         Pose3d targetPose = targetPoseSupplier.get();
