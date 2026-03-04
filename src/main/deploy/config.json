@@ -1,6 +1,7 @@
 {
     "presentation": {
         "Y Point Controller/D": "0.0",
+        "Pathfinding Y Controller/Tolerance": "0.05",
         "Y Point Controller/I": "0.0",
         "Pathfinding X Controller/I": "0.0",
         "Pathfinding X Controller/D": "0.0",
@@ -22,6 +23,7 @@
         "CalibrationState/Test Parameter 9": "0",
         "CalibrationState/Test Parameter 62": "0",
         "CalibrationState/Test Parameter 63": "0",
+        "X Point Controller/Tolerance": "0.05",
         "CalibrationState/Test Parameter 64": "0",
         "CalibrationState/Test Parameter 60": "0",
         "CalibrationState/Test Parameter 2": "0",
@@ -42,6 +44,7 @@
             "comment": "Auto-Generated",
             "value": "0.0"
         },
+        "Pathfinding X Controller/Tolerance": "0.05",
         "CalibrationState/Test Parameter 47": "0",
         "CalibrationState/Test Parameter 48": "0",
         "CalibrationState/Test Parameter 49": "0",
@@ -149,6 +152,7 @@
             "value": "0.0"
         },
         "TestMode/Test Shooter Speed": "0.0",
+        "Y Point Controller/Tolerance": "0.05",
         "Spindexer speed": {
             "comment": "Auto-Generated",
             "value": "0.5"
@@ -269,6 +273,7 @@
     "mode": "competition",
     "simulation": {
         "Y Point Controller/D": "0.0",
+        "Pathfinding Y Controller/Tolerance": "0.05",
         "Y Point Controller/I": "0.0",
         "Pathfinding X Controller/I": "0.0",
         "Pathfinding X Controller/D": "0.0",
@@ -290,6 +295,7 @@
         "CalibrationState/Test Parameter 9": "0",
         "CalibrationState/Test Parameter 62": "0",
         "CalibrationState/Test Parameter 63": "0",
+        "X Point Controller/Tolerance": "0.05",
         "CalibrationState/Test Parameter 64": "0",
         "CalibrationState/Test Parameter 60": "0",
         "CalibrationState/Test Parameter 2": "0",
@@ -310,6 +316,7 @@
             "comment": "Auto-Generated",
             "value": "0.0"
         },
+        "Pathfinding X Controller/Tolerance": "0.05",
         "CalibrationState/Test Parameter 47": "0",
         "CalibrationState/Test Parameter 48": "0",
         "CalibrationState/Test Parameter 49": "0",
@@ -340,12 +347,12 @@
         "CalibrationState/Test Parameter 102": "0",
         "Climb distance": {
             "comment": "Auto-Generated",
-            "value": "0.2"
+            "value": "0.1"
         },
         "CalibrationState/Test Parameter 103": "0",
         "Pathfinding tolerance": {
             "comment": "Auto-Generated",
-            "value": "1.0"
+            "value": "0.5"
         },
         "Point Theta Controller Fast/P": "0.0",
         "CalibrationState/Test Parameter 100": "0",
@@ -417,6 +424,7 @@
             "value": "0.0"
         },
         "TestMode/Test Shooter Speed": "0.0",
+        "Y Point Controller/Tolerance": "0.05",
         "Spindexer speed": {
             "comment": "Auto-Generated",
             "value": "0.5"
@@ -536,6 +544,7 @@
     },
     "competition": {
         "Y Point Controller/D": "0.0",
+        "Pathfinding Y Controller/Tolerance": "0.05",
         "Y Point Controller/I": "0.0",
         "Pathfinding X Controller/I": "0.0",
         "Pathfinding X Controller/D": "0.0",
@@ -557,6 +566,7 @@
         "CalibrationState/Test Parameter 9": "0",
         "CalibrationState/Test Parameter 62": "0",
         "CalibrationState/Test Parameter 63": "0",
+        "X Point Controller/Tolerance": "0.05",
         "CalibrationState/Test Parameter 64": "0",
         "CalibrationState/Test Parameter 60": "0",
         "CalibrationState/Test Parameter 2": "0",
@@ -577,6 +587,7 @@
             "comment": "Auto-Generated",
             "value": "0.0"
         },
+        "Pathfinding X Controller/Tolerance": "0.05",
         "CalibrationState/Test Parameter 47": "0",
         "CalibrationState/Test Parameter 48": "0",
         "CalibrationState/Test Parameter 49": "0",
@@ -684,6 +695,7 @@
             "value": "0.0"
         },
         "TestMode/Test Shooter Speed": "0.0",
+        "Y Point Controller/Tolerance": "0.05",
         "Spindexer speed": {
             "comment": "Auto-Generated",
             "value": "0.5"

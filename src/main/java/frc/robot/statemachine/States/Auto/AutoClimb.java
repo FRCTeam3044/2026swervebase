@@ -38,14 +38,13 @@ public class AutoClimb extends State {
                 Command far = DriveCommands.pointControl(drive, farTarget)
                                 .until(() -> DriveCommands.pointControllerConverged).withName("Far point control");
 
-                Command close = DriveCommands.pointControl(drive, scoreTarget).withName("Close point control");
+                Command close = DriveCommands.pointControl(drive, scoreTarget)
+                                .until(() -> DriveCommands.pointControllerConverged).withName("Close point control");
 
                 startWhenActive(pathfind);
                 startWhenActive(climber.climberTop().onlyIf(() -> autoTargetUtil.inAllianceZone())
                                 .withName("Climber to top"));
                 t(() -> drive.atPose(pathfindingTarget.get())).onTrue(far);
                 t(() -> drive.atPose(farTarget.get())).onTrue(close);
-                t(() -> drive.atPose(scoreTarget.get()) &&
-                                climber.atTopPosition()).onTrue(climber.climberPulledUp());
         }
 }
