@@ -46,5 +46,6 @@ public class AutoClimb extends State {
                                 .withName("Climber to top"));
                 t(() -> drive.atPose(pathfindingTarget.get())).onTrue(far);
                 t(() -> drive.atPose(farTarget.get())).onTrue(close);
+                t(() -> drive.atPose(scoreTarget.get())).onTrue(climber.climberPulledUp());
         }
 }
