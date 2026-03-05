@@ -9,14 +9,12 @@ public class AutoEnums {
   }
 
   public enum AutoSteps {
-    // These conditions are the END conditions
     LeftClimb(() -> false),
     RightClimb(() -> false),
-    ShootToHub(/* Hopper is empty */ () -> RobotContainer.getInstance().autoStateTimer.get() > 2),
-    ShootToAlliedSide(/* Hopper is empty */ () -> false),
-    IntakeNeutralZone(
-        /* Hopper is full */ () -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getRightNeutral())),
-    IntakeAllianceZone(/* Hopper is full */ () -> false),
+    ShootToHub(() -> RobotContainer.getInstance().autoStateTimer.get() > 4),
+    ShootToAlliedSide(() -> false),
+    IntakeNeutralZone(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getLeftNeutral())),
+    IntakeAllianceZone(() -> false),
     EmptyState(() -> false);
 
     private final BooleanSupplier condition;

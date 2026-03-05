@@ -26,8 +26,8 @@ public class AutoTargetUtil {
   private static POIData leftTower = POIData.createFromRed(1.06223613, 3.20841229, 1.06223613, 2.60841229);
   private static POIData rightTower = POIData.createFromRed(1.06223613, 4.28304359, 1.06223613, 4.88304359);
 
-  private static Pose2d rightNeutral = new Pose2d(9.5, 6, Rotation2d.fromDegrees(60));
-  private static Pose2d leftNeutral = new Pose2d(9.5, 1.5, Rotation2d.fromDegrees(60));
+  private static Pose2d rightNeutral = new Pose2d(8.5, 7, Rotation2d.fromDegrees(45));
+  private static Pose2d leftNeutral = new Pose2d(8.5, 0.5, Rotation2d.fromDegrees(45));
 
   private static Obstacle redAllianceZone = Obstacle.createObstacle(
       new Vertex(12.5, 0),

@@ -39,6 +39,8 @@ import frc.robot.util.AllianceUtil.AllianceColor;
 import frc.robot.util.AutoEnums.AutoSteps;
 import frc.robot.util.AutoTargetUtil;
 import java.util.ArrayList;
+import java.util.Collections;
+
 import frc.robot.util.HubShiftUtil;
 
 import java.util.function.BooleanSupplier;
@@ -137,19 +139,21 @@ public class StateMachine extends StateMachineBase {
                 // Autonomous work
 
                 EmptyState emptyState = new EmptyState(this);
-                AutoClimb leftClimb = new AutoClimb(this, autoTargetUtil, AutoTargetUtil.getLeftTower(), drive,
+                AutoClimb leftClimb = new AutoClimb(this, autoTargetUtil, AutoTargetUtil.getLeftTower(), autoAim, drive,
                                 climber);
-                AutoClimb rightClimb = new AutoClimb(this, autoTargetUtil, AutoTargetUtil.getRightTower(), drive,
+                AutoClimb rightClimb = new AutoClimb(this, autoTargetUtil, AutoTargetUtil.getRightTower(), autoAim,
+                                drive,
                                 climber);
                 IntakeAllianceZone intakeAllianceZone = new IntakeAllianceZone(this, drive);
                 IntakeNeutralZone intakeNeutralZone = new IntakeNeutralZone(this, drive, intake);
                 ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this, drive, autoAim);
-                ShootToHub shootHub = new ShootToHub(this, drive, intake, spindexer, kicker, turret, hood, shooter,
+                ShootToHub shootHub = new ShootToHub(this, autoTargetUtil, drive, intake, spindexer, kicker, turret,
+                                hood, shooter,
                                 autoAim, climber);
 
-                testAutoRoutine.add(AutoSteps.ShootToHub);
-                testAutoRoutine.add(AutoSteps.RightClimb);
-                testAutoRoutine.add(AutoSteps.EmptyState);
+                Collections.addAll(testAutoRoutine, AutoSteps.ShootToHub, AutoSteps.IntakeNeutralZone,
+                                AutoSteps.LeftClimb,
+                                AutoSteps.EmptyState);
                 currentStep = testAutoRoutine.get(index);
 
                 BooleanSupplier currentStateComplete = () -> {

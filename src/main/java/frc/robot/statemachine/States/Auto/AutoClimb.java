@@ -10,6 +10,7 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.util.AutoAim;
 import frc.robot.util.AutoTargetUtil;
 import frc.robot.util.AutoTargetUtil.POIData;
 import me.nabdev.oxconfig.ConfigurableParameter;
@@ -24,7 +25,8 @@ public class AutoClimb extends State {
         private static ConfigurableParameter<Double> scoreDist = new ConfigurableParameter<>(0.0,
                         "Climb distance");
 
-        public AutoClimb(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil, POIData climbSide, Drive drive,
+        public AutoClimb(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil, POIData climbSide,
+                        AutoAim autoAim, Drive drive,
                         Climber climber) {
                 super(stateMachine);
 
@@ -47,5 +49,6 @@ public class AutoClimb extends State {
                 t(() -> drive.atPose(pathfindingTarget.get())).onTrue(far);
                 t(() -> drive.atPose(farTarget.get())).onTrue(close);
                 t(() -> drive.atPose(scoreTarget.get())).onTrue(climber.climberPulledUp());
+                t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> true));
         }
 }

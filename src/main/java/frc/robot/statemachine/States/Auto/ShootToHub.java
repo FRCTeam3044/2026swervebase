@@ -27,6 +27,7 @@ import me.nabdev.pathfinding.structures.Vertex;
 public class ShootToHub extends State {
   public ShootToHub(
       StateMachineBase stateMachine,
+      AutoTargetUtil autoTargetUtil,
       Drive drive,
       Intake intake,
       Spindexer spindexer,
@@ -49,10 +50,10 @@ public class ShootToHub extends State {
     startWhenActive(spindexer.run());
     startWhenActive(kicker.blockKicker());
     t(() -> drive.atPose(targetSupplier.get())).whileTrue(Commands.run(() -> drive.stop()));
-    t(() -> drive.atPose(targetSupplier
-        .get()))
-        .onTrue(Commands.deferredProxy(() -> Commands.runOnce(RobotContainer.getInstance().autoStateTimer::restart)));
-    t(() -> drive.atPose(targetSupplier.get())).onTrue(kicker.shootKicker());
+    t(() -> autoTargetUtil.inAllianceZone())
+        .onTrue(Commands
+            .deferredProxy(() -> Commands.runOnce(() -> RobotContainer.getInstance().autoStateTimer.restart())));
+    t(() -> autoTargetUtil.inAllianceZone()).onTrue(kicker.shootKicker());
     t(() -> drive.atPose(targetSupplier.get())).onTrue(autoAim.aimHub(() -> true));
   }
 }

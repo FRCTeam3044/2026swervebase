@@ -495,7 +495,7 @@
         "CalibrationState/Test Parameter 42": "0",
         "Pathfinding Max Rotation Speed": {
             "comment": "Auto-Generated",
-            "value": "1.5707963267948966"
+            "value": "5.0"
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
@@ -534,7 +534,7 @@
             "value": "0.0"
         },
         "CalibrationState/Test Parameter 31": "0",
-        "Point Theta Controller/P": "0.0",
+        "Point Theta Controller/P": "5.0",
         "Pathfinding X Controller/P": "10.0",
         "Pre Climb distance": {
             "comment": "Auto-Generated",
