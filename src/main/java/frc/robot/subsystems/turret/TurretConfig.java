@@ -14,6 +14,7 @@ public class TurretConfig {
   static {
     EncoderConfig encoderConfig = new EncoderConfig();
     SoftLimitConfig softLimits = new SoftLimitConfig();
+    encoderConfig.positionConversionFactor(1);
     // Enable after we find the max mechanism range
     // double conversionFactor = (maxAngle.in(Degrees) - minAngle.in(Degrees)) /
     // (maxPosition - minPosition);
@@ -25,7 +26,7 @@ public class TurretConfig {
     // softLimits.reverseSoftLimit(TurretConstants.minPosition);
 
     motorConfig
-        .idleMode(IdleMode.kBrake)
+        .idleMode(IdleMode.kCoast)
         .smartCurrentLimit(currentLimit, currentLimit)
         .apply(softLimits)
         .apply(encoderConfig)

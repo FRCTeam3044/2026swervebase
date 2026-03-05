@@ -6,6 +6,7 @@ import static edu.wpi.first.units.Units.DegreesPerSecond;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
+import yams.units.EasyCRT.CRTStatus;
 
 import org.littletonrobotics.junction.AutoLog;
 
@@ -14,11 +15,14 @@ public interface TurretIO {
   public static class TurretIOInputs {
     public Angle rawTargetAngle = Degrees.of(0.0);
     public Angle computedTargetAngle = Degrees.of(0.0);
-    public Angle crtAngle = Degrees.of(0.0);
+    public double crtAngle = 0.0;
+    public int crtIterations = -1;
+    public double crtError = 0;
     public boolean crtMissing = false;
+    public CRTStatus crtStatus = null;
     public Angle angle = Degrees.of(0.0);
-    public Angle primaryAbsEncoder = Degrees.of(0.0);
-    public Angle secondaryAbsEncoder = Degrees.of(0.0);
+    public double primaryAbsEncoder = 0.0;
+    public double secondaryAbsEncoder = 0.0;
     public AngularVelocity angularVelocity = DegreesPerSecond.of(0.0);
     public AngularVelocity targetAngularVelocity = DegreesPerSecond.of(0.0);
     public Angle profileTargetPosition = Degrees.of(0.0);

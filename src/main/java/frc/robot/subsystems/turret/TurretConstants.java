@@ -1,6 +1,7 @@
 package frc.robot.subsystems.turret;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Radians;
 
 import edu.wpi.first.units.measure.Angle;
 
@@ -10,14 +11,14 @@ public class TurretConstants {
   public static final int primaryAbsEncoderDioChannel = 0;
   public static final int secondaryAbsEncoderDioChannel = 1;
 
-  public static final double primaryAbsEncoderZero = 0.0;
-  public static final double secondaryAbsEncoderZero = 0.0;
+  public static final Angle primaryAbsEncoderZero = Radians.of(-1.373);
+  public static final Angle secondaryAbsEncoderZero = Radians.of(-0.907);
 
   public static final int turretTeeth = 200;
   public static final int primaryEncoderTeeth = 22;
   public static final int secondaryEncoderTeeth = 27;
-  public static final Angle minAngle = Degrees.of(0);
-  public static final Angle maxAngle = Degrees.of(360);
+  public static final Angle minAngle = Degrees.of(-190);
+  public static final Angle maxAngle = Degrees.of(190);
   public static final int minPosition = 0;
   public static final int maxPosition = 1; // 1 mernillion
 
