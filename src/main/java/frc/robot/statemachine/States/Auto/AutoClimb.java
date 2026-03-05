@@ -47,8 +47,9 @@ public class AutoClimb extends State {
                 startWhenActive(climber.climberTop().onlyIf(() -> autoTargetUtil.inAllianceZone())
                                 .withName("Climber to top"));
                 t(() -> drive.atPose(pathfindingTarget.get())).onTrue(far);
-                t(() -> drive.atPose(farTarget.get())).onTrue(close);
-                t(() -> drive.atPose(scoreTarget.get())).onTrue(climber.climberPulledUp());
+                t(() -> drive.atPose(farTarget.get()) && DriveCommands.pointControllerRotConverged).onTrue(close);
+                t(() -> drive.atPose(scoreTarget.get()) && DriveCommands.pointControllerRotConverged)
+                                .onTrue(climber.climberPulledUp());
                 t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> true));
         }
 }

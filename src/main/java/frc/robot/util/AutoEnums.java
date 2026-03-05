@@ -11,9 +11,9 @@ public class AutoEnums {
   public enum AutoSteps {
     LeftClimb(() -> false),
     RightClimb(() -> false),
-    ShootToHub(() -> RobotContainer.getInstance().autoStateTimer.get() > 4),
+    ShootToHub(() -> RobotContainer.getInstance().autoStateTimer.get() > 2),
     ShootToAlliedSide(() -> false),
-    IntakeNeutralZone(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getLeftNeutral())),
+    IntakeNeutralZone(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getRightNeutral())),
     IntakeAllianceZone(() -> false),
     EmptyState(() -> false);
 

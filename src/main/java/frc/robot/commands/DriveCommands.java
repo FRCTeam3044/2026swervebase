@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WrapperCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
 import frc.robot.RobotContainer;
@@ -41,6 +42,7 @@ import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.DoubleSupplier;
@@ -371,6 +373,13 @@ public class DriveCommands {
                 }).withName("Go To Point");
         }
 
+        public static Command goToPoint(Drive drive, ArrayList<Pose2d> pose, Supplier<Rotation2d> rotation) {
+                return Commands.deferredProxy(() -> {
+                        return followTrajectory(drive, generateTrajectory(drive, pose), rotation,
+                                        null, false);
+                }).withName("Go To Point");
+        }
+
         private static Command followTrajectory(Drive drive, Trajectory traj, Supplier<Rotation2d> desiredRotation,
                         DoubleSupplier joystickRot, boolean useJoystick) {
 
@@ -425,6 +434,18 @@ public class DriveCommands {
                         return path.asTrajectory(config);
                 } catch (Exception e) {
                         DriverStation.reportWarning("Failed to generate path: " + start + " to " + end,
+                                        e.getStackTrace());
+                        return null;
+                }
+        }
+
+        public static Trajectory generateTrajectory(Drive drive, ArrayList<Pose2d> waypoints) {
+                try {
+                        Path path = DriveConstants.pathfinder.generatePath(drive.getPose(), waypoints);
+                        TrajectoryConfig config = getTrajectoryConfig(drive, path);
+                        return path.asTrajectory(config);
+                } catch (Exception e) {
+                        DriverStation.reportWarning("Failed to generate path: ",
                                         e.getStackTrace());
                         return null;
                 }

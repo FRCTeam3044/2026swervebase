@@ -1,17 +1,18 @@
 package frc.robot.statemachine;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Robot;
 import frc.robot.statemachine.States.Auto.AutoClimb;
 import frc.robot.statemachine.States.Auto.EmptyState;
 import frc.robot.statemachine.States.Auto.IntakeAllianceZone;
 import frc.robot.statemachine.States.Auto.IntakeNeutralZone;
 import frc.robot.statemachine.States.Auto.ShootToAlliedSide;
 import frc.robot.statemachine.States.Auto.ShootToHub;
+import frc.robot.commands.DriveCommands;
 import frc.robot.statemachine.States.AutoState;
 import frc.robot.statemachine.States.CalibrationState;
 import frc.robot.statemachine.States.DisabledState;
@@ -54,7 +55,11 @@ public class StateMachine extends StateMachineBase {
         String autoWinner = DriverStation.getGameSpecificMessage();
         AllianceColor allianceColor = AllianceUtil.getAlliance();
 
+        // Autos to choose from
         ArrayList<AutoSteps> testAutoRoutine = new ArrayList<AutoSteps>();
+
+        // Trajectories to choose from
+        ArrayList<Pose2d> leftToRightTraj = new ArrayList<Pose2d>();
 
         private AutoSteps currentStep;
         private int index;
@@ -138,21 +143,22 @@ public class StateMachine extends StateMachineBase {
 
                 // Autonomous work
 
-                EmptyState emptyState = new EmptyState(this);
+                Collections.addAll(leftToRightTraj, AutoTargetUtil.getRightNeutral(), AutoTargetUtil.getLeftNeutral());
+
+                EmptyState emptyState = new EmptyState(this, drive);
                 AutoClimb leftClimb = new AutoClimb(this, autoTargetUtil, AutoTargetUtil.getLeftTower(), autoAim, drive,
                                 climber);
                 AutoClimb rightClimb = new AutoClimb(this, autoTargetUtil, AutoTargetUtil.getRightTower(), autoAim,
                                 drive,
                                 climber);
                 IntakeAllianceZone intakeAllianceZone = new IntakeAllianceZone(this, drive);
-                IntakeNeutralZone intakeNeutralZone = new IntakeNeutralZone(this, drive, intake);
+                IntakeNeutralZone intakeNeutralZone = new IntakeNeutralZone(this, leftToRightTraj, drive, intake);
                 ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this, drive, autoAim);
                 ShootToHub shootHub = new ShootToHub(this, autoTargetUtil, drive, intake, spindexer, kicker, turret,
                                 hood, shooter,
                                 autoAim, climber);
 
-                Collections.addAll(testAutoRoutine, AutoSteps.ShootToHub, AutoSteps.IntakeNeutralZone,
-                                AutoSteps.LeftClimb,
+                Collections.addAll(testAutoRoutine, AutoSteps.IntakeNeutralZone,
                                 AutoSteps.EmptyState);
                 currentStep = testAutoRoutine.get(index);
 
@@ -196,10 +202,5 @@ public class StateMachine extends StateMachineBase {
                 // test.withModeTransitions(disabled, teleop, auto, test);
                 // disabled.withModeTransitions(disabled, teleop, auto, test);
                 // auto.withModeTransitions(disabled, teleop, auto, test);
-        }
-
-        public void autoStateReset() {
-                index = 0;
-                currentStep = testAutoRoutine.get(0);
         }
 }
