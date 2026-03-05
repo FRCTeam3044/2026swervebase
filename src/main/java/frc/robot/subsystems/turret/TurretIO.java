@@ -23,6 +23,8 @@ public interface TurretIO {
     public Angle angle = Degrees.of(0.0);
     public Angle primaryAbsEncoder = Degrees.of(0.0);
     public Angle secondaryAbsEncoder = Degrees.of(0.0);
+    public double rawPrimaryEncoderAvgDeg = 0;
+    public double rawSecondaryEncoderAvgDeg = 0;
     public AngularVelocity angularVelocity = DegreesPerSecond.of(0.0);
     public AngularVelocity targetAngularVelocity = DegreesPerSecond.of(0.0);
     public Angle profileTargetPosition = Degrees.of(0.0);

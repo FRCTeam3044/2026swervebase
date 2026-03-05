@@ -2,6 +2,7 @@ package frc.robot.subsystems.turret;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.subsystems.turret.TurretConstants.*;
@@ -19,6 +20,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
@@ -41,6 +43,9 @@ public class TurretIOSpark implements TurretIO {
   private Angle rawTargetAngle;
   private Angle computedTargetAngle;
   SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV);
+
+  LinearFilter filterOne = LinearFilter.movingAverage(500);
+  LinearFilter filterTwo = LinearFilter.movingAverage(500);
 
   // private CRTStatus lastCRTStatus = null;
   private boolean crtMissing = false;
@@ -71,8 +76,10 @@ public class TurretIOSpark implements TurretIO {
 
   public void updateInputs(TurretIOInputs inputs) {
     ifOk(motor, driveRelEncoder::getPosition, (value) -> inputs.angle = Degrees.of(value));
-    inputs.primaryAbsEncoder = Rotations.of(driveAbsEncoder.get());
-    inputs.secondaryAbsEncoder = Rotations.of(secondaryAbsEncoder.get());
+    inputs.primaryAbsEncoder = getPrimaryAbsEncoderAngle();
+    inputs.secondaryAbsEncoder = getSecondaryAbsEncoderAngle();
+    inputs.rawPrimaryEncoderAvgDeg = filterOne.calculate(Rotations.of(driveAbsEncoder.get()).in(Degrees));
+    inputs.rawSecondaryEncoderAvgDeg = filterTwo.calculate(Rotations.of(secondaryAbsEncoder.get()).in(Degrees));
     inputs.rawTargetAngle = rawTargetAngle;
     inputs.computedTargetAngle = computedTargetAngle;
     inputs.angularVelocity = DegreesPerSecond.of(driveRelEncoder.getVelocity());
@@ -112,17 +119,17 @@ public class TurretIOSpark implements TurretIO {
     motor.set(percent);
   }
 
-  // private Angle getPrimaryAbsEncoderAngle() {
-  // return Radians.of(MathUtil
-  // .angleModulus(Rotations.of(driveAbsEncoder.get()).minus(primaryAbsEncoderZero)).in(Radians))
-  // + Math.PI);
-  // }
+  private Angle getPrimaryAbsEncoderAngle() {
+    return Radians
+        .of(MathUtil.angleModulus(Rotations.of(driveAbsEncoder.get()).minus(primaryAbsEncoderZero).in(Radians))
+            + Math.PI);
+  }
 
-  // private Angle getSecondaryAbsEncoderAngle() {
-  // return Radians.of(MathUtil.angleModulus(
-  // Rotations.of(secondaryAbsEncoder.get()).minus(secondaryAbsEncoderZero)).in(Radians))
-  // + Math.PI);
-  // }
+  private Angle getSecondaryAbsEncoderAngle() {
+    return Radians.of(MathUtil.angleModulus(
+        Rotations.of(secondaryAbsEncoder.get()).minus(secondaryAbsEncoderZero).in(Radians))
+        + Math.PI);
+  }
 
   @Override
   public void resetAngle() {
@@ -145,9 +152,9 @@ public class TurretIOSpark implements TurretIO {
   // }
 
   private Optional<Angle> getAngle() {
-    double teeth1 = driveAbsEncoder.get() * primaryEncoderTeeth;
-    double teeth2 = secondaryAbsEncoder.get() * secondaryEncoderTeeth;
-    double turretGearTeeth = (teeth1 * secondaryEncoderTeeth * 10.0 + teeth2 * primaryEncoderTeeth * 10.0)
+    double teeth1 = getPrimaryAbsEncoderAngle().in(Rotations) * primaryEncoderTeeth;
+    double teeth2 = getSecondaryAbsEncoderAngle().in(Rotations) * secondaryEncoderTeeth;
+    double turretGearTeeth = (teeth1 * secondaryEncoderTeeth * 9.0 + teeth2 * primaryEncoderTeeth * 16.0)
         % (primaryEncoderTeeth * secondaryEncoderTeeth);
 
     Logger.recordOutput("Turret/TurretGearTeeth", turretGearTeeth);

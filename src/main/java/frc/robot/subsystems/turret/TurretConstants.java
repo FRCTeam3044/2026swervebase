@@ -11,8 +11,8 @@ public class TurretConstants {
   public static final int primaryAbsEncoderDioChannel = 0;
   public static final int secondaryAbsEncoderDioChannel = 1;
 
-  public static final Angle primaryAbsEncoderZero = Radians.of(-1.373);
-  public static final Angle secondaryAbsEncoderZero = Radians.of(-0.907);
+  public static final Angle primaryAbsEncoderZero = Degrees.of(57.51667);
+  public static final Angle secondaryAbsEncoderZero = Degrees.of(339.797861);
 
   public static final int turretTeeth = 200;
   public static final int primaryEncoderTeeth = 22;
