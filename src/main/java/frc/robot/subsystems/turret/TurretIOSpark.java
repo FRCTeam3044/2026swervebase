@@ -10,6 +10,8 @@ import static frc.robot.util.SparkUtil.tryUntilOk;
 
 import java.util.Optional;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -24,7 +26,6 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import me.nabdev.oxconfig.sampleClasses.ConfigurableProfiledPIDController;
 import yams.units.EasyCRT;
 import yams.units.EasyCRTConfig;
-import yams.units.EasyCRT.CRTStatus;
 
 public class TurretIOSpark implements TurretIO {
   private final SparkFlex motor = new SparkFlex(canId, MotorType.kBrushless);
@@ -41,10 +42,10 @@ public class TurretIOSpark implements TurretIO {
   private Angle computedTargetAngle;
   SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV);
 
-  private CRTStatus lastCRTStatus = null;
+  // private CRTStatus lastCRTStatus = null;
   private boolean crtMissing = false;
-  private int crtIterations = 0;
-  private double crtError = 0;
+  // private int crtIterations = 0;
+  // private double crtError = 0;
   private Angle lastCrtAngle = Degrees.of(0);
 
   public TurretIOSpark() {
@@ -70,18 +71,18 @@ public class TurretIOSpark implements TurretIO {
 
   public void updateInputs(TurretIOInputs inputs) {
     ifOk(motor, driveRelEncoder::getPosition, (value) -> inputs.angle = Degrees.of(value));
-    inputs.primaryAbsEncoder = driveAbsEncoder.get() * 2 * Math.PI;
-    inputs.secondaryAbsEncoder = secondaryAbsEncoder.get() * 2 * Math.PI;
+    inputs.primaryAbsEncoder = Rotations.of(driveAbsEncoder.get());
+    inputs.secondaryAbsEncoder = Rotations.of(secondaryAbsEncoder.get());
     inputs.rawTargetAngle = rawTargetAngle;
     inputs.computedTargetAngle = computedTargetAngle;
     inputs.angularVelocity = DegreesPerSecond.of(driveRelEncoder.getVelocity());
     inputs.targetAngularVelocity = DegreesPerSecond.of(pidController.getSetpoint().velocity);
     inputs.profileTargetPosition = Degrees.of(pidController.getSetpoint().position);
-    inputs.crtStatus = lastCRTStatus;
+    // inputs.crtStatus = lastCRTStatus;
     inputs.crtMissing = crtMissing;
-    inputs.crtIterations = crtIterations;
-    inputs.crtError = crtError;
-    inputs.crtAngle = lastCrtAngle.in(Degrees);
+    // inputs.crtIterations = crtIterations;
+    // inputs.crtError = crtError;
+    inputs.crtAngle = lastCrtAngle;
     currentAngle = inputs.angle;
   }
 
@@ -125,14 +126,35 @@ public class TurretIOSpark implements TurretIO {
 
   @Override
   public void resetAngle() {
-    Optional<Angle> crtAngle = crt.getAngleOptional();
-    lastCRTStatus = crt.getLastStatus();
+    Optional<Angle> crtAngle = getAngle();
+
     crtMissing = crtAngle.isEmpty();
-    crtIterations = crt.getLastIterations();
-    crtError = Rotations.of(crt.getLastErrorRotations()).in(Degrees);
     if (crtAngle.isPresent()) {
-      lastCrtAngle = Degrees.of(crtAngle.get().in(Degrees));
-      driveRelEncoder.setPosition(crtAngle.get().in(Degrees));
+      Angle angle = crtAngle.get();
+      lastCrtAngle = angle;
+      driveRelEncoder.setPosition(angle.in(Degrees));
     }
+  }
+
+  // public Optional<Angle> getAngle() {
+  // Optional<Angle> crtAngle = crt.getAngleOptional();
+  // lastCRTStatus = crt.getLastStatus();
+  // crtIterations = crt.getLastIterations();
+  // crtError = Rotations.of(crt.getLastErrorRotations()).in(Degrees);
+  // return crtAngle;
+  // }
+
+  private Optional<Angle> getAngle() {
+    double teeth1 = driveAbsEncoder.get() * primaryEncoderTeeth;
+    double teeth2 = secondaryAbsEncoder.get() * secondaryEncoderTeeth;
+    double turretGearTeeth = (teeth1 * secondaryEncoderTeeth * 10.0 + teeth2 * primaryEncoderTeeth * 10.0)
+        % (primaryEncoderTeeth * secondaryEncoderTeeth);
+
+    Logger.recordOutput("Turret/TurretGearTeeth", turretGearTeeth);
+    // if (turretGearTeeth > Constants.MAX_ROTATION) {
+    // return Optional.empty();
+    // }
+
+    return Optional.of(Rotations.of(turretGearTeeth / turretTeeth));
   }
 }
