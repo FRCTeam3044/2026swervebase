@@ -152,16 +152,19 @@ public class TurretIOSpark implements TurretIO {
   // }
 
   private Optional<Angle> getAngle() {
-    double teeth1 = getPrimaryAbsEncoderAngle().in(Rotations) * primaryEncoderTeeth;
-    double teeth2 = getSecondaryAbsEncoderAngle().in(Rotations) * secondaryEncoderTeeth;
-    double turretGearTeeth = (teeth1 * secondaryEncoderTeeth * 9.0 + teeth2 * primaryEncoderTeeth * 16.0)
-        % (primaryEncoderTeeth * secondaryEncoderTeeth);
+    long teeth1 = Math.round(getPrimaryAbsEncoderAngle().in(Rotations) * primaryEncoderTeeth);
+    long teeth2 = Math.round(getSecondaryAbsEncoderAngle().in(Rotations) * secondaryEncoderTeeth);
+
+    long lcm = (long) primaryEncoderTeeth * secondaryEncoderTeeth; // 594
+    long turretGearTeeth = ((teeth1 * secondaryEncoderTeeth * 9L + teeth2 * primaryEncoderTeeth * 16L) % lcm + lcm)
+        % lcm;
 
     Logger.recordOutput("Turret/TurretGearTeeth", turretGearTeeth);
-    // if (turretGearTeeth > Constants.MAX_ROTATION) {
-    // return Optional.empty();
-    // }
 
-    return Optional.of(Rotations.of(turretGearTeeth / turretTeeth));
+    if (turretGearTeeth > turretTeeth * 1.2) {
+      return Optional.empty();
+    }
+
+    return Optional.of(Rotations.of((double) turretGearTeeth / turretTeeth));
   }
 }

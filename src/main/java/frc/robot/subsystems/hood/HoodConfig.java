@@ -10,8 +10,8 @@ public class HoodConfig {
 
   static {
     hoodConfig
-        .idleMode(IdleMode.kBrake)
-        .smartCurrentLimit(currentLimit, currentLimit)
+        .idleMode(IdleMode.kCoast)
+        .smartCurrentLimit(stallCurrentLimit, freeCurrentLimit)
         .inverted(true);
   }
 }

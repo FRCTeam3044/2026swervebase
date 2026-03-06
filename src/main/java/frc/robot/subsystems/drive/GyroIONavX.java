@@ -30,7 +30,7 @@ public class GyroIONavX implements GyroIO {
 
     navX.enableOptionalMessages(true,
         true,
-        false,
+        true,
         false,
         false,
         false,
@@ -38,6 +38,7 @@ public class GyroIONavX implements GyroIO {
         false,
         false,
         false);
+    navX.setODRHz(10);
   }
 
   @Override
@@ -45,7 +46,9 @@ public class GyroIONavX implements GyroIO {
     Angle yawPosition = navX.getAngle().unaryMinus();
     // TODO: See if this is correct
     inputs.connected = !Double.isNaN(yawPosition.baseUnitMagnitude());
-    inputs.yawPosition = new Rotation2d(yawPosition);
+    if (inputs.connected) {
+      inputs.yawPosition = new Rotation2d(yawPosition);
+    }
     inputs.yawVelocityRadPerSec = Units.degreesToRadians(-navX.getAngularVel()[1].in(RadiansPerSecond));
 
     inputs.odometryYawTimestamps = yawTimestampQueue.stream().mapToDouble((Double value) -> value).toArray();
