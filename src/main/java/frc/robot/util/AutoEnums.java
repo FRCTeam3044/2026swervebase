@@ -14,6 +14,7 @@ public class AutoEnums {
     ShootToHub(() -> RobotContainer.getInstance().autoStateTimer.get() > 2),
     ShootToAlliedSide(() -> false),
     IntakeNeutralZone(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getRightNeutral())),
+    IntakeOutpost(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.closeOutpost())),
     IntakeAllianceZone(() -> false),
     EmptyState(() -> false);
 

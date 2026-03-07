@@ -10,6 +10,7 @@ import frc.robot.statemachine.States.Auto.AutoClimb;
 import frc.robot.statemachine.States.Auto.EmptyState;
 import frc.robot.statemachine.States.Auto.IntakeAllianceZone;
 import frc.robot.statemachine.States.Auto.IntakeNeutralZone;
+import frc.robot.statemachine.States.Auto.IntakeOutpost;
 import frc.robot.statemachine.States.Auto.ShootToAlliedSide;
 import frc.robot.statemachine.States.Auto.ShootToHub;
 import frc.robot.commands.DriveCommands;
@@ -43,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import frc.robot.util.HubShiftUtil;
+import frc.robot.util.PathfindingDebugUtils;
 
 import java.util.function.BooleanSupplier;
 
@@ -50,6 +52,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
+import me.nabdev.pathfinding.structures.Vertex;
 
 public class StateMachine extends StateMachineBase {
         String autoWinner = DriverStation.getGameSpecificMessage();
@@ -57,9 +60,6 @@ public class StateMachine extends StateMachineBase {
 
         // Autos to choose from
         ArrayList<AutoSteps> testAutoRoutine = new ArrayList<AutoSteps>();
-
-        // Trajectories to choose from
-        ArrayList<Pose2d> leftToRightTraj = new ArrayList<Pose2d>();
 
         private AutoSteps currentStep;
         private int index;
@@ -143,8 +143,6 @@ public class StateMachine extends StateMachineBase {
 
                 // Autonomous work
 
-                Collections.addAll(leftToRightTraj, AutoTargetUtil.getRightNeutral(), AutoTargetUtil.getLeftNeutral());
-
                 EmptyState emptyState = new EmptyState(this, drive);
                 AutoClimb leftClimb = new AutoClimb(this, autoTargetUtil, AutoTargetUtil.getLeftTower(), autoAim, drive,
                                 climber);
@@ -152,13 +150,14 @@ public class StateMachine extends StateMachineBase {
                                 drive,
                                 climber);
                 IntakeAllianceZone intakeAllianceZone = new IntakeAllianceZone(this, drive);
-                IntakeNeutralZone intakeNeutralZone = new IntakeNeutralZone(this, leftToRightTraj, drive, intake);
+                IntakeNeutralZone intakeNeutralZone = new IntakeNeutralZone(this, drive, intake);
                 ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this, drive, autoAim);
                 ShootToHub shootHub = new ShootToHub(this, autoTargetUtil, drive, intake, spindexer, kicker, turret,
                                 hood, shooter,
                                 autoAim, climber);
+                IntakeOutpost intakeOutpost = new IntakeOutpost(this, drive, intake);
 
-                Collections.addAll(testAutoRoutine, AutoSteps.IntakeNeutralZone,
+                Collections.addAll(testAutoRoutine, AutoSteps.IntakeOutpost,
                                 AutoSteps.EmptyState);
                 currentStep = testAutoRoutine.get(index);
 
@@ -183,6 +182,8 @@ public class StateMachine extends StateMachineBase {
                                                 "Auto to neutral intake")
                                 .withChild(shootToAlliedSide, () -> currentStep == AutoSteps.ShootToAlliedSide, 0,
                                                 "Auto to neutral shot")
+                                .withChild(intakeOutpost, () -> currentStep == AutoSteps.IntakeOutpost, 0,
+                                                "Auto to outpost intake")
                                 .withChild(emptyState, () -> currentStep == AutoSteps.EmptyState, 0,
                                                 "Auto to empty state");
 
@@ -192,6 +193,7 @@ public class StateMachine extends StateMachineBase {
                 shootToAlliedSide.withTransition(auto, currentStateComplete, 0, "Neutral shot to auto");
                 intakeAllianceZone.withTransition(auto, currentStateComplete, 0, "Allied intake to shot");
                 intakeNeutralZone.withTransition(auto, currentStateComplete, 0, "Neutral intake to shot");
+                intakeOutpost.withTransition(auto, currentStateComplete, "Outpost intake to auto");
                 emptyState.withTransition(auto, currentStateComplete, 0, "Empty to auto");
 
                 // For SYSID (comment out for normal autos)
