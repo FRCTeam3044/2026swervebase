@@ -36,6 +36,7 @@ public class ShooterIOSpark implements ShooterIO {
   SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
 
   public ShooterIOSpark() {
+    controller.setIZone(1000);
     tryUntilOk(
         leaderMotor,
         5,
@@ -49,8 +50,7 @@ public class ShooterIOSpark implements ShooterIO {
   }
 
   @Override
-  public void setSpeed(AngularVelocity speed) {
-    double leaderSetpoint = speed.in(RPM);
+  public void setSpeed(double leaderSetpoint) {
     this.targetSpeed = leaderSetpoint;
     this.pidOutput = controller.calculate(leaderEncoder.getVelocity(), leaderSetpoint);
     this.pidError = controller.getPositionError();
@@ -72,12 +72,12 @@ public class ShooterIOSpark implements ShooterIO {
 
   @Override
   public void updateInputs(ShooterIOInputs inputs) {
-    ifOk(leaderMotor, leaderEncoder::getVelocity, (value) -> inputs.leaderVelocity = RPM.of(value));
+    ifOk(leaderMotor, leaderEncoder::getVelocity, (value) -> inputs.leaderVelocity = value);
     ifOk(leaderMotor, leaderMotor::getAppliedOutput, (value) -> inputs.leaderOutput = value);
     ifOk(
         followerMotor,
         followerEncoder::getVelocity,
-        (value) -> inputs.followerVelocity = RPM.of(value));
+        (value) -> inputs.followerVelocity = value);
     ifOk(leaderMotor, leaderMotor::getOutputCurrent, (value) -> inputs.leaderCurrent = value);
     ifOk(followerMotor, followerMotor::getOutputCurrent, (value) -> inputs.followerCurrent = value);
     inputs.targetSpeed = targetSpeed;

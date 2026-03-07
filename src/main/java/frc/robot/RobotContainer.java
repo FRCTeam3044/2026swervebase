@@ -149,10 +149,10 @@ public class RobotContainer {
                                                 });
                                 vision = new Vision(
                                                 drive::addVisionMeasurement,
-                                                new VisionIOPhotonVision(portCamName, robotToPortCam),
-                                                new VisionIOPhotonVision(starCamName, robotToStarCam),
-                                                new VisionIOPhotonVision(foreCamName, robotToForeCam),
-                                                new VisionIOPhotonVision(aftCamName, robotToAftCam));
+                                                new VisionIOPhotonVision(fsCamName, robotToFs),
+                                                new VisionIOPhotonVision(ssCamName, robotToSs),
+                                                new VisionIOPhotonVision(spCamName, robotToSp),
+                                                new VisionIOPhotonVision(fpCamName, robotToFp));
                                 hood = new Hood(new HoodIOSpark());
                                 intake = new Intake(new IntakeIOSpark());
                                 shooter = new Shooter(new ShooterIOSpark());
@@ -348,7 +348,7 @@ public class RobotContainer {
                                                                         Rotation2d.fromDegrees(
                                                                                         turret.getAngle().in(Degrees)),
                                                                         Inches.of(15),
-                                                                        MetersPerSecond.of(shooter.getSpeed().in(RPM)),
+                                                                        MetersPerSecond.of(shooter.getSpeed()),
                                                                         Degrees.of(hood.getPosition())));
                 });
 

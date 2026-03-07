@@ -46,18 +46,13 @@ public class Hood extends SubsystemBase {
         .andThen(Commands.runOnce(() -> {
           io.setPercent(0);
           io.resetPosition(0.0);
+          calibrated = true;
         }, this))
         .withName("Calibrate Hood");
   }
 
   private Command calibrateIfNeeded(Command command) {
-    return Commands.deferredProxy(() -> {
-      if (!calibrated) {
-        return calibrate().andThen(command);
-      } else {
-        return command;
-      }
-    });
+    return calibrate().onlyIf(() -> !calibrated).andThen(command);
   }
 
   public boolean calibrated() {

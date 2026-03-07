@@ -17,16 +17,16 @@ public class VisionConstants {
     public static AprilTagFieldLayout aprilTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
     // Camera names, must match names configured on coprocessor
-    public static String portCamName = "port";
-    public static String starCamName = "star";
-    public static String foreCamName = "fore";
-    public static String aftCamName = "aft";
+    public static String fsCamName = "fore_star";
+    public static String ssCamName = "sensor_star";
+    public static String spCamName = "sensor_port";
+    public static String fpCamName = "fore_port";
 
     // Robot to camera transforms
-    public static Transform3d robotToPortCam = new Transform3d(0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, 0.0));
-    public static Transform3d robotToStarCam = new Transform3d(-0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, Math.PI));
-    public static Transform3d robotToForeCam = new Transform3d(0.0, 0.2, 0.2, new Rotation3d(0.0, -0.4, Math.PI / 2));
-    public static Transform3d robotToAftCam = new Transform3d(0.0, -0.2, 0.2, new Rotation3d(0.0, -0.4, -Math.PI / 2));
+    public static Transform3d robotToFs = new Transform3d(0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, 0.0));
+    public static Transform3d robotToSs = new Transform3d(-0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, Math.PI));
+    public static Transform3d robotToSp = new Transform3d(0.0, 0.2, 0.2, new Rotation3d(0.0, -0.4, Math.PI / 2));
+    public static Transform3d robotToFp = new Transform3d(0.0, -0.2, 0.2, new Rotation3d(0.0, -0.4, -Math.PI / 2));
 
     // Basic filtering thresholds
     public static double maxAmbiguity = 0.3;

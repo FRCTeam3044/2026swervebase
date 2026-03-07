@@ -8,22 +8,24 @@ import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DigitalInput;
 import me.nabdev.oxconfig.ConfigurableParameter;
 
 public class ClimberIOSpark implements ClimberIO {
   private final SparkFlex motor = new SparkFlex(ClimberConstants.canId, MotorType.kBrushless); // Fill in later
 
   private final RelativeEncoder climbEncoder = motor.getEncoder();
-  private final SparkLimitSwitch bottomLimit = motor.getReverseLimitSwitch();
+  private final DigitalInput limitSwitch = new DigitalInput(3);
   private final ConfigurableParameter<Double> runSpeedUp = new ConfigurableParameter<>(0.0,
       "Climber Motor Running Speed");
   // No current angle because it will be 0'd
   private final ConfigurableParameter<Double> runSpeedDown = new ConfigurableParameter<>(-0.0,
       "Climber Motor Running Speed");
 
+  @Override
   public void updateInputs(ClimberIOInputs inputs) {
-    if (bottomLimit.isPressed()) {
-      inputs.bottomLimitPressed = true;
+    inputs.bottomLimitPressed = limitSwitch.get();
+    if (inputs.bottomLimitPressed) {
       climbEncoder.setPosition(0); // Reset encoder to 0 when bottom limit is pressed
     }
     inputs.currentPosition = climbEncoder.getPosition();
@@ -31,10 +33,12 @@ public class ClimberIOSpark implements ClimberIO {
   }
 
   // Skipping the HoodIOSpark connecting thing
+  @Override
   public void setSpeed(double speed) {
     motor.set(MathUtil.clamp(speed, -1, 1));
   }
 
+  @Override
   public void setClimberPos(double wantedHeight) {
     double currentPosition = climbEncoder.getPosition(); // Get current position
     if (wantedHeight > currentPosition) {

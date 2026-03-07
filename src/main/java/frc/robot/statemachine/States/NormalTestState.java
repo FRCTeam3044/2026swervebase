@@ -88,7 +88,7 @@ public class NormalTestState extends State implements ConfigurableClass {
                                 DriveCommands.DEADBAND);
 
                 testControllerOne.a().whileTrue(hood.setPosition(hoodPosition::get));
-                testControllerOne.b().whileTrue(shooter.runSpeed(() -> RPM.of(shooterSpeed.get())));
+                testControllerOne.b().whileTrue(shooter.runSpeed(() -> shooterSpeed.get()));
                 testControllerOne.x().whileTrue(turret.setAngle(() -> Degrees.of(turretPosition.get())));
                 testControllerOne.y().whileTrue(spindexer.setSpeed());
 

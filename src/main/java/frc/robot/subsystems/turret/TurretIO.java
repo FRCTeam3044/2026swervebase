@@ -20,6 +20,7 @@ public interface TurretIO {
     public double turretGearTeeth = -1;
     public boolean crtMissing = false;
     // public CRTStatus crtStatus = null;
+    public double rawPosition = 0.0;
     public Angle angle = Degrees.of(0.0);
     public Angle primaryAbsEncoder = Degrees.of(0.0);
     public Angle secondaryAbsEncoder = Degrees.of(0.0);
@@ -43,6 +44,6 @@ public interface TurretIO {
   public default void updateInputs(TurretIOInputs inputs) {
   }
 
-  public default void resetAngle() {
+  public default void resetAngle(boolean reset) {
   }
 }

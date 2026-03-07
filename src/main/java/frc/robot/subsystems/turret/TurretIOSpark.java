@@ -26,8 +26,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import me.nabdev.oxconfig.sampleClasses.ConfigurableProfiledPIDController;
-import yams.units.EasyCRT;
-import yams.units.EasyCRTConfig;
 
 public class TurretIOSpark implements TurretIO {
   private final SparkFlex motor = new SparkFlex(canId, MotorType.kBrushless);
@@ -37,7 +35,7 @@ public class TurretIOSpark implements TurretIO {
   private final DutyCycleEncoder secondaryAbsEncoder = new DutyCycleEncoder(secondaryAbsEncoderDioChannel);
   private final ConfigurableProfiledPIDController pidController = new ConfigurableProfiledPIDController(0.0, 0.1, 0.0,
       new Constraints(maxVelocity, maxAcceleration), "Turret PID");
-  private final EasyCRT crt;
+  // private final EasyCRT crt;
 
   private Angle currentAngle;
   private Angle rawTargetAngle;
@@ -53,17 +51,25 @@ public class TurretIOSpark implements TurretIO {
   // private double crtError = 0;
   private Angle lastCrtAngle = Degrees.of(0);
 
+  // Calibration reference: a known (encoder, angle) pair from CRT
+  private double calibrationEncoderReading = Double.NaN;
+  private double calibrationAngleDeg = Double.NaN;
+
+  // Precomputed slope: degrees per relative encoder unit
+  private final double degreesPerEncoderUnit = (maxAngle.in(Degrees) - minAngle.in(Degrees))
+      / (maxPosition - minPosition);
+
   public TurretIOSpark() {
-    EasyCRTConfig crtConfig = new EasyCRTConfig(
-        () -> Rotations.of(driveAbsEncoder.get()),
-        () -> Rotations.of(secondaryAbsEncoder.get()))
-        .withAbsoluteEncoder1Gearing(turretTeeth, primaryEncoderTeeth)
-        .withAbsoluteEncoder2Gearing(turretTeeth, secondaryEncoderTeeth)
-        .withAbsoluteEncoderOffsets(primaryAbsEncoderZero, secondaryAbsEncoderZero)
-        .withAbsoluteEncoderInversions(true, true)
-        .withMatchTolerance(Degrees.of(7))
-        .withMechanismRange(minAngle, maxAngle);
-    crt = new EasyCRT(crtConfig);
+    // EasyCRTConfig crtConfig = new EasyCRTConfig(
+    // () -> Rotations.of(driveAbsEncoder.get()),
+    // () -> Rotations.of(secondaryAbsEncoder.get()))
+    // .withAbsoluteEncoder1Gearing(turretTeeth, primaryEncoderTeeth)
+    // .withAbsoluteEncoder2Gearing(turretTeeth, secondaryEncoderTeeth)
+    // .withAbsoluteEncoderOffsets(primaryAbsEncoderZero, secondaryAbsEncoderZero)
+    // .withAbsoluteEncoderInversions(true, true)
+    // .withMatchTolerance(Degrees.of(7))
+    // .withMechanismRange(minAngle, maxAngle);
+    // crt = new EasyCRT(crtConfig);
 
     tryUntilOk(
         motor,
@@ -75,7 +81,7 @@ public class TurretIOSpark implements TurretIO {
   }
 
   public void updateInputs(TurretIOInputs inputs) {
-    ifOk(motor, driveRelEncoder::getPosition, (value) -> inputs.angle = Degrees.of(value));
+    ifOk(motor, driveRelEncoder::getPosition, (value) -> inputs.rawPosition = value);
     inputs.primaryAbsEncoder = getPrimaryAbsEncoderAngle();
     inputs.secondaryAbsEncoder = getSecondaryAbsEncoderAngle();
     inputs.rawPrimaryEncoderAvgDeg = filterOne.calculate(Rotations.of(driveAbsEncoder.get()).in(Degrees));
@@ -90,7 +96,14 @@ public class TurretIOSpark implements TurretIO {
     // inputs.crtIterations = crtIterations;
     // inputs.crtError = crtError;
     inputs.crtAngle = lastCrtAngle;
+    if (!Double.isNaN(calibrationEncoderReading)) {
+      inputs.angle = Degrees.of(getAngleFromRel(driveRelEncoder.getPosition()));
+    }
     currentAngle = inputs.angle;
+  }
+
+  private double getAngleFromRel(double encoder) {
+    return calibrationAngleDeg + (encoder - calibrationEncoderReading) * degreesPerEncoderUnit;
   }
 
   @Override
@@ -132,14 +145,17 @@ public class TurretIOSpark implements TurretIO {
   }
 
   @Override
-  public void resetAngle() {
+  public void resetAngle(boolean reset) {
     Optional<Angle> crtAngle = getAngle();
 
     crtMissing = crtAngle.isEmpty();
     if (crtAngle.isPresent()) {
       Angle angle = crtAngle.get();
       lastCrtAngle = angle;
-      driveRelEncoder.setPosition(angle.in(Degrees));
+      if (reset) {
+        calibrationEncoderReading = driveRelEncoder.getPosition();
+        calibrationAngleDeg = angle.in(Degrees);
+      }
     }
   }
 

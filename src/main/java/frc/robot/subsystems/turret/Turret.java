@@ -72,6 +72,7 @@ public class Turret extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Turret", inputs);
+    Logger.recordOutput("Turret/InHoodDangerZone", inHoodDangerZone());
   }
 
   public Command setAngle(Supplier<Angle> angle) {
@@ -97,8 +98,8 @@ public class Turret extends SubsystemBase {
         .withName("Run Turret At Percent");
   }
 
-  public void resetAngle() {
-    io.resetAngle();
+  public void resetAngle(boolean reset) {
+    io.resetAngle(reset);
   }
 
   public Angle getAngle() {
@@ -107,7 +108,7 @@ public class Turret extends SubsystemBase {
 
   public boolean inHoodDangerZone() {
     double angle = inputs.angle.in(Degrees);
-    return !((angle > hoodDangerOneMin.get() && angle < hoodDangerOneMax.get())
+    return ((angle > hoodDangerOneMin.get() && angle < hoodDangerOneMax.get())
         || (angle > hoodDangerTwoMin.get() && angle < hoodDangerTwoMax.get()));
   }
 }

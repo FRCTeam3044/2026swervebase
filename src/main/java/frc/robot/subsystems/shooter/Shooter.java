@@ -52,8 +52,8 @@ public class Shooter extends SubsystemBase {
     Logger.processInputs("Shooter", inputs);
   }
 
-  public Command runSpeed(Supplier<AngularVelocity> speed) {
-    return Commands.runEnd(() -> io.setSpeed(speed.get()), () -> io.setPercent(0.0), this)
+  public Command runSpeed(DoubleSupplier speed) {
+    return Commands.runEnd(() -> io.setSpeed(speed.getAsDouble()), () -> io.setPercent(0.0), this)
         .withName("Run Shooter At Speed");
   }
 
@@ -63,11 +63,11 @@ public class Shooter extends SubsystemBase {
         .withName("Run Shooter At Percent");
   }
 
-  public AngularVelocity getSpeed() {
+  public double getSpeed() {
     return inputs.leaderVelocity;
   }
 
-  public boolean isAtSpeed(AngularVelocity targetSpeed) {
-    return Math.abs(inputs.leaderVelocity.in(RPM) - targetSpeed.in(RPM)) < tolerance.get();
+  public boolean isAtSpeed(double targetSpeed) {
+    return Math.abs(inputs.leaderVelocity - targetSpeed) < tolerance.get();
   }
 }

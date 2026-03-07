@@ -34,20 +34,28 @@ public class Kicker extends SubsystemBase {
       return Commands.deferredProxy(() -> Commands.repeatingSequence(RobotContainer.getInstance().simShootFuel(),
           Commands.waitSeconds(0.2)).withName("Sim shoot fuel")).withName("Sim shoot fuel proxy");
     }
-    return Commands.run(
+    return Commands.runEnd(
         () -> {
           io.setTopPercent(topShootSpeed.get());
           io.setBottomPercent(bottomSpeed.get());
+        },
+        () -> {
+          io.setTopPercent(0);
+          io.setBottomPercent(0);
         },
         this)
         .withName("Run Kicker");
   }
 
   public Command blockKicker() {
-    return Commands.run(
+    return Commands.runEnd(
         () -> {
           io.setTopPercent(topBlockSpeed.get());
           io.setBottomPercent(bottomSpeed.get());
+        },
+        () -> {
+          io.setTopPercent(0);
+          io.setBottomPercent(0);
         },
         this)
         .withName("Block Kicker");

@@ -5,7 +5,7 @@ import static edu.wpi.first.units.Units.RPM;
 import edu.wpi.first.units.measure.AngularVelocity;
 
 public class ShooterIOSim implements ShooterIO {
-    private AngularVelocity velocity = RPM.of(0.0);
+    private double velocity = 0.0;
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
@@ -14,7 +14,7 @@ public class ShooterIOSim implements ShooterIO {
     }
 
     @Override
-    public void setSpeed(AngularVelocity speed) {
+    public void setSpeed(double speed) {
         this.velocity = speed;
     }
 }

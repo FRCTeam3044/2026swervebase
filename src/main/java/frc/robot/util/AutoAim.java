@@ -44,8 +44,7 @@ public class AutoAim {
         turret.setAngle(() -> parameters.turretAngle().getMeasure()),
         hood.setPosition(() -> parameters.hoodPosition()),
         shooter.runSpeed(
-            () -> RPM.of(
-                parameters.flywheelSpeed() * (shooterEngaged.getAsBoolean() ? 1 : shooterDisengagedProportion.get()))))
+            () -> parameters.flywheelSpeed() * (shooterEngaged.getAsBoolean() ? 1 : shooterDisengagedProportion.get())))
         .withName("Auto Aim at Hub");
   }
 
@@ -54,8 +53,7 @@ public class AutoAim {
         turret.setAngle(() -> parameters.turretAngle().getMeasure()),
         hood.setPosition(() -> parameters.hoodPosition()),
         shooter.runSpeed(
-            () -> RPM.of(
-                parameters.flywheelSpeed() * (shooterEngaged.getAsBoolean() ? 1 : shooterDisengagedProportion.get()))))
+            () -> parameters.flywheelSpeed() * (shooterEngaged.getAsBoolean() ? 1 : shooterDisengagedProportion.get())))
         .withName("Auto Aim at AZ");
   }
 }

@@ -60,7 +60,7 @@ public class CalibrationState extends State {
                 };
                 controller.leftTrigger()
                                 .whileTrue(Commands.parallel(
-                                                shooter.runSpeed(() -> RPM.of(calibrationShotFlywheelSpeed.get())),
+                                                shooter.runSpeed(() -> calibrationShotFlywheelSpeed.get()),
                                                 turret.setAngle(() -> turretAngleSupplier.get()),
                                                 hood.setPosition(() -> calibrationShotHoodPosition.get()))
                                                 .withName("Calibration aiming"));
@@ -78,7 +78,7 @@ public class CalibrationState extends State {
                         Pose2d turretPosition = turretPoseSupplier.get();
                         double turretToTargetDistance = target.getDistance(turretPosition.getTranslation());
                         ShotCalculator.dm.addShot(turretToTargetDistance, hood.getPosition(),
-                                        shooter.getSpeed().in(RPM));
+                                        shooter.getSpeed());
                 }).withName("Record Shot"));
         }
 }

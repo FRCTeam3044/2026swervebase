@@ -580,7 +580,7 @@
         "CalibrationState/Test Parameter 87": "0",
         "CalibrationState/Test Parameter 88": "0",
         "CalibrationState/Test Parameter 89": "0",
-        "TestMode/Test Hood Position": "8.0",
+        "TestMode/Test Hood Position": "15.0",
         "Hood Danger Two Max": {
             "comment": "Auto-Generated",
             "value": "0.0"
@@ -650,7 +650,7 @@
             "comment": "Auto-Generated",
             "value": "0.0"
         },
-        "TestMode/Test Shooter Speed": "600.0",
+        "TestMode/Test Shooter Speed": "5000.0",
         "Spindexer speed": {
             "comment": "Auto-Generated",
             "value": "0.6"
@@ -726,7 +726,7 @@
             "comment": "Auto-Generated",
             "value": "0.2"
         },
-        "Shooter Speed Controller/P": "0.001",
+        "Shooter Speed Controller/P": "0.0018",
         "Turret PID/D": "0.0",
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",

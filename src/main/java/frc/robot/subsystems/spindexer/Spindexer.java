@@ -26,10 +26,12 @@ public class Spindexer extends SubsystemBase {
   }
 
   public Command setSpeed() {
-    return Commands.run(() -> io.setSpeed(spindexerSpeed.get()), this).withName("Run Spindexer");
+    return Commands.runEnd(() -> io.setSpeed(spindexerSpeed.get()), () -> io.setSpeed(0), this)
+        .withName("Run Spindexer");
   }
 
   public Command setSpeed(DoubleSupplier speed) {
-    return Commands.run(() -> io.setSpeed(speed.getAsDouble()), this).withName("Run Spindexer at speed");
+    return Commands.runEnd(() -> io.setSpeed(speed.getAsDouble()),
+        () -> io.setSpeed(0), this).withName("Run Spindexer at speed");
   }
 }
