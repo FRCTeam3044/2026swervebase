@@ -255,6 +255,7 @@ public class RobotContainer {
                                 break;
                 }
 
+                hood.setDefaultCommand(hood.setPosition(() -> HoodConstants.minPosition));
                 AllianceUtil.setRobot(drive::getPose);
 
                 // Set up auto routines

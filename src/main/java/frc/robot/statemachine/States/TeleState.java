@@ -6,8 +6,10 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.spindexer.Spindexer;
+import frc.robot.subsystems.turret.Turret;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 import me.nabdev.oxidation.util.SmartXboxController;
@@ -24,6 +26,8 @@ public class TeleState extends State {
       Climber climber,
       Intake intake,
       Spindexer spindexer,
+      Hood hood,
+      Turret turret,
       LEDs leds) {
     super(stateMachine);
     SmartXboxController controller = new SmartXboxController(driverController, loop);
@@ -52,6 +56,8 @@ public class TeleState extends State {
     startWhenActive(intake.runRollers().onlyIf(operatorController.a().negate()));
 
     startWhenActive(spindexer.setSpeed());
+
+    t(() -> turret.inHoodDangerZone() && !hood.calibrated()).whileTrue(turret.exitDangerZone());
 
     // controller
     // .b()

@@ -60,8 +60,8 @@ public class StateMachine extends StateMachineBase {
                 DisabledState disabled = new DisabledState(this, leds);
                 currentState = disabled;
                 State teleop = new TeleState(this, driverController, operatorController, drive, climber, intake,
-                                spindexer, leds);
-                State test = new TestState(this);
+                                spindexer, hood, turret, leds);
+                State test = new TestState(this, hood, turret);
 
                 this.registerToRootState(test, teleop, disabled);
                 // Test States

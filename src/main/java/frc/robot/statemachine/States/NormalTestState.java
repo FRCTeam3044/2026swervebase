@@ -132,7 +132,6 @@ public class NormalTestState extends State implements ConfigurableClass {
                                                 () -> -controllerOne.getRightX(),
                                                 false));
                 startWhenActive(leds.defaultPattern());
-                startWhenActive(hood.calibrate());
                 // startWhenActive(turret.exitDangerZone().onlyIf(hood::calibrationNeeded)
                 // .until(() -> !hood.calibrationNeeded()));
                 OxConfig.registerConfigurableClass(this);

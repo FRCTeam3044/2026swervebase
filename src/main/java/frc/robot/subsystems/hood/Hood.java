@@ -3,7 +3,6 @@ package frc.robot.subsystems.hood;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.RobotContainer;
 import me.nabdev.oxconfig.ConfigurableParameter;
 
@@ -30,16 +29,16 @@ public class Hood extends SubsystemBase {
   }
 
   public Command setPosition(DoubleSupplier position) {
-    return Commands.runEnd(
-        () -> io.setPosition(position.getAsDouble()), () -> io.setPercent(0), this).withName("Set Hood Position");
+    return calibrateIfNeeded(Commands.runEnd(
+        () -> io.setPosition(position.getAsDouble()), () -> io.setPercent(0), this)).withName("Set Hood Position");
   }
 
   public Command runPercent(DoubleSupplier percent) {
-    return Commands.runEnd(() -> io.setPercent(percent.getAsDouble()), () -> io.setPercent(0), this)
+    return calibrateIfNeeded(Commands.runEnd(() -> io.setPercent(percent.getAsDouble()), () -> io.setPercent(0), this))
         .withName("Run Hood At Percent");
   }
 
-  public Command calibrate() {
+  private Command calibrate() {
     return Commands.runOnce(() -> io.resetPosition(200.0))
         .andThen(Commands.waitUntil(() -> !RobotContainer.getInstance().turret.inHoodDangerZone()))
         .andThen(Commands.run(() -> io.setPercent(calibrationSpeed.get()), this)
@@ -48,11 +47,20 @@ public class Hood extends SubsystemBase {
           io.setPercent(0);
           io.resetPosition(0.0);
         }, this))
-        .withName("Calibrate Hood")
-        .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+        .withName("Calibrate Hood");
   }
 
-  public boolean calibrationNeeded() {
+  private Command calibrateIfNeeded(Command command) {
+    return Commands.deferredProxy(() -> {
+      if (!calibrated) {
+        return calibrate().andThen(command);
+      } else {
+        return command;
+      }
+    });
+  }
+
+  public boolean calibrated() {
     return calibrated;
   }
 

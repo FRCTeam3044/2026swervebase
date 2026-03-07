@@ -57,7 +57,7 @@ public class ShooterIOSpark implements ShooterIO {
     double goal = controller.getGoal().position;
     this.calculatedGoal = goal;
     this.ffOutput = feedforward.calculate(goal);
-    leaderMotor.set(this.pidOutput + this.ffOutput);
+    leaderMotor.setVoltage(this.pidOutput + this.ffOutput);
   }
 
   @Override
