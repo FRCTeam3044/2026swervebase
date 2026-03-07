@@ -123,17 +123,24 @@ public class AutoAimDataManager {
         SmartDashboard.putString("MzAutoAim", mzConfig.toString());
         String azSet = SmartDashboard.getString("AzAutoAimSet", "");
         if (!azSet.isEmpty()) {
+            System.out.println("Updating auto aim: " + azSet);
             JSONTokener tokener = new JSONTokener(azSet);
-            azConfig = new JSONObject(tokener);
-            updateFromJson(false);
-            SmartDashboard.putString("AzAutoAimSet", "");
+            JSONObject test = new JSONObject(tokener);
+            if (test.has("shots")) {
+                azConfig = test;
+                updateFromJson(false);
+                SmartDashboard.putString("AzAutoAimSet", "");
+            }
         }
         String mzSet = SmartDashboard.getString("MzAutoAimSet", "");
         if (!mzSet.isEmpty()) {
             JSONTokener tokener = new JSONTokener(mzSet);
-            mzConfig = new JSONObject(tokener);
-            updateFromJson(true);
-            SmartDashboard.putString("MzAutoAimSet", "");
+            JSONObject test = new JSONObject(tokener);
+            if (test.has("shots")) {
+                mzConfig = test;
+                updateFromJson(true);
+                SmartDashboard.putString("MzAutoAimSet", "");
+            }
         }
     }
 

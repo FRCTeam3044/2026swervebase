@@ -13,6 +13,7 @@ public interface HoodIO {
     public double setpoint = 0.0;
     public double velocity = 0.0;
     public Current current = Amps.of(0.0);
+    public Current currentAvg = Amps.of(0.0);
     public boolean stalled = false;
   }
 
@@ -22,7 +23,7 @@ public interface HoodIO {
   public default void setPercent(double percent) {
   }
 
-  public default void resetPosition() {
+  public default void resetPosition(double position) {
   }
 
   public default void updateInputs(HoodIOInputs inputs) {

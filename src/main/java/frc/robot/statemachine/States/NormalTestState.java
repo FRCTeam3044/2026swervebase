@@ -80,11 +80,11 @@ public class NormalTestState extends State implements ConfigurableClass {
 
                 //
 
-                DoubleSupplier rightY = () -> -MathUtil.applyDeadband(controllerOne.getRightY(),
+                DoubleSupplier rightY = () -> -MathUtil.applyDeadband(controllerTwo.getRightY(),
                                 DriveCommands.DEADBAND);
-                DoubleSupplier leftY = () -> -MathUtil.applyDeadband(controllerOne.getLeftY(), DriveCommands.DEADBAND);
-                DoubleSupplier leftX = () -> -MathUtil.applyDeadband(controllerOne.getLeftX(), DriveCommands.DEADBAND);
-                DoubleSupplier rightX = () -> -MathUtil.applyDeadband(controllerOne.getRightX(),
+                DoubleSupplier leftY = () -> -MathUtil.applyDeadband(controllerTwo.getLeftY(), DriveCommands.DEADBAND);
+                DoubleSupplier leftX = () -> -MathUtil.applyDeadband(controllerTwo.getLeftX(), DriveCommands.DEADBAND);
+                DoubleSupplier rightX = () -> -MathUtil.applyDeadband(controllerTwo.getRightX(),
                                 DriveCommands.DEADBAND);
 
                 testControllerOne.a().whileTrue(hood.setPosition(hoodPosition::get));
@@ -131,8 +131,10 @@ public class NormalTestState extends State implements ConfigurableClass {
                                                 () -> -controllerOne.getLeftX(),
                                                 () -> -controllerOne.getRightX(),
                                                 false));
-
                 startWhenActive(leds.defaultPattern());
+                startWhenActive(hood.calibrate());
+                // startWhenActive(turret.exitDangerZone().onlyIf(hood::calibrationNeeded)
+                // .until(() -> !hood.calibrationNeeded()));
                 OxConfig.registerConfigurableClass(this);
         }
 

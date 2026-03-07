@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.statemachine.States.CalibrationState;
 import frc.robot.statemachine.States.DisabledState;
 import frc.robot.statemachine.States.NormalTestState;
+import frc.robot.statemachine.States.SysIDState;
 import frc.robot.statemachine.States.Tele.ActiveHub;
 import frc.robot.statemachine.States.Tele.AlliedZone;
 import frc.robot.statemachine.States.Tele.InactiveHub;
@@ -109,17 +110,18 @@ public class StateMachine extends StateMachineBase {
                 inactiveHub.withTransition(activeHub, () -> HubShiftUtil.getShiftedShiftInfo().active(), 0,
                                 "Hub becomes active");
 
-                teleop.withModeTransitions(disabled, teleop, test);
-                test.withModeTransitions(disabled, teleop, test);
-                disabled.withModeTransitions(disabled, teleop, test);
+                // teleop.withModeTransitions(disabled, teleop, test);
+                // test.withModeTransitions(disabled, teleop, test);
+                // disabled.withModeTransitions(disabled, teleop, test);
 
                 // For SYSID (comment out for normal autos)
                 // MAKE SURE YOU ADD AUTO TO THE REGISTER TO ROOT STATE
 
-                // SysIDState auto = new SysIDState(this, chooser);
-                // teleop.withModeTransitions(disabled, teleop, auto, test);
-                // test.withModeTransitions(disabled, teleop, auto, test);
-                // disabled.withModeTransitions(disabled, teleop, auto, test);
-                // auto.withModeTransitions(disabled, teleop, auto, test);
+                SysIDState auto = new SysIDState(this, chooser);
+                this.registerToRootState(auto);
+                teleop.withModeTransitions(disabled, teleop, auto, test);
+                test.withModeTransitions(disabled, teleop, auto, test);
+                disabled.withModeTransitions(disabled, teleop, auto, test);
+                auto.withModeTransitions(disabled, teleop, auto, test);
         }
 }

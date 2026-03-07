@@ -1,7 +1,6 @@
 package frc.robot.subsystems.hood;
 
 import static edu.wpi.first.units.Units.Amps;
-import static frc.robot.subsystems.hood.HoodConstants.stallCurrentLimit;
 import static frc.robot.util.SparkUtil.ifOk;
 import static frc.robot.util.SparkUtil.tryUntilOk;
 
@@ -10,6 +9,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import me.nabdev.oxconfig.ConfigurableParameter;
 import me.nabdev.oxconfig.sampleClasses.ConfigurableProfiledPIDController;
@@ -19,13 +20,14 @@ public class HoodIOSpark implements HoodIO {
 
   private final ConfigurableProfiledPIDController hoodController = new ConfigurableProfiledPIDController(
       0.0, 0.1, 0.0, new Constraints(0, 0), "Hood Controller");
-  private final ConfigurableParameter<Double> stallCurrentTolerance = new ConfigurableParameter<Double>(0.5,
-      "Hood Stall Current Tolerance");
+  private final ConfigurableParameter<Double> stallCurrent = new ConfigurableParameter<Double>(0.25,
+      "Hood Stall Current");
   private final ConfigurableParameter<Double> stallVelocityTolerance = new ConfigurableParameter<Double>(0.5,
       "Hood Stall Velocity Tolerance");
 
   private final RelativeEncoder hoodEncoder = motor.getEncoder();
   private double setpoint;
+  LinearFilter currentFilter = LinearFilter.movingAverage(4);
 
   public HoodIOSpark() {
     tryUntilOk(
@@ -42,8 +44,10 @@ public class HoodIOSpark implements HoodIO {
     ifOk(motor, hoodEncoder::getVelocity, (value) -> inputs.velocity = value);
     ifOk(motor, motor::getOutputCurrent, (value) -> {
       inputs.current = Amps.of(value);
-      inputs.stalled = Math.abs(value - stallCurrentLimit) < stallCurrentTolerance.get()
+      inputs.currentAvg = Amps.of(currentFilter.calculate(value));
+      inputs.stalled = inputs.currentAvg.in(Amps) > stallCurrent.get()
           && Math.abs(hoodEncoder.getVelocity()) < stallVelocityTolerance.get();
+      // inputs.stalled = stallCurrent.get() < value;
     });
     inputs.setpoint = setpoint;
   }
@@ -60,7 +64,7 @@ public class HoodIOSpark implements HoodIO {
   }
 
   @Override
-  public void resetPosition() {
-    hoodEncoder.setPosition(0);
+  public void resetPosition(double position) {
+    hoodEncoder.setPosition(position);
   }
 }

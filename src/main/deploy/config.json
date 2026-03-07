@@ -38,6 +38,10 @@
         "CalibrationState/Test Parameter 48": "0",
         "CalibrationState/Test Parameter 49": "0",
         "CalibrationState/Test Parameter 54": "0",
+        "Hood Calibration Speed": {
+            "comment": "Auto-Generated",
+            "value": "-0.05"
+        },
         "CalibrationState/Test Parameter 55": "0",
         "CalibrationState/Test Parameter 56": "0",
         "CalibrationState/Test Parameter 57": "0",
@@ -48,6 +52,10 @@
         "CalibrationState/CalibrationShotFlywheelSpeed": "3000.0",
         "CalibrationState/Test Parameter 106": "0",
         "CalibrationState/Test Parameter 107": "0",
+        "Hood Danger Two Min": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "CalibrationState/Test Parameter 104": "0",
         "CalibrationState/Test Parameter 105": "0",
         "CalibrationState/Test Parameter 108": "0",
@@ -60,6 +68,10 @@
         "CalibrationState/Test Parameter 88": "0",
         "CalibrationState/Test Parameter 89": "0",
         "TestMode/Test Hood Position": "0.0",
+        "Hood Danger Two Max": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "CalibrationState/Test Parameter 83": "0",
         "CalibrationState/Test Parameter 84": "0",
         "CalibrationState/Test Parameter 85": "0",
@@ -96,6 +108,10 @@
         "CalibrationState/Test Parameter 75": "0",
         "CalibrationState/Test Parameter 70": "0",
         "CalibrationState/Test Parameter 71": "0",
+        "Hood Stall Velocity Tolerance": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
         "Intake Position Controller/I": "0.0",
         "CalibrationState/Test Parameter 18": "0",
         "CalibrationState/Test Parameter 19": "0",
@@ -149,12 +165,20 @@
         },
         "CalibrationState/Test Parameter 95": "0",
         "CalibrationState/Test Parameter 96": "0",
+        "Hood Stall Current": {
+            "comment": "Auto-Generated",
+            "value": "0.25"
+        },
         "CalibrationState/Test Parameter 97": "0",
         "CalibrationState/Test Parameter 90": "0",
         "CalibrationState/Test Parameter 91": "0",
         "CalibrationState/Test Parameter 92": "0",
         "CalibrationState/Test Parameter 93": "0",
         "Intake Position Controller/P": "0.0",
+        "Hood Danger One Min": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "Intake retract speed": {
             "comment": "Auto-Generated",
             "value": "0.05"
@@ -185,6 +209,10 @@
         "CalibrationState/Test Parameter 41": "0",
         "CalibrationState/Test Parameter 42": "0",
         "Turret PID/P": "0.0",
+        "Hood Stall Current Tolerance": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
         "Shooter Speed Controller/P": "0.0",
         "Turret PID/D": "0.0",
         "Shooter Calibration Mode": {
@@ -200,6 +228,10 @@
         },
         "CalibrationState/Test Parameter 25": "0",
         "CalibrationState/Test Parameter 26": "0",
+        "Hood Danger One Max": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "CalibrationState/Test Parameter 27": "0",
         "CalibrationState/Test Parameter 28": "0",
         "CalibrationState/Test Parameter 32": "0",
@@ -223,7 +255,7 @@
         "CalibrationState/Test Parameter 31": "0",
         "Hood Controller/D": "0.0"
     },
-    "mode": "presentation",
+    "mode": "competition",
     "simulation": {
         "CalibrationState/Test Parameter 58": "0",
         "CalibrationState/Test Parameter 59": "0",
@@ -263,6 +295,10 @@
         "CalibrationState/Test Parameter 48": "0",
         "CalibrationState/Test Parameter 49": "0",
         "CalibrationState/Test Parameter 54": "0",
+        "Hood Calibration Speed": {
+            "comment": "Auto-Generated",
+            "value": "-0.05"
+        },
         "CalibrationState/Test Parameter 55": "0",
         "CalibrationState/Test Parameter 56": "0",
         "CalibrationState/Test Parameter 57": "0",
@@ -273,6 +309,10 @@
         "CalibrationState/CalibrationShotFlywheelSpeed": "3000.0",
         "CalibrationState/Test Parameter 106": "0",
         "CalibrationState/Test Parameter 107": "0",
+        "Hood Danger Two Min": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "CalibrationState/Test Parameter 104": "0",
         "CalibrationState/Test Parameter 105": "0",
         "CalibrationState/Test Parameter 108": "0",
@@ -285,6 +325,10 @@
         "CalibrationState/Test Parameter 88": "0",
         "CalibrationState/Test Parameter 89": "0",
         "TestMode/Test Hood Position": "0.0",
+        "Hood Danger Two Max": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "CalibrationState/Test Parameter 83": "0",
         "CalibrationState/Test Parameter 84": "0",
         "CalibrationState/Test Parameter 85": "0",
@@ -321,6 +365,10 @@
         "CalibrationState/Test Parameter 75": "0",
         "CalibrationState/Test Parameter 70": "0",
         "CalibrationState/Test Parameter 71": "0",
+        "Hood Stall Velocity Tolerance": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
         "Intake Position Controller/I": "0.0",
         "CalibrationState/Test Parameter 18": "0",
         "CalibrationState/Test Parameter 19": "0",
@@ -374,12 +422,20 @@
         },
         "CalibrationState/Test Parameter 95": "0",
         "CalibrationState/Test Parameter 96": "0",
+        "Hood Stall Current": {
+            "comment": "Auto-Generated",
+            "value": "0.25"
+        },
         "CalibrationState/Test Parameter 97": "0",
         "CalibrationState/Test Parameter 90": "0",
         "CalibrationState/Test Parameter 91": "0",
         "CalibrationState/Test Parameter 92": "0",
         "CalibrationState/Test Parameter 93": "0",
         "Intake Position Controller/P": "0.0",
+        "Hood Danger One Min": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "Intake retract speed": {
             "comment": "Auto-Generated",
             "value": "0.05"
@@ -410,6 +466,10 @@
         "CalibrationState/Test Parameter 41": "0",
         "CalibrationState/Test Parameter 42": "0",
         "Turret PID/P": "0.0",
+        "Hood Stall Current Tolerance": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
         "Shooter Speed Controller/P": "0.0",
         "Turret PID/D": "0.0",
         "Shooter Calibration Mode": {
@@ -425,6 +485,10 @@
         },
         "CalibrationState/Test Parameter 25": "0",
         "CalibrationState/Test Parameter 26": "0",
+        "Hood Danger One Max": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "CalibrationState/Test Parameter 27": "0",
         "CalibrationState/Test Parameter 28": "0",
         "CalibrationState/Test Parameter 32": "0",
@@ -487,6 +551,10 @@
         "CalibrationState/Test Parameter 48": "0",
         "CalibrationState/Test Parameter 49": "0",
         "CalibrationState/Test Parameter 54": "0",
+        "Hood Calibration Speed": {
+            "comment": "Auto-Generated",
+            "value": "-0.8"
+        },
         "CalibrationState/Test Parameter 55": "0",
         "CalibrationState/Test Parameter 56": "0",
         "CalibrationState/Test Parameter 57": "0",
@@ -497,6 +565,10 @@
         "CalibrationState/CalibrationShotFlywheelSpeed": "3000.0",
         "CalibrationState/Test Parameter 106": "0",
         "CalibrationState/Test Parameter 107": "0",
+        "Hood Danger Two Min": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "CalibrationState/Test Parameter 104": "0",
         "CalibrationState/Test Parameter 105": "0",
         "CalibrationState/Test Parameter 108": "0",
@@ -508,7 +580,11 @@
         "CalibrationState/Test Parameter 87": "0",
         "CalibrationState/Test Parameter 88": "0",
         "CalibrationState/Test Parameter 89": "0",
-        "TestMode/Test Hood Position": "0.0",
+        "TestMode/Test Hood Position": "8.0",
+        "Hood Danger Two Max": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "CalibrationState/Test Parameter 83": "0",
         "CalibrationState/Test Parameter 84": "0",
         "CalibrationState/Test Parameter 85": "0",
@@ -545,6 +621,10 @@
         "CalibrationState/Test Parameter 75": "0",
         "CalibrationState/Test Parameter 70": "0",
         "CalibrationState/Test Parameter 71": "0",
+        "Hood Stall Velocity Tolerance": {
+            "comment": "Auto-Generated",
+            "value": "0.05"
+        },
         "Intake Position Controller/I": "0.0",
         "CalibrationState/Test Parameter 18": "0",
         "CalibrationState/Test Parameter 19": "0",
@@ -570,7 +650,7 @@
             "comment": "Auto-Generated",
             "value": "0.0"
         },
-        "TestMode/Test Shooter Speed": "0.0",
+        "TestMode/Test Shooter Speed": "600.0",
         "Spindexer speed": {
             "comment": "Auto-Generated",
             "value": "0.6"
@@ -598,12 +678,20 @@
         },
         "CalibrationState/Test Parameter 95": "0",
         "CalibrationState/Test Parameter 96": "0",
+        "Hood Stall Current": {
+            "comment": "Auto-Generated",
+            "value": "6"
+        },
         "CalibrationState/Test Parameter 97": "0",
         "CalibrationState/Test Parameter 90": "0",
         "CalibrationState/Test Parameter 91": "0",
         "CalibrationState/Test Parameter 92": "0",
         "CalibrationState/Test Parameter 93": "0",
         "Intake Position Controller/P": "0.0",
+        "Hood Danger One Min": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "Intake retract speed": {
             "comment": "Auto-Generated",
             "value": "0.05"
@@ -612,7 +700,7 @@
             "comment": "Auto-Generated",
             "value": "0.15"
         },
-        "Hood Controller/P": "0.0",
+        "Hood Controller/P": "0.2",
         "CalibrationState/Test Parameter 36": "0",
         "CalibrationState/Test Parameter 37": "0",
         "CalibrationState/Test Parameter 38": "0",
@@ -634,7 +722,11 @@
         "CalibrationState/Test Parameter 41": "0",
         "CalibrationState/Test Parameter 42": "0",
         "Turret PID/P": "0.0",
-        "Shooter Speed Controller/P": "0.0",
+        "Hood Stall Current Tolerance": {
+            "comment": "Auto-Generated",
+            "value": "0.2"
+        },
+        "Shooter Speed Controller/P": "0.001",
         "Turret PID/D": "0.0",
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
@@ -649,6 +741,10 @@
         },
         "CalibrationState/Test Parameter 25": "0",
         "CalibrationState/Test Parameter 26": "0",
+        "Hood Danger One Max": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "CalibrationState/Test Parameter 27": "0",
         "CalibrationState/Test Parameter 28": "0",
         "CalibrationState/Test Parameter 32": "0",

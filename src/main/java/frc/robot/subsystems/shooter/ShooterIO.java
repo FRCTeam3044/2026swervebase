@@ -12,11 +12,16 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ShooterIO {
   @AutoLog
   public static class ShooterIOInputs {
-    public AngularVelocity targetSpeed = RPM.of(0);
+    public double targetSpeed = 0.0;
     public AngularVelocity leaderVelocity = RPM.of(0);
     public AngularVelocity followerVelocity = RPM.of(0);
+    public double calculatedGoal;
+    public double leaderOutput;
     public double leaderCurrent = 0.0;
     public double followerCurrent = 0.0;
+    public double ffOutput = 0.0;
+    public double pidOutput = 0.0;
+    public double pidError = 0.0;
     public AngularAcceleration targetAcceleration = RotationsPerSecondPerSecond.of(0);
   }
 

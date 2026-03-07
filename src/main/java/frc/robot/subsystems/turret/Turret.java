@@ -2,9 +2,11 @@ package frc.robot.subsystems.turret;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import me.nabdev.oxconfig.ConfigurableParameter;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Volts;
@@ -19,6 +21,15 @@ public class Turret extends SubsystemBase {
   private final TurretIO io;
   private final TurretIOInputsAutoLogged inputs = new TurretIOInputsAutoLogged();
   private final SysIdRoutine sysId;
+
+  private final ConfigurableParameter<Double> hoodDangerOneMin = new ConfigurableParameter<Double>(0.0,
+      "Hood Danger One Min");
+  private final ConfigurableParameter<Double> hoodDangerOneMax = new ConfigurableParameter<Double>(0.0,
+      "Hood Danger One Max");
+  private final ConfigurableParameter<Double> hoodDangerTwoMin = new ConfigurableParameter<Double>(0.0,
+      "Hood Danger Two Min");
+  private final ConfigurableParameter<Double> hoodDangerTwoMax = new ConfigurableParameter<Double>(0.0,
+      "Hood Danger Two Max");
 
   public Turret(TurretIO io) {
     this.io = io;
@@ -68,6 +79,19 @@ public class Turret extends SubsystemBase {
         .withName("Set Turret Angle");
   }
 
+  public Command exitDangerZone() {
+    double curAngle = inputs.angle.in(Degrees);
+    if (curAngle > hoodDangerOneMin.get() && curAngle < hoodDangerOneMax.get()) {
+      return setAngle(() -> Degrees.of(hoodDangerOneMax.get() + 5))
+          .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    } else if (curAngle > hoodDangerTwoMin.get() && curAngle < hoodDangerTwoMax.get()) {
+      return setAngle(() -> Degrees.of(hoodDangerTwoMin.get() - 5))
+          .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+    } else {
+      return Commands.none().withInterruptBehavior(InterruptionBehavior.kCancelSelf);
+    }
+  }
+
   public Command runPercent(DoubleSupplier percent) {
     return Commands.runEnd(() -> io.setPercent(percent.getAsDouble()), () -> io.setPercent(0), this)
         .withName("Run Turret At Percent");
@@ -79,5 +103,11 @@ public class Turret extends SubsystemBase {
 
   public Angle getAngle() {
     return inputs.angle;
+  }
+
+  public boolean inHoodDangerZone() {
+    double angle = inputs.angle.in(Degrees);
+    return !((angle > hoodDangerOneMin.get() && angle < hoodDangerOneMax.get())
+        || (angle > hoodDangerTwoMin.get() && angle < hoodDangerTwoMax.get()));
   }
 }
