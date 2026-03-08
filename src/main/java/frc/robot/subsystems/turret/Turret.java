@@ -31,6 +31,9 @@ public class Turret extends SubsystemBase {
   private final ConfigurableParameter<Double> hoodDangerTwoMax = new ConfigurableParameter<Double>(0.0,
       "Hood Danger Two Max");
 
+  private final ConfigurableParameter<Double> tolerance = new ConfigurableParameter<Double>(2.0,
+      "Turret Angle Tolerance (degrees)");
+
   public Turret(TurretIO io) {
     this.io = io;
 
@@ -104,6 +107,10 @@ public class Turret extends SubsystemBase {
 
   public Angle getAngle() {
     return inputs.angle;
+  }
+
+  public boolean isAtTarget() {
+    return Math.abs(inputs.angle.in(Degrees) - inputs.computedTargetAngle.in(Degrees)) < tolerance.get();
   }
 
   public boolean inHoodDangerZone() {

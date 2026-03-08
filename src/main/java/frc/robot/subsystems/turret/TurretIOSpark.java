@@ -21,11 +21,11 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.filter.LinearFilter;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import me.nabdev.oxconfig.sampleClasses.ConfigurableProfiledPIDController;
+import me.nabdev.oxconfig.ConfigurableParameter;
+import me.nabdev.oxconfig.sampleClasses.ConfigurablePIDController;
 
 public class TurretIOSpark implements TurretIO {
   private final SparkFlex motor = new SparkFlex(canId, MotorType.kBrushless);
@@ -33,8 +33,15 @@ public class TurretIOSpark implements TurretIO {
   private final RelativeEncoder driveRelEncoder = motor.getEncoder();
   private final DutyCycleEncoder driveAbsEncoder = new DutyCycleEncoder(primaryAbsEncoderDioChannel);
   private final DutyCycleEncoder secondaryAbsEncoder = new DutyCycleEncoder(secondaryAbsEncoderDioChannel);
-  private final ConfigurableProfiledPIDController pidController = new ConfigurableProfiledPIDController(0.0, 0.1, 0.0,
-      new Constraints(maxVelocity, maxAcceleration), "Turret PID");
+  private final ConfigurablePIDController pidController = new ConfigurablePIDController(0.0, 0.1, 0.0, "Turret PID");
+  private final ConfigurableParameter<Double> maxOutput = new ConfigurableParameter<>(10.0, "Turret Max Output");
+  private final ConfigurableParameter<Double> errorFFTolerance = new ConfigurableParameter<>(10.0,
+      "Turret Error FF Tolerance");
+  private final ConfigurableParameter<Double> velocityScale = new ConfigurableParameter<>(10.0,
+      "Turret Velocity Scale");
+  private final ConfigurableParameter<Double> maxVelocity = new ConfigurableParameter<>(10.0, "Turret Max Velocity");
+  private final ConfigurableParameter<Double> pidMax = new ConfigurableParameter<>(1.0, "Turret Max PID");
+
   // private final EasyCRT crt;
 
   private Angle currentAngle;
@@ -51,11 +58,11 @@ public class TurretIOSpark implements TurretIO {
   // private double crtError = 0;
   private Angle lastCrtAngle = Degrees.of(0);
 
-  // Calibration reference: a known (encoder, angle) pair from CRT
   private double calibrationEncoderReading = Double.NaN;
   private double calibrationAngleDeg = Double.NaN;
+  private double error = 0.0;
+  private double velocitySetpoint = 0.0;
 
-  // Precomputed slope: degrees per relative encoder unit
   private final double degreesPerEncoderUnit = (maxAngle.in(Degrees) - minAngle.in(Degrees))
       / (maxPosition - minPosition);
 
@@ -82,6 +89,8 @@ public class TurretIOSpark implements TurretIO {
 
   public void updateInputs(TurretIOInputs inputs) {
     ifOk(motor, driveRelEncoder::getPosition, (value) -> inputs.rawPosition = value);
+    ifOk(motor, motor::getOutputCurrent, (value) -> inputs.current = value);
+    ifOk(motor, motor::getAppliedOutput, (value) -> inputs.output = value);
     inputs.primaryAbsEncoder = getPrimaryAbsEncoderAngle();
     inputs.secondaryAbsEncoder = getSecondaryAbsEncoderAngle();
     inputs.rawPrimaryEncoderAvgDeg = filterOne.calculate(Rotations.of(driveAbsEncoder.get()).in(Degrees));
@@ -89,8 +98,9 @@ public class TurretIOSpark implements TurretIO {
     inputs.rawTargetAngle = rawTargetAngle;
     inputs.computedTargetAngle = computedTargetAngle;
     inputs.angularVelocity = DegreesPerSecond.of(driveRelEncoder.getVelocity());
-    inputs.targetAngularVelocity = DegreesPerSecond.of(pidController.getSetpoint().velocity);
-    inputs.profileTargetPosition = Degrees.of(pidController.getSetpoint().position);
+    inputs.calibrationAngleDeg = calibrationAngleDeg;
+    inputs.calibrationEncoderReading = calibrationEncoderReading;
+    inputs.degreesPerEncoderUnit = degreesPerEncoderUnit;
     // inputs.crtStatus = lastCRTStatus;
     inputs.crtMissing = crtMissing;
     // inputs.crtIterations = crtIterations;
@@ -100,6 +110,8 @@ public class TurretIOSpark implements TurretIO {
       inputs.angle = Degrees.of(getAngleFromRel(driveRelEncoder.getPosition()));
     }
     currentAngle = inputs.angle;
+    inputs.error = error;
+    inputs.velocitySetpoint = velocitySetpoint;
   }
 
   private double getAngleFromRel(double encoder) {
@@ -112,24 +124,52 @@ public class TurretIOSpark implements TurretIO {
 
     // > 360 degrees (should probably handle better to allow using the extra range)
     // this.computedTargetAngle =
-    Degrees.of(MathUtil.inputModulus(targetAngle.in(Degrees),
-        minAngle.in(Degrees),
-        maxAngle.in(Degrees)));
+    // Degrees.of(MathUtil.inputModulus(targetAngle.in(Degrees),
+    // minAngle.in(Degrees),
+    // maxAngle.in(Degrees)));
     // < 360 degrees
-    this.computedTargetAngle = Degrees.of(MathUtil.clamp(targetAngle.in(Degrees), minAngle.in(Degrees),
-        maxAngle.in(Degrees)));
-    motor.set(pidController.calculate(currentAngle.in(Degrees), computedTargetAngle.in(Degrees))
-        + feedforward.calculate(pidController.getSetpoint().velocity));
+    // this.computedTargetAngle = Degrees.of(MathUtil.clamp(targetAngle.in(Degrees),
+    // minAngle.in(Degrees),
+    // maxAngle.in(Degrees)));
+
+    if (targetAngle.gt(minAngle) && targetAngle.lt(maxAngle)) {
+      computedTargetAngle = targetAngle;
+    } else {
+      double distToMin = MathUtil.inputModulus(targetAngle.in(Degrees) - minAngle.in(Degrees), 0, 360);
+      double distToMax = MathUtil.inputModulus(targetAngle.in(Degrees) - maxAngle.in(Degrees), 0, 360);
+
+      computedTargetAngle = distToMin > distToMax ? maxAngle : minAngle;
+    }
+
+    double pidOutput = MathUtil.clamp(
+        pidController.calculate(currentAngle.in(Degrees), computedTargetAngle.in(Degrees)),
+        -pidMax.get(), pidMax.get());
+
+    double signedError = currentAngle.in(Degrees) - computedTargetAngle.in(Degrees);
+    this.error = signedError;
+    double unsignedError = Math.abs(signedError);
+
+    this.velocitySetpoint = -1 * Math.signum(signedError)
+        * Math.min(Math.max(unsignedError - errorFFTolerance.get(), 0) * velocityScale.get(),
+            maxVelocity.get());
+
+    double ffOutput = feedforward.calculate(this.velocitySetpoint);
+
+    Logger.recordOutput("Turret/PidOutput", pidOutput);
+    Logger.recordOutput("Turret/FFOutput", ffOutput);
+
+    double output = MathUtil.clamp(pidOutput + ffOutput, -maxOutput.get(), maxOutput.get());
+    motor.setVoltage(applySoftLimits(output));
   }
 
   @Override
   public void setVoltage(Voltage volts) {
-    motor.setVoltage(volts.in(Volts));
+    motor.setVoltage(applySoftLimits(volts.in(Volts)));
   }
 
   @Override
   public void setPercent(double percent) {
-    motor.set(percent);
+    motor.set(applySoftLimits(percent));
   }
 
   private Angle getPrimaryAbsEncoderAngle() {
@@ -182,5 +222,14 @@ public class TurretIOSpark implements TurretIO {
     }
 
     return Optional.of(Rotations.of((double) turretGearTeeth / turretTeeth));
+  }
+
+  private double applySoftLimits(double num) {
+    if (currentAngle.gt(maxAngle) && num > 0) {
+      return 0;
+    } else if (currentAngle.lt(minAngle) && num < 0) {
+      return 0;
+    }
+    return num;
   }
 }

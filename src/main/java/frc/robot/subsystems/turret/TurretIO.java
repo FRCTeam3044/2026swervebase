@@ -29,6 +29,13 @@ public interface TurretIO {
     public AngularVelocity angularVelocity = DegreesPerSecond.of(0.0);
     public AngularVelocity targetAngularVelocity = DegreesPerSecond.of(0.0);
     public Angle profileTargetPosition = Degrees.of(0.0);
+    public double calibrationAngleDeg = 0.0;
+    public double calibrationEncoderReading = 0.0;
+    public double degreesPerEncoderUnit = 0.0;
+    public double current;
+    public double error = 0.0;
+    public double velocitySetpoint = 0.0;
+    public double output = 0.0;
   }
 
   public default void setAngle(Angle angle) {

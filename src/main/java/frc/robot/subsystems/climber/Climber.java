@@ -18,6 +18,9 @@ public class Climber extends SubsystemBase {
   private final ConfigurableParameter<Double> bottomPosition = new ConfigurableParameter<>(0.0,
       "Bottom climber position");
   private final ConfigurableParameter<Double> climbPosition = new ConfigurableParameter<>(0.0, "Climb position");
+  private final ConfigurableParameter<Double> climberCalibrationSpeed = new ConfigurableParameter<Double>(-0.1,
+      "Climber calibration speed");
+  private boolean calibrated = false;
 
   public Climber(ClimberIO io) {
     this.io = io;
@@ -27,6 +30,15 @@ public class Climber extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Climber", inputs);
+  }
+
+  public Command calibrate() {
+    return Commands.runEnd(() -> {
+      io.setSpeed(climberCalibrationSpeed.get());
+    }, () -> {
+      io.setSpeed(0);
+      calibrated = true;
+    }, this).onlyIf(() -> !calibrated).until(() -> inputs.bottomLimitPressed).withName("Calibrate Climber");
   }
 
   public Command setSpeed(boolean forward) { // Command factory for setting the speed of climber motor. Use for testing
@@ -41,32 +53,43 @@ public class Climber extends SubsystemBase {
   }
 
   public Command setSpeedWParameter(DoubleSupplier speedParameter) {
-    return Commands.run(
+    return Commands.runEnd(
         () -> {
           io.setSpeed(speedParameter.getAsDouble());
-        });
+        }, () -> {
+          io.setSpeed(0);
+        }, this);
   }
 
   public Command climberTop() { // Command factory for moving climber to top pos
-    return Commands.run(
+    return Commands.runEnd(
         () -> {
           io.setClimberPos(topPosition.get());
+        },
+        () -> {
+          io.setSpeed(0.0);
         },
         this);
   }
 
   public Command climberBottom() { // Command factory for moving climber to bottom pos
-    return Commands.run(
+    return Commands.runEnd(
         () -> {
           io.setClimberPos(bottomPosition.get());
+        },
+        () -> {
+          io.setSpeed(0.0);
         },
         this);
   }
 
   public Command climberPulledUp() { // Command factory for pulling the climber up to set up pos
-    return Commands.run(
+    return Commands.runEnd(
         () -> {
           io.setClimberPos(climbPosition.get());
+        },
+        () -> {
+          io.setSpeed(0.0);
         },
         this);
   }

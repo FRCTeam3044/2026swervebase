@@ -1,10 +1,12 @@
 package frc.robot.subsystems.climber;
 
 import static frc.robot.util.SparkUtil.ifOk;
+import static frc.robot.util.SparkUtil.tryUntilOk;
 
+import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkLimitSwitch;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
@@ -17,10 +19,21 @@ public class ClimberIOSpark implements ClimberIO {
   private final RelativeEncoder climbEncoder = motor.getEncoder();
   private final DigitalInput limitSwitch = new DigitalInput(3);
   private final ConfigurableParameter<Double> runSpeedUp = new ConfigurableParameter<>(0.0,
-      "Climber Motor Running Speed");
-  // No current angle because it will be 0'd
+      "Climber Motor Run Up Speed");
   private final ConfigurableParameter<Double> runSpeedDown = new ConfigurableParameter<>(-0.0,
-      "Climber Motor Running Speed");
+      "Climber Motor Run Down Speed");
+  private final ConfigurableParameter<Double> climberPosTolerance = new ConfigurableParameter<>(0.5,
+      "Climber Position Tolerance");
+
+  public ClimberIOSpark() {
+    tryUntilOk(
+        motor,
+        5,
+        () -> motor.configure(
+            ClimberConfig.climberConfig,
+            ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters));
+  }
 
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
@@ -30,23 +43,21 @@ public class ClimberIOSpark implements ClimberIO {
     }
     inputs.currentPosition = climbEncoder.getPosition();
     ifOk(motor, climbEncoder::getPosition, (value) -> inputs.currentPosition = value);
+    ifOk(motor, motor::getOutputCurrent, (value) -> inputs.current = value);
   }
 
-  // Skipping the HoodIOSpark connecting thing
   @Override
   public void setSpeed(double speed) {
-    motor.set(MathUtil.clamp(speed, -1, 1));
+    motor.set(MathUtil.clamp(speed, limitSwitch.get() ? 0 : -1, 1));
   }
 
   @Override
   public void setClimberPos(double wantedHeight) {
     double currentPosition = climbEncoder.getPosition(); // Get current position
-    if (wantedHeight > currentPosition) {
-      motor.set(runSpeedUp.get());
-    } else if (currentPosition > wantedHeight) {
-      motor.set(runSpeedDown.get());
-    } else {
-      motor.set(0.0); // sets motor to 0
+    if (Math.abs(currentPosition - wantedHeight) < climberPosTolerance.get()) {
+      motor.set(0.0);
+      return;
     }
+    setSpeed(wantedHeight > currentPosition ? runSpeedUp.get() : runSpeedDown.get());
   }
 }

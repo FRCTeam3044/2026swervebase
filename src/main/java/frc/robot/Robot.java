@@ -168,14 +168,14 @@ public class Robot extends LoggedRobot {
   public void disabledInit() {
     HubShiftUtil.initialize();
     Elastic.selectTab(0);
-    robotContainer.turret.resetAngle(true);
+    // robotContainer.turret.resetAngle(true);
   }
 
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {
     AllianceUtil.setAlliance();
-    robotContainer.turret.resetAngle(false);
+    robotContainer.turret.resetAngle(true);
   }
 
   /**

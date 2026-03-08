@@ -21,6 +21,7 @@ public class Shooter extends SubsystemBase {
   private final SysIdRoutine sysId;
   private ConfigurableParameter<Double> tolerance = new ConfigurableParameter<Double>(5.0,
       "Shooter at speed tolerance (RPM)");
+  private double targetSpeed = 0.0;
 
   public Shooter(ShooterIO io) {
     this.io = io;
@@ -53,7 +54,13 @@ public class Shooter extends SubsystemBase {
   }
 
   public Command runSpeed(DoubleSupplier speed) {
-    return Commands.runEnd(() -> io.setSpeed(speed.getAsDouble()), () -> io.setPercent(0.0), this)
+    return Commands.runEnd(() -> {
+      targetSpeed = speed.getAsDouble();
+      io.setSpeed(targetSpeed);
+    }, () -> {
+      targetSpeed = 0.0;
+      io.setPercent(0.0);
+    }, this)
         .withName("Run Shooter At Speed");
   }
 
@@ -67,7 +74,7 @@ public class Shooter extends SubsystemBase {
     return inputs.leaderVelocity;
   }
 
-  public boolean isAtSpeed(double targetSpeed) {
+  public boolean isAtSpeed() {
     return Math.abs(inputs.leaderVelocity - targetSpeed) < tolerance.get();
   }
 }

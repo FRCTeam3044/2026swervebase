@@ -11,42 +11,94 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Filesystem;
 
 public class VisionConstants {
-    // AprilTag layout
-    public static AprilTagFieldLayout aprilTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+        // AprilTag layout
+        // public static AprilTagFieldLayout aprilTagLayout =
+        // AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
+        public static AprilTagFieldLayout aprilTagLayout;
 
-    // Camera names, must match names configured on coprocessor
-    public static String fsCamName = "fore_star";
-    public static String ssCamName = "sensor_star";
-    public static String spCamName = "sensor_port";
-    public static String fpCamName = "fore_port";
+        static {
+                try {
+                        aprilTagLayout = new AprilTagFieldLayout(
+                                        Filesystem.getDeployDirectory() + "/3-7-practice-field.json");
+                } catch (Exception e) {
+                        e.printStackTrace();
+                        aprilTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+                }
+        }
+        // Camera names, must match names configured on coprocessor
+        public static String fsCamName = "fore_star";
+        public static String ssCamName = "sensor_star";
+        public static String spCamName = "sensor_port";
+        public static String fpCamName = "fore_port";
 
-    // Robot to camera transforms
-    public static Transform3d robotToFs = new Transform3d(0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, 0.0));
-    public static Transform3d robotToSs = new Transform3d(-0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, Math.PI));
-    public static Transform3d robotToSp = new Transform3d(0.0, 0.2, 0.2, new Rotation3d(0.0, -0.4, Math.PI / 2));
-    public static Transform3d robotToFp = new Transform3d(0.0, -0.2, 0.2, new Rotation3d(0.0, -0.4, -Math.PI / 2));
+        // Robot to camera transforms
+        // Port (left)
+        public static Transform3d robotToSp = new Transform3d(
+                        Units.inchesToMeters(
+                                        -0.75),
+                        Units.inchesToMeters(12.746915),
+                        Units.inchesToMeters(20.750000),
+                        new Rotation3d(
+                                        Units.degreesToRadians(0.0),
+                                        Units.degreesToRadians(0.0),
+                                        Units.degreesToRadians(116.352749)));
 
-    // Basic filtering thresholds
-    public static double maxAmbiguity = 0.3;
-    public static double maxZError = 0.75;
+        // Starboard (right)
+        public static Transform3d robotToSs = new Transform3d(
+                        Units.inchesToMeters(
+                                        -2.75),
+                        Units.inchesToMeters(-12.746915),
+                        Units.inchesToMeters(20.750000),
+                        new Rotation3d(
+                                        Units.degreesToRadians(0.0),
+                                        Units.degreesToRadians(0.0),
+                                        Units.degreesToRadians(244.65)));
 
-    // Standard deviation baselines, for 1 meter distance and 1 tag
-    // (Adjusted automatically based on distance and # of tags)
-    public static double linearStdDevBaseline = 0.02; // Meters
-    public static double angularStdDevBaseline = 0.06; // Radians
+        // Fore-starboard (back right)
+        public static Transform3d robotToFs = new Transform3d(
+                        Units.inchesToMeters(
+                                        10.75),
+                        Units.inchesToMeters(-10.25),
+                        Units.inchesToMeters(9),
+                        new Rotation3d(
+                                        Units.degreesToRadians(0.0),
+                                        Units.degreesToRadians(-25.0),
+                                        Units.degreesToRadians(315.0)));
 
-    // Standard deviation multipliers for each camera
-    // (Adjust to trust some cameras more than others)
-    public static double[] cameraStdDevFactors = new double[] {
-            1.0, // Port camera
-            1.0, // Starboard camera
-            1.0, // Fore camera
-            1.0 // Aft camera
-    };
+        // Fore-port (back left)
+        public static Transform3d robotToFp = new Transform3d(
+                        Units.inchesToMeters(10.75),
+                        Units.inchesToMeters(
+                                        10.25),
+                        Units.inchesToMeters(9),
+                        new Rotation3d(
+                                        Units.degreesToRadians(0.0),
+                                        Units.degreesToRadians(-10.0),
+                                        Units.degreesToRadians(45.0)));
 
-    // Multipliers to apply for MegaTag 2 observations
-    public static double linearStdDevMegatag2Factor = 0.5; // More stable than full 3D solve
-    public static double angularStdDevMegatag2Factor = Double.POSITIVE_INFINITY; // No rotation data available
+        // Basic filtering thresholds
+        public static double maxAmbiguity = 0.3;
+        public static double maxZError = 0.75;
+
+        // Standard deviation baselines, for 1 meter distance and 1 tag
+        // (Adjusted automatically based on distance and # of tags)
+        public static double linearStdDevBaseline = 0.02; // Meters
+        public static double angularStdDevBaseline = 0.06; // Radians
+
+        // Standard deviation multipliers for each camera
+        // (Adjust to trust some cameras more than others)
+        public static double[] cameraStdDevFactors = new double[] {
+                        1.5, // Fs
+                        2.5, // SS
+                        2.5, // SP
+                        1.5 // FP
+        };
+
+        // Multipliers to apply for MegaTag 2 observations
+        public static double linearStdDevMegatag2Factor = 0.5; // More stable than full 3D solve
+        public static double angularStdDevMegatag2Factor = Double.POSITIVE_INFINITY; // No rotation data available
 }

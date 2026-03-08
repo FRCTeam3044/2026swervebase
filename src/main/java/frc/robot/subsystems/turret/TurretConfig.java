@@ -29,7 +29,6 @@ public class TurretConfig {
         .idleMode(IdleMode.kCoast)
         .smartCurrentLimit(currentLimit, currentLimit)
         .apply(softLimits)
-        .apply(encoderConfig)
-        .inverted(true);
+        .apply(encoderConfig);
   }
 }
