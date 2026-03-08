@@ -214,7 +214,7 @@
         },
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "35"
+            "value": "9"
         },
         "Hood Controller/P": "0.0",
         "CalibrationState/Test Parameter 36": "0",
@@ -226,7 +226,7 @@
         "CalibrationState/Test Parameter 45": "0",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
-            "value": "4500"
+            "value": "3300"
         },
         "Climber Motor Running Speed": {
             "comment": "Auto-Generated",
@@ -512,7 +512,7 @@
         },
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "35"
+            "value": "9"
         },
         "Hood Controller/P": "0.0",
         "CalibrationState/Test Parameter 36": "0",
@@ -524,7 +524,7 @@
         "CalibrationState/Test Parameter 45": "0",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
-            "value": "4500"
+            "value": "3300"
         },
         "Climber Motor Running Speed": {
             "comment": "Auto-Generated",
@@ -787,7 +787,7 @@
         "CalibrationState/Test Parameter 96": "0",
         "Hood Stall Current": {
             "comment": "Auto-Generated",
-            "value": "6"
+            "value": "12"
         },
         "Turret Angle Tolerance (degrees)": {
             "comment": "Auto-Generated",
@@ -809,7 +809,7 @@
         },
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "35"
+            "value": "9"
         },
         "Hood Controller/P": "0.2",
         "CalibrationState/Test Parameter 36": "0",
@@ -821,7 +821,7 @@
         "CalibrationState/Test Parameter 45": "0",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
-            "value": "4500"
+            "value": "3300"
         },
         "Climber Motor Running Speed": {
             "comment": "Auto-Generated",
