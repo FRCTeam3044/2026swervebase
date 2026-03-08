@@ -19,13 +19,16 @@ public class TurretConstants {
   public static final int secondaryEncoderTeeth = 27;
   // public static final Angle minAngle = Degrees.of(64.8);
   // public static final Angle maxAngle = Degrees.of(324);
-  public static final Angle minAngle = Degrees.of(74.8);
-  public static final Angle maxAngle = Degrees.of(314);
-  public static final double minPosition = 3.6653;
-  public static final double maxPosition = 36.3256; // 1 mernillion
+  public static final Angle minAngle = Degrees.of(42);
+  public static final Angle maxAngle = Degrees.of(402);
+
+  public static final Angle angleAtPos1 = Degrees.of(39.6);
+  public static final Angle angleAtPos2 = Degrees.of(403.2);
+  public static final double encoderAtPos1 = -8.75;
+  public static final double encoderAtPos2 = 37.053852; // 1 mernillion
 
   public static final double kS = 0.0;
-  public static final double kV = 0.18;
+  public static final double kV = 0.18; // 0.18
 
   public static final double maxVelocity = 30;
   public static final double maxAcceleration = 60;

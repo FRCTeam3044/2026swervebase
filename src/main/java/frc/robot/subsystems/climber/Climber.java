@@ -35,10 +35,13 @@ public class Climber extends SubsystemBase {
   public Command calibrate() {
     return Commands.runEnd(() -> {
       io.setSpeed(climberCalibrationSpeed.get());
+      if (io.resetIfPressed())
+        calibrated = true;
     }, () -> {
       io.setSpeed(0);
-      calibrated = true;
-    }, this).onlyIf(() -> !calibrated).until(() -> inputs.bottomLimitPressed).withName("Calibrate Climber");
+      if (io.resetIfPressed())
+        calibrated = true;
+    }, this).onlyIf(() -> !calibrated).until(() -> calibrated).withName("Calibrate Climber");
   }
 
   public Command setSpeed(boolean forward) { // Command factory for setting the speed of climber motor. Use for testing

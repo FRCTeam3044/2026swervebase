@@ -20,4 +20,8 @@ public interface ClimberIO {
 
   public default void setClimberPos(double height) {
   }
+
+  public default boolean resetIfPressed() {
+    return false;
+  }
 }

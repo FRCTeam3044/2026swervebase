@@ -63,8 +63,8 @@ public class TurretIOSpark implements TurretIO {
   private double error = 0.0;
   private double velocitySetpoint = 0.0;
 
-  private final double degreesPerEncoderUnit = (maxAngle.in(Degrees) - minAngle.in(Degrees))
-      / (maxPosition - minPosition);
+  private final double degreesPerEncoderUnit = (angleAtPos2.in(Degrees) - angleAtPos1.in(Degrees))
+      / (encoderAtPos2 - encoderAtPos1);
 
   public TurretIOSpark() {
     // EasyCRTConfig crtConfig = new EasyCRTConfig(
@@ -121,6 +121,8 @@ public class TurretIOSpark implements TurretIO {
   @Override
   public void setAngle(Angle targetAngle) {
     this.rawTargetAngle = targetAngle;
+    this.computedTargetAngle = Degrees
+        .of(MathUtil.inputModulus(90 - targetAngle.in(Degrees) - minAngle.in(Degrees), 0, 360)).plus(minAngle);
 
     // > 360 degrees (should probably handle better to allow using the extra range)
     // this.computedTargetAngle =
@@ -132,14 +134,16 @@ public class TurretIOSpark implements TurretIO {
     // minAngle.in(Degrees),
     // maxAngle.in(Degrees)));
 
-    if (targetAngle.gt(minAngle) && targetAngle.lt(maxAngle)) {
-      computedTargetAngle = targetAngle;
-    } else {
-      double distToMin = MathUtil.inputModulus(targetAngle.in(Degrees) - minAngle.in(Degrees), 0, 360);
-      double distToMax = MathUtil.inputModulus(targetAngle.in(Degrees) - maxAngle.in(Degrees), 0, 360);
+    // if (targetAngle.gt(minAngle) && targetAngle.lt(maxAngle)) {
+    // computedTargetAngle = targetAngle;
+    // } else {
+    // double distToMin = MathUtil.inputModulus(targetAngle.in(Degrees) -
+    // minAngle.in(Degrees), 0, 360);
+    // double distToMax = MathUtil.inputModulus(targetAngle.in(Degrees) -
+    // maxAngle.in(Degrees), 0, 360);
 
-      computedTargetAngle = distToMin > distToMax ? maxAngle : minAngle;
-    }
+    // computedTargetAngle = distToMin > distToMax ? maxAngle : minAngle;
+    // }
 
     double pidOutput = MathUtil.clamp(
         pidController.calculate(currentAngle.in(Degrees), computedTargetAngle.in(Degrees)),

@@ -1,16 +1,8 @@
 package frc.robot.statemachine.States;
 
-import static edu.wpi.first.units.Units.RPM;
-
-import java.util.function.Supplier;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Robot;
+import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.intake.Intake;
@@ -43,40 +35,32 @@ public class CalibrationState extends State {
 
                 SmartXboxController controller = new SmartXboxController(rawController, loop);
 
-                Supplier<Pose2d> turretPoseSupplier = () -> Robot.robotContainer.drive.getPose()
-                                .transformBy(ShotCalculator.robotToTurret.toTransform2d());
-                Supplier<Pose3d> targetPoseSupplier = () -> {
-                        if (AutoAimDataManager.mzCalibrationMode.get()) {
-                                return autoTargetUtil.getAllianceZoneTarget();
-                        } else {
-                                return autoTargetUtil.getHub();
-                        }
-                };
-                Supplier<Angle> turretAngleSupplier = () -> {
-                        Pose2d turretPose = turretPoseSupplier.get();
-                        Pose3d targetPose = targetPoseSupplier.get();
-                        Translation2d targetTranslation = targetPose.getTranslation().toTranslation2d();
-                        return targetTranslation.minus(turretPose.getTranslation()).getAngle().getMeasure();
-                };
                 controller.leftTrigger()
                                 .whileTrue(Commands.parallel(
                                                 shooter.runSpeed(() -> calibrationShotFlywheelSpeed.get()),
-                                                turret.setAngle(() -> turretAngleSupplier.get()),
+                                                turret.setAngle(() -> ShotCalculator.dm.getTurretAngle(
+                                                                AutoAimDataManager.mzCalibrationMode.get())),
                                                 hood.setPosition(() -> calibrationShotHoodPosition.get()))
                                                 .withName("Calibration aiming"));
                 controller.rightTrigger().whileTrue(kicker.shootKicker());
-                controller.rightTrigger().whileFalse(kicker.blockKicker());
-                startWhenActive(kicker.blockKicker().onlyWhile(controller.rightTrigger().negate())
-                                .withName("Block Kicker"));
+                // controller.rightTrigger().whileFalse(kicker.blockKicker());
+                // startWhenActive(kicker.blockKicker().onlyWhile(controller.rightTrigger().negate())
+                // .withName("Block Kicker"));
                 startWhenActive(spindexer.setSpeed());
                 startWhenActive(intake.runRollers());
                 startWhenActive(intake.intakeBottom());
+                startWhenActive(
+                                DriveCommands.joystickDrive(
+                                                drive,
+                                                () -> -rawController.getLeftY(),
+                                                () -> -rawController.getLeftX(),
+                                                () -> -rawController.getRightX(),
+                                                true));
 
                 controller.rightTrigger().onTrue(Commands.runOnce(() -> {
-                        Pose3d targetPose = targetPoseSupplier.get();
-                        Translation2d target = targetPose.getTranslation().toTranslation2d();
-                        Pose2d turretPosition = turretPoseSupplier.get();
-                        double turretToTargetDistance = target.getDistance(turretPosition.getTranslation());
+                        double turretToTargetDistance = AutoAimDataManager.mzCalibrationMode.get()
+                                        ? ShotCalculator.dm.getDistToAz()
+                                        : ShotCalculator.dm.getDistToHub();
                         ShotCalculator.dm.addShot(turretToTargetDistance, hood.getPosition(),
                                         shooter.getSpeed());
                 }).withName("Record Shot"));

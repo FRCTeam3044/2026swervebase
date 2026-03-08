@@ -26,7 +26,7 @@ public class TurretConfig {
     // softLimits.reverseSoftLimit(TurretConstants.minPosition);
 
     motorConfig
-        .idleMode(IdleMode.kCoast)
+        .idleMode(IdleMode.kBrake)
         .smartCurrentLimit(currentLimit, currentLimit)
         .apply(softLimits)
         .apply(encoderConfig);

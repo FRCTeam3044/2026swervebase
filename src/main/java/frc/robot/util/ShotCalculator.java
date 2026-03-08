@@ -15,7 +15,9 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import lombok.experimental.ExtensionMethod;
 
 import java.io.FileNotFoundException;
@@ -49,7 +51,8 @@ public class ShotCalculator {
 
     private static double phaseDelay = 0.03;
 
-    public static Transform3d robotToTurret = new Transform3d(0, 0, 0.381, Rotation3d.kZero);
+    public static Transform3d robotToTurret = new Transform3d(Units.inchesToMeters(3.75), Units.inchesToMeters(6.75),
+            Units.inchesToMeters(0.381), Rotation3d.kZero);
 
     static {
         try {
@@ -111,7 +114,8 @@ public class ShotCalculator {
         }
 
         // Calculate parameters accounted for imparted velocity
-        turretAngle = target.minus(lookaheadPose.getTranslation()).getAngle();
+        turretAngle = new Rotation2d(target.minus(lookaheadPose.getTranslation()).getAngle().getMeasure()
+                .minus(RobotContainer.getInstance().drive.getPose().getRotation().getMeasure()));
         hoodPosition = dm.getShotHoodPositionMap(secondaryValues).get(lookaheadTurretToTargetDistance);
         latestParameters = new ShootingParameters(
                 lookaheadTurretToTargetDistance >= dm.getMinDistance(secondaryValues)

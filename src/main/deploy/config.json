@@ -214,7 +214,7 @@
         },
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "0.15"
+            "value": "30"
         },
         "Hood Controller/P": "0.0",
         "CalibrationState/Test Parameter 36": "0",
@@ -226,7 +226,7 @@
         "CalibrationState/Test Parameter 45": "0",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
-            "value": "2500"
+            "value": "3080"
         },
         "Climber Motor Running Speed": {
             "comment": "Auto-Generated",
@@ -250,7 +250,7 @@
         "Turret PID/D": "0.0",
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "false"
+            "value": "true"
         },
         "Turret PID/I": "0.0",
         "Climber Position Tolerance": {
@@ -512,7 +512,7 @@
         },
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "0.15"
+            "value": "30"
         },
         "Hood Controller/P": "0.0",
         "CalibrationState/Test Parameter 36": "0",
@@ -524,7 +524,7 @@
         "CalibrationState/Test Parameter 45": "0",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
-            "value": "2500"
+            "value": "3080"
         },
         "Climber Motor Running Speed": {
             "comment": "Auto-Generated",
@@ -548,7 +548,7 @@
         "Turret PID/D": "0.0",
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "false"
+            "value": "true"
         },
         "Turret PID/I": "0.0",
         "Climber Position Tolerance": {
@@ -628,7 +628,7 @@
         },
         "Top climber position": {
             "comment": "Auto-Generated",
-            "value": "500"
+            "value": "99"
         },
         "CalibrationState/Test Parameter 47": "0",
         "CalibrationState/Test Parameter 48": "0",
@@ -681,7 +681,7 @@
         "CalibrationState/Test Parameter 82": "0",
         "Climber Motor Run Up Speed": {
             "comment": "Auto-Generated",
-            "value": "1"
+            "value": "0.9"
         },
         "Intake roller speed": {
             "comment": "Auto-Generated",
@@ -718,7 +718,7 @@
         "CalibrationState/Test Parameter 71": "0",
         "Climber calibration speed": {
             "comment": "Auto-Generated",
-            "value": "-0.1"
+            "value": "-0.25"
         },
         "Hood Stall Velocity Tolerance": {
             "comment": "Auto-Generated",
@@ -727,7 +727,7 @@
         "Intake Position Controller/I": "0.0",
         "Climber Motor Run Down Speed": {
             "comment": "Auto-Generated",
-            "value": "-0.7"
+            "value": "-0.9"
         },
         "CalibrationState/Test Parameter 18": "0",
         "CalibrationState/Test Parameter 19": "0",
@@ -747,7 +747,7 @@
         "CalibrationState/Test Parameter 20": "0",
         "Climb position": {
             "comment": "Auto-Generated",
-            "value": "300"
+            "value": "50"
         },
         "CalibrationShotTurretAngle": {
             "comment": "Auto-Generated",
@@ -809,7 +809,7 @@
         },
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "0.15"
+            "value": "30"
         },
         "Hood Controller/P": "0.2",
         "CalibrationState/Test Parameter 36": "0",
@@ -821,7 +821,7 @@
         "CalibrationState/Test Parameter 45": "0",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
-            "value": "2500"
+            "value": "3080"
         },
         "Climber Motor Running Speed": {
             "comment": "Auto-Generated",
@@ -831,7 +831,7 @@
         "Shooter Speed Controller/I": "0.0",
         "Turret Velocity Scale": {
             "comment": "Auto-Generated",
-            "value": "1.0"
+            "value": "0.6"
         },
         "CalibrationState/Test Parameter 40": "0",
         "CalibrationState/Test Parameter 41": "0",
@@ -845,12 +845,12 @@
         "Turret PID/D": "0.003",
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "false"
+            "value": "true"
         },
         "Turret PID/I": "0.0",
         "Climber Position Tolerance": {
             "comment": "Auto-Generated",
-            "value": "8"
+            "value": "3"
         },
         "CalibrationState/CalibrationShotHoodPosition": "1",
         "CalibrationState/Test Parameter 29": "0",
@@ -871,7 +871,7 @@
         "Hood Controller/I": "0.0",
         "Bottom climber position": {
             "comment": "Auto-Generated",
-            "value": "2"
+            "value": "1"
         },
         "CalibrationState/Test Parameter 34": "0",
         "CalibrationState/Test Parameter 35": "0",

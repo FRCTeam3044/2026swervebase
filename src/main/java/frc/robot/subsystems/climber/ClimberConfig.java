@@ -9,8 +9,8 @@ public class ClimberConfig {
 
   static {
     SoftLimitConfig softLimits = new SoftLimitConfig();
-    // softLimits.forwardSoftLimit(500);
-    // softLimits.forwardSoftLimitEnabled(true);
+    softLimits.forwardSoftLimit(100);
+    softLimits.forwardSoftLimitEnabled(true);
     // softLimits.reverseSoftLimit(0);
     // softLimits.reverseSoftLimitEnabled(true);
     climberConfig.idleMode(IdleMode.kBrake)

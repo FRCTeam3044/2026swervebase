@@ -38,12 +38,19 @@ public class ClimberIOSpark implements ClimberIO {
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
     inputs.bottomLimitPressed = limitSwitch.get();
-    if (inputs.bottomLimitPressed) {
-      climbEncoder.setPosition(0); // Reset encoder to 0 when bottom limit is pressed
-    }
     inputs.currentPosition = climbEncoder.getPosition();
     ifOk(motor, climbEncoder::getPosition, (value) -> inputs.currentPosition = value);
     ifOk(motor, motor::getOutputCurrent, (value) -> inputs.current = value);
+  }
+
+  @Override
+  public boolean resetIfPressed() {
+    if (limitSwitch.get()) {
+      climbEncoder.setPosition(0);
+      return true;
+    }
+
+    return false;
   }
 
   @Override

@@ -8,12 +8,20 @@ import java.io.IOException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.RobotContainer;
+import lombok.experimental.ExtensionMethod;
 import me.nabdev.oxconfig.ConfigurableParameter;
 
+@ExtensionMethod({ GeomUtil.class })
 public class AutoAimDataManager {
     public static final ConfigurableParameter<Boolean> calibrationMode = new ConfigurableParameter<>(false,
             "Shooter Calibration Mode");
@@ -24,6 +32,12 @@ public class AutoAimDataManager {
     private JSONObject mzConfig;
     private TreeMapRecord azTreeMapRecord;
     private TreeMapRecord mzTreeMapRecord;
+
+    private double turretToHub;
+    private double turretToAz;
+
+    private LinearFilter turretToHubFilter = LinearFilter.movingAverage(3);
+    private LinearFilter turretToAzFilter = LinearFilter.movingAverage(3);
 
     public record TreeMapRecord(InterpolatingDoubleTreeMap flywheelSpeedMap,
             InterpolatingDoubleTreeMap hoodPositionMap,
@@ -115,7 +129,45 @@ public class AutoAimDataManager {
         updateFromJson(mzMode);
     }
 
+    public Pose2d getTurretPose() {
+        return RobotContainer.getInstance().drive.getPose()
+                .transformBy(ShotCalculator.robotToTurret.toTransform2d());
+    }
+
+    public double getDistToHub() {
+        return turretToHub;
+    }
+
+    public double getDistToAz() {
+        return turretToAz;
+    }
+
+    public Angle getTurretAngle(boolean mz) {
+        Translation2d target = mz
+                ? RobotContainer.getInstance().autoTargetUtil.getAllianceZoneTarget().getTranslation().toTranslation2d()
+                : RobotContainer.getInstance().autoTargetUtil.getHub().getTranslation().toTranslation2d();
+        Translation2d turret = getTurretPose().getTranslation();
+
+        Logger.recordOutput("Turret Pose", getTurretPose());
+        Logger.recordOutput("Target Pose", target);
+
+        return target.minus(turret).getAngle().getMeasure()
+                .minus(RobotContainer.getInstance().drive.getPose().getRotation().getMeasure());
+    }
+
     public void periodic() {
+        Pose2d turretPosition = getTurretPose();
+        turretToAz = turretToAzFilter.calculate(
+                RobotContainer
+                        .getInstance().autoTargetUtil.getAllianceZoneTarget().getTranslation().toTranslation2d()
+                        .getDistance(turretPosition.getTranslation()));
+        turretToHub = turretToHubFilter.calculate(
+                RobotContainer
+                        .getInstance().autoTargetUtil.getHub().getTranslation().toTranslation2d()
+                        .getDistance(turretPosition.getTranslation()));
+        Logger.recordOutput("Distance To Hub", turretToHub);
+        Logger.recordOutput("Distance to Az", turretToAz);
+
         if (!calibrationMode.get()) {
             return;
         }
@@ -141,6 +193,7 @@ public class AutoAimDataManager {
                 updateFromJson(true);
                 SmartDashboard.putString("MzAutoAimSet", "");
             }
+
         }
     }
 

@@ -1,7 +1,6 @@
 package frc.robot.statemachine.States;
 
 import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -118,10 +117,10 @@ public class NormalTestState extends State implements ConfigurableClass {
                                 .leftTrigger()
                                 .or(testControllerTwo.leftTrigger())
                                 .whileTrue(kicker.shootKicker());
-                testControllerOne
-                                .rightTrigger()
-                                .or(testControllerTwo.rightTrigger())
-                                .whileTrue(kicker.blockKicker());
+                // testControllerOne
+                // .rightTrigger()
+                // .or(testControllerTwo.rightTrigger())
+                // .whileTrue(kicker.blockKicker());
 
                 // testController.rightTrigger().whileTrue(turret.rotate(null));
                 startWhenActive(
