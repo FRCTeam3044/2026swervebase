@@ -32,12 +32,16 @@ import frc.robot.util.HubShiftUtil;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
+import me.nabdev.oxconfig.ConfigurableParameter;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 
 public class StateMachine extends StateMachineBase {
         String autoWinner = DriverStation.getGameSpecificMessage();
         AllianceColor allianceColor = AllianceUtil.getAlliance();
+
+        private ConfigurableParameter<Boolean> forceEnableShooting = new ConfigurableParameter<>(false,
+                        "Force Enable Shooting");
 
         public StateMachine(
                         CommandXboxController driverController,
@@ -95,8 +99,11 @@ public class StateMachine extends StateMachineBase {
 
                 teleop.withDefaultChild(alliedZone).withChild(neutralZone);
 
-                alliedZone.withChild(activeHub, () -> HubShiftUtil.getShiftedShiftInfo().active(), 0, "Active Hub");
-                alliedZone.withChild(inactiveHub, () -> !HubShiftUtil.getShiftedShiftInfo().active(), 1,
+                alliedZone.withChild(activeHub,
+                                () -> HubShiftUtil.getShiftedShiftInfo().active() || forceEnableShooting.get(), 0,
+                                "Active Hub");
+                alliedZone.withChild(inactiveHub,
+                                () -> !HubShiftUtil.getShiftedShiftInfo().active() && !forceEnableShooting.get(), 1,
                                 "Inactive Hub");
 
                 alliedZone.withTransition(
@@ -105,9 +112,11 @@ public class StateMachine extends StateMachineBase {
                                 alliedZone, () -> autoTargetUtil.inAllianceZone(), 0, "Drive into Allied Zone");
 
                 activeHub.withTransition(
-                                inactiveHub, () -> !HubShiftUtil.getShiftedShiftInfo().active(), 0,
+                                inactiveHub,
+                                () -> !HubShiftUtil.getShiftedShiftInfo().active() && !forceEnableShooting.get(), 0,
                                 "Hub becomes inactive");
-                inactiveHub.withTransition(activeHub, () -> HubShiftUtil.getShiftedShiftInfo().active(), 0,
+                inactiveHub.withTransition(activeHub,
+                                () -> HubShiftUtil.getShiftedShiftInfo().active() || forceEnableShooting.get(), 0,
                                 "Hub becomes active");
 
                 // teleop.withModeTransitions(disabled, teleop, test);

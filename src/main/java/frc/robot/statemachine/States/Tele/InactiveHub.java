@@ -23,11 +23,11 @@ public class InactiveHub extends State {
       Turret turret,
       Hood hood) {
     super(stateMachine);
-    startWhenActive(
-        Commands.waitSeconds(1)
-            .deadlineFor(
-                Commands.runEnd(
-                    () -> driverController.setRumble(RumbleType.kBothRumble, 1),
-                    () -> driverController.setRumble(RumbleType.kBothRumble, 0))));
+    // startWhenActive(
+    // Commands.waitSeconds(1)
+    // .deadlineFor(
+    // Commands.runEnd(
+    // () -> driverController.setRumble(RumbleType.kBothRumble, 1),
+    // () -> driverController.setRumble(RumbleType.kBothRumble, 0))));
   }
 }

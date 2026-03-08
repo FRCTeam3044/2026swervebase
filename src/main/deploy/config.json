@@ -250,7 +250,7 @@
         "Turret PID/D": "0.0",
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Turret PID/I": "0.0",
         "Climber Position Tolerance": {
@@ -258,6 +258,10 @@
             "value": "0.5"
         },
         "CalibrationState/CalibrationShotHoodPosition": "111",
+        "Force Enable Shooting": {
+            "comment": "Auto-Generated",
+            "value": "false"
+        },
         "CalibrationState/Test Parameter 29": "0",
         "Intake top position": {
             "comment": "Auto-Generated",
@@ -548,7 +552,7 @@
         "Turret PID/D": "0.0",
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Turret PID/I": "0.0",
         "Climber Position Tolerance": {
@@ -556,6 +560,10 @@
             "value": "0.5"
         },
         "CalibrationState/CalibrationShotHoodPosition": "11",
+        "Force Enable Shooting": {
+            "comment": "Auto-Generated",
+            "value": "false"
+        },
         "CalibrationState/Test Parameter 29": "0",
         "Intake top position": {
             "comment": "Auto-Generated",
@@ -845,7 +853,7 @@
         "Turret PID/D": "0.003",
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Turret PID/I": "0.0",
         "Climber Position Tolerance": {
@@ -853,6 +861,10 @@
             "value": "3"
         },
         "CalibrationState/CalibrationShotHoodPosition": "1",
+        "Force Enable Shooting": {
+            "comment": "Auto-Generated",
+            "value": "true"
+        },
         "CalibrationState/Test Parameter 29": "0",
         "Intake top position": {
             "comment": "Auto-Generated",

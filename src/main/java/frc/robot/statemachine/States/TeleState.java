@@ -16,7 +16,7 @@ import me.nabdev.oxidation.util.SmartXboxController;
 
 public class TeleState extends State {
 
-  public static boolean shooterEngaged = false;
+  public static boolean shooterEngaged = true;
 
   public TeleState(
       StateMachineBase stateMachine,
@@ -41,8 +41,9 @@ public class TeleState extends State {
             () -> -driverController.getRightX(),
             true));
 
-    operator.leftTrigger()
-        .onTrue(Commands.runOnce(() -> shooterEngaged = !shooterEngaged).withName("Toggle shooter engaged"));
+    // operator.leftTrigger()
+    // .onTrue(Commands.runOnce(() -> shooterEngaged =
+    // !shooterEngaged).withName("Toggle shooter engaged"));
 
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
