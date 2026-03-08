@@ -373,9 +373,10 @@ public class DriveCommands {
                 }).withName("Go To Point");
         }
 
-        public static Command goToPoint(Drive drive, ArrayList<Pose2d> pose, Supplier<Rotation2d> rotation) {
+        public static Command goToPoints(Drive drive, Supplier<ArrayList<Pose2d>> posesSupplier,
+                        Supplier<Rotation2d> rotation) {
                 return Commands.deferredProxy(() -> {
-                        return followTrajectory(drive, generateTrajectory(drive, pose), rotation,
+                        return followTrajectory(drive, generateTrajectory(drive, posesSupplier.get()), rotation,
                                         null, false);
                 }).withName("Go To Point");
         }

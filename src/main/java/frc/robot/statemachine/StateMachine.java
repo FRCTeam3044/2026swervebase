@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.statemachine.States.Auto.AutoClimb;
+import frc.robot.statemachine.States.Auto.AutoTrajectories;
 import frc.robot.statemachine.States.Auto.EmptyState;
 import frc.robot.statemachine.States.Auto.IntakeAllianceZone;
 import frc.robot.statemachine.States.Auto.IntakeNeutralZone;
@@ -150,14 +151,15 @@ public class StateMachine extends StateMachineBase {
                                 drive,
                                 climber);
                 IntakeAllianceZone intakeAllianceZone = new IntakeAllianceZone(this, drive);
-                IntakeNeutralZone intakeNeutralZone = new IntakeNeutralZone(this, drive, intake);
+                IntakeNeutralZone intakeNeutralZone = new IntakeNeutralZone(this,
+                                AutoTrajectories::getLeftToRightNeutral, drive, intake);
                 ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this, drive, autoAim);
                 ShootToHub shootHub = new ShootToHub(this, autoTargetUtil, drive, intake, spindexer, kicker, turret,
                                 hood, shooter,
                                 autoAim, climber);
                 IntakeOutpost intakeOutpost = new IntakeOutpost(this, drive, intake);
 
-                Collections.addAll(testAutoRoutine, AutoSteps.IntakeOutpost,
+                Collections.addAll(testAutoRoutine, AutoSteps.IntakeNeutralZone,
                                 AutoSteps.EmptyState);
                 currentStep = testAutoRoutine.get(index);
 

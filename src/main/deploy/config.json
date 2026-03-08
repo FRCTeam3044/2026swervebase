@@ -358,7 +358,7 @@
         "CalibrationState/Test Parameter 108": "0",
         "Pathfinding Theta Controller/I": "0.0",
         "CalibrationState/Test Parameter 109": "0",
-        "Pathfinding Theta Controller/P": "0.0",
+        "Pathfinding Theta Controller/P": "5",
         "Point Theta Controller Fast/I": "0.0",
         "CalibrationState/Test Parameter 102": "0",
         "Climb distance": {
