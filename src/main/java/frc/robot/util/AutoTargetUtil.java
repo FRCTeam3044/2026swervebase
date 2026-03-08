@@ -27,8 +27,10 @@ public class AutoTargetUtil {
   private static POIData leftTower = POIData.createFromRed(1.06223613, 3.20841229, 1.06223613, 2.60841229);
   private static POIData rightTower = POIData.createFromRed(1.06223613, 4.28304359, 1.06223613, 4.88304359);
 
-  private static Pose2d rightNeutral = new Pose2d(8.27772069, 0.5, Rotation2d.fromDegrees(45));
-  private static Pose2d leftNeutral = new Pose2d(8.27772069, 7, Rotation2d.fromDegrees(45));
+  private static Pose2d rightNeutral = new Pose2d(9, 0.5, Rotation2d.fromDegrees(0));
+  private static Pose2d leftNeutral = new Pose2d(9, 7, Rotation2d.fromDegrees(0));
+  private static Pose2d closeRightNeutral = new Pose2d(7.5, 0.5, Rotation2d.fromDegrees(0));
+  private static Pose2d closeLeftNeutral = new Pose2d(7.5, 7, Rotation2d.fromDegrees(0));
 
   private static POIData outpost = POIData.createFromRed(0.52188903, 5.96503125, 1.06827289, 5.96503125);
   private static Pose2d closeOutpost = new Pose2d(0.52188903, 5.96503125, Rotation2d.fromDegrees(0));
@@ -44,6 +46,11 @@ public class AutoTargetUtil {
       new Vertex(0, 8.0692625),
       new Vertex(4, 8.0692625),
       new Vertex(4, 0));
+
+  private double blueCloseTrenchLine = 3;
+  private double blueFarTrenchLine = 6;
+  private double redCloseTrenchLine = 13;
+  private double redFarTrenchLine = 11;
 
   public AutoTargetUtil(Drive drive) {
     this.drive = drive;
@@ -63,6 +70,14 @@ public class AutoTargetUtil {
 
   public static Pose2d getNeutralZone() {
     return AllianceUtil.getPoseForAlliance(testNeutralZonePosition);
+  }
+
+  public static Pose2d getCloseLeftNeutral() {
+    return AllianceUtil.getPoseForAlliance(closeLeftNeutral);
+  }
+
+  public static Pose2d getCloseRightNeutral() {
+    return AllianceUtil.getPoseForAlliance(closeRightNeutral);
   }
 
   public static POIData getLeftTower() {
@@ -127,6 +142,11 @@ public class AutoTargetUtil {
       return true;
     }
     return false;
+  }
+
+  public boolean nearTrench() {
+    double x = drive.getPose().getX();
+    return (x > blueCloseTrenchLine && x < blueFarTrenchLine) || (x > redFarTrenchLine && x < redCloseTrenchLine);
   }
 
   public record POIData(Vertex pos, Vector normal) {

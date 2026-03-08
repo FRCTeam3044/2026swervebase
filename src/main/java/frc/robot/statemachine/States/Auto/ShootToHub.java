@@ -51,6 +51,8 @@ public class ShootToHub extends State {
     startWhenActive(() -> Commands
         .deferredProxy(() -> Commands.runOnce(() -> RobotContainer.getInstance().autoStateTimer.restart()))
         .onlyIf(() -> autoTargetUtil.inAllianceZone()));
+    t(() -> autoTargetUtil.inAllianceZone())
+        .onTrue(Commands.runOnce(() -> RobotContainer.getInstance().autoStateTimer.restart()));
     startWhenActive(kicker.shootKicker().onlyIf(() -> autoTargetUtil.inAllianceZone()));
     startWhenActive(autoAim.aimHub(() -> true).onlyIf(() -> autoTargetUtil.inAllianceZone()));
   }

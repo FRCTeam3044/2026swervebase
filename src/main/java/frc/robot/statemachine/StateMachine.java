@@ -151,15 +151,16 @@ public class StateMachine extends StateMachineBase {
                                 drive,
                                 climber);
                 IntakeAllianceZone intakeAllianceZone = new IntakeAllianceZone(this, drive);
-                IntakeNeutralZone intakeNeutralZone = new IntakeNeutralZone(this,
-                                AutoTrajectories::getLeftToRightNeutral, drive, intake);
+                IntakeNeutralZone intakeNeutralZone = new IntakeNeutralZone(this, autoTargetUtil,
+                                AutoTrajectories::getLeftCurve, drive, intake);
                 ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this, drive, autoAim);
                 ShootToHub shootHub = new ShootToHub(this, autoTargetUtil, drive, intake, spindexer, kicker, turret,
                                 hood, shooter,
                                 autoAim, climber);
                 IntakeOutpost intakeOutpost = new IntakeOutpost(this, drive, intake);
 
-                Collections.addAll(testAutoRoutine, AutoSteps.IntakeNeutralZone,
+                Collections.addAll(testAutoRoutine, AutoSteps.ShootToHub, AutoSteps.IntakeNeutralZone,
+                                AutoSteps.RightClimb,
                                 AutoSteps.EmptyState);
                 currentStep = testAutoRoutine.get(index);
 

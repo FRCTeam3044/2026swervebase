@@ -12,4 +12,36 @@ public class AutoTrajectories {
         Collections.addAll(path, AutoTargetUtil.getLeftNeutral(), AutoTargetUtil.getRightNeutral());
         return path;
     };
+
+    public static ArrayList<Pose2d> getRightToLeftNeutral() {
+        ArrayList<Pose2d> path = new ArrayList<>();
+        Collections.addAll(path, AutoTargetUtil.getRightNeutral(), AutoTargetUtil.getLeftNeutral());
+        return path;
+    };
+
+    public static ArrayList<Pose2d> getCloseLeftToRightNeutral() {
+        ArrayList<Pose2d> path = new ArrayList<>();
+        Collections.addAll(path, AutoTargetUtil.getCloseLeftNeutral(), AutoTargetUtil.getCloseRightNeutral());
+        return path;
+    };
+
+    public static ArrayList<Pose2d> getCloseRightToLeftNeutral() {
+        ArrayList<Pose2d> path = new ArrayList<>();
+        Collections.addAll(path, AutoTargetUtil.getCloseRightNeutral(), AutoTargetUtil.getCloseLeftNeutral());
+        return path;
+    };
+
+    public static ArrayList<Pose2d> getRightCurve() {
+        ArrayList<Pose2d> path = new ArrayList<>();
+        Collections.addAll(path, AutoTargetUtil.getRightNeutral(), AutoTargetUtil.getLeftNeutral(),
+                AutoTargetUtil.getCloseLeftNeutral(), AutoTargetUtil.getCloseRightNeutral());
+        return path;
+    };
+
+    public static ArrayList<Pose2d> getLeftCurve() {
+        ArrayList<Pose2d> path = new ArrayList<>();
+        Collections.addAll(path, AutoTargetUtil.getLeftNeutral(), AutoTargetUtil.getRightNeutral(),
+                AutoTargetUtil.getCloseRightNeutral(), AutoTargetUtil.getCloseLeftNeutral());
+        return path;
+    };
 }
