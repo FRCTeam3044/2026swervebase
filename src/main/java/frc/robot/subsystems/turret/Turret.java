@@ -118,4 +118,8 @@ public class Turret extends SubsystemBase {
     return ((angle > hoodDangerOneMin.get() && angle < hoodDangerOneMax.get())
         || (angle > hoodDangerTwoMin.get() && angle < hoodDangerTwoMax.get()));
   }
+
+  public boolean hasReset() {
+    return inputs.hasReset;
+  }
 }

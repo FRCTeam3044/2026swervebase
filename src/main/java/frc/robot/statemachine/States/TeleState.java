@@ -41,9 +41,8 @@ public class TeleState extends State {
             () -> -driverController.getRightX(),
             true));
 
-    // operator.leftTrigger()
-    // .onTrue(Commands.runOnce(() -> shooterEngaged =
-    // !shooterEngaged).withName("Toggle shooter engaged"));
+    operator.leftTrigger()
+        .onTrue(Commands.runOnce(() -> shooterEngaged = !shooterEngaged).withName("Toggle shooter engaged"));
 
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 

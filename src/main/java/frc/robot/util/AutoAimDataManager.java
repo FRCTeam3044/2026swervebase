@@ -148,7 +148,6 @@ public class AutoAimDataManager {
                 : RobotContainer.getInstance().autoTargetUtil.getHub().getTranslation().toTranslation2d();
         Translation2d turret = getTurretPose().getTranslation();
 
-        Logger.recordOutput("Turret Pose", getTurretPose());
         Logger.recordOutput("Target Pose", target);
 
         return target.minus(turret).getAngle().getMeasure()
@@ -157,6 +156,7 @@ public class AutoAimDataManager {
 
     public void periodic() {
         Pose2d turretPosition = getTurretPose();
+        Logger.recordOutput("Turret Pose", turretPosition);
         turretToAz = turretToAzFilter.calculate(
                 RobotContainer
                         .getInstance().autoTargetUtil.getAllianceZoneTarget().getTranslation().toTranslation2d()
