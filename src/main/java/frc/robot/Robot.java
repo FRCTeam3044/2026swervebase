@@ -12,7 +12,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -49,6 +48,7 @@ public class Robot extends LoggedRobot {
   public static Timer timer = new Timer();
   private Field2d field = new Field2d();
 
+  private final Alert turretNotReset = new Alert("!!! TURRET NOT RESET !!!", AlertType.kError);
   private final Alert autoWinnerNotSet = new Alert("!!! AUTO WINNER NOT SET !!!", AlertType.kError);
 
   public Timer getTimer() {
@@ -151,6 +151,8 @@ public class Robot extends LoggedRobot {
                 robotContainer.autoTargetUtil.getHub().getTranslation().toTranslation2d()));
 
     robotContainer.autoAim.periodic();
+
+    turretNotReset.set(!robotContainer.turret.hasReset());
 
     ShotCalculator.periodic();
   }

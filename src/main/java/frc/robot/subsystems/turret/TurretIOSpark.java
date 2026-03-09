@@ -63,6 +63,8 @@ public class TurretIOSpark implements TurretIO {
   private double error = 0.0;
   private double velocitySetpoint = 0.0;
 
+  private boolean turretHasReset = false;
+
   private final double degreesPerEncoderUnit = (angleAtPos2.in(Degrees) - angleAtPos1.in(Degrees))
       / (encoderAtPos2 - encoderAtPos1);
 
@@ -112,6 +114,7 @@ public class TurretIOSpark implements TurretIO {
     currentAngle = inputs.angle;
     inputs.error = error;
     inputs.velocitySetpoint = velocitySetpoint;
+    inputs.hasReset = turretHasReset;
   }
 
   private double getAngleFromRel(double encoder) {
@@ -163,16 +166,28 @@ public class TurretIOSpark implements TurretIO {
     Logger.recordOutput("Turret/FFOutput", ffOutput);
 
     double output = MathUtil.clamp(pidOutput + ffOutput, -maxOutput.get(), maxOutput.get());
+    if (!turretHasReset) {
+      motor.set(0);
+      return;
+    }
     motor.setVoltage(applySoftLimits(output));
   }
 
   @Override
   public void setVoltage(Voltage volts) {
+    if (!turretHasReset) {
+      motor.set(0);
+      return;
+    }
     motor.setVoltage(applySoftLimits(volts.in(Volts)));
   }
 
   @Override
   public void setPercent(double percent) {
+    if (!turretHasReset) {
+      motor.set(0);
+      return;
+    }
     motor.set(applySoftLimits(percent));
   }
 
@@ -199,6 +214,7 @@ public class TurretIOSpark implements TurretIO {
       if (reset) {
         calibrationEncoderReading = driveRelEncoder.getPosition();
         calibrationAngleDeg = angle.in(Degrees);
+        turretHasReset = true;
       }
     }
   }

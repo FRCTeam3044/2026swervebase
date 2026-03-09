@@ -19,6 +19,7 @@ public class NeutralZone extends State {
   public NeutralZone(
       StateMachine stateMachine,
       CommandXboxController driverController,
+      CommandXboxController operatorController,
       GenericHID operatorBoard,
       Drive drive,
       Intake intake,
@@ -29,10 +30,11 @@ public class NeutralZone extends State {
       Shooter shooter,
       AutoAim autoAim) {
     super(stateMachine);
-    SmartXboxController controller = new SmartXboxController(driverController, loop);
+    SmartXboxController driver = new SmartXboxController(driverController, loop);
+    SmartXboxController operator = new SmartXboxController(operatorController, loop);
 
     startWhenActive(
         autoAim.aimAllianceZone(() -> TeleState.shooterEngaged));
-    controller.rightTrigger().whileTrue(kicker.shootKicker());
+    operator.rightTrigger().whileTrue(kicker.shootKicker());
   }
 }

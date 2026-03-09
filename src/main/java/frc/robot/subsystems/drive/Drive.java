@@ -264,8 +264,7 @@ public class Drive extends SubsystemBase {
     if (Constants.currentMode == Mode.SIM) {
       return RobotContainer.driveSimulation.getDriveTrainSimulatedChassisSpeedsFieldRelative();
     } else {
-      // TODO: Proper!
-      return new ChassisSpeeds();
+      return ChassisSpeeds.fromRobotRelativeSpeeds(getChassisSpeeds(), getPose().getRotation());
     }
   }
 
@@ -273,8 +272,7 @@ public class Drive extends SubsystemBase {
     if (Constants.currentMode == Mode.SIM) {
       return RobotContainer.driveSimulation.getDriveTrainSimulatedChassisSpeedsRobotRelative();
     } else {
-      // TODO: Proper!
-      return new ChassisSpeeds();
+      return getChassisSpeeds();
     }
   }
 
