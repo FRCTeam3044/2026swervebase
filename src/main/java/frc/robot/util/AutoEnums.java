@@ -34,7 +34,8 @@ public class AutoEnums {
             return false;
         }),
         ShootToAlliedSide(() -> false),
-        LeftToRight(() -> frc.robot.statemachine.States.Auto.IntakeNeutralZone.stateComplete),
+        LeftToRight(() -> frc.robot.statemachine.States.Auto.IntakeNeutralZone.stateComplete
+                && RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getCloseLeftNeutral())),
         RightToLeft(() -> frc.robot.statemachine.States.Auto.IntakeNeutralZone.stateComplete),
         IntakeOutpost(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.closeOutpost())),
         IntakeAllianceZone(() -> false),

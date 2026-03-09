@@ -35,7 +35,7 @@ public class IntakeNeutralZone extends State {
                 DriveCommands.goToPoints(drive, waypoints, rot));
         t(() -> autoTargetUtil.inNeutralZone()).onTrue(intake.intakeBottom());
         t(() -> autoTargetUtil.inNeutralZone()).onTrue(intake.runRollers());
-        t(() -> drive.atPose(waypoints.get().get(waypoints.get().size() - 1)))
+        t(() -> drive.atPose(waypoints.get().get(2)))
                 .onTrue(Commands.runOnce(() -> stateComplete = true));
     }
 }

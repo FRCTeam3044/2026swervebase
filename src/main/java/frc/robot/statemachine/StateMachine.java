@@ -161,9 +161,9 @@ public class StateMachine extends StateMachineBase {
                                 climber);
                 IntakeAllianceZone intakeAllianceZone = new IntakeAllianceZone(this, drive);
                 IntakeNeutralZone leftToRight = new IntakeNeutralZone(this, autoTargetUtil,
-                                AutoTrajectories::getRightToLeftNeutral, drive, intake);
+                                AutoTrajectories::getLeftCurve, drive, intake);
                 IntakeNeutralZone rightToLeft = new IntakeNeutralZone(this, autoTargetUtil,
-                                AutoTrajectories::getLeftToRightNeutral, drive, intake);
+                                AutoTrajectories::getRightCurve, drive, intake);
                 ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this, drive, autoAim);
                 ShootToHub shootHub = new ShootToHub(this, autoTargetUtil, drive, intake, spindexer, kicker, turret,
                                 hood, shooter,
@@ -186,12 +186,12 @@ public class StateMachine extends StateMachineBase {
                         return autoChooser.get();
                 };
 
-                currentStep = autoSupplier.get().get(index);
+                currentStep = shootLtRShoot.get(index);
 
                 BooleanSupplier currentStateComplete = () -> {
                         if (currentStep.getCondition().getAsBoolean()) {
                                 index = index + 1;
-                                currentStep = autoSupplier.get().get(index);
+                                currentStep = shootLtRShoot.get(index);
                                 return true;
                         } else {
                                 return false;
