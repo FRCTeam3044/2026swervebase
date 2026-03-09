@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.RobotContainer;
 import frc.robot.commands.DriveCommands;
@@ -43,15 +44,16 @@ public class ShootToHub extends State {
 
         startWhenActive(DriveCommands.goToPoint(drive, targetSupplier, () -> Rotation2d.fromDegrees(0)));
         startWhenActive(intake.intakeBottom());
-        startWhenActive(spindexer.run());
-        startWhenActive(kicker.blockKicker());
+        startWhenActive(spindexer.setSpeed());
+        startWhenActive(kicker.blockKicker().onlyIf(() -> !autoTargetUtil.inAllianceZone()));
         t(() -> drive.atPose(targetSupplier.get())).whileTrue(Commands.run(() -> drive.stop()));
         startWhenActive(() -> Commands
-                .deferredProxy(() -> Commands.runOnce(() -> RobotContainer.getInstance().autoStateTimer.restart()))
+                .deferredProxy(() -> Commands.runOnce(() -> RobotContainer.getInstance().autoStateTimer.start()))
                 .onlyIf(() -> autoTargetUtil.inAllianceZone()));
         t(() -> autoTargetUtil.inAllianceZone())
-                .onTrue(Commands.runOnce(() -> RobotContainer.getInstance().autoStateTimer.restart()));
+                .onTrue(Commands.runOnce(() -> RobotContainer.getInstance().autoStateTimer.start()));
         startWhenActive(kicker.shootKicker().onlyIf(() -> autoTargetUtil.inAllianceZone()));
         startWhenActive(autoAim.aimHub(() -> true).onlyIf(() -> autoTargetUtil.inAllianceZone()));
+        t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> false));
     }
 }

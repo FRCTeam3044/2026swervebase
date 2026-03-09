@@ -13,6 +13,8 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RPM;
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
+import java.util.ArrayList;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -73,6 +75,8 @@ import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoAim;
 import frc.robot.util.AutoTargetUtil;
+import frc.robot.util.AutoEnums.AutoSteps;
+
 import org.ironmaple.simulation.IntakeSimulation;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
@@ -115,6 +119,8 @@ public class RobotContainer {
 
         public Timer simShotTimer = new Timer();
 
+        public Timer autoStateTimer = new Timer();
+
         // private ConfigurableP
         private final Mechanism2d mech;
         private final MechanismRoot2d root;
@@ -122,6 +128,8 @@ public class RobotContainer {
         private final MechanismLigament2d hoodSim;
         // Dashboard inputs
         private final LoggedDashboardChooser<Command> sysidChooser;
+
+        public final LoggedDashboardChooser<ArrayList<AutoSteps>> autoChooser;
 
         private static RobotContainer instance;
 
@@ -262,6 +270,12 @@ public class RobotContainer {
                 // Set up auto routines
                 sysidChooser = new LoggedDashboardChooser<>("SysId Choices");
 
+                autoChooser = new LoggedDashboardChooser<>("Auto choices");
+
+                // Set up auto routines
+                autoChooser.addDefaultOption("Left to right", StateMachine.shootLtRShoot);
+                autoChooser.addOption("Right to left", StateMachine.shootRtLShoot);
+
                 DriverStation.getGameSpecificMessage();
 
                 // Set up SysId routines
@@ -321,7 +335,7 @@ public class RobotContainer {
                                 climber,
                                 LEDs,
                                 autoTargetUtil,
-                                autoAim, sysidChooser);
+                                autoAim, sysidChooser, autoChooser);
 
                 mech = new Mechanism2d(3, 3);
                 root = mech.getRoot("Shooter", 1.5, 0);

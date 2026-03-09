@@ -9,11 +9,18 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
+import edu.wpi.first.math.controller.HolonomicDriveController;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Distance;
+import me.nabdev.oxconfig.sampleClasses.ConfigurablePIDController;
+import me.nabdev.oxconfig.sampleClasses.ConfigurableProfiledPIDController;
 import me.nabdev.pathfinding.Pathfinder;
 import me.nabdev.pathfinding.PathfinderBuilder;
 import me.nabdev.pathfinding.utilities.FieldLoader.Field;
@@ -102,6 +109,23 @@ public class DriveConstants {
         public static final double robotMOI = 6.883;
         public static final double wheelCOF = 1.49;
 
+        public static final PIDController xController = new ConfigurablePIDController(1, 0, 0,
+                        "Pathfinding X Controller");
+        public static final PIDController yController = new ConfigurablePIDController(1, 0, 0,
+                        "Pathfinding Y Controller");
+
+        public static final ProfiledPIDController angleController = new ConfigurableProfiledPIDController(
+                        6.0,
+                        0,
+                        0,
+                        // new TrapezoidProfile.Constraints(kMaxAngularSpeedRadiansPerSecond.get(),
+                        // kMaxAngularAccelerationRadiansPerSecondSquared.get()),
+                        new TrapezoidProfile.Constraints(8, 20),
+                        "Pathfinding Theta Controller");
+
+        public static final HolonomicDriveController driveController = new HolonomicDriveController(
+                        xController, yController, angleController);
+
         public static final DriveTrainSimulationConfig mapleSimConfig = DriveTrainSimulationConfig.Default()
                         .withBumperSize(Inches.of(30), Inches.of(30))
                         .withCustomModuleTranslations(moduleTranslations)
@@ -128,4 +152,27 @@ public class DriveConstants {
                         .setRobotLength(mapleBumperSize.in(Meters))
                         .setRobotWidth(mapleBumperSize.in(Meters))
                         .build();
+
+        public static final PIDController xPointController = new ConfigurablePIDController(1, 0, 0,
+                        "X Point Controller");
+        public static final PIDController yPointController = new ConfigurablePIDController(1, 0, 0,
+                        "Y Point Controller");
+        public static final ProfiledPIDController anglePointController = new ConfigurableProfiledPIDController(
+                        6.0,
+                        0,
+                        0,
+                        // new TrapezoidProfile.Constraints(kMaxAngularSpeedRadiansPerSecond.get(),
+                        // kMaxAngularAccelerationRadiansPerSecondSquared.get()),
+                        new TrapezoidProfile.Constraints(8, 20),
+                        "Point Theta Controller");
+
+        public static final HolonomicDriveController pointController = new HolonomicDriveController(
+                        xPointController, yPointController, anglePointController);
+
+        public static final Pose2d pointControllerTolerance = new Pose2d(0.027, 0.027, new Rotation2d(0.05));
+        public static final Pose2d pointControllerLooseTolerance = new Pose2d(0.045, 0.045, new Rotation2d(0.06));
+
+        static {
+                pointController.setTolerance(pointControllerTolerance);
+        }
 }

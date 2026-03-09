@@ -14,6 +14,8 @@ import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 
 public class IntakeNeutralZone extends State {
+    public static boolean stateComplete = false;
+
     public IntakeNeutralZone(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil,
             Supplier<ArrayList<Pose2d>> waypoints, Drive drive,
             Intake intake) {
@@ -33,5 +35,7 @@ public class IntakeNeutralZone extends State {
                 DriveCommands.goToPoints(drive, waypoints, rot));
         t(() -> autoTargetUtil.inNeutralZone()).onTrue(intake.intakeBottom());
         t(() -> autoTargetUtil.inNeutralZone()).onTrue(intake.runRollers());
+        t(() -> drive.atPose(waypoints.get().get(waypoints.get().size() - 1)))
+                .onTrue(Commands.runOnce(() -> stateComplete = true));
     }
 }
