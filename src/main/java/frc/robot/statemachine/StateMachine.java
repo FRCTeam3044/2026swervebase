@@ -1,7 +1,5 @@
 package frc.robot.statemachine;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,7 +12,6 @@ import frc.robot.statemachine.States.Auto.IntakeNeutralZone;
 import frc.robot.statemachine.States.Auto.IntakeOutpost;
 import frc.robot.statemachine.States.Auto.ShootToAlliedSide;
 import frc.robot.statemachine.States.Auto.ShootToHub;
-import frc.robot.commands.DriveCommands;
 import frc.robot.statemachine.States.AutoState;
 import frc.robot.statemachine.States.CalibrationState;
 import frc.robot.statemachine.States.DisabledState;
@@ -45,7 +42,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import frc.robot.util.HubShiftUtil;
-import frc.robot.util.PathfindingDebugUtils;
 
 import java.util.function.BooleanSupplier;
 
@@ -53,7 +49,6 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
-import me.nabdev.pathfinding.structures.Vertex;
 
 public class StateMachine extends StateMachineBase {
         String autoWinner = DriverStation.getGameSpecificMessage();
@@ -156,10 +151,14 @@ public class StateMachine extends StateMachineBase {
                 ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this, drive, autoAim);
                 ShootToHub shootHub = new ShootToHub(this, autoTargetUtil, drive, intake, spindexer, kicker, turret,
                                 hood, shooter,
-                                autoAim, climber);
+                                autoAim);
+                ShootToHub secondScore = new ShootToHub(this, autoTargetUtil, drive, intake, spindexer, kicker, turret,
+                                hood, shooter,
+                                autoAim);
                 IntakeOutpost intakeOutpost = new IntakeOutpost(this, drive, intake);
 
                 Collections.addAll(testAutoRoutine, AutoSteps.ShootToHub, AutoSteps.IntakeNeutralZone,
+                                AutoSteps.SecondScore,
                                 AutoSteps.RightClimb,
                                 AutoSteps.EmptyState);
                 currentStep = testAutoRoutine.get(index);
@@ -175,6 +174,8 @@ public class StateMachine extends StateMachineBase {
                 };
 
                 auto.withChild(shootHub, () -> currentStep == AutoSteps.ShootToHub, 0, "Auto to hub shot")
+                                .withChild(secondScore, () -> currentStep == AutoSteps.SecondScore, 0,
+                                                "Auto to second score")
                                 .withChild(leftClimb, () -> currentStep == AutoSteps.LeftClimb, 0, "Auto to left climb")
                                 .withChild(rightClimb, () -> currentStep == AutoSteps.RightClimb, 0,
                                                 "Auto to right climb")
@@ -193,6 +194,7 @@ public class StateMachine extends StateMachineBase {
                 leftClimb.withTransition(auto, currentStateComplete, 0, "Left climb to auto");
                 rightClimb.withTransition(auto, currentStateComplete, "Right climb to auto");
                 shootHub.withTransition(auto, currentStateComplete, 0, "Shoot hub to auto");
+                secondScore.withTransition(auto, currentStateComplete, "Second score to auto");
                 shootToAlliedSide.withTransition(auto, currentStateComplete, 0, "Neutral shot to auto");
                 intakeAllianceZone.withTransition(auto, currentStateComplete, 0, "Allied intake to shot");
                 intakeNeutralZone.withTransition(auto, currentStateComplete, 0, "Neutral intake to shot");

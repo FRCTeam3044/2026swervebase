@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.RobotContainer;
 import frc.robot.commands.DriveCommands;
-import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.intake.Intake;
@@ -33,8 +32,7 @@ public class ShootToHub extends State {
       Turret turret,
       Hood hood,
       Shooter shooter,
-      AutoAim autoAim,
-      Climber climber) {
+      AutoAim autoAim) {
     super(stateMachine);
 
     Supplier<Pose2d> targetSupplier = () -> {
