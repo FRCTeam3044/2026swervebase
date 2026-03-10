@@ -37,22 +37,24 @@ public class ShootToHub extends State {
         super(stateMachine);
 
         Supplier<Pose2d> targetSupplier = () -> {
+            if (autoTargetUtil.inAllianceZone()) {
+                return drive.getPose();
+            }
             Obstacle allianceZone = AutoTargetUtil.allianceSide();
             Vertex robotPos = new Vertex(drive.getPose());
             return allianceZone.calculateNearestPoint(robotPos).asPose2d();
         };
 
         startWhenActive(DriveCommands.goToPoint(drive, targetSupplier, () -> Rotation2d.fromDegrees(0)));
-        startWhenActive(intake.intakeBottom());
-        startWhenActive(spindexer.setSpeed());
-        startWhenActive(kicker.blockKicker().onlyIf(() -> !autoTargetUtil.inAllianceZone()));
-        t(() -> drive.atPose(targetSupplier.get())).whileTrue(Commands.run(() -> drive.stop()));
+        t(() -> drive.atPose(targetSupplier.get()))
+                .whileTrue(Commands.run(() -> drive.stop()));
         startWhenActive(() -> Commands
                 .deferredProxy(() -> Commands.runOnce(() -> RobotContainer.getInstance().autoStateTimer.start()))
                 .onlyIf(() -> autoTargetUtil.inAllianceZone()));
         t(() -> autoTargetUtil.inAllianceZone())
                 .onTrue(Commands.runOnce(() -> RobotContainer.getInstance().autoStateTimer.start()));
-        startWhenActive(kicker.shootKicker().onlyIf(() -> autoTargetUtil.inAllianceZone()));
+        startWhenActive(kicker.shootKicker().onlyIf(() -> autoTargetUtil.inAllianceZone() && shooter.isAtSpeed()));
+        t(shooter::isAtSpeed).and(autoTargetUtil::inAllianceZone).onTrue(kicker.shootKicker());
         startWhenActive(autoAim.aimHub(() -> true).onlyIf(() -> autoTargetUtil.inAllianceZone()));
         t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> false));
     }

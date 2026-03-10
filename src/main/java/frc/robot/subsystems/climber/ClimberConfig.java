@@ -9,7 +9,7 @@ public class ClimberConfig {
 
   static {
     SoftLimitConfig softLimits = new SoftLimitConfig();
-    softLimits.forwardSoftLimit(100);
+    softLimits.forwardSoftLimit(105);
     softLimits.forwardSoftLimitEnabled(true);
     // softLimits.reverseSoftLimit(0);
     // softLimits.reverseSoftLimitEnabled(true);

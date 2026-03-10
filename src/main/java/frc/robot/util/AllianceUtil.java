@@ -73,6 +73,10 @@ public class AllianceUtil {
         new Rotation2d(bluePose.getRotation().getRadians() + Math.PI));
   }
 
+  public static final Rotation2d mapBlueRotToRed(Rotation2d blueRot) {
+    return new Rotation2d(blueRot.getRadians() + Math.PI);
+  }
+
   // Rotated
   public static final Vertex mapBlueVertexToRed(Vertex bluePose) {
     return new Vertex(
@@ -102,6 +106,17 @@ public class AllianceUtil {
       } else {
         return redPose;
       }
+    }
+  }
+
+  public static Rotation2d getRotForAlliance(Rotation2d blueRot) {
+    Rotation2d redPose = mapBlueRotToRed(blueRot);
+    if (alliance == AllianceColor.BLUE) {
+      return blueRot;
+    } else if (alliance == AllianceColor.RED) {
+      return redPose;
+    } else {
+      return blueRot;
     }
   }
 

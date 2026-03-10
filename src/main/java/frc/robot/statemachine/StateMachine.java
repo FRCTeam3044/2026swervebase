@@ -90,7 +90,7 @@ public class StateMachine extends StateMachineBase {
                 State teleop = new TeleState(this, driverController, operatorController, drive, climber, intake,
                                 spindexer, hood, turret, leds);
                 State test = new TestState(this, hood, turret);
-                State auto = new AutoState(this, autoChooser, turret, hood);
+                State auto = new AutoState(this, autoChooser, turret, hood, intake, spindexer);
 
                 this.registerToRootState(test, teleop, auto, disabled);
 
@@ -173,8 +173,9 @@ public class StateMachine extends StateMachineBase {
                                 autoAim);
                 IntakeOutpost intakeOutpost = new IntakeOutpost(this, drive, intake);
 
-                Collections.addAll(shootLtRShoot, AutoSteps.ShootToHub, AutoSteps.LeftToRight,
-                                AutoSteps.SecondScore,
+                Collections.addAll(shootLtRShoot, AutoSteps.ShootToHub,
+                                AutoSteps.LeftToRight,
+                                // AutoSteps.SecondScore,
                                 AutoSteps.EmptyState);
                 Collections.addAll(shootRtLShoot, AutoSteps.ShootToHub, AutoSteps.RightToLeft, AutoSteps.SecondScore,
                                 AutoSteps.EmptyState);

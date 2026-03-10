@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoTargetUtil;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
@@ -25,7 +26,11 @@ public class IntakeNeutralZone extends State {
             if (autoTargetUtil.inAllianceZone()) {
                 return Rotation2d.fromDegrees(0);
             } else if (autoTargetUtil.inNeutralZone()) {
-                return Rotation2d.fromDegrees(45);
+                if (!stateComplete) {
+                    return AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(45));
+                } else {
+                    return AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(225));
+                }
             } else {
                 return Rotation2d.fromDegrees(0);
             }

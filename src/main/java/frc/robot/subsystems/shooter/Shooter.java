@@ -21,6 +21,8 @@ public class Shooter extends SubsystemBase {
   private final SysIdRoutine sysId;
   private ConfigurableParameter<Double> tolerance = new ConfigurableParameter<Double>(5.0,
       "Shooter at speed tolerance (RPM)");
+  private ConfigurableParameter<Double> minSpeed = new ConfigurableParameter<Double>(2500.0,
+      "Shooter min speed (RPM)");
   private double targetSpeed = 0.0;
 
   public Shooter(ShooterIO io) {
@@ -75,6 +77,9 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean isAtSpeed() {
-    return Math.abs(inputs.leaderVelocity - targetSpeed) < tolerance.get();
+    boolean isAtSpeed = inputs.calculatedGoal > minSpeed.get()
+        && Math.abs(inputs.leaderVelocity - inputs.calculatedGoal) < tolerance.get();
+    Logger.recordOutput("IsAtSpeed", isAtSpeed);
+    return isAtSpeed;
   }
 }

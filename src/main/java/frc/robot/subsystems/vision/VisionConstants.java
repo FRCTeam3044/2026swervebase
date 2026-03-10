@@ -23,7 +23,7 @@ public class VisionConstants {
         static {
                 try {
                         aprilTagLayout = new AprilTagFieldLayout(
-                                        Filesystem.getDeployDirectory() + "/3-7-practice-field.json");
+                                        Filesystem.getDeployDirectory() + "/3-9-practice-field.json");
                 } catch (Exception e) {
                         e.printStackTrace();
                         aprilTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
@@ -86,7 +86,7 @@ public class VisionConstants {
 
         // Standard deviation baselines, for 1 meter distance and 1 tag
         // (Adjusted automatically based on distance and # of tags)
-        public static double linearStdDevBaseline = 0.02; // Meters
+        public static double linearStdDevBaseline = 0.04; // Meters
         public static double angularStdDevBaseline = 0.06; // Radians
 
         // Standard deviation multipliers for each camera

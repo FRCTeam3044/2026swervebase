@@ -14,8 +14,8 @@ import me.nabdev.pathfinding.structures.Vertex;
 public class AutoTargetUtil {
   private final Drive drive;
 
-  final double blueSideLine = 4.57482575;
-  final double redSideLine = 11.96622575;
+  final double blueSideLine = 4.67482575;
+  final double redSideLine = 11.86622575;
 
   private Pose3d hub = new Pose3d(new Translation3d(4.62, 8.069 / 2.0, 2), new Rotation3d());
   private Pose3d outpostAllianceTarget = new Pose3d(new Translation3d(3.3, 1.7, 2), new Rotation3d());
@@ -26,9 +26,9 @@ public class AutoTargetUtil {
   private static POIData leftTower = POIData.createFromRed(1.06223613, 3.20841229, 1.06223613, 2.60841229);
   private static POIData rightTower = POIData.createFromRed(1.06223613, 4.28304359, 1.06223613, 4.88304359);
 
-  private static Pose2d rightNeutral = new Pose2d(8.75, 0.75, Rotation2d.fromDegrees(0));
-  private static Pose2d leftNeutral = new Pose2d(8.75, 7, Rotation2d.fromDegrees(0));
-  private static Pose2d closeRightNeutral = new Pose2d(7.5, 0.75, Rotation2d.fromDegrees(0));
+  private static Pose2d rightNeutral = new Pose2d(8, 1.5, Rotation2d.fromDegrees(0));
+  private static Pose2d leftNeutral = new Pose2d(8, 7, Rotation2d.fromDegrees(0));
+  private static Pose2d closeRightNeutral = new Pose2d(7.5, 1.5, Rotation2d.fromDegrees(0));
   private static Pose2d closeLeftNeutral = new Pose2d(7.5, 7, Rotation2d.fromDegrees(0));
 
   private static POIData outpost = POIData.createFromRed(0.52188903, 5.96503125, 1.06827289, 5.96503125);
