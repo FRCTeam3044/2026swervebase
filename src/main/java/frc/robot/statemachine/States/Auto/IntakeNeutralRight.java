@@ -9,19 +9,18 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.kicker.Kicker;
 import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoAim;
 import frc.robot.util.AutoTargetUtil;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 
-public class IntakeNeutralZone extends State {
+public class IntakeNeutralRight extends State {
     public static boolean stateComplete = false;
 
-    public IntakeNeutralZone(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil,
+    public IntakeNeutralRight(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil,
             Supplier<ArrayList<Pose2d>> waypoints, AutoAim autoAim, Drive drive,
-            Intake intake, Kicker kicker) {
+            Intake intake) {
         super(stateMachine);
 
         Supplier<Rotation2d> rot = () -> {
@@ -29,9 +28,9 @@ public class IntakeNeutralZone extends State {
                 return Rotation2d.fromDegrees(0);
             } else if (autoTargetUtil.inNeutralZone()) {
                 if (!stateComplete) {
-                    return AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(60));
+                    return AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(225));
                 } else {
-                    return AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(290));
+                    return AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(45));
                 }
             } else {
                 return Rotation2d.fromDegrees(0);
@@ -42,12 +41,10 @@ public class IntakeNeutralZone extends State {
                 DriveCommands.goToPoints(drive, waypoints, rot));
         t(() -> autoTargetUtil.inNeutralZone()).onTrue(intake.intakeBottom());
         t(() -> autoTargetUtil.inNeutralZone()).onTrue(intake.runRollers());
-        t(() -> drive.atPose(waypoints.get().get(1)))
+        t(() -> drive.atPose(waypoints.get().get(2)))
                 .onTrue(Commands.runOnce(() -> stateComplete = true));
 
-        startWhenActive(kicker.shootKicker().onlyIf(() -> !stateComplete).withName("Running kicker"));
         startWhenActive(autoAim.aimAllianceZone(() -> false).onlyIf(() -> !stateComplete).withName("Shoot to AZ"));
-        // t(() -> !stateComplete).whileTrue(autoAim.aimAllianceZone(() ->
-        // false).withName("Shoot to AZ"));
+        t(() -> !stateComplete).whileTrue(autoAim.aimAllianceZone(() -> false).withName("Shoot to AZ"));
     }
 }

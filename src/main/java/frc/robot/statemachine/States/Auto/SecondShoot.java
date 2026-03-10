@@ -21,8 +21,8 @@ import me.nabdev.oxidation.StateMachineBase;
 import me.nabdev.pathfinding.structures.Obstacle;
 import me.nabdev.pathfinding.structures.Vertex;
 
-public class ShootToHub extends State {
-    public ShootToHub(
+public class SecondShoot extends State {
+    public SecondShoot(
             StateMachineBase stateMachine,
             AutoTargetUtil autoTargetUtil,
             Drive drive,
@@ -44,7 +44,7 @@ public class ShootToHub extends State {
             return allianceZone.calculateNearestPoint(robotPos).asPose2d();
         };
 
-        startWhenActive(DriveCommands.goToPoint(drive, targetSupplier, () -> Rotation2d.fromDegrees(0)));
+        startWhenActive(DriveCommands.goToPoint(drive, targetSupplier, () -> Rotation2d.fromDegrees(180)));
         t(() -> drive.atPose(targetSupplier.get()))
                 .whileTrue(Commands.run(() -> drive.stop()));
         startWhenActive(() -> Commands

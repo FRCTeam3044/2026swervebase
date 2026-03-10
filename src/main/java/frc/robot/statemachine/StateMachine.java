@@ -20,8 +20,10 @@ import frc.robot.statemachine.States.Auto.AutoClimb;
 import frc.robot.statemachine.States.Auto.AutoTrajectories;
 import frc.robot.statemachine.States.Auto.EmptyState;
 import frc.robot.statemachine.States.Auto.IntakeAllianceZone;
+import frc.robot.statemachine.States.Auto.IntakeNeutralRight;
 import frc.robot.statemachine.States.Auto.IntakeNeutralZone;
 import frc.robot.statemachine.States.Auto.IntakeOutpost;
+import frc.robot.statemachine.States.Auto.SecondShoot;
 import frc.robot.statemachine.States.Auto.ShootToAlliedSide;
 import frc.robot.statemachine.States.Auto.ShootToHub;
 import frc.robot.subsystems.climber.Climber;
@@ -161,31 +163,36 @@ public class StateMachine extends StateMachineBase {
                                 climber);
                 IntakeAllianceZone intakeAllianceZone = new IntakeAllianceZone(this, drive);
                 IntakeNeutralZone leftToRight = new IntakeNeutralZone(this, autoTargetUtil,
-                                AutoTrajectories::getLeftCurve, drive, intake);
-                IntakeNeutralZone rightToLeft = new IntakeNeutralZone(this, autoTargetUtil,
-                                AutoTrajectories::getRightCurve, drive, intake);
+                                AutoTrajectories::getLeftCurve, autoAim, drive, intake, kicker);
+
+                IntakeNeutralRight rightToLeft = new IntakeNeutralRight(this, autoTargetUtil,
+                                AutoTrajectories::getRightCurve, autoAim, drive, intake);
                 ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this, drive, autoAim);
                 ShootToHub shootHub = new ShootToHub(this, autoTargetUtil, drive, intake, spindexer, kicker, turret,
                                 hood, shooter,
                                 autoAim);
-                ShootToHub secondScore = new ShootToHub(this, autoTargetUtil, drive, intake, spindexer, kicker, turret,
+                SecondShoot secondScore = new SecondShoot(this, autoTargetUtil, drive, intake, spindexer, kicker,
+                                turret,
                                 hood, shooter,
                                 autoAim);
                 IntakeOutpost intakeOutpost = new IntakeOutpost(this, drive, intake);
 
                 Collections.addAll(shootLtRShoot, AutoSteps.ShootToHub,
                                 AutoSteps.LeftToRight,
-                                // AutoSteps.SecondScore,
-                                AutoSteps.EmptyState);
-                Collections.addAll(shootRtLShoot, AutoSteps.ShootToHub, AutoSteps.RightToLeft, AutoSteps.SecondScore,
+                                AutoSteps.SecondScore,
                                 AutoSteps.EmptyState);
 
-                Supplier<ArrayList<AutoSteps>> autoSupplier = () -> {
-                        if (autoChooser.get() == null) {
-                                return shootRtLShoot;
-                        }
-                        return autoChooser.get();
-                };
+                Collections.addAll(shootRtLShoot, AutoSteps.ShootToHub,
+                                AutoSteps.RightToLeft,
+                                // AutoSteps.SecondScore,
+                                AutoSteps.EmptyState);
+
+                // Supplier<ArrayList<AutoSteps>> autoSupplier = () -> {
+                // if (autoChooser.get() == null) {
+                // return shootRtLShoot;
+                // }
+                // return autoChooser.get();
+                // };
 
                 currentStep = shootLtRShoot.get(index);
 
