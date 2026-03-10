@@ -12,7 +12,7 @@ public class ShooterConstants {
 
   // since these are used to constrain a profiled PID controller of velocity, the
   // "velocity" constraint is actually acceleration and the "acceleration"
-  // constraint is actually jolt
+  // constraint is actually jerk
   public static final double maxJerk = 1000;
   public static final double maxAcceleration = 1000;
 }
