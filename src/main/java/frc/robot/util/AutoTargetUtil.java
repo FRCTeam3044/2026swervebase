@@ -28,6 +28,7 @@ public class AutoTargetUtil {
 
   private static Pose2d rightNeutral = new Pose2d(8.75, 4.5, Rotation2d.fromDegrees(0));
   private static Pose2d leftNeutral = new Pose2d(8.75, 7, Rotation2d.fromDegrees(0));
+  private static Pose2d safeLeftNeutral = new Pose2d(8.75, 7.25, Rotation2d.fromDegrees(0));
   private static Pose2d closeRightNeutral = new Pose2d(7.5, 4.5, Rotation2d.fromDegrees(0));
   private static Pose2d closeLeftNeutral = new Pose2d(7.5, 7, Rotation2d.fromDegrees(0));
 
@@ -65,6 +66,10 @@ public class AutoTargetUtil {
 
   public static Pose2d getLeftNeutral() {
     return AllianceUtil.getPoseForAlliance(leftNeutral);
+  }
+
+  public static Pose2d getSafeLeftNeutral() {
+    return AllianceUtil.getPoseForAlliance(safeLeftNeutral);
   }
 
   public static Pose2d getNeutralZone() {

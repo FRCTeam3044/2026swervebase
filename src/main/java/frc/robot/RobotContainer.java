@@ -167,7 +167,8 @@ public class RobotContainer {
                                 spindexer = new Spindexer(new SpindexerIOSpark());
                                 kicker = new Kicker(new KickerIOSpark());
                                 turret = new Turret(new TurretIOSpark());
-                                climber = new Climber(new ClimberIOSpark());
+                                climber = new Climber(new ClimberIO() {
+                                });
                                 LEDs = new LEDs(/* new LEDsIORio() */ new LEDsIO() {
 
                                 });

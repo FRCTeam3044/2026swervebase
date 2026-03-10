@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.RobotContainer;
 import frc.robot.statemachine.States.AutoState;
 import frc.robot.statemachine.States.CalibrationState;
 import frc.robot.statemachine.States.DisabledState;
@@ -20,9 +19,10 @@ import frc.robot.statemachine.States.Auto.AutoClimb;
 import frc.robot.statemachine.States.Auto.AutoTrajectories;
 import frc.robot.statemachine.States.Auto.EmptyState;
 import frc.robot.statemachine.States.Auto.IntakeAllianceZone;
+import frc.robot.statemachine.States.Auto.IntakeDepot;
 import frc.robot.statemachine.States.Auto.IntakeNeutralRight;
 import frc.robot.statemachine.States.Auto.IntakeNeutralZone;
-import frc.robot.statemachine.States.Auto.IntakeOutpost;
+import frc.robot.statemachine.States.Auto.LeftTransition;
 import frc.robot.statemachine.States.Auto.SecondShoot;
 import frc.robot.statemachine.States.Auto.ShootToAlliedSide;
 import frc.robot.statemachine.States.Auto.ShootToHub;
@@ -46,7 +46,6 @@ import frc.robot.util.HubShiftUtil;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -175,10 +174,12 @@ public class StateMachine extends StateMachineBase {
                                 turret,
                                 hood, shooter,
                                 autoAim);
-                IntakeOutpost intakeOutpost = new IntakeOutpost(this, drive, intake);
+                LeftTransition leftTransition = new LeftTransition(this, drive);
+                IntakeDepot intakeOutpost = new IntakeDepot(this, drive, intake);
 
                 Collections.addAll(shootLtRShoot, AutoSteps.ShootToHub,
                                 AutoSteps.LeftToRight,
+                                AutoSteps.LeftTransition,
                                 AutoSteps.SecondScore,
                                 AutoSteps.EmptyState);
 
@@ -223,6 +224,8 @@ public class StateMachine extends StateMachineBase {
                                                 "Auto to neutral shot")
                                 .withChild(intakeOutpost, () -> currentStep == AutoSteps.IntakeOutpost, 0,
                                                 "Auto to outpost intake")
+                                .withChild(leftTransition, () -> currentStep == AutoSteps.LeftTransition, 0,
+                                                "Auto to left transition")
                                 .withChild(emptyState, () -> currentStep == AutoSteps.EmptyState, 0,
                                                 "Auto to empty state");
 
@@ -235,6 +238,7 @@ public class StateMachine extends StateMachineBase {
                 leftToRight.withTransition(auto, currentStateComplete, 0, "Left to right to auto");
                 rightToLeft.withTransition(auto, currentStateComplete, "Right to left to auto");
                 intakeOutpost.withTransition(auto, currentStateComplete, "Outpost intake to auto");
+                leftTransition.withTransition(auto, currentStateComplete, 0, "Left transition to auto");
                 emptyState.withTransition(auto, currentStateComplete, 0, "Empty to auto");
 
                 // For SYSID (comment out for normal autos)

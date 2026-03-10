@@ -13,6 +13,7 @@ import static frc.robot.subsystems.drive.DriveConstants.*;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -66,6 +67,12 @@ public class Drive extends SubsystemBase {
   public boolean atPose(Pose2d pose) {
     double distance = pose.getTranslation().getDistance(this.getPose().getTranslation());
     return distance < DriveCommands.pathfindingTolerance.get();
+  };
+
+  public boolean atRotation(Rotation2d rot) {
+    double rotation = rot.getRadians() - this.getRotation().getRadians();
+    double diff = MathUtil.angleModulus(rotation);
+    return Math.abs(diff) < DriveCommands.rotationTolerance.get();
   };
 
   public Drive(

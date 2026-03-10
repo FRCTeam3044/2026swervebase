@@ -1,6 +1,8 @@
 package frc.robot.util;
 
 import java.util.function.BooleanSupplier;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.RobotContainer;
 import me.nabdev.oxconfig.ConfigurableParameter;
 
@@ -41,6 +43,8 @@ public class AutoEnums {
                         .getCloseRightNeutral())),
         IntakeOutpost(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.closeOutpost())),
         IntakeAllianceZone(() -> false),
+        LeftTransition(() -> RobotContainer.getInstance().drive.atRotation(Rotation2d.fromDegrees(180))
+                && RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getCloseLeftNeutral())),
         EmptyState(() -> false);
 
         private final BooleanSupplier condition;

@@ -46,7 +46,7 @@ public class IntakeNeutralZone extends State {
                 .onTrue(Commands.runOnce(() -> stateComplete = true));
 
         startWhenActive(kicker.shootKicker().onlyIf(() -> !stateComplete).withName("Running kicker"));
-        startWhenActive(autoAim.aimAllianceZone(() -> false).onlyIf(() -> !stateComplete).withName("Shoot to AZ"));
+        startWhenActive(autoAim.aimAllianceZone(() -> true).onlyIf(() -> !stateComplete).withName("Shoot to AZ"));
         // t(() -> !stateComplete).whileTrue(autoAim.aimAllianceZone(() ->
         // false).withName("Shoot to AZ"));
     }

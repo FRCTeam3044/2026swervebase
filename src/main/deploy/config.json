@@ -367,6 +367,10 @@
             "comment": "Auto-Generated",
             "value": "0.5"
         },
+        "Rotation tolerance": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "Hood Controller/I": "0.0",
         "Bottom climber position": {
             "comment": "Auto-Generated",
@@ -747,6 +751,10 @@
             "comment": "Auto-Generated",
             "value": "0.5"
         },
+        "Rotation tolerance": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "Hood Controller/I": "0.0",
         "Bottom climber position": {
             "comment": "Auto-Generated",
@@ -1125,6 +1133,10 @@
         "Intake top position": {
             "comment": "Auto-Generated",
             "value": "0.5"
+        },
+        "Rotation tolerance": {
+            "comment": "Auto-Generated",
+            "value": "4.0"
         },
         "Hood Controller/I": "0.0",
         "Bottom climber position": {

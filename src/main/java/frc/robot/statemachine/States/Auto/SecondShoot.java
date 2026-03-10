@@ -55,6 +55,6 @@ public class SecondShoot extends State {
         startWhenActive(kicker.shootKicker().onlyIf(() -> autoTargetUtil.inAllianceZone() && shooter.isAtSpeed()));
         t(shooter::isAtSpeed).and(autoTargetUtil::inAllianceZone).onTrue(kicker.shootKicker());
         startWhenActive(autoAim.aimHub(() -> true).onlyIf(() -> autoTargetUtil.inAllianceZone()));
-        t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> false));
+        t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> true));
     }
 }
