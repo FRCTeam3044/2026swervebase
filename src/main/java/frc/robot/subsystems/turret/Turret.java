@@ -1,5 +1,7 @@
 package frc.robot.subsystems.turret;
 
+import frc.robot.RobotContainer;
+
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
@@ -79,21 +81,14 @@ public class Turret extends SubsystemBase {
   }
 
   public Command setAngle(Supplier<Angle> angle) {
-    return Commands.runEnd(() -> io.setAngle(angle.get()), () -> io.setPercent(0), this)
-        .withName("Set Turret Angle");
-  }
+    Supplier<Angle> realAngleSupplier = () -> {
+      if (RobotContainer.getInstance().hood.calibrated())
+        return angle.get();
 
-  public Command exitDangerZone() {
-    double curAngle = inputs.angle.in(Degrees);
-    if (curAngle > hoodDangerOneMin.get() && curAngle < hoodDangerOneMax.get()) {
-      return setAngle(() -> Degrees.of(hoodDangerOneMax.get() + 5))
-          .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
-    } else if (curAngle > hoodDangerTwoMin.get() && curAngle < hoodDangerTwoMax.get()) {
-      return setAngle(() -> Degrees.of(hoodDangerTwoMin.get() - 5))
-          .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
-    } else {
-      return Commands.none().withInterruptBehavior(InterruptionBehavior.kCancelSelf);
-    }
+      return Degrees.of(hoodDangerOneMax.get() + 5);
+    };
+    return Commands.runEnd(() -> io.setAngle(realAngleSupplier.get()), () -> io.setPercent(0))
+        .withName("Set Turret Angle");
   }
 
   public Command runPercent(DoubleSupplier percent) {
@@ -114,7 +109,11 @@ public class Turret extends SubsystemBase {
   }
 
   public boolean inHoodDangerZone() {
-    double angle = inputs.angle.in(Degrees);
+    return angleInHoodDangerZone(inputs.angle);
+  }
+
+  public boolean angleInHoodDangerZone(Angle angleToCheck) {
+    double angle = angleToCheck.in(Degrees);
     return ((angle > hoodDangerOneMin.get() && angle < hoodDangerOneMax.get())
         || (angle > hoodDangerTwoMin.get() && angle < hoodDangerTwoMax.get()));
   }

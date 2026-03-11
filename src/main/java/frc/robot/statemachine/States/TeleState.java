@@ -44,7 +44,8 @@ public class TeleState extends State {
     operator.leftTrigger()
         .onTrue(Commands.runOnce(() -> shooterEngaged = !shooterEngaged).withName("Toggle shooter engaged"));
 
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    controller.start().onTrue(Commands.runOnce(hood::resetCalibration));
 
     operator.povUp().whileTrue(climber.setSpeed(true));
     operator.povDown().whileTrue(climber.setSpeed(false));
@@ -57,7 +58,8 @@ public class TeleState extends State {
 
     startWhenActive(spindexer.setSpeed());
 
-    t(() -> turret.inHoodDangerZone() && !hood.calibrated()).whileTrue(turret.exitDangerZone());
+    // t(() -> turret.inHoodDangerZone() &&
+    // !hood.calibrated()).whileTrue(turret.exitDangerZone());
 
     // controller
     // .b()
@@ -68,6 +70,6 @@ public class TeleState extends State {
     // .outpostDump(AllianceUtil.getAlliance() == AllianceColor.BLUE))
     // .ignoringDisable(true));
 
-    startWhenActive(leds.setBlinkingOrange());
+    startWhenActive(leds.defaultPattern());
   }
 }
