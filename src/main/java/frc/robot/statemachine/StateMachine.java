@@ -120,15 +120,15 @@ public class StateMachine extends StateMachineBase {
                                 this, driverController, operatorController, operatorBoard, drive, intake, spindexer,
                                 kicker, turret, hood,
                                 shooter,
-                                autoAim);
+                                autoAim, leds);
                 ActiveHub activeHub = new ActiveHub(
                                 this, driverController, operatorController, drive, intake, spindexer, kicker, turret,
                                 hood,
                                 shooter,
-                                autoAim);
+                                autoAim, leds);
                 InactiveHub inactiveHub = new InactiveHub(this, driverController, drive, intake, spindexer, kicker,
                                 turret,
-                                hood);
+                                hood, leds);
 
                 teleop.withDefaultChild(alliedZone).withChild(neutralZone);
 

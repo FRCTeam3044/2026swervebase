@@ -1,7 +1,9 @@
 package frc.robot.statemachine.States.Tele;
 
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.statemachine.StateMachine;
+import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.intake.Intake;
@@ -26,10 +28,15 @@ public class ActiveHub extends State {
       Kicker kicker,
       Turret turret,
       Hood hood,
-      Shooter shooter, AutoAim autoAim) {
+      Shooter shooter, AutoAim autoAim, LEDs leds) {
     super(stateMachine);
     SmartXboxController operator = new SmartXboxController(operatorController, loop);
     SmartXboxController driver = new SmartXboxController(driverController, loop);
-    operator.rightTrigger().and(turret::isAtTarget).and(shooter::isAtSpeed).whileTrue(kicker.shootKicker());
+    operator.rightTrigger().and(turret::isAtTarget).and(shooter::isAtSpeed).whileTrue(kicker.shootKicker())
+        .whileTrue(leds.setBlinkingColor(Color.kGreen));
+    operator.rightTrigger().negate().and(turret::isAtTarget).and(shooter::isAtSpeed)
+        .whileTrue(leds.setSolidColor(() -> Color.kGreen));
+    t(() -> turret.isAtTarget()).or(() -> !shooter.isAtSpeed()).whileTrue(leds.setBlinkingColor(Color.kYellow));
+
   }
 }

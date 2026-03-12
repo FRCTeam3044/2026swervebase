@@ -30,6 +30,11 @@ public class LEDs extends SubsystemBase {
         .withName("Set Solid Color").ignoringDisable(true);
   }
 
+  public Command setBlinkingColor(Color color) {
+    return Commands.run(() -> io.setBlinkingColor(color), this)
+        .withName("Blinking Purple LEDs");
+  }
+
   public record ColorPair(Color color1, Color color2) {
   }
 

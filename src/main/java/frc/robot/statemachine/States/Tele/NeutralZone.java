@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.statemachine.StateMachine;
 import frc.robot.statemachine.States.TeleState;
+import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.intake.Intake;
@@ -28,7 +29,7 @@ public class NeutralZone extends State {
       Turret turret,
       Hood hood,
       Shooter shooter,
-      AutoAim autoAim) {
+      AutoAim autoAim, LEDs leds) {
     super(stateMachine);
     SmartXboxController driver = new SmartXboxController(driverController, loop);
     SmartXboxController operator = new SmartXboxController(operatorController, loop);
@@ -37,5 +38,6 @@ public class NeutralZone extends State {
     startWhenActive(
         autoAim.aimAllianceZone(() -> TeleState.shooterEngaged).until(driver.start()));
     operator.rightTrigger().whileTrue(kicker.shootKicker());
+    startWhenActive(leds.defaultPattern());
   }
 }
