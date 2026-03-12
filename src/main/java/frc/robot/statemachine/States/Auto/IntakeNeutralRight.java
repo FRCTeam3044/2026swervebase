@@ -45,7 +45,7 @@ public class IntakeNeutralRight extends State {
         t(() -> drive.atPose(waypoints.get().get(1)))
                 .onTrue(Commands.runOnce(() -> stateComplete = true));
 
-        startWhenActive(autoAim.aimAllianceZone(() -> false).onlyIf(() -> !stateComplete).withName("Shoot to AZ"));
-        t(() -> !stateComplete).whileTrue(autoAim.aimAllianceZone(() -> false).withName("Shoot to AZ"));
+        startWhenActive(autoAim.aimAllianceZone(() -> true).onlyIf(() -> !stateComplete).withName("Shoot to AZ"));
+        t(() -> !stateComplete).whileTrue(autoAim.aimAllianceZone(() -> true).withName("Shoot to AZ"));
     }
 }

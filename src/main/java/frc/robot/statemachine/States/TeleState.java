@@ -2,6 +2,7 @@ package frc.robot.statemachine.States;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -15,6 +16,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.util.AllianceUtil;
+import frc.robot.util.HubShiftUtil;
 import me.nabdev.oxconfig.ConfigurableParameter;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
@@ -45,6 +47,7 @@ public class TeleState extends State {
         && !driverController.rightTrigger().getAsBoolean()) ? slowModeSpeed.get() : 1;
     DoubleSupplier driveY = () -> -driverController.getLeftX() * slowMult.getAsDouble();
     DoubleSupplier driveX = () -> -driverController.getLeftY() * slowMult.getAsDouble();
+
     startWhenActive(
         DriveCommands.joystickDrive(
             drive,
@@ -78,8 +81,9 @@ public class TeleState extends State {
         () -> -driverController.getRightX() * slowMult.getAsDouble(),
         true));
 
-    operator.leftTrigger()
-        .onTrue(Commands.runOnce(() -> shooterEngaged = !shooterEngaged).withName("Toggle shooter engaged"));
+    // operator.leftTrigger()
+    // .onTrue(Commands.runOnce(() -> shooterEngaged =
+    // !shooterEngaged).withName("Toggle shooter engaged"));
 
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     controller.start().onTrue(Commands.runOnce(hood::resetCalibration));
@@ -101,6 +105,20 @@ public class TeleState extends State {
     }, () -> {
       driverController.setRumble(RumbleType.kBothRumble, 0);
     }));
+
+    t(() -> HubShiftUtil.getShiftedShiftInfo().remainingTime() < 10)
+        .onTrue(Commands.deadline(Commands.waitSeconds(0.25), Commands.runEnd(() -> {
+          operatorController.setRumble(RumbleType.kBothRumble, 1);
+        }, () -> {
+          operatorController.setRumble(RumbleType.kBothRumble, 0);
+        })));
+
+    t(() -> HubShiftUtil.getShiftedShiftInfo().remainingTime() < 5)
+        .onTrue(Commands.deadline(Commands.waitSeconds(0.75), Commands.runEnd(() -> {
+          operatorController.setRumble(RumbleType.kBothRumble, 1);
+        }, () -> {
+          operatorController.setRumble(RumbleType.kBothRumble, 0);
+        })));
 
     // t(() -> turret.inHoodDangerZone() &&
     // !hood.calibrated()).whileTrue(turret.exitDangerZone());

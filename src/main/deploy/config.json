@@ -267,6 +267,10 @@
         "CalibrationState/Test Parameter 80": "0",
         "CalibrationState/Test Parameter 81": "0",
         "CalibrationState/Test Parameter 82": "0",
+        "Turret Fliparound Tolerance": {
+            "comment": "Auto-Generated",
+            "value": "15.0"
+        },
         "Turret Error FF Tolerance": {
             "comment": "Auto-Generated",
             "value": "10.0"
@@ -671,6 +675,10 @@
         "CalibrationState/Test Parameter 80": "0",
         "CalibrationState/Test Parameter 81": "0",
         "CalibrationState/Test Parameter 82": "0",
+        "Turret Fliparound Tolerance": {
+            "comment": "Auto-Generated",
+            "value": "15.0"
+        },
         "Turret Error FF Tolerance": {
             "comment": "Auto-Generated",
             "value": "10.0"
@@ -882,7 +890,7 @@
         },
         "Slow Mode Speed": {
             "comment": "Auto-Generated",
-            "value": "0.6"
+            "value": "1"
         },
         "Pathfinding Y Controller/P": "1.5",
         "Climber Motor Run Down Speed": {
@@ -893,7 +901,7 @@
         "CalibrationState/Test Parameter 19": "0",
         "Spin in disabled": {
             "comment": "Auto-Generated",
-            "value": "false"
+            "value": "true"
         },
         "CalibrationState/Test Parameter 14": "0",
         "CalibrationState/Test Parameter 15": "0",
@@ -1074,6 +1082,10 @@
         "CalibrationState/Test Parameter 80": "0",
         "CalibrationState/Test Parameter 81": "0",
         "CalibrationState/Test Parameter 82": "0",
+        "Turret Fliparound Tolerance": {
+            "comment": "Auto-Generated",
+            "value": "15.0"
+        },
         "Turret Error FF Tolerance": {
             "comment": "Auto-Generated",
             "value": "4.0"
@@ -1136,7 +1148,7 @@
         "CalibrationState/Test Parameter 96": "0",
         "Turret Angle Tolerance (degrees)": {
             "comment": "Auto-Generated",
-            "value": "8.0"
+            "value": "6.0"
         },
         "CalibrationState/Test Parameter 97": "0",
         "Outpost pathfinding distance": {
@@ -1205,7 +1217,7 @@
         },
         "Shooter at speed tolerance (RPM)": {
             "comment": "Auto-Generated",
-            "value": "400.0"
+            "value": "300.0"
         },
         "Hood Controller/D": "0.0"
     }

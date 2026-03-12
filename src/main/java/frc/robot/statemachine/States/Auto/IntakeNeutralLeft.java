@@ -48,7 +48,6 @@ public class IntakeNeutralLeft extends State {
 
         startWhenActive(kicker.shootKicker().onlyIf(() -> !stateComplete).withName("Running kicker"));
         startWhenActive(autoAim.aimAllianceZone(() -> true).onlyIf(() -> !stateComplete).withName("Shoot to AZ"));
-        // t(() -> !stateComplete).whileTrue(autoAim.aimAllianceZone(() ->
-        // false).withName("Shoot to AZ"));
+        t(() -> !stateComplete).whileTrue(autoAim.aimAllianceZone(() -> true).withName("Shoot to AZ"));
     }
 }
