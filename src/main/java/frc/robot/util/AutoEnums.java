@@ -45,13 +45,11 @@ public class AutoEnums {
         IntakeDepot(() -> false),
         IntakeOutpost(() -> false),
         IntakeAllianceZone(() -> false),
-        LeftTransition(
-                () ->
-                // RobotContainer.getInstance().drive.atRotation(Rotation2d.fromDegrees(180)) &&
+        LeftTransition(() -> RobotContainer.getInstance().drive.atRotation(Rotation2d.fromRadians(Math.PI))
+                &&
                 RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeLeftNeutral())),
-        RightTransition(() ->
-        // RobotContainer.getInstance().drive.atRotation(Rotation2d.fromDegrees(180)) &&
-        RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeRightNeutral())),
+        RightTransition(() -> RobotContainer.getInstance().drive.atRotation(Rotation2d.fromDegrees(180)) &&
+                RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeRightNeutral())),
         EmptyState(() -> false);
 
         private final BooleanSupplier condition;

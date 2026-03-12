@@ -64,6 +64,13 @@ public class StateMachine extends StateMachineBase {
         public static ArrayList<AutoSteps> leftAuto = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> rightAuto = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> middleAuto = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> leftDepot = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> rightOutpost = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> middleDepot = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> middleOutpost = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> leftDoubleSweep = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> rightDoubleSweep = new ArrayList<AutoSteps>();
+
         private AutoSteps currentStep;
         private int index;
 
@@ -198,7 +205,25 @@ public class StateMachine extends StateMachineBase {
                                 AutoSteps.IntakeOutpost,
                                 AutoSteps.EmptyState);
 
+                Collections.addAll(leftDoubleSweep, AutoSteps.ShootToHub, AutoSteps.LeftIntake,
+                                AutoSteps.LeftTransition, AutoSteps.SecondScore,
+                                AutoSteps.LeftIntake, AutoSteps.LeftTransition, AutoSteps.SecondScore,
+                                AutoSteps.EmptyState);
+
+                Collections.addAll(rightDoubleSweep, AutoSteps.ShootToHub, AutoSteps.RightIntake,
+                                AutoSteps.RightTransition, AutoSteps.SecondScore,
+                                AutoSteps.RightIntake, AutoSteps.RightTransition, AutoSteps.SecondScore,
+                                AutoSteps.EmptyState);
+
                 Collections.addAll(middleAuto, AutoSteps.ShootToHub, AutoSteps.EmptyState);
+
+                Collections.addAll(leftDepot, AutoSteps.SecondScore, AutoSteps.IntakeDepot, AutoSteps.EmptyState);
+
+                Collections.addAll(rightOutpost, AutoSteps.SecondScore, AutoSteps.IntakeOutpost, AutoSteps.EmptyState);
+
+                Collections.addAll(middleDepot, AutoSteps.ShootToHub, AutoSteps.IntakeDepot, AutoSteps.EmptyState);
+
+                Collections.addAll(middleOutpost, AutoSteps.ShootToHub, AutoSteps.IntakeOutpost, AutoSteps.EmptyState);
 
                 Supplier<ArrayList<AutoSteps>> autoSupplier = () -> {
                         if (autoChooser.get() == null) {

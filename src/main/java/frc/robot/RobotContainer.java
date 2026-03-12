@@ -280,9 +280,15 @@ public class RobotContainer {
                 autoChooser = new LoggedDashboardChooser<>("Auto choices");
 
                 // Set up auto routines
-                autoChooser.addDefaultOption("Left Auto", StateMachine.leftAuto);
-                autoChooser.addOption("Right Auto", StateMachine.rightAuto);
-                autoChooser.addOption("Middle Auto", StateMachine.middleAuto);
+                autoChooser.addOption("Left Swoop Depot", StateMachine.leftAuto);
+                autoChooser.addOption("Right Swoop Outpost", StateMachine.rightAuto);
+                autoChooser.addOption("Middle Shoot", StateMachine.middleAuto);
+                autoChooser.addOption("Left Depot", StateMachine.leftDepot);
+                autoChooser.addOption("Right Outpost", StateMachine.rightOutpost);
+                autoChooser.addOption("Middle Depot", StateMachine.middleDepot);
+                autoChooser.addOption("Middle Outpost", StateMachine.middleOutpost);
+                autoChooser.addOption("Left Double Sweep", StateMachine.leftDoubleSweep);
+                autoChooser.addOption("Right Double Sweep", StateMachine.rightDoubleSweep);
 
                 DriverStation.getGameSpecificMessage();
 

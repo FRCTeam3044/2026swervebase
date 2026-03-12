@@ -38,6 +38,7 @@ public class IntakeNeutralLeft extends State {
             }
         };
 
+        startWhenActive(Commands.runOnce(() -> stateComplete = false));
         startWhenActive(
                 DriveCommands.goToPoints(drive, waypoints, rot));
         t(() -> autoTargetUtil.inNeutralZone()).onTrue(intake.intakeBottom());

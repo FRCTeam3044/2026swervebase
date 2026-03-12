@@ -50,7 +50,8 @@ public class IntakeDepot extends State {
                 t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> true));
 
                 startWhenActive(pathfind);
-                t(() -> drive.atPose(pathfindingTarget.get())).onTrue(far);
+                t(() -> drive.atPose(pathfindingTarget.get()) && drive.atRotation(Rotation2d.fromDegrees(180)))
+                                .onTrue(far);
                 t(() -> drive.atPose(farTarget.get())).onTrue(close);
         }
 }
