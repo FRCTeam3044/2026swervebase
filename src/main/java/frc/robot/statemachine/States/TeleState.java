@@ -10,11 +10,13 @@ import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.turret.Turret;
+import me.nabdev.oxconfig.ConfigurableParameter;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 import me.nabdev.oxidation.util.SmartXboxController;
 
 public class TeleState extends State {
+  private ConfigurableParameter<Double> slowModeSpeed = new ConfigurableParameter<>(0.6, "Slow Mode Speed");
 
   public static boolean shooterEngaged = true;
 
@@ -36,9 +38,16 @@ public class TeleState extends State {
     startWhenActive(
         DriveCommands.joystickDrive(
             drive,
-            () -> -driverController.getLeftY(),
-            () -> -driverController.getLeftX(),
-            () -> -driverController.getRightX(),
+            () -> -driverController.getLeftY()
+                * ((operator.rightTrigger().getAsBoolean() && !driverController.rightTrigger().getAsBoolean())
+                    ? slowModeSpeed.get()
+                    : 1),
+            () -> -driverController.getLeftX()
+                * ((operator.rightTrigger().getAsBoolean() && !driverController.rightTrigger().getAsBoolean())
+                    ? slowModeSpeed.get()
+                    : 1),
+            () -> -driverController.getRightX() * ((operator.rightTrigger().getAsBoolean()
+                && !driverController.rightTrigger().getAsBoolean()) ? slowModeSpeed.get() : 1),
             true));
 
     operator.leftTrigger()
