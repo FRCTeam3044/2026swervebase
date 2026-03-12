@@ -26,7 +26,7 @@ public class IntakeNeutralLeft extends State {
 
         Supplier<Rotation2d> rot = () -> {
             if (autoTargetUtil.inAllianceZone()) {
-                return Rotation2d.fromDegrees(0);
+                return AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180));
             } else if (autoTargetUtil.inNeutralZone()) {
                 if (!stateComplete) {
                     return AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(60));
@@ -34,7 +34,7 @@ public class IntakeNeutralLeft extends State {
                     return AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(290));
                 }
             } else {
-                return Rotation2d.fromDegrees(0);
+                return AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180));
             }
         };
 

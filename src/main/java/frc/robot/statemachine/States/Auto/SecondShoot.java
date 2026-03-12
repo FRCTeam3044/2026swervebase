@@ -14,6 +14,7 @@ import frc.robot.subsystems.kicker.Kicker;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.turret.Turret;
+import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoAim;
 import frc.robot.util.AutoTargetUtil;
 import me.nabdev.oxidation.State;
@@ -44,7 +45,8 @@ public class SecondShoot extends State {
             return allianceZone.calculateNearestPoint(robotPos).asPose2d();
         };
 
-        startWhenActive(DriveCommands.goToPoint(drive, targetSupplier, () -> Rotation2d.fromDegrees(180)));
+        startWhenActive(DriveCommands.goToPoint(drive, targetSupplier,
+                () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0))));
         t(() -> drive.atPose(targetSupplier.get()))
                 .whileTrue(Commands.run(() -> drive.stop()));
         startWhenActive(() -> Commands

@@ -10,6 +10,7 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.kicker.Kicker;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoAim;
 import frc.robot.util.AutoTargetUtil;
 import me.nabdev.oxconfig.ConfigurableParameter;
@@ -34,7 +35,9 @@ public class IntakeDepot extends State {
                 Supplier<Pose2d> farTarget = () -> AutoTargetUtil.getDepot().poseFacing(preIntakeDist.get(), true);
                 Supplier<Pose2d> intakeTarget = () -> AutoTargetUtil.getDepot().poseFacing(intakeDist.get(), true);
 
-                Command pathfind = DriveCommands.goToPoint(drive, pathfindingTarget, () -> Rotation2d.fromDegrees(180))
+                Command pathfind = DriveCommands
+                                .goToPoint(drive, pathfindingTarget,
+                                                () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0)))
                                 .withName("Pathfinding");
 
                 Command far = DriveCommands.pointControl(drive, farTarget)

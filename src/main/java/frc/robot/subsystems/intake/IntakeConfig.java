@@ -11,7 +11,7 @@ public class IntakeConfig {
   public static SparkMaxConfig rollerMotorConfig = new SparkMaxConfig();
 
   static {
-    motorConfigOne.idleMode(IdleMode.kCoast).smartCurrentLimit(stallCurrentLimit, freeCurrentLimit);
+    motorConfigOne.idleMode(IdleMode.kCoast).smartCurrentLimit(stallCurrentLimit, freeCurrentLimit).inverted(true);
     motorConfigTwo.idleMode(IdleMode.kCoast).smartCurrentLimit(stallCurrentLimit, freeCurrentLimit).follow(motorIdOne,
         true);
     rollerMotorConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(rollerCurrentLimit, rollerCurrentLimit);

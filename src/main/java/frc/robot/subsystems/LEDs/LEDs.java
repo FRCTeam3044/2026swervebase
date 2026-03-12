@@ -32,7 +32,7 @@ public class LEDs extends SubsystemBase {
 
   public Command setBlinkingColor(Color color) {
     return Commands.run(() -> io.setBlinkingColor(color), this)
-        .withName("Blinking Purple LEDs");
+        .withName("Blinking Purple LEDs").ignoringDisable(true);
   }
 
   public record ColorPair(Color color1, Color color2) {

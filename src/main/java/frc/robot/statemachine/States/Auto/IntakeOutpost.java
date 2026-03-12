@@ -7,25 +7,27 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.kicker.Kicker;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoAim;
 import frc.robot.util.AutoTargetUtil;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 
 public class IntakeOutpost extends State {
-    public IntakeOutpost(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil, AutoAim autoAim, Drive drive,
-            Intake intake,
-            Kicker kicker, Shooter shooter) {
-        super(stateMachine);
+        public IntakeOutpost(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil, AutoAim autoAim, Drive drive,
+                        Intake intake,
+                        Kicker kicker, Shooter shooter) {
+                super(stateMachine);
 
-        startWhenActive(
-                DriveCommands.goToPoint(drive, () -> AutoTargetUtil.getOutpost(), () -> Rotation2d.fromDegrees(180)));
-        t(() -> drive.atPose(AutoTargetUtil.getOutpost())).onTrue(Commands.run(() -> drive.stop()));
+                startWhenActive(
+                                DriveCommands.goToPoint(drive, () -> AutoTargetUtil.getOutpost(),
+                                                () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0))));
+                t(() -> drive.atPose(AutoTargetUtil.getOutpost())).onTrue(Commands.run(() -> drive.stop()));
 
-        startWhenActive(kicker.shootKicker()
-                .onlyIf(() -> autoTargetUtil.inAllianceZone() && shooter.isAtSpeed()));
-        t(shooter::isAtSpeed).and(autoTargetUtil::inAllianceZone).onTrue(kicker.shootKicker());
-        startWhenActive(autoAim.aimHub(() -> true).onlyIf(() -> autoTargetUtil.inAllianceZone()));
-        t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> true));
-    }
+                startWhenActive(kicker.shootKicker()
+                                .onlyIf(() -> autoTargetUtil.inAllianceZone() && shooter.isAtSpeed()));
+                t(shooter::isAtSpeed).and(autoTargetUtil::inAllianceZone).onTrue(kicker.shootKicker());
+                startWhenActive(autoAim.aimHub(() -> true).onlyIf(() -> autoTargetUtil.inAllianceZone()));
+                t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> true));
+        }
 }

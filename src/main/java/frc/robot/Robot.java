@@ -175,9 +175,14 @@ public class Robot extends LoggedRobot {
     // robotContainer.turret.resetAngle(true);
   }
 
+  public static int loopCount = 0;
+
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {
+    if (loopCount < 15) {
+      loopCount++;
+    }
     AllianceUtil.setAlliance();
     robotContainer.turret.resetAngle(true);
   }
@@ -213,20 +218,22 @@ public class Robot extends LoggedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    if (!(DriverStation.getGameSpecificMessage().length() > 0) && HubShiftUtil.getAllianceWinOverride().isEmpty()
-        && timer
-            .hasElapsed(1.0)) {
-      autoWinnerNotSet.set(true);
-      if (!autoWinnerAlerted) {
-        Elastic.sendNotification(
-            new Notification(NotificationLevel.ERROR, "AUTO WINNER NOT SET!!!!", "MERN YOU NEED TO SET IT MERN", 30000,
-                512, 256));
-        autoWinnerAlerted = true;
-      }
-    } else {
-      autoWinnerNotSet.set(false);
-      autoWinnerAlerted = false;
-    }
+    // if (!(DriverStation.getGameSpecificMessage().length() > 0) &&
+    // HubShiftUtil.getAllianceWinOverride().isEmpty()
+    // && timer
+    // .hasElapsed(1.0)) {
+    // autoWinnerNotSet.set(true);
+    // if (!autoWinnerAlerted) {
+    // Elastic.sendNotification(
+    // new Notification(NotificationLevel.ERROR, "AUTO WINNER NOT SET!!!!", "MERN
+    // YOU NEED TO SET IT MERN", 30000,
+    // 512, 256));
+    // autoWinnerAlerted = true;
+    // }
+    // } else {
+    // autoWinnerNotSet.set(false);
+    // autoWinnerAlerted = false;
+    // }
   }
 
   /** This function is called once when test mode is enabled. */

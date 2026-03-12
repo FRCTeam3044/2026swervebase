@@ -16,7 +16,7 @@ public class LEDsIORio implements LEDsIO {
   private final AddressableLEDBuffer buffer = new AddressableLEDBuffer(length);
 
   private final double blinkSpeed = 0.25;
-  private final double spinSpeed = 30;
+  private final double spinSpeed = 100;
 
   public LEDsIORio() {
     LEDStrip.setLength(buffer.getLength());

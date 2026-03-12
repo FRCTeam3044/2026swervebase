@@ -271,6 +271,7 @@ public class RobotContainer {
 
                 hood.setDefaultCommand(hood.setPosition(() -> HoodConstants.minPosition));
                 climber.setDefaultCommand(climber.calibrate());
+
                 AllianceUtil.setRobot(drive::getPose);
 
                 // Set up auto routines

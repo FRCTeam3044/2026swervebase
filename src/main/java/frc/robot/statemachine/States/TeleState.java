@@ -56,15 +56,15 @@ public class TeleState extends State {
     DoubleSupplier targetRotation = () -> {
       // a = 180, y = 0, b = 90, x = 270
       if (controller.a().getAsBoolean()) {
-        return 180.0;
+        return 0;
       } else if (controller.b().getAsBoolean()) {
         return 90.0;
       } else if (controller.x().getAsBoolean()) {
         return 270.0;
       } else if (controller.y().getAsBoolean()) {
-        return 0.0;
-      } else {
         return 180.0;
+      } else {
+        return 0.0;
       }
     };
     abxy.whileTrue(DriveCommands.joystickDriveAtAngle(drive, driveX, driveY,
