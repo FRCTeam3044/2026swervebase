@@ -49,6 +49,7 @@ public class Robot extends LoggedRobot {
   private Field2d field = new Field2d();
 
   private final Alert turretNotReset = new Alert("!!! TURRET NOT RESET !!!", AlertType.kError);
+  private final Alert turretInDangerZone = new Alert("!!! TURRET IN DANGER ZONE !!!", AlertType.kError);
   private final Alert autoWinnerNotSet = new Alert("!!! AUTO WINNER NOT SET !!!", AlertType.kError);
 
   public Timer getTimer() {
@@ -153,6 +154,7 @@ public class Robot extends LoggedRobot {
     robotContainer.autoAim.periodic();
 
     turretNotReset.set(!robotContainer.turret.hasReset());
+    turretInDangerZone.set(robotContainer.turret.inHoodDangerZone() && !robotContainer.hood.calibrated());
 
     ShotCalculator.periodic();
   }

@@ -95,7 +95,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
         // Subsystems
         public final Drive drive;
-        private final Hood hood;
+        public final Hood hood;
         private final Intake intake;
         private final Spindexer spindexer;
         private final Kicker kicker;
@@ -140,6 +140,14 @@ public class RobotContainer {
                 return instance;
         }
 
+        /*
+         * Solid allliance color if no other errors
+         * 
+         * Apriltag detected = Green
+         * Turret not reset = orange
+         * Turret in danger zone
+         */
+
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
@@ -169,9 +177,7 @@ public class RobotContainer {
                                 turret = new Turret(new TurretIOSpark());
                                 climber = new Climber(new ClimberIO() {
                                 });
-                                LEDs = new LEDs(/* new LEDsIORio() */ new LEDsIO() {
-
-                                });
+                                LEDs = new LEDs(new LEDsIORio());
                                 break;
 
                         case SIM:

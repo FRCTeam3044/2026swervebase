@@ -51,6 +51,11 @@ public class Hood extends SubsystemBase {
         .withName("Calibrate Hood");
   }
 
+  public void resetCalibration() {
+    calibrated = false;
+    io.resetPosition(200);
+  }
+
   private Command calibrateIfNeeded(Command command) {
     return calibrate().onlyIf(() -> !calibrated).andThen(command);
   }

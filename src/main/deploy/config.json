@@ -810,7 +810,7 @@
         "CalibrationState/Test Parameter 107": "0",
         "Hood Danger Two Min": {
             "comment": "Auto-Generated",
-            "value": "0.0"
+            "value": "333"
         },
         "CalibrationState/Test Parameter 104": "0",
         "Pathfinding Y Controller/I": "0.0",
@@ -938,7 +938,7 @@
         "CalibrationState/Test Parameter 26": "0",
         "Hood Danger One Max": {
             "comment": "Auto-Generated",
-            "value": "0.0"
+            "value": "209"
         },
         "CalibrationState/Test Parameter 27": "0",
         "CalibrationState/Test Parameter 28": "0",
@@ -1041,7 +1041,7 @@
         "CalibrationState/Test Parameter 89": "0",
         "Hood Danger Two Max": {
             "comment": "Auto-Generated",
-            "value": "0.0"
+            "value": "389"
         },
         "CalibrationState/Test Parameter 83": "0",
         "CalibrationState/Test Parameter 84": "0",
@@ -1130,7 +1130,7 @@
         "Intake Position Controller/P": "0.0",
         "Hood Danger One Min": {
             "comment": "Auto-Generated",
-            "value": "0.0"
+            "value": "152"
         },
         "Intake retract speed": {
             "comment": "Auto-Generated",
