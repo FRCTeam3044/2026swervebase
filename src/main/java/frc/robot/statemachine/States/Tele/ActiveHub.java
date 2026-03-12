@@ -30,6 +30,6 @@ public class ActiveHub extends State {
     super(stateMachine);
     SmartXboxController operator = new SmartXboxController(operatorController, loop);
     SmartXboxController driver = new SmartXboxController(driverController, loop);
-    operator.rightTrigger().and(turret::isAtTarget).whileTrue(kicker.shootKicker());
+    operator.rightTrigger().and(turret::isAtTarget).and(shooter::isAtSpeed).whileTrue(kicker.shootKicker());
   }
 }
