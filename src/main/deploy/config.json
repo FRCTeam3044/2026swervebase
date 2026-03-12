@@ -73,6 +73,10 @@
             "comment": "Auto-Generated",
             "value": "0.7"
         },
+        "Slow Mode Speed": {
+            "comment": "Auto-Generated",
+            "value": "0.6"
+        },
         "Pathfinding Y Controller/P": "0.0",
         "Climber Motor Run Down Speed": {
             "comment": "Auto-Generated",
@@ -80,6 +84,10 @@
         },
         "CalibrationState/Test Parameter 18": "0",
         "CalibrationState/Test Parameter 19": "0",
+        "Spin in disabled": {
+            "comment": "Auto-Generated",
+            "value": "false"
+        },
         "CalibrationState/Test Parameter 14": "0",
         "CalibrationState/Test Parameter 15": "0",
         "CalibrationState/Test Parameter 16": "0",
@@ -469,6 +477,10 @@
             "comment": "Auto-Generated",
             "value": "0.7"
         },
+        "Slow Mode Speed": {
+            "comment": "Auto-Generated",
+            "value": "0.6"
+        },
         "Pathfinding Y Controller/P": "5.0",
         "Climber Motor Run Down Speed": {
             "comment": "Auto-Generated",
@@ -476,6 +488,10 @@
         },
         "CalibrationState/Test Parameter 18": "0",
         "CalibrationState/Test Parameter 19": "0",
+        "Spin in disabled": {
+            "comment": "Auto-Generated",
+            "value": "false"
+        },
         "CalibrationState/Test Parameter 14": "0",
         "CalibrationState/Test Parameter 15": "0",
         "CalibrationState/Test Parameter 16": "0",
@@ -864,6 +880,10 @@
             "comment": "Auto-Generated",
             "value": "0.7"
         },
+        "Slow Mode Speed": {
+            "comment": "Auto-Generated",
+            "value": "0.6"
+        },
         "Pathfinding Y Controller/P": "1.5",
         "Climber Motor Run Down Speed": {
             "comment": "Auto-Generated",
@@ -871,6 +891,10 @@
         },
         "CalibrationState/Test Parameter 18": "0",
         "CalibrationState/Test Parameter 19": "0",
+        "Spin in disabled": {
+            "comment": "Auto-Generated",
+            "value": "false"
+        },
         "CalibrationState/Test Parameter 14": "0",
         "CalibrationState/Test Parameter 15": "0",
         "CalibrationState/Test Parameter 16": "0",
