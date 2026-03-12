@@ -10,10 +10,13 @@ import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.AllianceUtil;
 import frc.robot.util.AllianceUtil.AllianceColor;
+import me.nabdev.oxconfig.ConfigurableParameter;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 
 public class DisabledState extends State {
+  private ConfigurableParameter<Boolean> spinInDisabled = new ConfigurableParameter<Boolean>(false, "Spin in disabled");
+
   public DisabledState(StateMachineBase stateMachine, LEDs leds, Turret turret, Hood hood, Vision vision) {
     super(stateMachine);
 
@@ -41,7 +44,8 @@ public class DisabledState extends State {
       return new ColorPair(allianceColor.get(), allianceColor.get());
     };
 
-    startWhenActive(leds.setAlternatingColors(color));
-
+    startWhenActive(leds.setAlternatingColors(color).onlyIf(() -> !spinInDisabled.get()));
+    startWhenActive(leds.defaultPattern().onlyIf(spinInDisabled::get));
+    t(spinInDisabled::get).whileTrue(leds.defaultPattern()).whileFalse(leds.setAlternatingColors(color));
   }
 }
