@@ -1103,7 +1103,7 @@
             "comment": "Auto-Generated",
             "value": "0.5"
         },
-        "TestMode/Test Shooter Speed": "5000.0",
+        "TestMode/Test Shooter Speed": "3000.0",
         "Turret Max Velocity": {
             "comment": "Auto-Generated",
             "value": "50.0"
@@ -1177,7 +1177,7 @@
         },
         "Shooter Speed Controller/I": "0.0",
         "X Point Controller/P": "2",
-        "Shooter Speed Controller/P": "0.0018",
+        "Shooter Speed Controller/P": "0.001",
         "Pathfinding Max Rotation Speed": {
             "comment": "Auto-Generated",
             "value": "1.5707963267948966"

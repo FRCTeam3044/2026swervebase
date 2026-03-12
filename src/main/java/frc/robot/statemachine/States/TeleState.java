@@ -3,6 +3,7 @@ package frc.robot.statemachine.States;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
@@ -87,12 +88,19 @@ public class TeleState extends State {
     operator.povDown().whileTrue(climber.setSpeed(false));
     operator.a().whileTrue(intake.intakeTop());
     operator.a().whileFalse(intake.intakeBottom());
-    operator.a().whileFalse(intake.runRollers());
+    operator.a().or(operator.b()).whileFalse(intake.runRollers());
+    operator.b().whileTrue(intake.runRollersReverse());
 
     startWhenActive(intake.intakeBottom().onlyWhile(operatorController.a().negate()));
     startWhenActive(intake.runRollers().onlyWhile(operatorController.a().negate()));
 
     startWhenActive(spindexer.setSpeed());
+
+    t(turret::nearFlipAround).whileTrue(Commands.runEnd(() -> {
+      driverController.setRumble(RumbleType.kBothRumble, 1);
+    }, () -> {
+      driverController.setRumble(RumbleType.kBothRumble, 0);
+    }));
 
     // t(() -> turret.inHoodDangerZone() &&
     // !hood.calibrated()).whileTrue(turret.exitDangerZone());

@@ -36,6 +36,9 @@ public class Turret extends SubsystemBase {
   private final ConfigurableParameter<Double> tolerance = new ConfigurableParameter<Double>(2.0,
       "Turret Angle Tolerance (degrees)");
 
+  private final ConfigurableParameter<Double> turretRumbleTolerance = new ConfigurableParameter<>(15.0,
+      "Turret Fliparound Tolerance");
+
   public Turret(TurretIO io) {
     this.io = io;
 
@@ -124,5 +127,10 @@ public class Turret extends SubsystemBase {
 
   public boolean hasReset() {
     return inputs.hasReset;
+  }
+
+  public boolean nearFlipAround() {
+    return Math.abs(inputs.angle.minus(TurretConstants.maxAngle).in(Degrees)) < turretRumbleTolerance.get()
+        || Math.abs(inputs.angle.minus(TurretConstants.minAngle).in(Degrees)) < turretRumbleTolerance.get();
   }
 }
