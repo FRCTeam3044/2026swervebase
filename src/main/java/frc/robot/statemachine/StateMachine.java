@@ -37,6 +37,7 @@ import frc.robot.subsystems.kicker.Kicker;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.turret.Turret;
+import frc.robot.subsystems.vision.Vision;
 import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoAim;
 import frc.robot.util.AutoAimDataManager;
@@ -92,11 +93,12 @@ public class StateMachine extends StateMachineBase {
                         LEDs leds,
                         AutoTargetUtil autoTargetUtil,
                         AutoAim autoAim,
+                        Vision vision,
                         LoggedDashboardChooser<Command> chooser,
                         LoggedDashboardChooser<ArrayList<AutoSteps>> autoChooser) {
                 super();
 
-                DisabledState disabled = new DisabledState(this, leds);
+                DisabledState disabled = new DisabledState(this, leds, turret, hood, vision);
                 currentState = disabled;
                 State teleop = new TeleState(this, driverController, operatorController, drive, climber, intake,
                                 spindexer, hood, turret, leds);
@@ -125,15 +127,15 @@ public class StateMachine extends StateMachineBase {
                                 this, driverController, operatorController, operatorBoard, drive, intake, spindexer,
                                 kicker, turret, hood,
                                 shooter,
-                                autoAim);
+                                autoAim, leds);
                 ActiveHub activeHub = new ActiveHub(
                                 this, driverController, operatorController, drive, intake, spindexer, kicker, turret,
                                 hood,
                                 shooter,
-                                autoAim);
+                                autoAim, leds);
                 InactiveHub inactiveHub = new InactiveHub(this, driverController, drive, intake, spindexer, kicker,
                                 turret,
-                                hood);
+                                hood, leds);
 
                 teleop.withDefaultChild(alliedZone).withChild(neutralZone);
 

@@ -35,7 +35,6 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.statemachine.StateMachine;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.climber.ClimberIO;
-import frc.robot.subsystems.climber.ClimberIOSpark;
 import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.LEDs.LEDsIO;
 import frc.robot.subsystems.LEDs.LEDsIORio;
@@ -349,7 +348,7 @@ public class RobotContainer {
                                 climber,
                                 LEDs,
                                 autoTargetUtil,
-                                autoAim, sysidChooser, autoChooser);
+                                autoAim, vision, sysidChooser, autoChooser);
 
                 mech = new Mechanism2d(3, 3);
                 root = mech.getRoot("Shooter", 1.5, 0);

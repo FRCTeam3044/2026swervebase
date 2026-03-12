@@ -17,15 +17,18 @@ public interface LEDsIO {
     static Time currentTime;
   }
 
-  public default void setSolidColor(LEDPattern color) {}
-  ;
+  public default void setSolidColor(LEDPattern color) {
+  };
 
-  public default void setSpinningColor(Color color1, Color color2) {}
-  ;
+  public default void setAlternatingColors(Color color1, Color color2) {
+  };
 
-  public default void setOff() {}
-  ;
+  public default void setSpinningColor(Color color1, Color color2) {
+  };
 
-  public default void setBlinkingColor(Color color) {}
-  ;
+  public default void setOff() {
+  };
+
+  public default void setBlinkingColor(Color color) {
+  };
 }

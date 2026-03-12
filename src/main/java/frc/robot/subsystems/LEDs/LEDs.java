@@ -1,10 +1,16 @@
 package frc.robot.subsystems.LEDs;
 
+import static frc.robot.subsystems.LEDs.LEDsConstants.length;
+
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.AllianceUtil;
+import frc.robot.util.AllianceUtil.AllianceColor;
 
 public class LEDs extends SubsystemBase {
 
@@ -14,52 +20,28 @@ public class LEDs extends SubsystemBase {
     this.io = io;
   }
 
-  public Command setPurple() {
-    return Commands.run(() -> io.setSolidColor(LEDPattern.solid(Color.kPurple)), this)
-        .withName("Set Purple LEDs");
-  }
-  // red blue and green solid -- yellow blinking shooting and orange blinking intaking autos --
-  public Command setYellow() {
-    return Commands.run(() -> io.setSolidColor(LEDPattern.solid(Color.kYellow)), this)
-        .withName("Set Yellow LEDs");
-  }
-
-  public Command setRed() {
-    return Commands.run(() -> io.setSolidColor(LEDPattern.solid(Color.kRed)), this)
-        .withName("Set Red LEDs");
-  }
-
-  public Command setBlue() {
-    return Commands.run(() -> io.setSolidColor(LEDPattern.solid(Color.kBlue)), this)
-        .withName("Set Blue LEDs");
-  }
-
-  public Command setGreen() {
-    return Commands.run(() -> io.setSolidColor(LEDPattern.solid(Color.kGreen)), this)
-        .withName("Set Green LEDs");
-  }
-
   public Command defaultPattern() {
     return Commands.run(() -> io.setSpinningColor(Color.kPurple, Color.kYellow), this)
-        .withName("Spinning LEDs");
+        .withName("Spinning LEDs").ignoringDisable(true);
   }
 
-  public Command off() {
-    return Commands.run(io::setOff, this).withName("LEDs off");
+  public Command setSolidColor(Supplier<Color> color) {
+    return Commands.run(() -> io.setSolidColor(LEDPattern.solid(color.get())), this)
+        .withName("Set Solid Color").ignoringDisable(true);
   }
 
-  public Command setBlinkingPurple() {
-    return Commands.run(() -> io.setBlinkingColor(Color.kPurple), this)
+  public Command setBlinkingColor(Color color) {
+    return Commands.run(() -> io.setBlinkingColor(color), this)
         .withName("Blinking Purple LEDs");
   }
 
-  public Command setBlinkingYellow() {
-    return Commands.run(() -> io.setBlinkingColor(Color.kYellow), this)
-        .withName("Blinking Yellow LEDs");
+  public record ColorPair(Color color1, Color color2) {
   }
 
-  public Command setBlinkingOrange() {
-    return Commands.run(() -> io.setBlinkingColor(Color.kOrange), this)
-        .withName("Blinking Orange LEDs");
+  public Command setAlternatingColors(Supplier<ColorPair> colorPair) {
+    return Commands
+        .run(() -> io.setAlternatingColors(colorPair.get().color1(), colorPair.get().color2()),
+            this)
+        .withName("Set alternating colors").ignoringDisable(true);
   }
 }
