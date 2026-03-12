@@ -32,8 +32,23 @@ public class LEDsIORio implements LEDsIO {
   }
 
   @Override
+  public void setAlternatingColors(Color color1, Color color2) {
+    // every other LED
+    LEDPattern pattern = LEDPattern.solid(color1);
+    pattern.applyTo(buffer);
+    for (int i = 0; i < buffer.getLength(); i++) {
+      if (i % 2 == 0) {
+        buffer.setLED(i, color1);
+      } else {
+        buffer.setLED(i, color2);
+      }
+    }
+    LEDStrip.setData(buffer);
+  }
+
+  @Override
   public void setSpinningColor(Color color1, Color color2) {
-    LEDPattern step = LEDPattern.steps(Map.of(0, color1, 0.46, color2, 0.5, color1, 0.96, color2));
+    LEDPattern step = LEDPattern.steps(Map.of(0, color1, 0.83, color2));
     LEDPattern pattern = step.scrollAtRelativeSpeed(Percent.per(Seconds).of(spinSpeed));
     pattern.applyTo(buffer);
     LEDStrip.setData(buffer);
