@@ -274,8 +274,9 @@ public class RobotContainer {
                 autoChooser = new LoggedDashboardChooser<>("Auto choices");
 
                 // Set up auto routines
-                autoChooser.addDefaultOption("Left to right", StateMachine.shootLtRShoot);
-                autoChooser.addOption("Right to left", StateMachine.shootRtLShoot);
+                autoChooser.addDefaultOption("Left Auto", StateMachine.leftAuto);
+                autoChooser.addOption("Right Auto", StateMachine.rightAuto);
+                autoChooser.addOption("Middle Auto", StateMachine.middleAuto);
 
                 DriverStation.getGameSpecificMessage();
 

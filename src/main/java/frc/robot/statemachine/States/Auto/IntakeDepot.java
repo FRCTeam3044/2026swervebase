@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.kicker.Kicker;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.util.AutoAim;
 import frc.robot.util.AutoTargetUtil;
 import me.nabdev.oxconfig.ConfigurableParameter;
 import me.nabdev.oxidation.State;
@@ -15,21 +18,23 @@ import me.nabdev.oxidation.StateMachineBase;
 
 public class IntakeDepot extends State {
         private static ConfigurableParameter<Double> pathfindingDist = new ConfigurableParameter<>(0.7,
-                        "Outpost pathfinding distance");
+                        "Depot pathfinding distance");
         public static ConfigurableParameter<Double> preIntakeDist = new ConfigurableParameter<>(0.5,
-                        "Pre Outpost Intake distance");
+                        "Pre Depot Intake distance");
         private static ConfigurableParameter<Double> intakeDist = new ConfigurableParameter<>(0.4,
-                        "Outpost distance");
+                        "Depot distance");
 
-        public IntakeDepot(StateMachineBase stateMachine, Drive drive, Intake intake) {
+        public IntakeDepot(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil, AutoAim autoAim, Drive drive,
+                        Intake intake,
+                        Kicker kicker, Shooter shooter) {
                 super(stateMachine);
 
-                Supplier<Pose2d> pathfindingTarget = () -> AutoTargetUtil.getOutpost().poseFacing(pathfindingDist.get(),
+                Supplier<Pose2d> pathfindingTarget = () -> AutoTargetUtil.getDepot().poseFacing(pathfindingDist.get(),
                                 false);
-                Supplier<Pose2d> farTarget = () -> AutoTargetUtil.getOutpost().poseFacing(preIntakeDist.get(), false);
-                Supplier<Pose2d> intakeTarget = () -> AutoTargetUtil.getOutpost().poseFacing(intakeDist.get(), false);
+                Supplier<Pose2d> farTarget = () -> AutoTargetUtil.getDepot().poseFacing(preIntakeDist.get(), true);
+                Supplier<Pose2d> intakeTarget = () -> AutoTargetUtil.getDepot().poseFacing(intakeDist.get(), true);
 
-                Command pathfind = DriveCommands.goToPoint(drive, pathfindingTarget, () -> Rotation2d.fromDegrees(0))
+                Command pathfind = DriveCommands.goToPoint(drive, pathfindingTarget, () -> Rotation2d.fromDegrees(180))
                                 .withName("Pathfinding");
 
                 Command far = DriveCommands.pointControl(drive, farTarget)
@@ -38,7 +43,12 @@ public class IntakeDepot extends State {
                 Command close = DriveCommands.pointControl(drive, intakeTarget)
                                 .until(() -> DriveCommands.pointControllerConverged).withName("Close point control");
 
-                startWhenActive(intake.runRollers());
+                startWhenActive(kicker.shootKicker()
+                                .onlyIf(() -> autoTargetUtil.inAllianceZone() && shooter.isAtSpeed()));
+                t(shooter::isAtSpeed).and(autoTargetUtil::inAllianceZone).onTrue(kicker.shootKicker());
+                startWhenActive(autoAim.aimHub(() -> true).onlyIf(() -> autoTargetUtil.inAllianceZone()));
+                t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> true));
+
                 startWhenActive(pathfind);
                 t(() -> drive.atPose(pathfindingTarget.get())).onTrue(far);
                 t(() -> drive.atPose(farTarget.get())).onTrue(close);

@@ -28,9 +28,9 @@ public class IntakeNeutralRight extends State {
                 return Rotation2d.fromDegrees(0);
             } else if (autoTargetUtil.inNeutralZone()) {
                 if (!stateComplete) {
-                    return AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(225));
+                    return AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(300));
                 } else {
-                    return AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(45));
+                    return AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(50));
                 }
             } else {
                 return Rotation2d.fromDegrees(0);
@@ -41,7 +41,7 @@ public class IntakeNeutralRight extends State {
                 DriveCommands.goToPoints(drive, waypoints, rot));
         t(() -> autoTargetUtil.inNeutralZone()).onTrue(intake.intakeBottom());
         t(() -> autoTargetUtil.inNeutralZone()).onTrue(intake.runRollers());
-        t(() -> drive.atPose(waypoints.get().get(2)))
+        t(() -> drive.atPose(waypoints.get().get(1)))
                 .onTrue(Commands.runOnce(() -> stateComplete = true));
 
         startWhenActive(autoAim.aimAllianceZone(() -> false).onlyIf(() -> !stateComplete).withName("Shoot to AZ"));

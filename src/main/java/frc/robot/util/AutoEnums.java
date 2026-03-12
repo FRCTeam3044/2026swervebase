@@ -27,6 +27,7 @@ public class AutoEnums {
             }
             return false;
         }),
+
         SecondScore(() -> {
             if (RobotContainer.getInstance().autoStateTimer.get() > secondAutoTime.get()) {
                 RobotContainer.getInstance().autoStateTimer.stop();
@@ -36,15 +37,21 @@ public class AutoEnums {
             return false;
         }),
         ShootToAlliedSide(() -> false),
-        LeftToRight(() -> frc.robot.statemachine.States.Auto.IntakeNeutralZone.stateComplete
+        LeftIntake(() -> frc.robot.statemachine.States.Auto.IntakeNeutralLeft.stateComplete
                 && RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getCloseLeftNeutral())),
-        RightToLeft(() -> frc.robot.statemachine.States.Auto.IntakeNeutralZone.stateComplete
+        RightIntake(() -> frc.robot.statemachine.States.Auto.IntakeNeutralRight.stateComplete
                 && RobotContainer.getInstance().drive.atPose(AutoTargetUtil
                         .getCloseRightNeutral())),
-        IntakeOutpost(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.closeOutpost())),
+        IntakeDepot(() -> false),
+        IntakeOutpost(() -> false),
         IntakeAllianceZone(() -> false),
-        LeftTransition(() -> RobotContainer.getInstance().drive.atRotation(Rotation2d.fromDegrees(180))
-                && RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getCloseLeftNeutral())),
+        LeftTransition(
+                () ->
+                // RobotContainer.getInstance().drive.atRotation(Rotation2d.fromDegrees(180)) &&
+                RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeLeftNeutral())),
+        RightTransition(() ->
+        // RobotContainer.getInstance().drive.atRotation(Rotation2d.fromDegrees(180)) &&
+        RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeRightNeutral())),
         EmptyState(() -> false);
 
         private final BooleanSupplier condition;

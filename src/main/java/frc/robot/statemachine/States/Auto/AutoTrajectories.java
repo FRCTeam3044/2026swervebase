@@ -31,17 +31,17 @@ public class AutoTrajectories {
         return path;
     };
 
-    public static ArrayList<Pose2d> getRightCurve() {
+    public static ArrayList<Pose2d> getLeftCurve() {
         ArrayList<Pose2d> path = new ArrayList<>();
-        Collections.addAll(path, AutoTargetUtil.getRightNeutral(), AutoTargetUtil.getLeftNeutral(),
-                AutoTargetUtil.getCloseLeftNeutral(), AutoTargetUtil.getCloseRightNeutral());
+        Collections.addAll(path, AutoTargetUtil.getLeftNeutral(), AutoTargetUtil.getTopLeftMiddle(),
+                AutoTargetUtil.getBottomLeftMiddle(), AutoTargetUtil.getCloseLeftNeutral());
         return path;
     };
 
-    public static ArrayList<Pose2d> getLeftCurve() {
+    public static ArrayList<Pose2d> getRightCurve() {
         ArrayList<Pose2d> path = new ArrayList<>();
-        Collections.addAll(path, AutoTargetUtil.getLeftNeutral(), AutoTargetUtil.getRightNeutral(),
-                AutoTargetUtil.getCloseRightNeutral(), AutoTargetUtil.getCloseLeftNeutral());
+        Collections.addAll(path, AutoTargetUtil.getRightNeutral(), AutoTargetUtil.getTopRightMiddle(),
+                AutoTargetUtil.getBottomRightMiddle(), AutoTargetUtil.getCloseRightNeutral());
         return path;
     };
 }

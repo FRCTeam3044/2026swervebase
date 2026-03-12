@@ -1,5 +1,9 @@
 {
     "presentation": {
+        "Depot distance": {
+            "comment": "Auto-Generated",
+            "value": "0.4"
+        },
         "Pre Outpost Intake distance": {
             "comment": "Auto-Generated",
             "value": "0.5"
@@ -64,6 +68,10 @@
         "Intake deploy speed": {
             "comment": "Auto-Generated",
             "value": "0.05"
+        },
+        "Depot pathfinding distance": {
+            "comment": "Auto-Generated",
+            "value": "0.7"
         },
         "Pathfinding Y Controller/P": "0.0",
         "Climber Motor Run Down Speed": {
@@ -171,6 +179,10 @@
         "Pathfinding Max Accel": {
             "comment": "Auto-Generated",
             "value": "2.0"
+        },
+        "Pre Depot Intake distance": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
         },
         "CalibrationState/Test Parameter 58": "0",
         "CalibrationState/Test Parameter 59": "0",
@@ -384,6 +396,10 @@
     },
     "mode": "competition",
     "simulation": {
+        "Depot distance": {
+            "comment": "Auto-Generated",
+            "value": "0.4"
+        },
         "Pre Outpost Intake distance": {
             "comment": "Auto-Generated",
             "value": "0.5"
@@ -448,6 +464,10 @@
         "Intake deploy speed": {
             "comment": "Auto-Generated",
             "value": "0.05"
+        },
+        "Depot pathfinding distance": {
+            "comment": "Auto-Generated",
+            "value": "0.7"
         },
         "Pathfinding Y Controller/P": "5.0",
         "Climber Motor Run Down Speed": {
@@ -555,6 +575,10 @@
         "Pathfinding Max Accel": {
             "comment": "Auto-Generated",
             "value": "2.0"
+        },
+        "Pre Depot Intake distance": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
         },
         "CalibrationState/Test Parameter 58": "0",
         "CalibrationState/Test Parameter 59": "0",
@@ -767,6 +791,10 @@
         "Hood Controller/D": "0.0"
     },
     "competition": {
+        "Depot distance": {
+            "comment": "Auto-Generated",
+            "value": "0.4"
+        },
         "Pre Outpost Intake distance": {
             "comment": "Auto-Generated",
             "value": "0.5"
@@ -831,6 +859,10 @@
         "Intake deploy speed": {
             "comment": "Auto-Generated",
             "value": "-0.2"
+        },
+        "Depot pathfinding distance": {
+            "comment": "Auto-Generated",
+            "value": "0.7"
         },
         "Pathfinding Y Controller/P": "1.5",
         "Climber Motor Run Down Speed": {
@@ -938,6 +970,10 @@
         "Pathfinding Max Accel": {
             "comment": "Auto-Generated",
             "value": "4.5"
+        },
+        "Pre Depot Intake distance": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
         },
         "CalibrationState/Test Parameter 58": "0",
         "CalibrationState/Test Parameter 59": "0",

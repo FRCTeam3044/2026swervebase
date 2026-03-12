@@ -16,10 +16,10 @@ import frc.robot.util.AutoTargetUtil;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 
-public class IntakeNeutralZone extends State {
+public class IntakeNeutralLeft extends State {
     public static boolean stateComplete = false;
 
-    public IntakeNeutralZone(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil,
+    public IntakeNeutralLeft(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil,
             Supplier<ArrayList<Pose2d>> waypoints, AutoAim autoAim, Drive drive,
             Intake intake, Kicker kicker) {
         super(stateMachine);

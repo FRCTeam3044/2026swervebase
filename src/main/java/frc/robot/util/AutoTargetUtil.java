@@ -26,14 +26,22 @@ public class AutoTargetUtil {
   private static POIData leftTower = POIData.createFromRed(1.06223613, 3.20841229, 1.06223613, 2.60841229);
   private static POIData rightTower = POIData.createFromRed(1.06223613, 4.28304359, 1.06223613, 4.88304359);
 
-  private static Pose2d rightNeutral = new Pose2d(8.75, 4.5, Rotation2d.fromDegrees(0));
-  private static Pose2d leftNeutral = new Pose2d(8.75, 7, Rotation2d.fromDegrees(0));
-  private static Pose2d safeLeftNeutral = new Pose2d(8.75, 7.25, Rotation2d.fromDegrees(0));
-  private static Pose2d closeRightNeutral = new Pose2d(7.5, 4.5, Rotation2d.fromDegrees(0));
-  private static Pose2d closeLeftNeutral = new Pose2d(7.5, 7, Rotation2d.fromDegrees(0));
+  private static Pose2d rightNeutral = new Pose2d(8.75, 1.25, Rotation2d.fromDegrees(0));
+  private static Pose2d closeRightNeutral = new Pose2d(7.75, 1.25, Rotation2d.fromDegrees(0));
+  private static Pose2d safeRightNeutral = new Pose2d(7.75, 0.25, Rotation2d.fromDegrees(0));
+  private static Pose2d topRightMiddle = new Pose2d(8.75, 3.75, Rotation2d.fromDegrees(0));
+  private static Pose2d bottomRightMiddle = new Pose2d(7.75, 3.75, Rotation2d.fromDegrees(0));
 
-  private static POIData outpost = POIData.createFromRed(0.52188903, 5.96503125, 1.06827289, 5.96503125);
-  private static Pose2d closeOutpost = new Pose2d(0.52188903, 5.96503125, Rotation2d.fromDegrees(0));
+  private static Pose2d leftNeutral = new Pose2d(8.75, 7, Rotation2d.fromDegrees(0));
+  private static Pose2d closeLeftNeutral = new Pose2d(7.75, 7, Rotation2d.fromDegrees(0));
+  private static Pose2d safeLeftNeutral = new Pose2d(7.75, 8, Rotation2d.fromDegrees(0));
+  private static Pose2d topLeftMiddle = new Pose2d(8.75, 4.5, Rotation2d.fromDegrees(0));
+  private static Pose2d bottomLeftMiddle = new Pose2d(7.75, 4.5, Rotation2d.fromDegrees(0));
+
+  private static POIData depot = POIData.createFromRed(0.52188903, 5.96503125, 1.06827289, 5.96503125);
+  private static Pose2d closeDepot = new Pose2d(0.52188903, 5.96503125, Rotation2d.fromDegrees(180));
+
+  private static Pose2d outpost = new Pose2d(0.7, 0.7, Rotation2d.fromDegrees(180));
 
   private static Obstacle redAllianceZone = Obstacle.createObstacle(
       new Vertex(12.5, 0),
@@ -60,20 +68,12 @@ public class AutoTargetUtil {
     return AllianceUtil.getPose3dForAlliance(hub);
   }
 
-  public static Pose2d getRightNeutral() {
-    return AllianceUtil.getPoseForAlliance(rightNeutral);
-  }
-
   public static Pose2d getLeftNeutral() {
     return AllianceUtil.getPoseForAlliance(leftNeutral);
   }
 
-  public static Pose2d getSafeLeftNeutral() {
-    return AllianceUtil.getPoseForAlliance(safeLeftNeutral);
-  }
-
-  public static Pose2d getNeutralZone() {
-    return AllianceUtil.getPoseForAlliance(testNeutralZonePosition);
+  public static Pose2d getRightNeutral() {
+    return AllianceUtil.getPoseForAlliance(rightNeutral);
   }
 
   public static Pose2d getCloseLeftNeutral() {
@@ -84,6 +84,34 @@ public class AutoTargetUtil {
     return AllianceUtil.getPoseForAlliance(closeRightNeutral);
   }
 
+  public static Pose2d getSafeLeftNeutral() {
+    return AllianceUtil.getPoseForAlliance(safeLeftNeutral);
+  }
+
+  public static Pose2d getSafeRightNeutral() {
+    return AllianceUtil.getPoseForAlliance(safeRightNeutral);
+  }
+
+  public static Pose2d getTopLeftMiddle() {
+    return AllianceUtil.getPoseForAlliance(topLeftMiddle);
+  }
+
+  public static Pose2d getTopRightMiddle() {
+    return AllianceUtil.getPoseForAlliance(topRightMiddle);
+  }
+
+  public static Pose2d getBottomLeftMiddle() {
+    return AllianceUtil.getPoseForAlliance(bottomLeftMiddle);
+  }
+
+  public static Pose2d getBottomRightMiddle() {
+    return AllianceUtil.getPoseForAlliance(bottomRightMiddle);
+  }
+
+  public static Pose2d getNeutralZone() {
+    return AllianceUtil.getPoseForAlliance(testNeutralZonePosition);
+  }
+
   public static POIData getLeftTower() {
     return leftTower;
   }
@@ -92,12 +120,16 @@ public class AutoTargetUtil {
     return rightTower;
   }
 
-  public static POIData getOutpost() {
-    return outpost;
+  public static POIData getDepot() {
+    return depot;
   }
 
-  public static Pose2d closeOutpost() {
-    return closeOutpost;
+  public static Pose2d getCloseDepot() {
+    return AllianceUtil.getPoseForAlliance(closeDepot);
+  }
+
+  public static Pose2d getOutpost() {
+    return AllianceUtil.getPoseForAlliance(outpost);
   }
 
   public static Obstacle allianceSide() {
