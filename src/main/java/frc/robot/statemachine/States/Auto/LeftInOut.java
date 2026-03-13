@@ -10,7 +10,8 @@ import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 
 public class LeftInOut extends State {
-    public LeftInOut(StateMachineBase stateMachine, AutoAim autoAim, Drive drive, Kicker kicker) {
+    public LeftInOut(StateMachineBase stateMachine, AutoAim autoAim, Drive drive,
+            Kicker kicker) {
         super(stateMachine);
 
         startWhenActive(

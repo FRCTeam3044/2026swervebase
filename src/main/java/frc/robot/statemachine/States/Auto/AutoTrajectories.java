@@ -51,9 +51,21 @@ public class AutoTrajectories {
         return path;
     };
 
+    public static ArrayList<Pose2d> getFarLeftInOut() {
+        ArrayList<Pose2d> path = new ArrayList<>();
+        Collections.addAll(path, AutoTargetUtil.getLeftNeutral(), AutoTargetUtil.getTopLeftMiddle());
+        return path;
+    }
+
     public static ArrayList<Pose2d> getRightInOut() {
         ArrayList<Pose2d> path = new ArrayList<>();
         Collections.addAll(path, AutoTargetUtil.getCloseRightNeutral(), AutoTargetUtil.getBottomRightMiddle());
+        return path;
+    };
+
+    public static ArrayList<Pose2d> getFarRightInOut() {
+        ArrayList<Pose2d> path = new ArrayList<>();
+        Collections.addAll(path, AutoTargetUtil.getRightNeutral(), AutoTargetUtil.getTopRightMiddle());
         return path;
     };
 }

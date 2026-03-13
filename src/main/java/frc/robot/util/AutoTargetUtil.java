@@ -26,16 +26,16 @@ public class AutoTargetUtil {
   private static POIData leftTower = POIData.createFromRed(1.06223613, 3.20841229, 1.06223613, 2.60841229);
   private static POIData rightTower = POIData.createFromRed(1.06223613, 4.28304359, 1.06223613, 4.88304359);
 
-  private static Pose2d rightNeutral = new Pose2d(8.75, 1.25, Rotation2d.fromDegrees(0));
+  private static Pose2d rightNeutral = new Pose2d(8.5, 1.25, Rotation2d.fromDegrees(0));
   private static Pose2d closeRightNeutral = new Pose2d(7.75, 1.25, Rotation2d.fromDegrees(0));
   private static Pose2d safeRightNeutral = new Pose2d(7.75, 0.25, Rotation2d.fromDegrees(0));
-  private static Pose2d topRightMiddle = new Pose2d(8.75, 3.75, Rotation2d.fromDegrees(0));
+  private static Pose2d topRightMiddle = new Pose2d(8.5, 3.75, Rotation2d.fromDegrees(0));
   private static Pose2d bottomRightMiddle = new Pose2d(7.75, 3.75, Rotation2d.fromDegrees(0));
 
-  private static Pose2d leftNeutral = new Pose2d(8.75, 7, Rotation2d.fromDegrees(0));
+  private static Pose2d leftNeutral = new Pose2d(8.5, 7, Rotation2d.fromDegrees(0));
   private static Pose2d closeLeftNeutral = new Pose2d(7.75, 7, Rotation2d.fromDegrees(0));
   private static Pose2d safeLeftNeutral = new Pose2d(7.75, 8, Rotation2d.fromDegrees(0));
-  private static Pose2d topLeftMiddle = new Pose2d(8.75, 4.5, Rotation2d.fromDegrees(0));
+  private static Pose2d topLeftMiddle = new Pose2d(8.5, 4.5, Rotation2d.fromDegrees(0));
   private static Pose2d bottomLeftMiddle = new Pose2d(7.75, 4.5, Rotation2d.fromDegrees(0));
 
   private static POIData depot = POIData.createFromRed(0.52188903, 5.96503125, 1.06827289, 5.96503125);
