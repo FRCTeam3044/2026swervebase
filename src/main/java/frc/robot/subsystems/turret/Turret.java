@@ -4,13 +4,13 @@ import frc.robot.RobotContainer;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import me.nabdev.oxconfig.ConfigurableParameter;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 import static frc.robot.subsystems.turret.TurretConstants.maxAngle;
 import static frc.robot.subsystems.turret.TurretConstants.minAngle;
@@ -38,6 +38,8 @@ public class Turret extends SubsystemBase {
 
   private final ConfigurableParameter<Double> turretRumbleTolerance = new ConfigurableParameter<>(15.0,
       "Turret Fliparound Tolerance");
+
+  private final ConfigurableParameter<Double> slowSpeed = new ConfigurableParameter<>(1000.0, "Turret sSlow Speed");
 
   public Turret(TurretIO io) {
     this.io = io;
@@ -83,12 +85,25 @@ public class Turret extends SubsystemBase {
     Logger.recordOutput("Turret/InHoodDangerZone", inHoodDangerZone());
   }
 
+  private boolean isOverridingTarget = false;
+
   public Command setAngle(Supplier<Angle> angle) {
     Supplier<Angle> realAngleSupplier = () -> {
-      if (RobotContainer.getInstance().hood.calibrated())
+      if (RobotContainer.getInstance().hood.calibrated()) {
+        isOverridingTarget = false;
         return angle.get();
+      }
 
-      return Degrees.of(hoodDangerOneMax.get() + 5);
+      isOverridingTarget = true;
+      double targetAngle = angle.get().in(Degrees);
+      double dangerOneMax = hoodDangerOneMax.get() - 5;
+      double dangerTwoMin = hoodDangerTwoMin.get() + 5;
+
+      if (Math.abs(targetAngle - dangerOneMax) < Math.abs(targetAngle - dangerTwoMin)) {
+        return Degrees.of(dangerOneMax + 5);
+      } else {
+        return Degrees.of(dangerTwoMin - 5);
+      }
     };
     return Commands.runEnd(() -> io.setAngle(realAngleSupplier.get()), () -> io.setPercent(0))
         .withName("Set Turret Angle");
@@ -108,6 +123,9 @@ public class Turret extends SubsystemBase {
   }
 
   public boolean isAtTarget() {
+    if (isOverridingTarget) {
+      return false;
+    }
     if (inputs.angle == null || inputs.computedTargetAngle == null) {
       System.out.println("Unable to tell if turret is at target!");
       return false;
@@ -132,5 +150,9 @@ public class Turret extends SubsystemBase {
   public boolean nearFlipAround() {
     return Math.abs(inputs.angle.minus(TurretConstants.maxAngle).in(Degrees)) < turretRumbleTolerance.get()
         || Math.abs(inputs.angle.minus(TurretConstants.minAngle).in(Degrees)) < turretRumbleTolerance.get();
+  }
+
+  public boolean movingSlow() {
+    return Math.abs(inputs.angularVelocity.in(RPM)) < slowSpeed.get();
   }
 }
