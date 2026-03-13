@@ -4,6 +4,7 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.RobotContainer;
+import frc.robot.statemachine.States.Auto.RightInOut;
 import me.nabdev.oxconfig.ConfigurableParameter;
 
 public class AutoEnums {
@@ -50,6 +51,8 @@ public class AutoEnums {
                 RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeLeftNeutral())),
         RightTransition(() -> RobotContainer.getInstance().drive.atRotation(Rotation2d.fromDegrees(180)) &&
                 RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeRightNeutral())),
+        LeftInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getBottomLeftMiddle())),
+        RightInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getBottomRightMiddle())),
         EmptyState(() -> false);
 
         private final BooleanSupplier condition;

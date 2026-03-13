@@ -22,8 +22,10 @@ import frc.robot.statemachine.States.Auto.IntakeAllianceZone;
 import frc.robot.statemachine.States.Auto.IntakeDepot;
 import frc.robot.statemachine.States.Auto.IntakeNeutralRight;
 import frc.robot.statemachine.States.Auto.IntakeOutpost;
+import frc.robot.statemachine.States.Auto.LeftInOut;
 import frc.robot.statemachine.States.Auto.IntakeNeutralLeft;
 import frc.robot.statemachine.States.Auto.LeftTransition;
+import frc.robot.statemachine.States.Auto.RightInOut;
 import frc.robot.statemachine.States.Auto.RightTransition;
 import frc.robot.statemachine.States.Auto.SecondShoot;
 import frc.robot.statemachine.States.Auto.ShootToAlliedSide;
@@ -62,15 +64,21 @@ public class StateMachine extends StateMachineBase {
         AllianceColor allianceColor = AllianceUtil.getAlliance();
 
         // Autos to choose from
-        public static ArrayList<AutoSteps> leftAuto = new ArrayList<AutoSteps>();
-        public static ArrayList<AutoSteps> rightAuto = new ArrayList<AutoSteps>();
-        public static ArrayList<AutoSteps> middleAuto = new ArrayList<AutoSteps>();
-        public static ArrayList<AutoSteps> leftDepot = new ArrayList<AutoSteps>();
-        public static ArrayList<AutoSteps> rightOutpost = new ArrayList<AutoSteps>();
-        public static ArrayList<AutoSteps> middleDepot = new ArrayList<AutoSteps>();
-        public static ArrayList<AutoSteps> middleOutpost = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> leftSwoop = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> rightSwoop = new ArrayList<AutoSteps>();
+
+        public static ArrayList<AutoSteps> leftSwoopDepot = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> rightSwoopOutpost = new ArrayList<AutoSteps>();
+
         public static ArrayList<AutoSteps> leftDoubleSweep = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> rightDoubleSweep = new ArrayList<AutoSteps>();
+
+        public static ArrayList<AutoSteps> justShoot = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> shootDepot = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> shootOutpost = new ArrayList<AutoSteps>();
+
+        public static ArrayList<AutoSteps> leftInOutAuto = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> rightInOutAuto = new ArrayList<AutoSteps>();
 
         private AutoSteps currentStep;
         private int index;
@@ -192,15 +200,17 @@ public class StateMachine extends StateMachineBase {
                                 shooter);
                 IntakeOutpost intakeOutpost = new IntakeOutpost(this, autoTargetUtil, autoAim, drive, intake, kicker,
                                 shooter);
+                LeftInOut leftInOut = new LeftInOut(this, autoAim, drive, kicker);
+                RightInOut rightInOut = new RightInOut(this, autoAim, drive, kicker);
 
-                Collections.addAll(leftAuto, AutoSteps.ShootToHub,
+                Collections.addAll(leftSwoopDepot, AutoSteps.ShootToHub,
                                 AutoSteps.LeftIntake,
                                 AutoSteps.LeftTransition,
                                 AutoSteps.SecondScore,
                                 AutoSteps.IntakeDepot,
                                 AutoSteps.EmptyState);
 
-                Collections.addAll(rightAuto, AutoSteps.ShootToHub,
+                Collections.addAll(rightSwoopOutpost, AutoSteps.ShootToHub,
                                 AutoSteps.RightIntake,
                                 AutoSteps.RightTransition,
                                 AutoSteps.SecondScore,
@@ -217,19 +227,27 @@ public class StateMachine extends StateMachineBase {
                                 AutoSteps.RightIntake, AutoSteps.RightTransition, AutoSteps.SecondScore,
                                 AutoSteps.EmptyState);
 
-                Collections.addAll(middleAuto, AutoSteps.ShootToHub, AutoSteps.EmptyState);
+                Collections.addAll(justShoot, AutoSteps.ShootToHub, AutoSteps.EmptyState);
 
-                Collections.addAll(leftDepot, AutoSteps.SecondScore, AutoSteps.IntakeDepot, AutoSteps.EmptyState);
+                Collections.addAll(shootDepot, AutoSteps.ShootToHub, AutoSteps.IntakeDepot, AutoSteps.EmptyState);
 
-                Collections.addAll(rightOutpost, AutoSteps.SecondScore, AutoSteps.IntakeOutpost, AutoSteps.EmptyState);
+                Collections.addAll(shootOutpost, AutoSteps.ShootToHub, AutoSteps.IntakeOutpost, AutoSteps.EmptyState);
 
-                Collections.addAll(middleDepot, AutoSteps.ShootToHub, AutoSteps.IntakeDepot, AutoSteps.EmptyState);
+                Collections.addAll(leftInOutAuto, AutoSteps.ShootToHub, AutoSteps.LeftTransition, AutoSteps.LeftInOut,
+                                AutoSteps.LeftTransition,
+                                AutoSteps.SecondScore, AutoSteps.LeftTransition,
+                                AutoSteps.LeftInOut, AutoSteps.LeftTransition, AutoSteps.SecondScore,
+                                AutoSteps.EmptyState);
 
-                Collections.addAll(middleOutpost, AutoSteps.ShootToHub, AutoSteps.IntakeOutpost, AutoSteps.EmptyState);
+                Collections.addAll(rightInOutAuto, AutoSteps.ShootToHub, AutoSteps.RightTransition,
+                                AutoSteps.RightInOut,
+                                AutoSteps.RightTransition, AutoSteps.SecondScore, AutoSteps.RightTransition,
+                                AutoSteps.RightInOut, AutoSteps.RightTransition, AutoSteps.SecondScore,
+                                AutoSteps.EmptyState);
 
                 Supplier<ArrayList<AutoSteps>> autoSupplier = () -> {
                         if (autoChooser.get() == null) {
-                                return leftAuto;
+                                return leftSwoopDepot;
                         }
                         return autoChooser.get();
                 };
@@ -269,6 +287,10 @@ public class StateMachine extends StateMachineBase {
                                                 "Auto to left transition")
                                 .withChild(rightTransition, () -> currentStep == AutoSteps.RightTransition, 0,
                                                 "Auto to rightTransition")
+                                .withChild(leftInOut, () -> currentStep == AutoSteps.LeftInOut, 0,
+                                                "Auto to left in out")
+                                .withChild(rightInOut, () -> currentStep == AutoSteps.RightInOut, 0,
+                                                "Auto to right in out")
                                 .withChild(emptyState, () -> currentStep == AutoSteps.EmptyState, 0,
                                                 "Auto to empty state");
 
@@ -284,6 +306,8 @@ public class StateMachine extends StateMachineBase {
                 intakeOutpost.withTransition(auto, currentStateComplete, "Outpost intake to auto");
                 leftTransition.withTransition(auto, currentStateComplete, 0, "Left transition to auto");
                 rightTransition.withTransition(auto, currentStateComplete, 0, "Right transition to auto");
+                leftInOut.withTransition(auto, currentStateComplete, 0, "Left in out to auto");
+                rightInOut.withTransition(auto, currentStateComplete, 0, "Right in out to auto");
                 emptyState.withTransition(auto, currentStateComplete, 0, "Empty to auto");
 
                 // For SYSID (comment out for normal autos)
