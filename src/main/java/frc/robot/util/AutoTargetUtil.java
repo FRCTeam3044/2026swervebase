@@ -34,7 +34,7 @@ public class AutoTargetUtil {
 
   private static Pose2d leftNeutral = new Pose2d(8.5, 7, Rotation2d.fromDegrees(0));
   private static Pose2d closeLeftNeutral = new Pose2d(7.75, 7, Rotation2d.fromDegrees(0));
-  private static Pose2d safeLeftNeutral = new Pose2d(7.75, 8, Rotation2d.fromDegrees(0));
+  private static Pose2d safeLeftNeutral = new Pose2d(7.85, 7.86, Rotation2d.fromDegrees(0));
   private static Pose2d topLeftMiddle = new Pose2d(8.5, 4.5, Rotation2d.fromDegrees(0));
   private static Pose2d bottomLeftMiddle = new Pose2d(7.75, 4.5, Rotation2d.fromDegrees(0));
 
@@ -54,6 +54,18 @@ public class AutoTargetUtil {
       new Vertex(0, 8.0692625),
       new Vertex(4, 8.0692625),
       new Vertex(4, 0));
+
+  private static Obstacle redAllianceZoneSecond = Obstacle.createObstacle(
+      new Vertex(13.1, 0),
+      new Vertex(13.1, 8.0692625),
+      new Vertex(16.5410515, 8.0692625),
+      new Vertex(16.5410515, 0));
+
+  private static Obstacle blueAllianceZoneSecond = Obstacle.createObstacle(
+      new Vertex(0, 0),
+      new Vertex(0, 8.0692625),
+      new Vertex(3.4, 8.0692625),
+      new Vertex(3.4, 0));
 
   private double blueCloseTrenchLine = 3;
   private double blueFarTrenchLine = 6;
@@ -137,6 +149,14 @@ public class AutoTargetUtil {
       return blueAllianceZone;
     } else {
       return redAllianceZone;
+    }
+  }
+
+  public static Obstacle allianceSideSecondShoot() {
+    if (AllianceUtil.getAlliance() == AllianceColor.BLUE) {
+      return blueAllianceZoneSecond;
+    } else {
+      return redAllianceZoneSecond;
     }
   }
 

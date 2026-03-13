@@ -40,7 +40,7 @@ public class SecondShoot extends State {
             if (autoTargetUtil.inAllianceZone()) {
                 return drive.getPose();
             }
-            Obstacle allianceZone = AutoTargetUtil.allianceSide();
+            Obstacle allianceZone = AutoTargetUtil.allianceSideSecondShoot();
             Vertex robotPos = new Vertex(drive.getPose());
             return allianceZone.calculateNearestPoint(robotPos).asPose2d();
         };
