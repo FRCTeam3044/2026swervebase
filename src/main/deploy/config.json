@@ -971,7 +971,7 @@
         "CalibrationState/Test Parameter 19": "0",
         "Spin in disabled": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "CalibrationState/Test Parameter 14": "0",
         "CalibrationState/Test Parameter 15": "0",
@@ -1258,7 +1258,7 @@
         "CalibrationState/Test Parameter 92": "0",
         "Second auto shot time": {
             "comment": "Auto-Generated",
-            "value": "4.0"
+            "value": "20.0"
         },
         "CalibrationState/Test Parameter 93": "0",
         "Intake Position Controller/P": "0.0",

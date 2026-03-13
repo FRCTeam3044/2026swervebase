@@ -134,7 +134,7 @@ public class StateMachine extends StateMachineBase {
                                 "Enter Calibration Mode");
 
                 // Teleop States
-                AlliedZone alliedZone = new AlliedZone(this, driverController, autoAim);
+                AlliedZone alliedZone = new AlliedZone(this, driverController, operatorController, autoAim);
                 NeutralZone neutralZone = new NeutralZone(
                                 this, driverController, operatorController, operatorBoard, drive, intake, spindexer,
                                 kicker, turret, hood,

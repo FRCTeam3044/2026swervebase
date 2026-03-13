@@ -45,7 +45,9 @@ public class IntakeIOSpark implements IntakeIO {
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
 
-    ifOk(motorOne, motorOne::getOutputCurrent, (value) -> inputs.currentApms = value);
+    ifOk(motorOne, motorOne::getOutputCurrent, (value) -> inputs.leaderCurrentAmps = value);
+    ifOk(motorTwo, motorTwo::getOutputCurrent, (value) -> inputs.followerCurrentAmps = value);
+    ifOk(rollerMotor, rollerMotor::getOutputCurrent, (value) -> inputs.rollerCurrentApms = value);
     ifOk(motorOne, encoderOne::getVelocity, (value) -> inputs.speedIntake = value);
 
     ifOk(
@@ -53,7 +55,6 @@ public class IntakeIOSpark implements IntakeIO {
         new DoubleSupplier[] { motorOne::getAppliedOutput, motorOne::getBusVoltage },
         (values) -> inputs.appliedVoltage = values[0] * values[1]);
 
-    ifOk(motorTwo, motorTwo::getOutputCurrent, (value) -> inputs.currentApms = value);
     ifOk(motorTwo, encoderTwo::getVelocity, (value) -> inputs.speedRollers = value);
 
     ifOk(

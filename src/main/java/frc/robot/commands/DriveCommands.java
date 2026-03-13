@@ -80,8 +80,8 @@ public class DriveCommands {
   public static boolean pointControllerLooseConverged = false;
   public static boolean pointControllerRotConverged = false;
 
-  private static SlewRateLimiter xLimiter = new SlewRateLimiter(3);
-  private static SlewRateLimiter yLimiter = new SlewRateLimiter(3);
+  private static SlewRateLimiter xLimiter = new SlewRateLimiter(26);
+  private static SlewRateLimiter yLimiter = new SlewRateLimiter(26);
 
   private DriveCommands() {
   }
@@ -128,7 +128,7 @@ public class DriveCommands {
           double x = linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec();
           double y = linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec();
 
-          if (limitAccel.getAsBoolean()) {
+          if (true) {
             if (!wasAccelLimited) {
               xLimiter.reset(x);
               yLimiter.reset(y);
@@ -201,7 +201,7 @@ public class DriveCommands {
           double x = linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec();
           double y = linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec();
 
-          if (limitAccel.getAsBoolean()) {
+          if (true) {
             if (!wasAccelLimited) {
               xLimiter.reset(x);
               yLimiter.reset(y);

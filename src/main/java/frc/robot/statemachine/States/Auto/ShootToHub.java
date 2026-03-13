@@ -55,8 +55,10 @@ public class ShootToHub extends State {
         t(() -> autoTargetUtil.inAllianceZone())
                 .onTrue(Commands.runOnce(() -> RobotContainer.getInstance().autoStateTimer.start()));
         startWhenActive(kicker.shootKicker()
-                .onlyIf(() -> autoTargetUtil.inAllianceZone() && shooter.isAtSpeed() && turret.isAtTarget()));
-        t(shooter::isAtSpeed).and(turret::isAtTarget).and(autoTargetUtil::inAllianceZone).onTrue(kicker.shootKicker());
+                .onlyIf(() -> autoTargetUtil.inAllianceZone() && shooter.isAtSpeed() && turret.isAtTarget()
+                        && hood.atPosition()));
+        t(shooter::isAtSpeed).and(turret::isAtTarget).and(autoTargetUtil::inAllianceZone).and(hood::atPosition)
+                .onTrue(kicker.shootKicker());
         startWhenActive(autoAim.aimHub(() -> true).onlyIf(() -> autoTargetUtil.inAllianceZone()));
         t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> true));
     }

@@ -35,7 +35,8 @@ public class KickerIOSpark implements KickerIO {
 
   @Override
   public void updateInputs(KickerIOInputs inputs) {
-    ifOk(topMotor, topMotor::getOutputCurrent, (value) -> inputs.currentApms = value);
+    ifOk(topMotor, topMotor::getOutputCurrent, (value) -> inputs.currentTopMotor = value);
+    ifOk(bottomMotor, bottomMotor::getOutputCurrent, (value) -> inputs.currentBottomMotor = value);
     ifOk(topMotor, encoderOne::getVelocity, (value) -> inputs.speedMotorOne = value);
 
     ifOk(
@@ -43,7 +44,6 @@ public class KickerIOSpark implements KickerIO {
         new DoubleSupplier[] { topMotor::getAppliedOutput, topMotor::getBusVoltage },
         (values) -> inputs.appliedVoltage = values[0] * values[1]);
 
-    ifOk(bottomMotor, bottomMotor::getOutputCurrent, (value) -> inputs.currentApms = value);
     ifOk(bottomMotor, encoderTwo::getVelocity, (value) -> inputs.speedMotorTwo = value);
 
     ifOk(

@@ -128,6 +128,7 @@ public class Robot extends LoggedRobot {
     robotContainer.stateMachine.periodic();
 
     SmartDashboard.putData(CommandScheduler.getInstance());
+    // Logger.recordOutput("CommandScheduler", CommandScheduler.getInstance());
 
     SmartDashboard.putString("Alliance", AllianceUtil.getAlliance().toString());
 

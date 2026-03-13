@@ -10,13 +10,14 @@ import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.util.SmartXboxController;
 
 public class AlliedZone extends State {
-  public AlliedZone(StateMachine stateMachine, CommandXboxController controller, AutoAim autoAim) {
+  public AlliedZone(StateMachine stateMachine, CommandXboxController controller, CommandXboxController operator,
+      AutoAim autoAim) {
     super(stateMachine);
 
     SmartXboxController driver = new SmartXboxController(controller, loop);
 
-    driver.start().whileFalse(autoAim.aimHub(() -> TeleState.shooterEngaged));
+    driver.start().whileFalse(autoAim.aimHub(() -> !operator.leftTrigger().getAsBoolean()));
     startWhenActive(
-        autoAim.aimHub(() -> TeleState.shooterEngaged).until(driver.start()));
+        autoAim.aimHub(() -> !operator.leftTrigger().getAsBoolean()).until(driver.start()));
   }
 }

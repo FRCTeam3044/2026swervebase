@@ -1,6 +1,7 @@
 package frc.robot.statemachine.States.Auto;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.AllianceUtil;
@@ -14,6 +15,7 @@ public class LeftTransition extends State {
 
         startWhenActive(
                 DriveCommands.goToPoint(drive, () -> AutoTargetUtil.getSafeLeftNeutral(),
-                        () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0))));
+                        () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0)))
+                        .andThen(Commands.runOnce(drive::stop)));
     }
 }

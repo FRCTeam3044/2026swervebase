@@ -11,13 +11,17 @@ public interface KickerIO {
     public double absEncoderOne = 0.0;
     public double absEncoderTwo = 0.0;
     public double relEncoder = 0.0;
-    public double currentApms = 0.0;
+    public double currentTopMotor = 0.0;
+    public double currentBottomMotor = 0.0;
     public double appliedVoltage = 0.0;
   }
 
-  public default void setTopPercent(double percent) {}
+  public default void setTopPercent(double percent) {
+  }
 
-  public default void setBottomPercent(double percent) {}
+  public default void setBottomPercent(double percent) {
+  }
 
-  public default void updateInputs(KickerIOInputs inputs) {}
+  public default void updateInputs(KickerIOInputs inputs) {
+  }
 }

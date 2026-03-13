@@ -26,8 +26,6 @@ import me.nabdev.oxidation.util.SmartXboxController;
 public class TeleState extends State {
   private ConfigurableParameter<Double> slowModeSpeed = new ConfigurableParameter<>(0.6, "Slow Mode Speed");
 
-  public static boolean shooterEngaged = true;
-
   public TeleState(
       StateMachineBase stateMachine,
       CommandXboxController driverController,
@@ -81,10 +79,6 @@ public class TeleState extends State {
         () -> -driverController.getRightX() * slowMult.getAsDouble(),
         true,
         operator.rightTrigger()));
-
-    // operator.leftTrigger()
-    // .onTrue(Commands.runOnce(() -> shooterEngaged =
-    // !shooterEngaged).withName("Toggle shooter engaged"));
 
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     controller.start().onTrue(Commands.runOnce(hood::resetCalibration));
