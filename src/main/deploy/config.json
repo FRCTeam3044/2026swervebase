@@ -137,7 +137,7 @@
         "CalibrationState/Test Parameter 46": "0",
         "Turret Velocity Scale": {
             "comment": "Auto-Generated",
-            "value": "10.0"
+            "value": "1.2"
         },
         "CalibrationState/Test Parameter 40": "0",
         "CalibrationState/Test Parameter 41": "0",
@@ -578,7 +578,7 @@
         "CalibrationState/Test Parameter 46": "0",
         "Turret Velocity Scale": {
             "comment": "Auto-Generated",
-            "value": "10.0"
+            "value": "1.2"
         },
         "CalibrationState/Test Parameter 40": "0",
         "CalibrationState/Test Parameter 41": "0",
@@ -1018,7 +1018,7 @@
         "CalibrationState/Test Parameter 46": "0",
         "Turret Velocity Scale": {
             "comment": "Auto-Generated",
-            "value": "0.6"
+            "value": "1.2"
         },
         "CalibrationState/Test Parameter 40": "0",
         "CalibrationState/Test Parameter 41": "0",
