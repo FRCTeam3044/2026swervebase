@@ -3,7 +3,10 @@ package frc.robot.util;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.RobotContainer;
+import frc.robot.statemachine.States.Auto.LeftFirstTransition;
+import frc.robot.statemachine.States.Auto.RightInOut;
 import me.nabdev.oxconfig.ConfigurableParameter;
 
 public class AutoEnums {
@@ -45,11 +48,24 @@ public class AutoEnums {
         IntakeDepot(() -> false),
         IntakeOutpost(() -> false),
         IntakeAllianceZone(() -> false),
-        LeftTransition(() -> RobotContainer.getInstance().drive.atRotation(Rotation2d.fromRadians(Math.PI))
+        LeftTransition(() -> RobotContainer.getInstance().drive
+                .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0)))
                 &&
                 RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeLeftNeutral())),
-        RightTransition(() -> RobotContainer.getInstance().drive.atRotation(Rotation2d.fromDegrees(180)) &&
+        RightTransition(() -> RobotContainer.getInstance().drive
+                .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0))) &&
                 RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeRightNeutral())),
+        LeftFirstTransition(() -> RobotContainer.getInstance().drive
+                .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180)))
+                &&
+                RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeLeftNeutral())),
+        RightFirstTransition(() -> RobotContainer.getInstance().drive
+                .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180))) &&
+                RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeRightNeutral())),
+        LeftInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getBottomLeftMiddle())),
+        RightInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getBottomRightMiddle())),
+        FarLeftInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getTopLeftMiddle())),
+        FarRightInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getTopRightMiddle())),
         EmptyState(() -> false);
 
         private final BooleanSupplier condition;

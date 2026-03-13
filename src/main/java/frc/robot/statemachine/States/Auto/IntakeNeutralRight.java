@@ -34,7 +34,7 @@ public class IntakeNeutralRight extends State {
                     return AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(50));
                 }
             } else {
-                return Rotation2d.fromDegrees(0);
+                return AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180));
             }
         };
 
