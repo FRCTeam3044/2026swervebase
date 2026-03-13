@@ -16,6 +16,9 @@ public class Hood extends SubsystemBase {
   private final ConfigurableParameter<Double> calibrationSpeed = new ConfigurableParameter<Double>(-0.05,
       "Hood Calibration Speed");
 
+  private final ConfigurableParameter<Double> hoodPositionTolerance = new ConfigurableParameter<>(3.0,
+      "Hood Position Tolerance");
+
   public Hood(HoodIO io) {
     this.io = io;
   }
@@ -49,6 +52,13 @@ public class Hood extends SubsystemBase {
           calibrated = true;
         }, this))
         .withName("Calibrate Hood");
+  }
+
+  public boolean atPosition() {
+    if (!calibrated) {
+      return false;
+    }
+    return Math.abs(inputs.position - inputs.setpoint) < hoodPositionTolerance.get();
   }
 
   public void resetCalibration() {

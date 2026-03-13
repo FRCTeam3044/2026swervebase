@@ -59,7 +59,6 @@ public class TeleState extends State {
     SmartTrigger abxy = controller.a().or(controller.b()).or(controller.x()).or(controller.y());
 
     DoubleSupplier targetRotation = () -> {
-      // a = 180, y = 0, b = 90, x = 270
       if (controller.a().getAsBoolean()) {
         return 0;
       } else if (controller.b().getAsBoolean()) {

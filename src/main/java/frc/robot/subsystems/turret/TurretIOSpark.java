@@ -2,6 +2,7 @@ package frc.robot.subsystems.turret;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Volts;
@@ -99,7 +100,7 @@ public class TurretIOSpark implements TurretIO {
     inputs.rawSecondaryEncoderAvgDeg = filterTwo.calculate(Rotations.of(secondaryAbsEncoder.get()).in(Degrees));
     inputs.rawTargetAngle = rawTargetAngle;
     inputs.computedTargetAngle = computedTargetAngle;
-    inputs.angularVelocity = DegreesPerSecond.of(driveRelEncoder.getVelocity());
+    inputs.angularVelocity = RPM.of(driveRelEncoder.getVelocity());
     inputs.calibrationAngleDeg = calibrationAngleDeg;
     inputs.calibrationEncoderReading = calibrationEncoderReading;
     inputs.degreesPerEncoderUnit = degreesPerEncoderUnit;
