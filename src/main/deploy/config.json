@@ -57,6 +57,10 @@
         },
         "CalibrationState/Test Parameter 117": "0",
         "CalibrationState/Test Parameter 118": "0",
+        "Hood Error FF Tolerance": {
+            "comment": "Auto-Generated",
+            "value": "1.5"
+        },
         "CalibrationState/Test Parameter 115": "0",
         "CalibrationState/Test Parameter 116": "0",
         "CalibrationState/Test Parameter 119": "0",
@@ -106,6 +110,10 @@
             "value": "0.0"
         },
         "Y Point Controller/Tolerance": "0.05",
+        "Shooter at speed tight tolerance (RPM)": {
+            "comment": "Auto-Generated",
+            "value": "200.0"
+        },
         "Climber speed": {
             "comment": "Auto-Generated",
             "value": "0.0"
@@ -150,6 +158,10 @@
             "comment": "Auto-Generated",
             "value": "false"
         },
+        "Hood Max PID": {
+            "comment": "Auto-Generated",
+            "value": "1.0"
+        },
         "CalibrationState/Test Parameter 29": "0",
         "CalibrationState/Test Parameter 25": "0",
         "CalibrationState/Test Parameter 26": "0",
@@ -163,6 +175,10 @@
         "CalibrationState/Test Parameter 33": "0",
         "CalibrationState/Test Parameter 34": "0",
         "CalibrationState/Test Parameter 35": "0",
+        "Hood Max Velocity": {
+            "comment": "Auto-Generated",
+            "value": "15.0"
+        },
         "CalibrationState/Test Parameter 30": "0",
         "Point Theta Controller/D": "0.0",
         "Kicker top block speed": {
@@ -294,11 +310,23 @@
             "comment": "Auto-Generated",
             "value": "0.5"
         },
+        "Hood Position Tolerance": {
+            "comment": "Auto-Generated",
+            "value": "3.0"
+        },
         "Intake Position Controller/I": "0.0",
         "Intake Position Controller/D": "0.0",
         "ShooterDisengagedProportion": {
             "comment": "Auto-Generated",
             "value": "0.5"
+        },
+        "Hood Velocity Scale": {
+            "comment": "Auto-Generated",
+            "value": "5.0"
+        },
+        "Hood Max Output": {
+            "comment": "Auto-Generated",
+            "value": "10.0"
         },
         "TestMode/Test Shooter Speed": "0.0",
         "Turret Max Velocity": {
@@ -342,6 +370,10 @@
         },
         "CalibrationState/Test Parameter 90": "0",
         "CalibrationState/Test Parameter 91": "0",
+        "Turret sSlow Speed": {
+            "comment": "Auto-Generated",
+            "value": "1000.0"
+        },
         "CalibrationState/Test Parameter 92": "0",
         "Second auto shot time": {
             "comment": "Auto-Generated",
@@ -383,6 +415,7 @@
             "comment": "Auto-Generated",
             "value": "false"
         },
+        "Hood Controller/Tolerance": "0.05",
         "Outpost distance": {
             "comment": "Auto-Generated",
             "value": "0.4"
@@ -465,6 +498,10 @@
         },
         "CalibrationState/Test Parameter 117": "0",
         "CalibrationState/Test Parameter 118": "0",
+        "Hood Error FF Tolerance": {
+            "comment": "Auto-Generated",
+            "value": "1.5"
+        },
         "CalibrationState/Test Parameter 115": "0",
         "CalibrationState/Test Parameter 116": "0",
         "CalibrationState/Test Parameter 119": "0",
@@ -514,6 +551,10 @@
             "value": "0.0"
         },
         "Y Point Controller/Tolerance": "0.05",
+        "Shooter at speed tight tolerance (RPM)": {
+            "comment": "Auto-Generated",
+            "value": "200.0"
+        },
         "Climber speed": {
             "comment": "Auto-Generated",
             "value": "0.0"
@@ -558,6 +599,10 @@
             "comment": "Auto-Generated",
             "value": "false"
         },
+        "Hood Max PID": {
+            "comment": "Auto-Generated",
+            "value": "1.0"
+        },
         "CalibrationState/Test Parameter 29": "0",
         "CalibrationState/Test Parameter 25": "0",
         "CalibrationState/Test Parameter 26": "0",
@@ -571,6 +616,10 @@
         "CalibrationState/Test Parameter 33": "0",
         "CalibrationState/Test Parameter 34": "0",
         "CalibrationState/Test Parameter 35": "0",
+        "Hood Max Velocity": {
+            "comment": "Auto-Generated",
+            "value": "15.0"
+        },
         "CalibrationState/Test Parameter 30": "0",
         "Point Theta Controller/D": "0.0",
         "Kicker top block speed": {
@@ -702,11 +751,23 @@
             "comment": "Auto-Generated",
             "value": "0.5"
         },
+        "Hood Position Tolerance": {
+            "comment": "Auto-Generated",
+            "value": "3.0"
+        },
         "Intake Position Controller/I": "0.0",
         "Intake Position Controller/D": "0.0",
         "ShooterDisengagedProportion": {
             "comment": "Auto-Generated",
             "value": "0.5"
+        },
+        "Hood Velocity Scale": {
+            "comment": "Auto-Generated",
+            "value": "5.0"
+        },
+        "Hood Max Output": {
+            "comment": "Auto-Generated",
+            "value": "10.0"
         },
         "TestMode/Test Shooter Speed": "0.0",
         "Turret Max Velocity": {
@@ -750,6 +811,10 @@
         },
         "CalibrationState/Test Parameter 90": "0",
         "CalibrationState/Test Parameter 91": "0",
+        "Turret sSlow Speed": {
+            "comment": "Auto-Generated",
+            "value": "1000.0"
+        },
         "CalibrationState/Test Parameter 92": "0",
         "Second auto shot time": {
             "comment": "Auto-Generated",
@@ -791,6 +856,7 @@
             "comment": "Auto-Generated",
             "value": "false"
         },
+        "Hood Controller/Tolerance": "0.05",
         "Outpost distance": {
             "comment": "Auto-Generated",
             "value": "0.4"
@@ -860,7 +926,7 @@
             "comment": "Auto-Generated",
             "value": "1.0"
         },
-        "TestMode/Test Hood Position": "15.0",
+        "TestMode/Test Hood Position": "38",
         "Climber Motor Run Up Speed": {
             "comment": "Auto-Generated",
             "value": "0.9"
@@ -872,6 +938,10 @@
         },
         "CalibrationState/Test Parameter 117": "0",
         "CalibrationState/Test Parameter 118": "0",
+        "Hood Error FF Tolerance": {
+            "comment": "Auto-Generated",
+            "value": "0.1"
+        },
         "CalibrationState/Test Parameter 115": "0",
         "CalibrationState/Test Parameter 116": "0",
         "CalibrationState/Test Parameter 119": "0",
@@ -921,6 +991,10 @@
             "value": "0.0"
         },
         "Y Point Controller/Tolerance": "0.05",
+        "Shooter at speed tight tolerance (RPM)": {
+            "comment": "Auto-Generated",
+            "value": "200.0"
+        },
         "Climber speed": {
             "comment": "Auto-Generated",
             "value": "0.0"
@@ -965,6 +1039,10 @@
             "comment": "Auto-Generated",
             "value": "true"
         },
+        "Hood Max PID": {
+            "comment": "Auto-Generated",
+            "value": "1.2"
+        },
         "CalibrationState/Test Parameter 29": "0",
         "CalibrationState/Test Parameter 25": "0",
         "CalibrationState/Test Parameter 26": "0",
@@ -978,6 +1056,10 @@
         "CalibrationState/Test Parameter 33": "0",
         "CalibrationState/Test Parameter 34": "0",
         "CalibrationState/Test Parameter 35": "0",
+        "Hood Max Velocity": {
+            "comment": "Auto-Generated",
+            "value": "60.0"
+        },
         "CalibrationState/Test Parameter 30": "0",
         "Point Theta Controller/D": "0.0",
         "Kicker top block speed": {
@@ -1109,11 +1191,23 @@
             "comment": "Auto-Generated",
             "value": "0.05"
         },
+        "Hood Position Tolerance": {
+            "comment": "Auto-Generated",
+            "value": "3.0"
+        },
         "Intake Position Controller/I": "0.0",
         "Intake Position Controller/D": "0.0",
         "ShooterDisengagedProportion": {
             "comment": "Auto-Generated",
             "value": "0.5"
+        },
+        "Hood Velocity Scale": {
+            "comment": "Auto-Generated",
+            "value": "3.5"
+        },
+        "Hood Max Output": {
+            "comment": "Auto-Generated",
+            "value": "20.0"
         },
         "TestMode/Test Shooter Speed": "3000.0",
         "Turret Max Velocity": {
@@ -1157,6 +1251,10 @@
         },
         "CalibrationState/Test Parameter 90": "0",
         "CalibrationState/Test Parameter 91": "0",
+        "Turret sSlow Speed": {
+            "comment": "Auto-Generated",
+            "value": "1000.0"
+        },
         "CalibrationState/Test Parameter 92": "0",
         "Second auto shot time": {
             "comment": "Auto-Generated",
@@ -1177,7 +1275,7 @@
             "comment": "Auto-Generated",
             "value": "40"
         },
-        "Hood Controller/P": "0.2",
+        "Hood Controller/P": "0.08",
         "X Point Controller/D": "0.2",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
@@ -1198,6 +1296,7 @@
             "comment": "Auto-Generated",
             "value": "false"
         },
+        "Hood Controller/Tolerance": "0.01",
         "Outpost distance": {
             "comment": "Auto-Generated",
             "value": "0.4"
@@ -1219,6 +1318,6 @@
             "comment": "Auto-Generated",
             "value": "300.0"
         },
-        "Hood Controller/D": "0.0"
+        "Hood Controller/D": "0.00"
     }
 }

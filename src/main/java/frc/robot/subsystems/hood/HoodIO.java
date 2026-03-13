@@ -15,6 +15,9 @@ public interface HoodIO {
     public Current current = Amps.of(0.0);
     public Current currentAvg = Amps.of(0.0);
     public boolean stalled = false;
+    public double error;
+    public double velocitySetpoint;
+    public double output;
   }
 
   public default void setPosition(double position) {
