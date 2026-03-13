@@ -177,7 +177,7 @@ public class StateMachine extends StateMachineBase {
                                 AutoTrajectories::getLeftCurve, autoAim, drive, intake, kicker);
 
                 IntakeNeutralRight rightIntake = new IntakeNeutralRight(this, autoTargetUtil,
-                                AutoTrajectories::getRightCurve, autoAim, drive, intake);
+                                AutoTrajectories::getRightCurve, autoAim, drive, intake, kicker);
                 ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this, drive, autoAim);
                 ShootToHub shootHub = new ShootToHub(this, autoTargetUtil, drive, intake, spindexer, kicker, turret,
                                 hood, shooter,

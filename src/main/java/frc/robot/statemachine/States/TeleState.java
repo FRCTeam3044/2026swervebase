@@ -54,7 +54,8 @@ public class TeleState extends State {
             driveX,
             driveY,
             () -> -driverController.getRightX() * slowMult.getAsDouble(),
-            true));
+            true,
+            operator.rightTrigger()));
     SmartTrigger abxy = controller.a().or(controller.b()).or(controller.x()).or(controller.y());
 
     DoubleSupplier targetRotation = () -> {
@@ -72,14 +73,15 @@ public class TeleState extends State {
       }
     };
     abxy.whileTrue(DriveCommands.joystickDriveAtAngle(drive, driveX, driveY,
-        () -> AllianceUtil.getRotForAlliance(new Rotation2d(targetRotation.getAsDouble()))));
+        () -> AllianceUtil.getRotForAlliance(new Rotation2d(targetRotation.getAsDouble())), operator.rightTrigger()));
 
     abxy.negate().whileTrue(DriveCommands.joystickDrive(
         drive,
         driveX,
         driveY,
         () -> -driverController.getRightX() * slowMult.getAsDouble(),
-        true));
+        true,
+        operator.rightTrigger()));
 
     // operator.leftTrigger()
     // .onTrue(Commands.runOnce(() -> shooterEngaged =

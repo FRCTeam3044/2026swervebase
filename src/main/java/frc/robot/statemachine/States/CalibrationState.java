@@ -55,7 +55,7 @@ public class CalibrationState extends State {
                                                 () -> -rawController.getLeftY(),
                                                 () -> -rawController.getLeftX(),
                                                 () -> -rawController.getRightX(),
-                                                true));
+                                                true, () -> false));
 
                 controller.rightTrigger().onTrue(Commands.runOnce(() -> {
                         double turretToTargetDistance = AutoAimDataManager.mzCalibrationMode.get()

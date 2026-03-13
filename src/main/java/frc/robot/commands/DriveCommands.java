@@ -43,6 +43,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -79,6 +80,9 @@ public class DriveCommands {
   public static boolean pointControllerLooseConverged = false;
   public static boolean pointControllerRotConverged = false;
 
+  private static SlewRateLimiter xLimiter = new SlewRateLimiter(3);
+  private static SlewRateLimiter yLimiter = new SlewRateLimiter(3);
+
   private DriveCommands() {
   }
 
@@ -96,6 +100,8 @@ public class DriveCommands {
         .getTranslation();
   }
 
+  private static boolean wasAccelLimited = false;
+
   /**
    * Field relative drive command using two joysticks (controlling linear and
    * angular velocities).
@@ -105,7 +111,8 @@ public class DriveCommands {
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
       DoubleSupplier omegaSupplier,
-      boolean fieldRelative) {
+      boolean fieldRelative,
+      BooleanSupplier limitAccel) {
     return Commands.run(
         () -> {
           // Get linear velocity
@@ -118,10 +125,25 @@ public class DriveCommands {
           // Square rotation value for more precise control
           omega = Math.copySign(omega * omega, omega);
 
+          double x = linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec();
+          double y = linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec();
+
+          if (limitAccel.getAsBoolean()) {
+            if (!wasAccelLimited) {
+              xLimiter.reset(x);
+              yLimiter.reset(y);
+            }
+            wasAccelLimited = true;
+            x = xLimiter.calculate(x);
+            y = yLimiter.calculate(y);
+          } else {
+            wasAccelLimited = false;
+          }
+
           // Convert to field relative speeds & send command
           ChassisSpeeds speeds = new ChassisSpeeds(
-              linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-              linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+              x,
+              y,
               omega * drive.getMaxAngularSpeedRadPerSec());
           if (!fieldRelative) {
             drive.runVelocity(speeds);
@@ -155,7 +177,7 @@ public class DriveCommands {
       Drive drive,
       DoubleSupplier xSupplier,
       DoubleSupplier ySupplier,
-      Supplier<Rotation2d> rotationSupplier) {
+      Supplier<Rotation2d> rotationSupplier, BooleanSupplier limitAccel) {
 
     // Create PID controller
     ProfiledPIDController angleController = new ProfiledPIDController(
@@ -176,10 +198,25 @@ public class DriveCommands {
           double omega = angleController.calculate(
               drive.getRotation().getRadians(), rotationSupplier.get().getRadians());
 
+          double x = linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec();
+          double y = linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec();
+
+          if (limitAccel.getAsBoolean()) {
+            if (!wasAccelLimited) {
+              xLimiter.reset(x);
+              yLimiter.reset(y);
+            }
+            wasAccelLimited = true;
+            x = xLimiter.calculate(x);
+            y = yLimiter.calculate(y);
+          } else {
+            wasAccelLimited = false;
+          }
+
           // Convert to field relative speeds & send command
           ChassisSpeeds speeds = new ChassisSpeeds(
-              linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-              linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
+              x,
+              y,
               omega);
           boolean isFlipped = AllianceUtil.getAlliance() == AllianceColor.RED;
           drive.runVelocity(

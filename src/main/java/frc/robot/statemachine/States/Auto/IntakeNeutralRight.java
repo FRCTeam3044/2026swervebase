@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.kicker.Kicker;
 import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoAim;
 import frc.robot.util.AutoTargetUtil;
@@ -20,7 +21,7 @@ public class IntakeNeutralRight extends State {
 
     public IntakeNeutralRight(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil,
             Supplier<ArrayList<Pose2d>> waypoints, AutoAim autoAim, Drive drive,
-            Intake intake) {
+            Intake intake, Kicker kicker) {
         super(stateMachine);
 
         Supplier<Rotation2d> rot = () -> {
@@ -45,6 +46,8 @@ public class IntakeNeutralRight extends State {
         t(() -> drive.atPose(waypoints.get().get(1)))
                 .onTrue(Commands.runOnce(() -> stateComplete = true));
 
+        startWhenActive(kicker.shootKicker().onlyIf(() -> !stateComplete).withName("Running kicker"));
+        t(() -> !stateComplete).whileTrue(kicker.shootKicker().withName("Running kicker"));
         startWhenActive(autoAim.aimAllianceZone(() -> true).onlyIf(() -> !stateComplete).withName("Shoot to AZ"));
         t(() -> !stateComplete).whileTrue(autoAim.aimAllianceZone(() -> true).withName("Shoot to AZ"));
     }
