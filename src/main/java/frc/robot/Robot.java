@@ -8,7 +8,10 @@
 package frc.robot;
 
 import com.revrobotics.util.StatusLogger;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -16,14 +19,20 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.DriveCommands;
+import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.util.AllianceUtil;
+import frc.robot.util.AutoTargetUtil;
 import frc.robot.util.Elastic;
 import frc.robot.util.HubShiftUtil;
 import frc.robot.util.ShotCalculator;
 import frc.robot.util.Elastic.Notification;
 import frc.robot.util.Elastic.NotificationLevel;
 import frc.robot.util.HubShiftUtil.ShiftInfo;
+import frc.robot.util.PathfindingDebugUtils;
 import me.nabdev.oxconfig.OxConfig;
+import me.nabdev.pathfinding.structures.Vertex;
+
 import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -109,6 +118,18 @@ public class Robot extends LoggedRobot {
     OxConfig.initialize();
     System.out.println("Starting state machine...");
     robotContainer.stateMachine.onStartup();
+    Logger.recordOutput("test path",
+        DriveCommands.generateTrajectory(robotContainer.drive, new Pose2d(1, 1, new Rotation2d(0)),
+            new Pose2d(2, 1, new Rotation2d(0))));
+
+    // PathfindingDebugUtils.drawLines("Field Map",
+    // DriveConstants.pathfinder.visualizeEdges(),
+    // DriveConstants.pathfinder.visualizeVertices());
+
+    // PathfindingDebugUtils.drawLines("Field Map Inflated",
+    // DriveConstants.pathfinder.visualizeEdges(),
+    // DriveConstants.pathfinder.visualizeInflatedVertices());
+
   }
 
   /** This function is called periodically during all modes. */

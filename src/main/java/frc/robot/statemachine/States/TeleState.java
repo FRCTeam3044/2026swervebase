@@ -86,11 +86,13 @@ public class TeleState extends State {
     operator.povUp().whileTrue(climber.setSpeed(true));
     operator.povDown().whileTrue(climber.setSpeed(false));
     operator.a().whileTrue(intake.intakeTop());
-    operator.a().whileFalse(intake.intakeBottom());
+    operator.a().or(operator.x()).whileFalse(intake.intakeBottom());
     operator.a().or(operator.b()).whileFalse(intake.runRollers());
     operator.b().whileTrue(intake.runRollersReverse());
+    operator.x().whileTrue(intake.intakeTop());
 
-    startWhenActive(intake.intakeBottom().onlyWhile(operatorController.a().negate()));
+    startWhenActive(
+        intake.intakeBottom().onlyWhile(operatorController.a().negate().and(operatorController.x().negate())));
     startWhenActive(intake.runRollers().onlyWhile(operatorController.a().negate()));
 
     startWhenActive(spindexer.setSpeed());
