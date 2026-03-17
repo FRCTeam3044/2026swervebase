@@ -1,4 +1,4 @@
-package frc.robot.statemachine.States.Auto;
+package frc.robot.statemachine.States.ConsolidatedAuto;
 
 import java.util.function.Supplier;
 

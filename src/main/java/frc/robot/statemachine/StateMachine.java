@@ -16,22 +16,22 @@ import frc.robot.statemachine.States.Tele.NeutralZone;
 import frc.robot.statemachine.States.TeleState;
 import frc.robot.statemachine.States.TestState;
 import frc.robot.statemachine.States.Auto.AutoClimb;
-import frc.robot.statemachine.States.Auto.AutoTrajectories;
-import frc.robot.statemachine.States.Auto.EmptyState;
 import frc.robot.statemachine.States.Auto.FarLeftInOut;
 import frc.robot.statemachine.States.Auto.FarRightInOut;
-import frc.robot.statemachine.States.Auto.IntakeDepot;
 import frc.robot.statemachine.States.Auto.IntakeNeutralRight;
-import frc.robot.statemachine.States.Auto.IntakeOutpost;
 import frc.robot.statemachine.States.Auto.LeftFirstTransition;
 import frc.robot.statemachine.States.Auto.LeftInOut;
 import frc.robot.statemachine.States.Auto.IntakeNeutralLeft;
-import frc.robot.statemachine.States.Auto.LeftTransition;
 import frc.robot.statemachine.States.Auto.RightFirstTransition;
 import frc.robot.statemachine.States.Auto.RightInOut;
-import frc.robot.statemachine.States.Auto.RightTransition;
-import frc.robot.statemachine.States.Auto.SecondShoot;
 import frc.robot.statemachine.States.Auto.ShootToHub;
+import frc.robot.statemachine.States.ConsolidatedAuto.AutoTrajectories;
+import frc.robot.statemachine.States.ConsolidatedAuto.EmptyState;
+import frc.robot.statemachine.States.ConsolidatedAuto.IntakeDepot;
+import frc.robot.statemachine.States.ConsolidatedAuto.IntakeOutpost;
+import frc.robot.statemachine.States.ConsolidatedAuto.NeutralPaths;
+import frc.robot.statemachine.States.ConsolidatedAuto.Scoring;
+import frc.robot.statemachine.States.ConsolidatedAuto.Transitions;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.drive.Drive;
@@ -175,8 +175,6 @@ public class StateMachine extends StateMachineBase {
                 auto.withModeTransitions(disabled, teleop, auto, test);
 
                 // Autonomous work
-
-                EmptyState emptyState = new EmptyState(this, drive);
                 AutoClimb leftClimb = new AutoClimb(this, autoTargetUtil, AutoTargetUtil.getLeftTower(), autoAim, drive,
                                 climber);
                 AutoClimb rightClimb = new AutoClimb(this, autoTargetUtil, AutoTargetUtil.getRightTower(), autoAim,
@@ -184,30 +182,49 @@ public class StateMachine extends StateMachineBase {
                                 climber);
                 IntakeNeutralLeft leftIntake = new IntakeNeutralLeft(this, autoTargetUtil,
                                 AutoTrajectories::getLeftCurve, autoAim, drive, intake, kicker);
-
                 IntakeNeutralRight rightIntake = new IntakeNeutralRight(this, autoTargetUtil,
                                 AutoTrajectories::getRightCurve, autoAim, drive, intake, kicker);
                 ShootToHub shootHub = new ShootToHub(this, autoTargetUtil, drive, intake, spindexer, kicker, turret,
                                 hood, shooter,
                                 autoAim);
-                SecondShoot secondScore = new SecondShoot(this, autoTargetUtil, drive, intake, spindexer, kicker,
-                                turret,
-                                hood, shooter,
-                                autoAim);
-                LeftTransition leftTransition = new LeftTransition(this, drive);
-                RightTransition rightTransition = new RightTransition(this, drive);
                 LeftFirstTransition leftFirstTransition = new LeftFirstTransition(this, drive);
                 RightFirstTransition rightFirstTransition = new RightFirstTransition(this, drive);
-                IntakeDepot intakeDepot = new IntakeDepot(this, autoTargetUtil, autoAim, drive, intake, kicker,
-                                shooter);
-                IntakeOutpost intakeOutpost = new IntakeOutpost(this, autoTargetUtil, autoAim, drive, intake, kicker,
-                                shooter);
-                LeftInOut leftInOut = new LeftInOut(this, autoAim, drive, kicker);
-                RightInOut rightInOut = new RightInOut(this, autoAim, drive, kicker);
                 FarLeftInOut farLeftInOut = new FarLeftInOut(this, autoAim, drive,
                                 kicker);
                 FarRightInOut farRightInOut = new FarRightInOut(this, autoAim, drive,
                                 kicker);
+
+                // Consolidated auto work
+                EmptyState emptyState = new EmptyState(this, drive);
+
+                Scoring firstScore = new Scoring(this, autoTargetUtil, drive, kicker, shooter, hood, turret, autoAim,
+                                180);
+                Scoring secondScore = new Scoring(this, autoTargetUtil, drive, kicker, shooter, hood, turret, autoAim,
+                                0);
+
+                IntakeOutpost intakeOutpost = new IntakeOutpost(this, autoTargetUtil, autoAim, drive, intake, kicker,
+                                shooter);
+                IntakeDepot intakeDepot = new IntakeDepot(this, autoTargetUtil, autoAim, drive, intake, kicker,
+                                shooter);
+
+                Transitions leftTransition = new Transitions(this, autoTargetUtil, drive,
+                                AutoTargetUtil.getSafeLeftNeutral(), 0.0);
+                Transitions rightTransition = new Transitions(this, autoTargetUtil, drive,
+                                AutoTargetUtil.getSafeRightNeutral(), 0.0);
+
+                NeutralPaths rightSwoop = new NeutralPaths(this, autoAim, AutoTrajectories.getRightCurve(), drive,
+                                kicker,
+                                300.0, 50.0, 1);
+                NeutralPaths leftSwoop = new NeutralPaths(this, autoAim, AutoTrajectories.getLeftCurve(), drive,
+                                kicker,
+                                60.0, 290.0, 1);
+
+                NeutralPaths rightInOut = new NeutralPaths(this, autoAim, AutoTrajectories.getRightInOut(), drive,
+                                kicker, 270.0, 270.0, 1);
+                NeutralPaths leftInOut = new NeutralPaths(this, autoAim, AutoTrajectories.getLeftInOut(), drive,
+                                kicker, 90.0, 90.0, 1);
+
+                // Add steps to auto options
 
                 Collections.addAll(leftSwoopDepot, AutoSteps.ShootToHub,
                                 AutoSteps.LeftIntake,
