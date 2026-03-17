@@ -17,24 +17,13 @@ import frc.robot.statemachine.States.Tele.NeutralZone;
 import frc.robot.statemachine.States.TeleState;
 import frc.robot.statemachine.States.TestState;
 import frc.robot.statemachine.States.Auto.AutoClimb;
-import frc.robot.statemachine.States.Auto.AutoTrajectories;
-import frc.robot.statemachine.States.Auto.EmptyState;
-import frc.robot.statemachine.States.Auto.FarLeftInOut;
-import frc.robot.statemachine.States.Auto.FarRightInOut;
-import frc.robot.statemachine.States.Auto.IntakeAllianceZone;
-import frc.robot.statemachine.States.Auto.IntakeDepot;
-import frc.robot.statemachine.States.Auto.IntakeNeutralRight;
-import frc.robot.statemachine.States.Auto.IntakeOutpost;
-import frc.robot.statemachine.States.Auto.LeftFirstTransition;
-import frc.robot.statemachine.States.Auto.LeftInOut;
-import frc.robot.statemachine.States.Auto.IntakeNeutralLeft;
-import frc.robot.statemachine.States.Auto.LeftTransition;
-import frc.robot.statemachine.States.Auto.RightFirstTransition;
-import frc.robot.statemachine.States.Auto.RightInOut;
-import frc.robot.statemachine.States.Auto.RightTransition;
-import frc.robot.statemachine.States.Auto.SecondShoot;
-import frc.robot.statemachine.States.Auto.ShootToAlliedSide;
-import frc.robot.statemachine.States.Auto.ShootToHub;
+import frc.robot.statemachine.States.ConsolidatedAuto.AutoTrajectories;
+import frc.robot.statemachine.States.ConsolidatedAuto.EmptyState;
+import frc.robot.statemachine.States.ConsolidatedAuto.IntakeDepot;
+import frc.robot.statemachine.States.ConsolidatedAuto.IntakeOutpost;
+import frc.robot.statemachine.States.ConsolidatedAuto.NeutralPaths;
+import frc.robot.statemachine.States.ConsolidatedAuto.Scoring;
+import frc.robot.statemachine.States.ConsolidatedAuto.Transitions;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.drive.Drive;
@@ -69,8 +58,7 @@ public class StateMachine extends StateMachineBase {
         AllianceColor allianceColor = AllianceUtil.getAlliance();
 
         // Autos to choose from
-        public static ArrayList<AutoSteps> leftSwoop = new ArrayList<AutoSteps>();
-        public static ArrayList<AutoSteps> rightSwoop = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> orbitAuto = new ArrayList<AutoSteps>();
 
         public static ArrayList<AutoSteps> leftSwoopDepot = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> rightSwoopOutpost = new ArrayList<AutoSteps>();
@@ -85,11 +73,18 @@ public class StateMachine extends StateMachineBase {
         public static ArrayList<AutoSteps> leftInOutAuto = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> rightInOutAuto = new ArrayList<AutoSteps>();
 
+<<<<<<< HEAD
         public static AutoSteps currentStep;
         public static int index;
+=======
+        private AutoSteps currentStep;
+        private static int index;
+>>>>>>> dedfb07d43558ef2bb09f63a9b9903fe1d38cfc7
 
         private ConfigurableParameter<Boolean> forceEnableShooting = new ConfigurableParameter<>(false,
                         "Force Enable Shooting");
+
+        Supplier<ArrayList<AutoSteps>> autoSupplier;
 
         public StateMachine(
                         CommandXboxController driverController,
@@ -178,17 +173,13 @@ public class StateMachine extends StateMachineBase {
                 auto.withModeTransitions(disabled, teleop, auto, test);
 
                 // Autonomous work
-
-                EmptyState emptyState = new EmptyState(this, drive);
                 AutoClimb leftClimb = new AutoClimb(this, autoTargetUtil, AutoTargetUtil.getLeftTower(), autoAim, drive,
                                 climber);
                 AutoClimb rightClimb = new AutoClimb(this, autoTargetUtil, AutoTargetUtil.getRightTower(), autoAim,
                                 drive,
                                 climber);
-                IntakeAllianceZone intakeAllianceZone = new IntakeAllianceZone(this, drive);
-                IntakeNeutralLeft leftIntake = new IntakeNeutralLeft(this, autoTargetUtil,
-                                AutoTrajectories::getLeftCurve, autoAim, drive, intake, kicker);
 
+<<<<<<< HEAD
                 IntakeNeutralRight rightIntake = new IntakeNeutralRight(this, autoTargetUtil,
                                 AutoTrajectories::getRightCurve, autoAim, drive, intake, kicker);
                 ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this, drive, autoAim);
@@ -205,57 +196,103 @@ public class StateMachine extends StateMachineBase {
                 RightFirstTransition rightFirstTransition = new RightFirstTransition(this, drive);
                 IntakeDepot intakeDepot = new IntakeDepot(this, autoTargetUtil, autoAim, drive, intake, kicker,
                                 shooter);
+=======
+                // Consolidated auto work
+                EmptyState emptyState = new EmptyState(this, drive);
+
+                Scoring firstScore = new Scoring(this, autoTargetUtil, drive, kicker, shooter, hood, turret, autoAim,
+                                180);
+                Scoring secondScore = new Scoring(this, autoTargetUtil, drive, kicker, shooter, hood, turret, autoAim,
+                                0);
+
+>>>>>>> dedfb07d43558ef2bb09f63a9b9903fe1d38cfc7
                 IntakeOutpost intakeOutpost = new IntakeOutpost(this, autoTargetUtil, autoAim, drive, intake, kicker,
                                 shooter);
-                LeftInOut leftInOut = new LeftInOut(this, autoAim, drive, kicker);
-                RightInOut rightInOut = new RightInOut(this, autoAim, drive, kicker);
-                FarLeftInOut farLeftInOut = new FarLeftInOut(this, autoAim, drive,
-                                kicker);
-                FarRightInOut farRightInOut = new FarRightInOut(this, autoAim, drive,
-                                kicker);
+                IntakeDepot intakeDepot = new IntakeDepot(this, autoTargetUtil, autoAim, drive, intake, kicker,
+                                shooter);
 
-                Collections.addAll(leftSwoopDepot, AutoSteps.ShootToHub,
-                                AutoSteps.LeftIntake,
+                Transitions leftTransition = new Transitions(this, drive,
+                                AutoTargetUtil.getSafeLeftNeutral(), 0.0);
+                Transitions rightTransition = new Transitions(this, drive,
+                                AutoTargetUtil.getSafeRightNeutral(), 0.0);
+
+                NeutralPaths leftSwoop = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getLeftCurve(), drive,
+                                kicker,
+                                60.0, 290.0, 1);
+                NeutralPaths rightSwoop = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getRightCurve(), drive,
+                                kicker,
+                                300.0, 50.0, 1);
+
+                NeutralPaths leftInOut = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getLeftInOut(), drive,
+                                kicker, 90.0, 90.0, 0);
+                NeutralPaths rightInOut = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getRightInOut(), drive,
+                                kicker, 270.0, 270.0, 0);
+
+                // Add steps to auto options
+
+                Collections.addAll(orbitAuto, AutoSteps.FirstScore, AutoSteps.LeftSwoop, AutoSteps.LeftInOut,
+                                AutoSteps.LeftTransition,
+                                AutoSteps.SecondScore, AutoSteps.EmptyState);
+
+                Collections.addAll(leftSwoopDepot, AutoSteps.FirstScore,
+                                AutoSteps.LeftSwoop,
                                 AutoSteps.LeftTransition,
                                 AutoSteps.SecondScore,
                                 AutoSteps.IntakeDepot,
                                 AutoSteps.EmptyState);
 
+<<<<<<< HEAD
                 Collections.addAll(rightSwoopOutpost,
                                 AutoSteps.ShootToHub,
                                 AutoSteps.RightIntake,
+=======
+                Collections.addAll(rightSwoopOutpost, AutoSteps.FirstScore,
+                                AutoSteps.RightSwoop,
+>>>>>>> dedfb07d43558ef2bb09f63a9b9903fe1d38cfc7
                                 AutoSteps.RightTransition,
                                 AutoSteps.EmptyState);
 
-                Collections.addAll(leftDoubleSweep, AutoSteps.ShootToHub, AutoSteps.LeftIntake,
+                Collections.addAll(leftDoubleSweep, AutoSteps.FirstScore, AutoSteps.LeftSwoop,
                                 AutoSteps.LeftTransition, AutoSteps.SecondScore, AutoSteps.LeftTransition,
-                                AutoSteps.LeftIntake, AutoSteps.LeftTransition, AutoSteps.SecondScore,
+                                AutoSteps.LeftSwoop, AutoSteps.LeftTransition, AutoSteps.SecondScore,
                                 AutoSteps.EmptyState);
 
-                Collections.addAll(rightDoubleSweep, AutoSteps.ShootToHub, AutoSteps.RightIntake,
+                Collections.addAll(rightDoubleSweep, AutoSteps.FirstScore, AutoSteps.RightSwoop,
                                 AutoSteps.RightTransition, AutoSteps.SecondScore, AutoSteps.RightTransition,
-                                AutoSteps.RightIntake, AutoSteps.RightTransition, AutoSteps.SecondScore,
+                                AutoSteps.RightSwoop, AutoSteps.RightTransition, AutoSteps.SecondScore,
                                 AutoSteps.EmptyState);
 
-                Collections.addAll(justShoot, AutoSteps.ShootToHub, AutoSteps.EmptyState);
+                Collections.addAll(justShoot, AutoSteps.FirstScore, AutoSteps.EmptyState);
 
-                Collections.addAll(shootDepot, AutoSteps.ShootToHub, AutoSteps.IntakeDepot, AutoSteps.EmptyState);
+                Collections.addAll(shootDepot, AutoSteps.FirstScore, AutoSteps.IntakeDepot, AutoSteps.EmptyState);
 
-                Collections.addAll(shootOutpost, AutoSteps.ShootToHub, AutoSteps.IntakeOutpost, AutoSteps.EmptyState);
+                Collections.addAll(shootOutpost, AutoSteps.FirstScore, AutoSteps.IntakeOutpost, AutoSteps.EmptyState);
 
-                Collections.addAll(leftInOutAuto, AutoSteps.ShootToHub, AutoSteps.LeftFirstTransition,
+                Collections.addAll(leftInOutAuto, AutoSteps.FirstScore,
                                 AutoSteps.LeftInOut,
                                 AutoSteps.LeftTransition,
                                 AutoSteps.SecondScore, AutoSteps.LeftTransition,
                                 AutoSteps.FarLeftInOut, AutoSteps.LeftTransition, AutoSteps.SecondScore,
                                 AutoSteps.EmptyState);
 
-                Collections.addAll(rightInOutAuto, AutoSteps.ShootToHub, AutoSteps.RightFirstTransition,
+                Collections.addAll(rightInOutAuto, AutoSteps.FirstScore,
                                 AutoSteps.RightInOut,
                                 AutoSteps.RightTransition, AutoSteps.SecondScore, AutoSteps.RightTransition,
                                 AutoSteps.FarRightInOut, AutoSteps.RightTransition, AutoSteps.SecondScore,
                                 AutoSteps.EmptyState);
 
+<<<<<<< HEAD
+=======
+                autoSupplier = () -> {
+                        if (autoChooser.get() == null) {
+                                return orbitAuto;
+                        }
+                        return autoChooser.get();
+                };
+
+                currentStep = autoSupplier.get().get(index);
+
+>>>>>>> dedfb07d43558ef2bb09f63a9b9903fe1d38cfc7
                 BooleanSupplier currentStateComplete = () -> {
                         if (currentStep.getCondition().getAsBoolean()) {
                                 index = index + 1;
@@ -266,21 +303,17 @@ public class StateMachine extends StateMachineBase {
                         }
                 };
 
-                auto.withChild(shootHub, () -> currentStep == AutoSteps.ShootToHub, 0, "Auto to hub shot")
+                auto.withChild(firstScore, () -> currentStep == AutoSteps.FirstScore, 0, "Auto to hub shot")
                                 .withChild(secondScore, () -> currentStep == AutoSteps.SecondScore, 0,
                                                 "Auto to second score")
                                 .withChild(leftClimb, () -> currentStep == AutoSteps.LeftClimb, 0, "Auto to left climb")
                                 .withChild(rightClimb, () -> currentStep == AutoSteps.RightClimb, 0,
                                                 "Auto to right climb")
-                                .withChild(intakeAllianceZone, () -> currentStep == AutoSteps.IntakeAllianceZone, 0,
-                                                "Auto to allied intake")
-                                .withChild(leftIntake,
-                                                () -> currentStep == AutoSteps.LeftIntake, 0,
+                                .withChild(leftSwoop,
+                                                () -> currentStep == AutoSteps.LeftSwoop, 0,
                                                 "Auto to left to right")
-                                .withChild(rightIntake, () -> currentStep == AutoSteps.RightIntake, 0,
+                                .withChild(rightSwoop, () -> currentStep == AutoSteps.RightSwoop, 0,
                                                 "Auto to right to left")
-                                .withChild(shootToAlliedSide, () -> currentStep == AutoSteps.ShootToAlliedSide, 0,
-                                                "Auto to neutral shot")
                                 .withChild(intakeDepot, () -> currentStep == AutoSteps.IntakeDepot, 0,
                                                 "Auto to depot intake")
                                 .withChild(intakeOutpost, () -> currentStep == AutoSteps.IntakeOutpost, 0,
@@ -289,39 +322,25 @@ public class StateMachine extends StateMachineBase {
                                                 "Auto to left transition")
                                 .withChild(rightTransition, () -> currentStep == AutoSteps.RightTransition, 0,
                                                 "Auto to rightTransition")
-                                .withChild(leftFirstTransition, () -> currentStep == AutoSteps.LeftFirstTransition, 0,
-                                                "Auto to left first transition")
-                                .withChild(rightFirstTransition, () -> currentStep == AutoSteps.RightFirstTransition, 0,
-                                                "Auto to right first transition")
                                 .withChild(leftInOut, () -> currentStep == AutoSteps.LeftInOut, 0,
                                                 "Auto to left in out")
                                 .withChild(rightInOut, () -> currentStep == AutoSteps.RightInOut, 0,
                                                 "Auto to right in out")
-                                .withChild(farLeftInOut, () -> currentStep == AutoSteps.FarLeftInOut, 0,
-                                                "Auto to far left in out")
-                                .withChild(farRightInOut, () -> currentStep == AutoSteps.FarRightInOut, 0,
-                                                "Auto to far right in out")
                                 .withChild(emptyState, () -> currentStep == AutoSteps.EmptyState, 0,
                                                 "Auto to empty state");
 
                 leftClimb.withTransition(auto, currentStateComplete, 0, "Left climb to auto");
                 rightClimb.withTransition(auto, currentStateComplete, "Right climb to auto");
-                shootHub.withTransition(auto, currentStateComplete, 0, "Shoot hub to auto");
+                firstScore.withTransition(auto, currentStateComplete, 0, "Shoot hub to auto");
                 secondScore.withTransition(auto, currentStateComplete, "Second score to auto");
-                shootToAlliedSide.withTransition(auto, currentStateComplete, 0, "Neutral shot to auto");
-                intakeAllianceZone.withTransition(auto, currentStateComplete, 0, "Allied intake to auto");
-                leftIntake.withTransition(auto, currentStateComplete, 0, "Left to right to auto");
-                rightIntake.withTransition(auto, currentStateComplete, "Right to left to auto");
+                leftSwoop.withTransition(auto, currentStateComplete, 0, "Left to right to auto");
+                rightSwoop.withTransition(auto, currentStateComplete, "Right to left to auto");
                 intakeDepot.withTransition(auto, currentStateComplete, "Depot intake to auto");
                 intakeOutpost.withTransition(auto, currentStateComplete, "Outpost intake to auto");
                 leftTransition.withTransition(auto, currentStateComplete, 0, "Left transition to auto");
                 rightTransition.withTransition(auto, currentStateComplete, 0, "Right transition to auto");
-                leftFirstTransition.withTransition(auto, currentStateComplete, 0, "Left first transition to auto");
-                rightFirstTransition.withTransition(auto, currentStateComplete, 0, "Right first transition to auto");
                 leftInOut.withTransition(auto, currentStateComplete, 0, "Left in out to auto");
                 rightInOut.withTransition(auto, currentStateComplete, 0, "Right in out to auto");
-                farLeftInOut.withTransition(auto, currentStateComplete, 0, "Far left in out to auto");
-                farRightInOut.withTransition(auto, currentStateComplete, 0, "Far right in out to auto");
                 emptyState.withTransition(auto, currentStateComplete, 0, "Empty to auto");
 
                 // For SYSID (comment out for normal autos)
@@ -333,5 +352,10 @@ public class StateMachine extends StateMachineBase {
                 // test.withModeTransitions(disabled, teleop, auto, test);
                 // disabled.withModeTransitions(disabled, teleop, auto, test);
                 // auto.withModeTransitions(disabled, teleop, auto, test);
+        }
+
+        public void autoReset() {
+                index = 0;
+                currentStep = autoSupplier.get().get(index);
         }
 }

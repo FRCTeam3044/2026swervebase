@@ -233,6 +233,7 @@ public class Robot extends LoggedRobot {
     HubShiftUtil.initialize();
 
     Elastic.selectTab(1);
+    robotContainer.stateMachine.autoReset();
   }
 
   /** This function is called periodically during autonomous. */

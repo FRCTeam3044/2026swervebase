@@ -1,4 +1,4 @@
-package frc.robot.statemachine.States.Auto;
+package frc.robot.statemachine.States.ConsolidatedAuto;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;

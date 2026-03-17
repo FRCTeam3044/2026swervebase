@@ -477,7 +477,7 @@
         "CalibrationState/Test Parameter 103": "0",
         "Pathfinding tolerance": {
             "comment": "Auto-Generated",
-            "value": "0.7"
+            "value": "0.3"
         },
         "CalibrationState/Test Parameter 100": "0",
         "CalibrationState/Test Parameter 101": "0",
@@ -867,7 +867,7 @@
         },
         "Rotation tolerance": {
             "comment": "Auto-Generated",
-            "value": "0.1745"
+            "value": "10"
         },
         "Hood Controller/I": "0.0",
         "Bottom climber position": {
