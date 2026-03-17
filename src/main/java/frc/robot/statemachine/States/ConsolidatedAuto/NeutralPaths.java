@@ -11,13 +11,14 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.kicker.Kicker;
 import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoAim;
+import frc.robot.util.AutoTargetUtil;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 
 public class NeutralPaths extends State {
     public static boolean stateComplete = false;
 
-    public NeutralPaths(StateMachineBase stateMachine, AutoAim autoAim, ArrayList<Pose2d> path, Drive drive,
+    public NeutralPaths(StateMachineBase stateMachine, AutoAim autoAim, Supplier<ArrayList<Pose2d>> path, Drive drive,
             Kicker kicker, double firstRot, double secondRot, int turnPoint) {
         super(stateMachine);
 
@@ -29,10 +30,10 @@ public class NeutralPaths extends State {
             }
         };
 
-        startWhenActive(DriveCommands.goToPoints(drive, () -> path,
-                () -> AllianceUtil.getRotForAlliance(rot.get())));
+        startWhenActive(DriveCommands.goToPoints(drive, () -> path.get(),
+                () -> rot.get()));
 
-        t(() -> drive.atPose(path.get(turnPoint)))
+        t(() -> drive.atPose(path.get().get(turnPoint)))
                 .onTrue(Commands.runOnce(() -> stateComplete = true));
 
         startWhenActive(kicker.shootKicker());

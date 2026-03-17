@@ -867,7 +867,7 @@
         },
         "Rotation tolerance": {
             "comment": "Auto-Generated",
-            "value": "0.1745"
+            "value": "10"
         },
         "Hood Controller/I": "0.0",
         "Bottom climber position": {
