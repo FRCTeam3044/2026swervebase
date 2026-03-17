@@ -280,7 +280,8 @@ public class RobotContainer {
                 autoChooser = new LoggedDashboardChooser<>("Auto choices");
 
                 // Set up auto routines
-                autoChooser.addOption("Orbit auto", StateMachine.orbitAuto);
+                autoChooser.addOption("Left Orbit", StateMachine.leftOrbit);
+                autoChooser.addOption("Right Orbit", StateMachine.rightOrbit);
                 autoChooser.addOption("Left Swoop Depot", StateMachine.leftSwoopDepot);
                 autoChooser.addOption("Right Swoop Outpost", StateMachine.rightSwoopOutpost);
                 autoChooser.addOption("Left Double Sweep", StateMachine.leftDoubleSweep);

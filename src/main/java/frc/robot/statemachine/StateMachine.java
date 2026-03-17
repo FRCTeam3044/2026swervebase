@@ -58,7 +58,8 @@ public class StateMachine extends StateMachineBase {
         AllianceColor allianceColor = AllianceUtil.getAlliance();
 
         // Autos to choose from
-        public static ArrayList<AutoSteps> orbitAuto = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> leftOrbit = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> rightOrbit = new ArrayList<AutoSteps>();
 
         public static ArrayList<AutoSteps> leftSwoopDepot = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> rightSwoopOutpost = new ArrayList<AutoSteps>();
@@ -206,8 +207,12 @@ public class StateMachine extends StateMachineBase {
 
                 // Add steps to auto options
 
-                Collections.addAll(orbitAuto, AutoSteps.FirstScore, AutoSteps.LeftSwoop, AutoSteps.LeftInOut,
+                Collections.addAll(leftOrbit, AutoSteps.FirstScore, AutoSteps.LeftSwoop, AutoSteps.LeftInOut,
                                 AutoSteps.LeftTransition,
+                                AutoSteps.SecondScore, AutoSteps.EmptyState);
+
+                Collections.addAll(rightOrbit, AutoSteps.FirstScore, AutoSteps.RightSwoop, AutoSteps.RightInOut,
+                                AutoSteps.RightTransition,
                                 AutoSteps.SecondScore, AutoSteps.EmptyState);
 
                 Collections.addAll(leftSwoopDepot, AutoSteps.FirstScore,
@@ -237,19 +242,6 @@ public class StateMachine extends StateMachineBase {
                 Collections.addAll(shootDepot, AutoSteps.FirstScore, AutoSteps.IntakeDepot, AutoSteps.EmptyState);
 
                 Collections.addAll(shootOutpost, AutoSteps.FirstScore, AutoSteps.IntakeOutpost, AutoSteps.EmptyState);
-
-                Collections.addAll(leftInOutAuto, AutoSteps.FirstScore,
-                                AutoSteps.LeftInOut,
-                                AutoSteps.LeftTransition,
-                                AutoSteps.SecondScore, AutoSteps.LeftTransition,
-                                AutoSteps.FarLeftInOut, AutoSteps.LeftTransition, AutoSteps.SecondScore,
-                                AutoSteps.EmptyState);
-
-                Collections.addAll(rightInOutAuto, AutoSteps.FirstScore,
-                                AutoSteps.RightInOut,
-                                AutoSteps.RightTransition, AutoSteps.SecondScore, AutoSteps.RightTransition,
-                                AutoSteps.FarRightInOut, AutoSteps.RightTransition, AutoSteps.SecondScore,
-                                AutoSteps.EmptyState);
 
                 BooleanSupplier currentStateComplete = () -> {
                         if (currentStep.getCondition().getAsBoolean()) {
