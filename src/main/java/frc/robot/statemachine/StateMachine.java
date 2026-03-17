@@ -73,8 +73,8 @@ public class StateMachine extends StateMachineBase {
         public static ArrayList<AutoSteps> leftInOutAuto = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> rightInOutAuto = new ArrayList<AutoSteps>();
 
-        private AutoSteps currentStep;
-        private static int index;
+        public static AutoSteps currentStep;
+        public static int index;
 
         private ConfigurableParameter<Boolean> forceEnableShooting = new ConfigurableParameter<>(false,
                         "Force Enable Shooting");
