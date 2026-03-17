@@ -243,6 +243,15 @@ public class StateMachine extends StateMachineBase {
 
                 Collections.addAll(shootOutpost, AutoSteps.FirstScore, AutoSteps.IntakeOutpost, AutoSteps.EmptyState);
 
+                autoSupplier = () -> {
+                        if (autoChooser.get() == null) {
+                                return leftOrbit;
+                        }
+                        return autoChooser.get();
+                };
+
+                currentStep = autoSupplier.get().get(index);
+
                 BooleanSupplier currentStateComplete = () -> {
                         if (currentStep.getCondition().getAsBoolean()) {
                                 index = index + 1;
