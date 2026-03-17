@@ -216,7 +216,7 @@ public class Robot extends LoggedRobot {
 
   public static Supplier<ArrayList<AutoSteps>> autoSupplier = () -> {
     if (robotContainer.autoChooser.get() == null) {
-      return StateMachine.rightSwoopOutpost;
+      return StateMachine.leftOrbit;
     }
     return robotContainer.autoChooser.get();
   };
