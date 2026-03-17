@@ -73,13 +73,8 @@ public class StateMachine extends StateMachineBase {
         public static ArrayList<AutoSteps> leftInOutAuto = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> rightInOutAuto = new ArrayList<AutoSteps>();
 
-<<<<<<< HEAD
-        public static AutoSteps currentStep;
-        public static int index;
-=======
         private AutoSteps currentStep;
         private static int index;
->>>>>>> dedfb07d43558ef2bb09f63a9b9903fe1d38cfc7
 
         private ConfigurableParameter<Boolean> forceEnableShooting = new ConfigurableParameter<>(false,
                         "Force Enable Shooting");
@@ -179,24 +174,6 @@ public class StateMachine extends StateMachineBase {
                                 drive,
                                 climber);
 
-<<<<<<< HEAD
-                IntakeNeutralRight rightIntake = new IntakeNeutralRight(this, autoTargetUtil,
-                                AutoTrajectories::getRightCurve, autoAim, drive, intake, kicker);
-                ShootToAlliedSide shootToAlliedSide = new ShootToAlliedSide(this, drive, autoAim);
-                ShootToHub shootHub = new ShootToHub(this, autoTargetUtil, drive, intake, spindexer, kicker, turret,
-                                hood, shooter,
-                                autoAim);
-                SecondShoot secondScore = new SecondShoot(this, autoTargetUtil, drive, intake, spindexer, kicker,
-                                turret,
-                                hood, shooter,
-                                autoAim);
-                LeftTransition leftTransition = new LeftTransition(this, drive);
-                RightTransition rightTransition = new RightTransition(this, drive, autoAim, kicker);
-                LeftFirstTransition leftFirstTransition = new LeftFirstTransition(this, drive);
-                RightFirstTransition rightFirstTransition = new RightFirstTransition(this, drive);
-                IntakeDepot intakeDepot = new IntakeDepot(this, autoTargetUtil, autoAim, drive, intake, kicker,
-                                shooter);
-=======
                 // Consolidated auto work
                 EmptyState emptyState = new EmptyState(this, drive);
 
@@ -205,7 +182,6 @@ public class StateMachine extends StateMachineBase {
                 Scoring secondScore = new Scoring(this, autoTargetUtil, drive, kicker, shooter, hood, turret, autoAim,
                                 0);
 
->>>>>>> dedfb07d43558ef2bb09f63a9b9903fe1d38cfc7
                 IntakeOutpost intakeOutpost = new IntakeOutpost(this, autoTargetUtil, autoAim, drive, intake, kicker,
                                 shooter);
                 IntakeDepot intakeDepot = new IntakeDepot(this, autoTargetUtil, autoAim, drive, intake, kicker,
@@ -241,14 +217,8 @@ public class StateMachine extends StateMachineBase {
                                 AutoSteps.IntakeDepot,
                                 AutoSteps.EmptyState);
 
-<<<<<<< HEAD
-                Collections.addAll(rightSwoopOutpost,
-                                AutoSteps.ShootToHub,
-                                AutoSteps.RightIntake,
-=======
                 Collections.addAll(rightSwoopOutpost, AutoSteps.FirstScore,
                                 AutoSteps.RightSwoop,
->>>>>>> dedfb07d43558ef2bb09f63a9b9903fe1d38cfc7
                                 AutoSteps.RightTransition,
                                 AutoSteps.EmptyState);
 
@@ -281,18 +251,6 @@ public class StateMachine extends StateMachineBase {
                                 AutoSteps.FarRightInOut, AutoSteps.RightTransition, AutoSteps.SecondScore,
                                 AutoSteps.EmptyState);
 
-<<<<<<< HEAD
-=======
-                autoSupplier = () -> {
-                        if (autoChooser.get() == null) {
-                                return orbitAuto;
-                        }
-                        return autoChooser.get();
-                };
-
-                currentStep = autoSupplier.get().get(index);
-
->>>>>>> dedfb07d43558ef2bb09f63a9b9903fe1d38cfc7
                 BooleanSupplier currentStateComplete = () -> {
                         if (currentStep.getCondition().getAsBoolean()) {
                                 index = index + 1;
