@@ -11,7 +11,6 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.kicker.Kicker;
 import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoAim;
-import frc.robot.util.AutoTargetUtil;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 
@@ -29,6 +28,8 @@ public class NeutralPaths extends State {
                 return AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(secondRot));
             }
         };
+
+        startWhenActive(Commands.runOnce(() -> stateComplete = false));
 
         startWhenActive(DriveCommands.goToPoints(drive, () -> path.get(),
                 () -> rot.get()));

@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DriveCommands;
+import frc.robot.statemachine.StateMachine;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoTargetUtil;
@@ -218,6 +219,7 @@ public class Robot extends LoggedRobot {
     AllianceUtil.setAlliance();
     HubShiftUtil.initialize();
     Elastic.selectTab(1);
+    robotContainer.stateMachine.autoReset();
   }
 
   /** This function is called periodically during autonomous. */

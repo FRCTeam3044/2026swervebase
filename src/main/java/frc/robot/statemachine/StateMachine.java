@@ -73,10 +73,12 @@ public class StateMachine extends StateMachineBase {
         public static ArrayList<AutoSteps> rightInOutAuto = new ArrayList<AutoSteps>();
 
         private AutoSteps currentStep;
-        private int index;
+        private static int index;
 
         private ConfigurableParameter<Boolean> forceEnableShooting = new ConfigurableParameter<>(false,
                         "Force Enable Shooting");
+
+        Supplier<ArrayList<AutoSteps>> autoSupplier;
 
         public StateMachine(
                         CommandXboxController driverController,
@@ -197,11 +199,15 @@ public class StateMachine extends StateMachineBase {
                                 300.0, 50.0, 1);
 
                 NeutralPaths leftInOut = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getLeftInOut(), drive,
-                                kicker, 270.0, 270.0, 1);
+                                kicker, 90.0, 90.0, 0);
                 NeutralPaths rightInOut = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getRightInOut(), drive,
-                                kicker, 90.0, 90.0, 1);
+                                kicker, 270.0, 270.0, 0);
 
                 // Add steps to auto options
+
+                Collections.addAll(orbitAuto, AutoSteps.FirstScore, AutoSteps.LeftSwoop, AutoSteps.LeftInOut,
+                                AutoSteps.LeftTransition,
+                                AutoSteps.SecondScore, AutoSteps.EmptyState);
 
                 Collections.addAll(leftSwoopDepot, AutoSteps.FirstScore,
                                 AutoSteps.LeftSwoop,
@@ -246,12 +252,9 @@ public class StateMachine extends StateMachineBase {
                                 AutoSteps.FarRightInOut, AutoSteps.RightTransition, AutoSteps.SecondScore,
                                 AutoSteps.EmptyState);
 
-                Collections.addAll(orbitAuto, AutoSteps.FirstScore, AutoSteps.LeftSwoop, AutoSteps.LeftTransition,
-                                AutoSteps.SecondScore, AutoSteps.EmptyState);
-
-                Supplier<ArrayList<AutoSteps>> autoSupplier = () -> {
+                autoSupplier = () -> {
                         if (autoChooser.get() == null) {
-                                return leftSwoopDepot;
+                                return orbitAuto;
                         }
                         return autoChooser.get();
                 };
@@ -317,5 +320,10 @@ public class StateMachine extends StateMachineBase {
                 // test.withModeTransitions(disabled, teleop, auto, test);
                 // disabled.withModeTransitions(disabled, teleop, auto, test);
                 // auto.withModeTransitions(disabled, teleop, auto, test);
+        }
+
+        public void autoReset() {
+                index = 0;
+                currentStep = autoSupplier.get().get(index);
         }
 }

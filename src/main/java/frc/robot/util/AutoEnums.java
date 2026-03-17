@@ -36,9 +36,9 @@ public class AutoEnums {
             }
             return false;
         }),
-        LeftSwoop(() -> frc.robot.statemachine.States.Auto.IntakeNeutralLeft.stateComplete
+        LeftSwoop(() -> frc.robot.statemachine.States.ConsolidatedAuto.NeutralPaths.stateComplete
                 && RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getCloseLeftNeutral())),
-        RightSwoop(() -> frc.robot.statemachine.States.Auto.IntakeNeutralRight.stateComplete
+        RightSwoop(() -> frc.robot.statemachine.States.ConsolidatedAuto.NeutralPaths.stateComplete
                 && RobotContainer.getInstance().drive.atPose(AutoTargetUtil
                         .getCloseRightNeutral())),
         IntakeDepot(/* TODO: figure out whether to have end condition or not */ () -> false),
