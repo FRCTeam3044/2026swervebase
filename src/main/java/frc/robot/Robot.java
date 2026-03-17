@@ -20,8 +20,10 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DriveCommands;
+import frc.robot.statemachine.StateMachine;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.util.AllianceUtil;
+import frc.robot.util.AutoEnums.AutoSteps;
 import frc.robot.util.AutoTargetUtil;
 import frc.robot.util.Elastic;
 import frc.robot.util.HubShiftUtil;
@@ -32,6 +34,9 @@ import frc.robot.util.HubShiftUtil.ShiftInfo;
 import frc.robot.util.PathfindingDebugUtils;
 import me.nabdev.oxconfig.OxConfig;
 import me.nabdev.pathfinding.structures.Vertex;
+
+import java.util.ArrayList;
+import java.util.function.Supplier;
 
 import org.ironmaple.simulation.SimulatedArena;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -209,6 +214,13 @@ public class Robot extends LoggedRobot {
     robotContainer.turret.resetAngle(true);
   }
 
+  public static Supplier<ArrayList<AutoSteps>> autoSupplier = () -> {
+    if (robotContainer.autoChooser.get() == null) {
+      return StateMachine.rightSwoopOutpost;
+    }
+    return robotContainer.autoChooser.get();
+  };
+
   /**
    * This autonomous runs the autonomous command selected by your
    * {@link RobotContainer} class.
@@ -216,7 +228,10 @@ public class Robot extends LoggedRobot {
   @Override
   public void autonomousInit() {
     AllianceUtil.setAlliance();
+
+    StateMachine.currentStep = autoSupplier.get().get(StateMachine.index);
     HubShiftUtil.initialize();
+
     Elastic.selectTab(1);
   }
 

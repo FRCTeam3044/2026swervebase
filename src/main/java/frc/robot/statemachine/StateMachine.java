@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Robot;
 import frc.robot.statemachine.States.AutoState;
 import frc.robot.statemachine.States.CalibrationState;
 import frc.robot.statemachine.States.DisabledState;
@@ -84,8 +85,8 @@ public class StateMachine extends StateMachineBase {
         public static ArrayList<AutoSteps> leftInOutAuto = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> rightInOutAuto = new ArrayList<AutoSteps>();
 
-        private AutoSteps currentStep;
-        private int index;
+        public static AutoSteps currentStep;
+        public static int index;
 
         private ConfigurableParameter<Boolean> forceEnableShooting = new ConfigurableParameter<>(false,
                         "Force Enable Shooting");
@@ -199,7 +200,7 @@ public class StateMachine extends StateMachineBase {
                                 hood, shooter,
                                 autoAim);
                 LeftTransition leftTransition = new LeftTransition(this, drive);
-                RightTransition rightTransition = new RightTransition(this, drive);
+                RightTransition rightTransition = new RightTransition(this, drive, autoAim, kicker);
                 LeftFirstTransition leftFirstTransition = new LeftFirstTransition(this, drive);
                 RightFirstTransition rightFirstTransition = new RightFirstTransition(this, drive);
                 IntakeDepot intakeDepot = new IntakeDepot(this, autoTargetUtil, autoAim, drive, intake, kicker,
@@ -220,11 +221,10 @@ public class StateMachine extends StateMachineBase {
                                 AutoSteps.IntakeDepot,
                                 AutoSteps.EmptyState);
 
-                Collections.addAll(rightSwoopOutpost, AutoSteps.ShootToHub,
+                Collections.addAll(rightSwoopOutpost,
+                                AutoSteps.ShootToHub,
                                 AutoSteps.RightIntake,
                                 AutoSteps.RightTransition,
-                                AutoSteps.SecondScore,
-                                AutoSteps.IntakeOutpost,
                                 AutoSteps.EmptyState);
 
                 Collections.addAll(leftDoubleSweep, AutoSteps.ShootToHub, AutoSteps.LeftIntake,
@@ -256,19 +256,10 @@ public class StateMachine extends StateMachineBase {
                                 AutoSteps.FarRightInOut, AutoSteps.RightTransition, AutoSteps.SecondScore,
                                 AutoSteps.EmptyState);
 
-                Supplier<ArrayList<AutoSteps>> autoSupplier = () -> {
-                        if (autoChooser.get() == null) {
-                                return leftSwoopDepot;
-                        }
-                        return autoChooser.get();
-                };
-
-                currentStep = autoSupplier.get().get(index);
-
                 BooleanSupplier currentStateComplete = () -> {
                         if (currentStep.getCondition().getAsBoolean()) {
                                 index = index + 1;
-                                currentStep = autoSupplier.get().get(index);
+                                currentStep = Robot.autoSupplier.get().get(index);
                                 return true;
                         } else {
                                 return false;

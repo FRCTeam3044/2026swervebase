@@ -52,9 +52,11 @@ public class AutoEnums {
                 .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0)))
                 &&
                 RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeLeftNeutral())),
-        RightTransition(() -> RobotContainer.getInstance().drive
-                .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0))) &&
-                RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeRightNeutral())),
+        RightTransition(() -> false
+        // RobotContainer.getInstance().drive
+        // .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0))) &&
+        // RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeRightNeutral())
+        ),
         LeftFirstTransition(() -> RobotContainer.getInstance().drive
                 .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180)))
                 &&
