@@ -1,5 +1,7 @@
 package frc.robot.statemachine.States.ConsolidatedAuto;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.commands.DriveCommands;
@@ -9,12 +11,12 @@ import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 
 public class Transitions extends State {
-    public Transitions(StateMachineBase stateMachine, Drive drive, Pose2d pos,
+    public Transitions(StateMachineBase stateMachine, Drive drive, Supplier<Pose2d> pos,
             double rot) {
         super(stateMachine);
 
         startWhenActive(
-                DriveCommands.goToPoint(drive, () -> pos,
+                DriveCommands.goToPoint(drive, () -> pos.get(),
                         () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(rot))));
     }
 }

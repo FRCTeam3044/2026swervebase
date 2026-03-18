@@ -4,15 +4,9 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.RobotContainer;
-import me.nabdev.oxconfig.ConfigurableParameter;
+import frc.robot.statemachine.StateMachine;
 
 public class AutoEnums {
-    private static ConfigurableParameter<Double> firstAutoTime = new ConfigurableParameter<>(2.0,
-            "First auto shot time");
-
-    private static ConfigurableParameter<Double> secondAutoTime = new ConfigurableParameter<>(4.0,
-            "Second auto shot time");
-
     public AutoEnums() {
     }
 
@@ -20,7 +14,7 @@ public class AutoEnums {
         LeftClimb(() -> false),
         RightClimb(() -> false),
         FirstScore(() -> {
-            if (RobotContainer.getInstance().autoStateTimer.get() > firstAutoTime.get()) {
+            if (RobotContainer.getInstance().autoStateTimer.get() > StateMachine.firstAutoTime.get()) {
                 RobotContainer.getInstance().autoStateTimer.stop();
                 RobotContainer.getInstance().autoStateTimer.reset();
                 return true;
@@ -29,7 +23,7 @@ public class AutoEnums {
         }),
 
         SecondScore(() -> {
-            if (RobotContainer.getInstance().autoStateTimer.get() > secondAutoTime.get()) {
+            if (RobotContainer.getInstance().autoStateTimer.get() > StateMachine.secondAutoTime.get()) {
                 RobotContainer.getInstance().autoStateTimer.stop();
                 RobotContainer.getInstance().autoStateTimer.reset();
                 return true;
@@ -59,6 +53,8 @@ public class AutoEnums {
         // RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeRightNeutral())),
         LeftInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getBottomLeftMiddle())),
         RightInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getBottomRightMiddle())),
+        LeftHub(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getLeftHubPos())),
+        RightHub(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getRightHubPos())),
         // FarLeftInOut(() ->
         // RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getTopLeftMiddle())),
         // FarRightInOut(() ->

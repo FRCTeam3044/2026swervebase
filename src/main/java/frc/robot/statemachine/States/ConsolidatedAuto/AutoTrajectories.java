@@ -68,4 +68,18 @@ public class AutoTrajectories {
         Collections.addAll(path, AutoTargetUtil.getRightNeutral(), AutoTargetUtil.getTopRightMiddle());
         return path;
     };
+
+    public static ArrayList<Pose2d> getLeftHubPath() {
+        ArrayList<Pose2d> path = new ArrayList<>();
+        Collections.addAll(path, AutoTargetUtil.getCloseLeftNeutral(), AutoTargetUtil.getSafeCloseLeftNeutral(),
+                AutoTargetUtil.getLeftHubPos());
+        return path;
+    };
+
+    public static ArrayList<Pose2d> getRightHubPath() {
+        ArrayList<Pose2d> path = new ArrayList<>();
+        Collections.addAll(path, AutoTargetUtil.getCloseRightNeutral(), AutoTargetUtil.getSafeCloseRightNeutral(),
+                AutoTargetUtil.getRightHubPos());
+        return path;
+    };
 }

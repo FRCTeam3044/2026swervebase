@@ -45,7 +45,6 @@ import frc.robot.util.HubShiftUtil;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -80,7 +79,11 @@ public class StateMachine extends StateMachineBase {
         private ConfigurableParameter<Boolean> forceEnableShooting = new ConfigurableParameter<>(false,
                         "Force Enable Shooting");
 
-        Supplier<ArrayList<AutoSteps>> autoSupplier;
+        public static ConfigurableParameter<Double> firstAutoTime = new ConfigurableParameter<>(2.0,
+                        "First auto shot time");
+
+        public static ConfigurableParameter<Double> secondAutoTime = new ConfigurableParameter<>(4.0,
+                        "Second auto shot time");
 
         public StateMachine(
                         CommandXboxController driverController,
@@ -189,9 +192,9 @@ public class StateMachine extends StateMachineBase {
                                 shooter);
 
                 Transitions leftTransition = new Transitions(this, drive,
-                                AutoTargetUtil.getSafeLeftNeutral(), 0.0);
+                                () -> AutoTargetUtil.getSafeLeftNeutral(), 0.0);
                 Transitions rightTransition = new Transitions(this, drive,
-                                AutoTargetUtil.getSafeRightNeutral(), 0.0);
+                                () -> AutoTargetUtil.getSafeRightNeutral(), 0.0);
 
                 NeutralPaths leftSwoop = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getLeftCurve(), drive,
                                 kicker,
@@ -205,15 +208,20 @@ public class StateMachine extends StateMachineBase {
                 NeutralPaths rightInOut = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getRightInOut(), drive,
                                 kicker, 270.0, 270.0, 0);
 
+                NeutralPaths leftHubPath = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getLeftHubPath(),
+                                drive, kicker, 90, 90, 0);
+                NeutralPaths rightHubPath = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getRightHubPath(),
+                                drive, kicker, 270, 270, 0);
+
                 // Add steps to auto options
 
-                Collections.addAll(leftOrbit, AutoSteps.FirstScore, AutoSteps.LeftSwoop, AutoSteps.LeftInOut,
+                Collections.addAll(leftOrbit, AutoSteps.FirstScore, AutoSteps.LeftSwoop, AutoSteps.LeftHub,
                                 AutoSteps.LeftTransition,
                                 AutoSteps.SecondScore, AutoSteps.EmptyState);
 
-                Collections.addAll(rightOrbit, AutoSteps.FirstScore, AutoSteps.RightSwoop, AutoSteps.RightInOut,
-                                AutoSteps.RightTransition,
-                                AutoSteps.SecondScore, AutoSteps.EmptyState);
+                Collections.addAll(rightOrbit, AutoSteps.FirstScore, AutoSteps.RightSwoop,
+                                AutoSteps.RightHub, AutoSteps.RightTransition, AutoSteps.SecondScore,
+                                AutoSteps.EmptyState);
 
                 Collections.addAll(leftSwoopDepot, AutoSteps.FirstScore,
                                 AutoSteps.LeftSwoop,
@@ -276,6 +284,10 @@ public class StateMachine extends StateMachineBase {
                                                 "Auto to left in out")
                                 .withChild(rightInOut, () -> currentStep == AutoSteps.RightInOut, 0,
                                                 "Auto to right in out")
+                                .withChild(leftHubPath, () -> currentStep == AutoSteps.LeftHub, 0,
+                                                "Auto to left hub path")
+                                .withChild(rightHubPath, () -> currentStep == AutoSteps.RightHub, 0,
+                                                "Auto to right hub path")
                                 .withChild(emptyState, () -> currentStep == AutoSteps.EmptyState, 0,
                                                 "Auto to empty state");
 
@@ -291,6 +303,8 @@ public class StateMachine extends StateMachineBase {
                 rightTransition.withTransition(auto, currentStateComplete, 0, "Right transition to auto");
                 leftInOut.withTransition(auto, currentStateComplete, 0, "Left in out to auto");
                 rightInOut.withTransition(auto, currentStateComplete, 0, "Right in out to auto");
+                leftHubPath.withTransition(auto, currentStateComplete, 0, "Left hub path to auto");
+                rightHubPath.withTransition(auto, currentStateComplete, 0, "Right hub path to auto");
                 emptyState.withTransition(auto, currentStateComplete, 0, "Empty to auto");
 
                 // For SYSID (comment out for normal autos)
@@ -306,6 +320,6 @@ public class StateMachine extends StateMachineBase {
 
         public void autoReset() {
                 index = 0;
-                currentStep = autoSupplier.get().get(index);
+                currentStep = Robot.autoSupplier.get().get(index);
         }
 }

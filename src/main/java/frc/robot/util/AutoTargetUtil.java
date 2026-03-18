@@ -5,12 +5,15 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.AllianceUtil.AllianceColor;
+import lombok.experimental.ExtensionMethod;
 import me.nabdev.pathfinding.structures.Obstacle;
 import me.nabdev.pathfinding.structures.Vector;
 import me.nabdev.pathfinding.structures.Vertex;
 
+@ExtensionMethod({ GeomUtil.class })
 public class AutoTargetUtil {
   private final Drive drive;
 
@@ -28,15 +31,19 @@ public class AutoTargetUtil {
 
   private static Pose2d rightNeutral = new Pose2d(8.5, 1.25, Rotation2d.fromDegrees(0));
   private static Pose2d closeRightNeutral = new Pose2d(7.75, 1.25, Rotation2d.fromDegrees(0));
-  private static Pose2d safeRightNeutral = new Pose2d(7.75, 0.25, Rotation2d.fromDegrees(0));
+  private static Pose2d safeRightNeutral = new Pose2d(7.75, 0.5, Rotation2d.fromDegrees(0));
+  private static Pose2d safeCloseRightNeutral = new Pose2d(7, 0.25, Rotation2d.fromDegrees(0));
   private static Pose2d topRightMiddle = new Pose2d(8.5, 3.75, Rotation2d.fromDegrees(0));
   private static Pose2d bottomRightMiddle = new Pose2d(7.75, 3.75, Rotation2d.fromDegrees(0));
+  private static Pose2d rightBehindHub = new Pose2d(6, 3.75, Rotation2d.fromDegrees(0));
 
   private static Pose2d leftNeutral = new Pose2d(8.5, 7, Rotation2d.fromDegrees(0));
   private static Pose2d closeLeftNeutral = new Pose2d(7.75, 7, Rotation2d.fromDegrees(0));
   private static Pose2d safeLeftNeutral = new Pose2d(7.75, 7.25, Rotation2d.fromDegrees(0));
+  private static Pose2d safeCloseLeftNeutral = new Pose2d(7, 7.25, Rotation2d.fromDegrees(0));
   private static Pose2d topLeftMiddle = new Pose2d(8.5, 4.5, Rotation2d.fromDegrees(0));
   private static Pose2d bottomLeftMiddle = new Pose2d(7.75, 4.5, Rotation2d.fromDegrees(0));
+  private static Pose2d leftBehindHub = new Pose2d(6, 4.5, Rotation2d.fromDegrees(0));
 
   private static POIData depot = POIData.createFromRed(0.52188903, 5.96503125, 1.06827289, 5.96503125);
   private static Pose2d closeDepot = new Pose2d(0.52188903, 5.96503125, Rotation2d.fromDegrees(180));
@@ -76,6 +83,11 @@ public class AutoTargetUtil {
     this.drive = drive;
   }
 
+  public Pose2d getTurretPose() {
+    return RobotContainer.getInstance().drive.getPose()
+        .transformBy(ShotCalculator.robotToTurret.toTransform2d());
+  }
+
   public Pose3d getHub() {
     return AllianceUtil.getPose3dForAlliance(hub);
   }
@@ -104,6 +116,14 @@ public class AutoTargetUtil {
     return AllianceUtil.getPoseForAlliance(safeRightNeutral);
   }
 
+  public static Pose2d getSafeCloseLeftNeutral() {
+    return AllianceUtil.getPoseForAlliance(safeCloseLeftNeutral);
+  }
+
+  public static Pose2d getSafeCloseRightNeutral() {
+    return AllianceUtil.getPoseForAlliance(safeCloseRightNeutral);
+  }
+
   public static Pose2d getTopLeftMiddle() {
     return AllianceUtil.getPoseForAlliance(topLeftMiddle);
   }
@@ -118,6 +138,14 @@ public class AutoTargetUtil {
 
   public static Pose2d getBottomRightMiddle() {
     return AllianceUtil.getPoseForAlliance(bottomRightMiddle);
+  }
+
+  public static Pose2d getLeftHubPos() {
+    return AllianceUtil.getPoseForAlliance(leftBehindHub);
+  }
+
+  public static Pose2d getRightHubPos() {
+    return AllianceUtil.getPoseForAlliance(rightBehindHub);
   }
 
   public static Pose2d getNeutralZone() {
