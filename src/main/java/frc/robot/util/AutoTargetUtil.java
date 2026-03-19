@@ -5,7 +5,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.AllianceUtil.AllianceColor;
 import lombok.experimental.ExtensionMethod;
@@ -32,7 +31,7 @@ public class AutoTargetUtil {
   private static Pose2d rightNeutral = new Pose2d(8.5, 1.25, Rotation2d.fromDegrees(0));
   private static Pose2d closeRightNeutral = new Pose2d(7.75, 1.25, Rotation2d.fromDegrees(0));
   private static Pose2d safeRightNeutral = new Pose2d(7.75, 0.5, Rotation2d.fromDegrees(0));
-  private static Pose2d safeCloseRightNeutral = new Pose2d(7, 0.25, Rotation2d.fromDegrees(0));
+  private static Pose2d safeCloseRightNeutral = new Pose2d(6.5, 0.5, Rotation2d.fromDegrees(0));
   private static Pose2d topRightMiddle = new Pose2d(8.5, 3.75, Rotation2d.fromDegrees(0));
   private static Pose2d bottomRightMiddle = new Pose2d(7.75, 3.75, Rotation2d.fromDegrees(0));
   private static Pose2d rightBehindHub = new Pose2d(6, 3.75, Rotation2d.fromDegrees(0));
@@ -40,7 +39,7 @@ public class AutoTargetUtil {
   private static Pose2d leftNeutral = new Pose2d(8.5, 7, Rotation2d.fromDegrees(0));
   private static Pose2d closeLeftNeutral = new Pose2d(7.75, 7, Rotation2d.fromDegrees(0));
   private static Pose2d safeLeftNeutral = new Pose2d(7.75, 7.25, Rotation2d.fromDegrees(0));
-  private static Pose2d safeCloseLeftNeutral = new Pose2d(7, 7.25, Rotation2d.fromDegrees(0));
+  private static Pose2d safeCloseLeftNeutral = new Pose2d(6.5, 7.25, Rotation2d.fromDegrees(0));
   private static Pose2d topLeftMiddle = new Pose2d(8.5, 4.5, Rotation2d.fromDegrees(0));
   private static Pose2d bottomLeftMiddle = new Pose2d(7.75, 4.5, Rotation2d.fromDegrees(0));
   private static Pose2d leftBehindHub = new Pose2d(6, 4.5, Rotation2d.fromDegrees(0));
@@ -74,18 +73,8 @@ public class AutoTargetUtil {
       new Vertex(3.4, 8.0692625),
       new Vertex(3.4, 0));
 
-  private double blueCloseTrenchLine = 3;
-  private double blueFarTrenchLine = 6;
-  private double redCloseTrenchLine = 13;
-  private double redFarTrenchLine = 11;
-
   public AutoTargetUtil(Drive drive) {
     this.drive = drive;
-  }
-
-  public Pose2d getTurretPose() {
-    return RobotContainer.getInstance().drive.getPose()
-        .transformBy(ShotCalculator.robotToTurret.toTransform2d());
   }
 
   public Pose3d getHub() {
@@ -200,8 +189,13 @@ public class AutoTargetUtil {
     }
   }
 
+  public Pose2d getTurretPose() {
+    return drive.getPose()
+        .transformBy(ShotCalculator.robotToTurret.toTransform2d());
+  }
+
   public boolean inNeutralZone() {
-    if (drive.getPose().getX() < redSideLine && drive.getPose().getX() > blueSideLine) {
+    if (this.getTurretPose().getX() < redSideLine && this.getTurretPose().getX() > blueSideLine) {
       return true;
     }
     return false;
@@ -210,9 +204,9 @@ public class AutoTargetUtil {
   public boolean inAllianceZone() {
     AllianceColor allianceColor = AllianceUtil.getAlliance();
 
-    if ((drive.getPose().getX() > redSideLine
+    if ((this.getTurretPose().getX() > redSideLine
         && (allianceColor == AllianceColor.RED || allianceColor == AllianceColor.UNKNOWN))
-        || (drive.getPose().getX() < blueSideLine
+        || (this.getTurretPose().getX() < blueSideLine
             && (allianceColor == AllianceColor.BLUE || allianceColor == AllianceColor.UNKNOWN))) {
       return true;
     }
@@ -221,16 +215,11 @@ public class AutoTargetUtil {
 
   public boolean inOpponentZone() {
     AllianceColor allianceColor = AllianceUtil.getAlliance();
-    if ((drive.getPose().getX() > redSideLine && allianceColor == AllianceColor.BLUE)
-        || (drive.getPose().getX() < blueSideLine && allianceColor == AllianceColor.RED)) {
+    if ((this.getTurretPose().getX() > redSideLine && allianceColor == AllianceColor.BLUE)
+        || (this.getTurretPose().getX() < blueSideLine && allianceColor == AllianceColor.RED)) {
       return true;
     }
     return false;
-  }
-
-  public boolean nearTrench() {
-    double x = drive.getPose().getX();
-    return (x > blueCloseTrenchLine && x < blueFarTrenchLine) || (x > redFarTrenchLine && x < redCloseTrenchLine);
   }
 
   public record POIData(Vertex pos, Vector normal) {

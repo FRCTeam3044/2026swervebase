@@ -196,31 +196,36 @@ public class StateMachine extends StateMachineBase {
                 Transitions rightTransition = new Transitions(this, drive,
                                 () -> AutoTargetUtil.getSafeRightNeutral(), 0.0);
 
+                Transitions leftCloseTransition = new Transitions(this, drive,
+                                () -> AutoTargetUtil.getSafeCloseLeftNeutral(), 0.0);
+                Transitions rightCloseTransition = new Transitions(this, drive,
+                                () -> AutoTargetUtil.getSafeCloseRightNeutral(), 0.0);
+
                 NeutralPaths leftSwoop = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getLeftCurve(), drive,
                                 kicker,
-                                60.0, 290.0, 1);
+                                60.0, 290.0, 1, true);
                 NeutralPaths rightSwoop = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getRightCurve(), drive,
                                 kicker,
-                                300.0, 50.0, 1);
+                                300.0, 50.0, 1, true);
 
                 NeutralPaths leftInOut = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getLeftInOut(), drive,
-                                kicker, 90.0, 90.0, 0);
+                                kicker, 90.0, 90.0, 0, true);
                 NeutralPaths rightInOut = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getRightInOut(), drive,
-                                kicker, 270.0, 270.0, 0);
+                                kicker, 270.0, 270.0, 0, true);
 
                 NeutralPaths leftHubPath = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getLeftHubPath(),
-                                drive, kicker, 90, 90, 0);
+                                drive, kicker, 90, 90, 0, false);
                 NeutralPaths rightHubPath = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getRightHubPath(),
-                                drive, kicker, 270, 270, 0);
+                                drive, kicker, 270, 270, 0, false);
 
                 // Add steps to auto options
 
                 Collections.addAll(leftOrbit, AutoSteps.FirstScore, AutoSteps.LeftSwoop, AutoSteps.LeftHub,
-                                AutoSteps.LeftTransition,
+                                AutoSteps.LeftCloseTransition,
                                 AutoSteps.SecondScore, AutoSteps.EmptyState);
 
                 Collections.addAll(rightOrbit, AutoSteps.FirstScore, AutoSteps.RightSwoop,
-                                AutoSteps.RightHub, AutoSteps.RightTransition, AutoSteps.SecondScore,
+                                AutoSteps.RightHub, AutoSteps.RightCloseTransition, AutoSteps.SecondScore,
                                 AutoSteps.EmptyState);
 
                 Collections.addAll(leftSwoopDepot, AutoSteps.FirstScore,
@@ -280,6 +285,10 @@ public class StateMachine extends StateMachineBase {
                                                 "Auto to left transition")
                                 .withChild(rightTransition, () -> currentStep == AutoSteps.RightTransition, 0,
                                                 "Auto to rightTransition")
+                                .withChild(leftCloseTransition, () -> currentStep == AutoSteps.LeftCloseTransition, 0,
+                                                "Auto to left close transition")
+                                .withChild(rightCloseTransition, () -> currentStep == AutoSteps.RightCloseTransition, 0,
+                                                "Auto to right close transition")
                                 .withChild(leftInOut, () -> currentStep == AutoSteps.LeftInOut, 0,
                                                 "Auto to left in out")
                                 .withChild(rightInOut, () -> currentStep == AutoSteps.RightInOut, 0,
@@ -301,6 +310,8 @@ public class StateMachine extends StateMachineBase {
                 intakeOutpost.withTransition(auto, currentStateComplete, "Outpost intake to auto");
                 leftTransition.withTransition(auto, currentStateComplete, 0, "Left transition to auto");
                 rightTransition.withTransition(auto, currentStateComplete, 0, "Right transition to auto");
+                leftCloseTransition.withTransition(auto, currentStateComplete, 0, "Left close transition to auto");
+                rightCloseTransition.withTransition(auto, currentStateComplete, 0, "Right close transition to auto");
                 leftInOut.withTransition(auto, currentStateComplete, 0, "Left in out to auto");
                 rightInOut.withTransition(auto, currentStateComplete, 0, "Right in out to auto");
                 leftHubPath.withTransition(auto, currentStateComplete, 0, "Left hub path to auto");
