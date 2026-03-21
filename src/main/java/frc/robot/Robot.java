@@ -212,6 +212,15 @@ public class Robot extends LoggedRobot {
     }
     AllianceUtil.setAlliance();
     robotContainer.turret.resetAngle(true);
+
+    PathfindingDebugUtils.drawPoint("Test/Right neutral", new Vertex(AutoTargetUtil.getRightNeutral()));
+    PathfindingDebugUtils.drawPoint("Test/Close right neutral", new Vertex(AutoTargetUtil.getCloseRightNeutral()));
+    PathfindingDebugUtils.drawPoint("Test/Safe right neutral", new Vertex(AutoTargetUtil.getSafeRightNeutral()));
+    PathfindingDebugUtils.drawPoint("Test/Safe close right neutral",
+        new Vertex(AutoTargetUtil.getSafeCloseRightNeutral()));
+    PathfindingDebugUtils.drawPoint("Test/Top right middle", new Vertex(AutoTargetUtil.getTopRightMiddle()));
+    PathfindingDebugUtils.drawPoint("Test/Bottom right middle", new Vertex(AutoTargetUtil.getBottomRightMiddle()));
+    PathfindingDebugUtils.drawPoint("Test/Right behind hub", new Vertex(AutoTargetUtil.getRightHubPos()));
   }
 
   public static Supplier<ArrayList<AutoSteps>> autoSupplier = () -> {

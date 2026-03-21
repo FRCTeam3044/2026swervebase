@@ -63,15 +63,9 @@ public class StateMachine extends StateMachineBase {
         public static ArrayList<AutoSteps> leftSwoopDepot = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> rightSwoopOutpost = new ArrayList<AutoSteps>();
 
-        public static ArrayList<AutoSteps> leftDoubleSweep = new ArrayList<AutoSteps>();
-        public static ArrayList<AutoSteps> rightDoubleSweep = new ArrayList<AutoSteps>();
-
         public static ArrayList<AutoSteps> justShoot = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> shootDepot = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> shootOutpost = new ArrayList<AutoSteps>();
-
-        public static ArrayList<AutoSteps> leftInOutAuto = new ArrayList<AutoSteps>();
-        public static ArrayList<AutoSteps> rightInOutAuto = new ArrayList<AutoSteps>();
 
         public static AutoSteps currentStep;
         public static int index;
@@ -238,16 +232,6 @@ public class StateMachine extends StateMachineBase {
                 Collections.addAll(rightSwoopOutpost, AutoSteps.FirstScore,
                                 AutoSteps.RightSwoop,
                                 AutoSteps.RightTransition,
-                                AutoSteps.EmptyState);
-
-                Collections.addAll(leftDoubleSweep, AutoSteps.FirstScore, AutoSteps.LeftSwoop,
-                                AutoSteps.LeftTransition, AutoSteps.SecondScore, AutoSteps.LeftTransition,
-                                AutoSteps.LeftSwoop, AutoSteps.LeftTransition, AutoSteps.SecondScore,
-                                AutoSteps.EmptyState);
-
-                Collections.addAll(rightDoubleSweep, AutoSteps.FirstScore, AutoSteps.RightSwoop,
-                                AutoSteps.RightTransition, AutoSteps.SecondScore, AutoSteps.RightTransition,
-                                AutoSteps.RightSwoop, AutoSteps.RightTransition, AutoSteps.SecondScore,
                                 AutoSteps.EmptyState);
 
                 Collections.addAll(justShoot, AutoSteps.FirstScore, AutoSteps.EmptyState);

@@ -69,7 +69,18 @@ public class Drive extends SubsystemBase {
     return distance < DriveCommands.pathfindingTolerance.get();
   };
 
+  public boolean atPoseTight(Pose2d pose) {
+    double distance = pose.getTranslation().getDistance(this.getPose().getTranslation());
+    return distance < DriveCommands.tightPathfindingTolerance.get();
+  };
+
   public boolean atRotation(Rotation2d rot) {
+    double rotation = rot.getRadians() - this.getRotation().getRadians();
+    double diff = MathUtil.angleModulus(rotation);
+    return Math.abs(diff) < DriveCommands.rotationTolerance.get();
+  };
+
+  public boolean atRotationTight(Rotation2d rot) {
     double rotation = rot.getRadians() - this.getRotation().getRadians();
     double diff = MathUtil.angleModulus(rotation);
     return Math.abs(diff) < DriveCommands.rotationTolerance.get();

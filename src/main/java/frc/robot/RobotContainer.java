@@ -284,13 +284,9 @@ public class RobotContainer {
                 autoChooser.addOption("Right Orbit", StateMachine.rightOrbit);
                 autoChooser.addOption("Left Swoop Depot", StateMachine.leftSwoopDepot);
                 autoChooser.addOption("Right Swoop Outpost", StateMachine.rightSwoopOutpost);
-                autoChooser.addOption("Left Double Sweep", StateMachine.leftDoubleSweep);
-                autoChooser.addOption("Right Double Sweep", StateMachine.rightDoubleSweep);
                 autoChooser.addOption("Just score", StateMachine.justShoot);
                 autoChooser.addOption("Shoot Depot", StateMachine.shootDepot);
                 autoChooser.addOption("Shoot Outpost", StateMachine.shootOutpost);
-                autoChooser.addOption("Left In Out", StateMachine.leftInOutAuto);
-                autoChooser.addOption("Right In Out", StateMachine.rightInOutAuto);
 
                 DriverStation.getGameSpecificMessage();
 

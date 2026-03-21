@@ -38,19 +38,19 @@ public class AutoEnums {
         IntakeDepot(/* TODO: figure out whether to have end condition or not */ () -> false),
         IntakeOutpost(/* TODO: figure out whether to have end condition or not */ () -> false),
         LeftTransition(() -> RobotContainer.getInstance().drive
-                .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0)))
+                .atRotationTight(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0)))
                 &&
-                RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeLeftNeutral())),
+                RobotContainer.getInstance().drive.atPoseTight(AutoTargetUtil.getSafeLeftNeutral())),
         RightTransition(() -> RobotContainer.getInstance().drive
-                .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0))) &&
-                RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeRightNeutral())),
+                .atRotationTight(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0))) &&
+                RobotContainer.getInstance().drive.atPoseTight(AutoTargetUtil.getSafeRightNeutral())),
         LeftCloseTransition(() -> RobotContainer.getInstance().drive
-                .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0)))
+                .atRotationTight(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0)))
                 &&
-                RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeCloseLeftNeutral())),
+                RobotContainer.getInstance().drive.atPoseTight(AutoTargetUtil.getSafeCloseLeftNeutral())),
         RightCloseTransition(() -> RobotContainer.getInstance().drive
-                .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0))) &&
-                RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeCloseRightNeutral())),
+                .atRotationTight(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0))) &&
+                RobotContainer.getInstance().drive.atPoseTight(AutoTargetUtil.getSafeCloseRightNeutral())),
         LeftInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getBottomLeftMiddle())),
         RightInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getBottomRightMiddle())),
         LeftHub(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getLeftHubPos())),

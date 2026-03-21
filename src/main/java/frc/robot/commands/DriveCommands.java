@@ -73,8 +73,14 @@ public class DriveCommands {
   public static ConfigurableParameter<Double> pathfindingTolerance = new ConfigurableParameter<Double>(0.0,
       "Pathfinding tolerance");
 
+  public static ConfigurableParameter<Double> tightPathfindingTolerance = new ConfigurableParameter<Double>(0.0,
+      "Tight pathfinding tolerance");
+
   public static ConfigurableParameter<Double> rotationTolerance = new ConfigurableParameter<Double>(0.0,
       "Rotation tolerance");
+
+  public static ConfigurableParameter<Double> tightRotationTolerance = new ConfigurableParameter<Double>(0.0,
+      "TIght rotation tolerance");
 
   public static boolean pointControllerConverged = false;
   public static boolean pointControllerLooseConverged = false;

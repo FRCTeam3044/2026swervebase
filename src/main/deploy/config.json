@@ -181,6 +181,10 @@
         },
         "CalibrationState/Test Parameter 30": "0",
         "Point Theta Controller/D": "0.0",
+        "Tight pathfinding tolerance": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "Kicker top block speed": {
             "comment": "Auto-Generated",
             "value": "0.0"
@@ -296,6 +300,10 @@
         "CalibrationState/Test Parameter 77": "0",
         "CalibrationState/Test Parameter 78": "0",
         "CalibrationState/Test Parameter 79": "0",
+        "TIght rotation tolerance": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "CalibrationState/Test Parameter 72": "0",
         "CalibrationState/Test Parameter 73": "0",
         "CalibrationState/Test Parameter 74": "0",
@@ -443,7 +451,7 @@
     "simulation": {
         "Depot distance": {
             "comment": "Auto-Generated",
-            "value": "0.4"
+            "value": "0.1"
         },
         "Pre Outpost Intake distance": {
             "comment": "Auto-Generated",
@@ -622,6 +630,10 @@
         },
         "CalibrationState/Test Parameter 30": "0",
         "Point Theta Controller/D": "0.0",
+        "Tight pathfinding tolerance": {
+            "comment": "Auto-Generated",
+            "value": "0.3"
+        },
         "Kicker top block speed": {
             "comment": "Auto-Generated",
             "value": "0.0"
@@ -737,6 +749,10 @@
         "CalibrationState/Test Parameter 77": "0",
         "CalibrationState/Test Parameter 78": "0",
         "CalibrationState/Test Parameter 79": "0",
+        "TIght rotation tolerance": {
+            "comment": "Auto-Generated",
+            "value": "0.1"
+        },
         "CalibrationState/Test Parameter 72": "0",
         "CalibrationState/Test Parameter 73": "0",
         "CalibrationState/Test Parameter 74": "0",
@@ -867,7 +883,7 @@
         },
         "Rotation tolerance": {
             "comment": "Auto-Generated",
-            "value": "1"
+            "value": "0.1745"
         },
         "Hood Controller/I": "0.0",
         "Bottom climber position": {
@@ -1062,6 +1078,10 @@
         },
         "CalibrationState/Test Parameter 30": "0",
         "Point Theta Controller/D": "0.0",
+        "Tight pathfinding tolerance": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "Kicker top block speed": {
             "comment": "Auto-Generated",
             "value": "-0.7"
@@ -1177,6 +1197,10 @@
         "CalibrationState/Test Parameter 77": "0",
         "CalibrationState/Test Parameter 78": "0",
         "CalibrationState/Test Parameter 79": "0",
+        "TIght rotation tolerance": {
+            "comment": "Auto-Generated",
+            "value": "0.0"
+        },
         "CalibrationState/Test Parameter 72": "0",
         "CalibrationState/Test Parameter 73": "0",
         "CalibrationState/Test Parameter 74": "0",

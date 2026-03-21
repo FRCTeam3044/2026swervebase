@@ -18,5 +18,6 @@ public class Transitions extends State {
         startWhenActive(
                 DriveCommands.goToPoint(drive, () -> pos.get(),
                         () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(rot))));
+        t(() -> drive.atPose(pos.get())).onTrue(DriveCommands.pointControl(drive, pos));
     }
 }

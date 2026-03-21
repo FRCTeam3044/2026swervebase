@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.util.AllianceUtil.AllianceColor;
 import lombok.experimental.ExtensionMethod;
 import me.nabdev.pathfinding.structures.Obstacle;
@@ -31,23 +32,15 @@ public class AutoTargetUtil {
   private static Pose2d rightNeutral = new Pose2d(8.5, 1.25, Rotation2d.fromDegrees(0));
   private static Pose2d closeRightNeutral = new Pose2d(7.75, 1.25, Rotation2d.fromDegrees(0));
   private static Pose2d safeRightNeutral = new Pose2d(7.75, 0.5, Rotation2d.fromDegrees(0));
-  private static Pose2d safeCloseRightNeutral = new Pose2d(6.5, 0.5, Rotation2d.fromDegrees(0));
-  private static Pose2d topRightMiddle = new Pose2d(8.5, 3.75, Rotation2d.fromDegrees(0));
-  private static Pose2d bottomRightMiddle = new Pose2d(7.75, 3.75, Rotation2d.fromDegrees(0));
-  private static Pose2d rightBehindHub = new Pose2d(6, 3.75, Rotation2d.fromDegrees(0));
+  private static Pose2d safeCloseRightNeutral = new Pose2d(6, 0.5, Rotation2d.fromDegrees(0));
+  private static Pose2d topRightMiddle = new Pose2d(8.5, 3.5, Rotation2d.fromDegrees(0));
+  private static Pose2d bottomRightMiddle = new Pose2d(7.75, 3.5, Rotation2d.fromDegrees(0));
+  private static Pose2d rightBehindHub = new Pose2d(6, 3.5, Rotation2d.fromDegrees(0));
+  private static Pose2d rightWideHub = new Pose2d(6, 2, Rotation2d.fromDegrees(0));
 
-  private static Pose2d leftNeutral = new Pose2d(8.5, 7, Rotation2d.fromDegrees(0));
-  private static Pose2d closeLeftNeutral = new Pose2d(7.75, 7, Rotation2d.fromDegrees(0));
-  private static Pose2d safeLeftNeutral = new Pose2d(7.75, 7.25, Rotation2d.fromDegrees(0));
-  private static Pose2d safeCloseLeftNeutral = new Pose2d(6.5, 7.25, Rotation2d.fromDegrees(0));
-  private static Pose2d topLeftMiddle = new Pose2d(8.5, 4.5, Rotation2d.fromDegrees(0));
-  private static Pose2d bottomLeftMiddle = new Pose2d(7.75, 4.5, Rotation2d.fromDegrees(0));
-  private static Pose2d leftBehindHub = new Pose2d(6, 4.5, Rotation2d.fromDegrees(0));
+  private static POIData depot = POIData.createFromRed(0.4, 5.96503125, 1.06827289, 5.96503125);
 
-  private static POIData depot = POIData.createFromRed(0.52188903, 5.96503125, 1.06827289, 5.96503125);
-  private static Pose2d closeDepot = new Pose2d(0.52188903, 5.96503125, Rotation2d.fromDegrees(180));
-
-  private static Pose2d outpost = new Pose2d(0.7, 0.7, Rotation2d.fromDegrees(180));
+  private static Pose2d outpost = new Pose2d(0.5, 0.5, Rotation2d.fromDegrees(180));
 
   private static Obstacle redAllianceZone = Obstacle.createObstacle(
       new Vertex(12.5, 0),
@@ -77,12 +70,17 @@ public class AutoTargetUtil {
     this.drive = drive;
   }
 
+  public static Pose2d mirrorY(Pose2d rightSide) {
+    return new Pose2d(rightSide.getX(), DriveConstants.pathfinder.map.fieldy - rightSide.getY(),
+        rightSide.getRotation());
+  }
+
   public Pose3d getHub() {
     return AllianceUtil.getPose3dForAlliance(hub);
   }
 
   public static Pose2d getLeftNeutral() {
-    return AllianceUtil.getPoseForAlliance(leftNeutral);
+    return AllianceUtil.getPoseForAlliance(mirrorY(rightNeutral));
   }
 
   public static Pose2d getRightNeutral() {
@@ -90,7 +88,7 @@ public class AutoTargetUtil {
   }
 
   public static Pose2d getCloseLeftNeutral() {
-    return AllianceUtil.getPoseForAlliance(closeLeftNeutral);
+    return AllianceUtil.getPoseForAlliance(mirrorY(closeRightNeutral));
   }
 
   public static Pose2d getCloseRightNeutral() {
@@ -98,7 +96,7 @@ public class AutoTargetUtil {
   }
 
   public static Pose2d getSafeLeftNeutral() {
-    return AllianceUtil.getPoseForAlliance(safeLeftNeutral);
+    return AllianceUtil.getPoseForAlliance(mirrorY(safeRightNeutral));
   }
 
   public static Pose2d getSafeRightNeutral() {
@@ -106,7 +104,7 @@ public class AutoTargetUtil {
   }
 
   public static Pose2d getSafeCloseLeftNeutral() {
-    return AllianceUtil.getPoseForAlliance(safeCloseLeftNeutral);
+    return AllianceUtil.getPoseForAlliance(mirrorY(safeCloseRightNeutral));
   }
 
   public static Pose2d getSafeCloseRightNeutral() {
@@ -114,7 +112,7 @@ public class AutoTargetUtil {
   }
 
   public static Pose2d getTopLeftMiddle() {
-    return AllianceUtil.getPoseForAlliance(topLeftMiddle);
+    return AllianceUtil.getPoseForAlliance(mirrorY(topRightMiddle));
   }
 
   public static Pose2d getTopRightMiddle() {
@@ -122,7 +120,7 @@ public class AutoTargetUtil {
   }
 
   public static Pose2d getBottomLeftMiddle() {
-    return AllianceUtil.getPoseForAlliance(bottomLeftMiddle);
+    return AllianceUtil.getPoseForAlliance(mirrorY(bottomRightMiddle));
   }
 
   public static Pose2d getBottomRightMiddle() {
@@ -130,11 +128,19 @@ public class AutoTargetUtil {
   }
 
   public static Pose2d getLeftHubPos() {
-    return AllianceUtil.getPoseForAlliance(leftBehindHub);
+    return AllianceUtil.getPoseForAlliance(mirrorY(rightBehindHub));
   }
 
   public static Pose2d getRightHubPos() {
     return AllianceUtil.getPoseForAlliance(rightBehindHub);
+  }
+
+  public static Pose2d getWideLeftHub() {
+    return AllianceUtil.getPoseForAlliance(mirrorY(rightWideHub));
+  }
+
+  public static Pose2d getWideRighHub() {
+    return AllianceUtil.getPoseForAlliance(rightWideHub);
   }
 
   public static Pose2d getNeutralZone() {
@@ -151,10 +157,6 @@ public class AutoTargetUtil {
 
   public static POIData getDepot() {
     return depot;
-  }
-
-  public static Pose2d getCloseDepot() {
-    return AllianceUtil.getPoseForAlliance(closeDepot);
   }
 
   public static Pose2d getOutpost() {

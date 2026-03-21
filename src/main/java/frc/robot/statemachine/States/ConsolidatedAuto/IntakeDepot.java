@@ -20,8 +20,6 @@ import me.nabdev.oxidation.StateMachineBase;
 public class IntakeDepot extends State {
         private static ConfigurableParameter<Double> pathfindingDist = new ConfigurableParameter<>(0.7,
                         "Depot pathfinding distance");
-        public static ConfigurableParameter<Double> preIntakeDist = new ConfigurableParameter<>(0.5,
-                        "Pre Depot Intake distance");
         private static ConfigurableParameter<Double> intakeDist = new ConfigurableParameter<>(0.4,
                         "Depot distance");
 
@@ -32,7 +30,6 @@ public class IntakeDepot extends State {
 
                 Supplier<Pose2d> pathfindingTarget = () -> AutoTargetUtil.getDepot().poseFacing(pathfindingDist.get(),
                                 false);
-                Supplier<Pose2d> farTarget = () -> AutoTargetUtil.getDepot().poseFacing(preIntakeDist.get(), true);
                 Supplier<Pose2d> intakeTarget = () -> AutoTargetUtil.getDepot().poseFacing(intakeDist.get(), true);
 
                 Command pathfind = DriveCommands
@@ -40,10 +37,7 @@ public class IntakeDepot extends State {
                                                 () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0)))
                                 .withName("Pathfinding");
 
-                Command far = DriveCommands.pointControl(drive, farTarget)
-                                .until(() -> DriveCommands.pointControllerConverged).withName("Far point control");
-
-                Command close = DriveCommands.pointControl(drive, intakeTarget)
+                Command pointControl = DriveCommands.pointControl(drive, intakeTarget)
                                 .until(() -> DriveCommands.pointControllerConverged).withName("Close point control");
 
                 startWhenActive(kicker.shootKicker()
@@ -53,8 +47,8 @@ public class IntakeDepot extends State {
                 t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> true));
 
                 startWhenActive(pathfind);
-                t(() -> drive.atPose(pathfindingTarget.get()) && drive.atRotation(Rotation2d.fromDegrees(180)))
-                                .onTrue(far);
-                t(() -> drive.atPose(farTarget.get())).onTrue(close);
+                t(() -> drive.atPoseTight(pathfindingTarget.get())
+                                && drive.atRotationTight(Rotation2d.fromDegrees(180)))
+                                .onTrue(pointControl);
         }
 }
