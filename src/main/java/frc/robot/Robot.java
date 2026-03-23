@@ -238,11 +238,12 @@ public class Robot extends LoggedRobot {
   public void autonomousInit() {
     AllianceUtil.setAlliance();
 
+    robotContainer.stateMachine.autoReset();
+
     StateMachine.currentStep = autoSupplier.get().get(StateMachine.index);
     HubShiftUtil.initialize();
 
     Elastic.selectTab(1);
-    robotContainer.stateMachine.autoReset();
   }
 
   /** This function is called periodically during autonomous. */

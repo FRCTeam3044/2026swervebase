@@ -56,9 +56,16 @@ public class StateMachine extends StateMachineBase {
         String autoWinner = DriverStation.getGameSpecificMessage();
         AllianceColor allianceColor = AllianceUtil.getAlliance();
 
+        // Test autos for practice field
+        public static ArrayList<AutoSteps> testDepot = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> testOutpost = new ArrayList<AutoSteps>();
+
         // Autos to choose from
         public static ArrayList<AutoSteps> leftOrbit = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> rightOrbit = new ArrayList<AutoSteps>();
+
+        public static ArrayList<AutoSteps> leftOrbitDepot = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> rightOrbitOutpost = new ArrayList<AutoSteps>();
 
         public static ArrayList<AutoSteps> leftSwoopDepot = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> rightSwoopOutpost = new ArrayList<AutoSteps>();
@@ -214,6 +221,9 @@ public class StateMachine extends StateMachineBase {
 
                 // Add steps to auto options
 
+                Collections.addAll(testDepot, AutoSteps.IntakeDepot);
+                Collections.addAll(testOutpost, AutoSteps.IntakeOutpost);
+
                 Collections.addAll(leftOrbit, AutoSteps.FirstScore, AutoSteps.LeftSwoop, AutoSteps.LeftHub,
                                 AutoSteps.LeftCloseTransition,
                                 AutoSteps.SecondScore, AutoSteps.EmptyState);
@@ -221,6 +231,14 @@ public class StateMachine extends StateMachineBase {
                 Collections.addAll(rightOrbit, AutoSteps.FirstScore, AutoSteps.RightSwoop,
                                 AutoSteps.RightHub, AutoSteps.RightCloseTransition, AutoSteps.SecondScore,
                                 AutoSteps.EmptyState);
+
+                Collections.addAll(leftOrbitDepot, AutoSteps.FirstScore, AutoSteps.LeftSwoop, AutoSteps.LeftHub,
+                                AutoSteps.LeftCloseTransition,
+                                AutoSteps.SecondScore, AutoSteps.IntakeDepot, AutoSteps.EmptyState);
+
+                Collections.addAll(rightOrbitOutpost, AutoSteps.FirstScore, AutoSteps.RightSwoop, AutoSteps.RightHub,
+                                AutoSteps.RightCloseTransition,
+                                AutoSteps.SecondScore, AutoSteps.IntakeOutpost, AutoSteps.EmptyState);
 
                 Collections.addAll(leftSwoopDepot, AutoSteps.FirstScore,
                                 AutoSteps.LeftSwoop,
@@ -232,6 +250,8 @@ public class StateMachine extends StateMachineBase {
                 Collections.addAll(rightSwoopOutpost, AutoSteps.FirstScore,
                                 AutoSteps.RightSwoop,
                                 AutoSteps.RightTransition,
+                                AutoSteps.SecondScore,
+                                AutoSteps.IntakeOutpost,
                                 AutoSteps.EmptyState);
 
                 Collections.addAll(justShoot, AutoSteps.FirstScore, AutoSteps.EmptyState);
