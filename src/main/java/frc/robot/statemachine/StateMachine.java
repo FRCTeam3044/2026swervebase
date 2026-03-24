@@ -60,6 +60,12 @@ public class StateMachine extends StateMachineBase {
         public static ArrayList<AutoSteps> testDepot = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> testOutpost = new ArrayList<AutoSteps>();
 
+        public static ArrayList<AutoSteps> leftInOutAuto = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> rightInOutAuto = new ArrayList<AutoSteps>();
+
+        public static ArrayList<AutoSteps> leftInOutDepot = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> rightInOutOutpost = new ArrayList<AutoSteps>();
+
         // Autos to choose from
         public static ArrayList<AutoSteps> leftOrbit = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> rightOrbit = new ArrayList<AutoSteps>();
@@ -223,6 +229,22 @@ public class StateMachine extends StateMachineBase {
 
                 Collections.addAll(testDepot, AutoSteps.IntakeDepot);
                 Collections.addAll(testOutpost, AutoSteps.IntakeOutpost);
+
+                Collections.addAll(leftInOutAuto, AutoSteps.FirstScore, AutoSteps.LeftInOut,
+                                AutoSteps.LeftCloseTransition,
+                                AutoSteps.SecondScore, AutoSteps.EmptyState);
+
+                Collections.addAll(rightInOutAuto, AutoSteps.FirstScore, AutoSteps.RightInOut,
+                                AutoSteps.RightCloseTransition,
+                                AutoSteps.SecondScore, AutoSteps.EmptyState);
+
+                Collections.addAll(leftInOutDepot, AutoSteps.FirstScore, AutoSteps.LeftInOut,
+                                AutoSteps.LeftCloseTransition,
+                                AutoSteps.SecondScore, AutoSteps.IntakeDepot, AutoSteps.EmptyState);
+
+                Collections.addAll(rightInOutOutpost, AutoSteps.FirstScore, AutoSteps.RightInOut,
+                                AutoSteps.RightCloseTransition,
+                                AutoSteps.SecondScore, AutoSteps.IntakeOutpost, AutoSteps.EmptyState);
 
                 Collections.addAll(leftOrbit, AutoSteps.FirstScore, AutoSteps.LeftSwoop, AutoSteps.LeftHub,
                                 AutoSteps.LeftCloseTransition,
