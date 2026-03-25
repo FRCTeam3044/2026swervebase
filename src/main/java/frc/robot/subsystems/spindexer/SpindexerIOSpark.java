@@ -9,37 +9,43 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import java.util.function.DoubleSupplier;
 
 public class SpindexerIOSpark implements SpindexerIO {
-  private final SparkFlex motor = new SparkFlex(canId, MotorType.kBrushless);
+  private final SparkFlex leader = new SparkFlex(leaderCanId, MotorType.kBrushless);
+  private final SparkFlex follower = new SparkFlex(followerCanId, MotorType.kBrushless);
 
-  private RelativeEncoder encoderOne = motor.getEncoder();
+  private RelativeEncoder encoderOne = leader.getEncoder();
+  private RelativeEncoder encoderTwo = follower.getEncoder();
 
   public SpindexerIOSpark() {
     tryUntilOk(
-        motor,
+        leader,
         5,
-        () ->
-            motor.configure(
-                SpindexerConfig.motorConfig,
-                ResetMode.kResetSafeParameters,
-                PersistMode.kPersistParameters));
+        () -> leader.configure(
+            SpindexerConfig.leaderConfig,
+            ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters));
+    tryUntilOk(
+        follower,
+        5,
+        () -> follower.configure(
+            SpindexerConfig.followerConfig,
+            ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters));
   }
 
   @Override
   public void updateInputs(SpindexerIOInputs inputs) {
-    ifOk(motor, motor::getOutputCurrent, (value) -> inputs.currentApms = value);
-    ifOk(motor, encoderOne::getVelocity, (value) -> inputs.speed = value);
-
-    ifOk(
-        motor,
-        new DoubleSupplier[] {motor::getAppliedOutput, motor::getBusVoltage},
-        (values) -> inputs.appliedVoltage = values[0] * values[1]);
+    ifOk(leader, leader::getOutputCurrent, (value) -> inputs.leaderApms = value);
+    ifOk(follower, follower::getOutputCurrent, (value) -> inputs.followerApms = value);
+    ifOk(leader, leader::getAppliedOutput, (value) -> inputs.leaderOutput = value);
+    ifOk(follower, follower::getAppliedOutput, (value) -> inputs.followerOutput = value);
+    ifOk(leader, encoderOne::getVelocity, (value) -> inputs.leaderSpeed = value);
+    ifOk(follower, encoderTwo::getVelocity, (value) -> inputs.followerSpeed = value);
   }
 
   @Override
   public void setSpeed(double speed) {
-    motor.set(speed);
+    leader.set(speed);
   }
 }

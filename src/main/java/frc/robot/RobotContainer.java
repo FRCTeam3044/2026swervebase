@@ -10,10 +10,8 @@ package frc.robot;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.RPM;
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
-import java.lang.Thread.State;
 import java.util.ArrayList;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -34,8 +32,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
 import frc.robot.statemachine.StateMachine;
-import frc.robot.subsystems.climber.Climber;
-import frc.robot.subsystems.climber.ClimberIO;
 import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.LEDs.LEDsIO;
 import frc.robot.subsystems.LEDs.LEDsIORio;
@@ -101,7 +97,6 @@ public class RobotContainer {
         private final Kicker kicker;
         private final Shooter shooter;
         public final Turret turret;
-        private final Climber climber;
         private final Vision vision;
         public final LEDs LEDs;
 
@@ -175,8 +170,6 @@ public class RobotContainer {
                                 spindexer = new Spindexer(new SpindexerIOSpark());
                                 kicker = new Kicker(new KickerIOSpark());
                                 turret = new Turret(new TurretIOSpark());
-                                climber = new Climber(new ClimberIO() {
-                                });
                                 LEDs = new LEDs(new LEDsIORio());
                                 break;
 
@@ -226,8 +219,6 @@ public class RobotContainer {
                                 });
                                 turret = new Turret(new TurretIOSim() {
                                 });
-                                climber = new Climber(new ClimberIO() {
-                                });
                                 LEDs = new LEDs(new LEDsIORio());
                                 break;
 
@@ -263,15 +254,12 @@ public class RobotContainer {
                                 });
                                 turret = new Turret(new TurretIO() {
                                 });
-                                climber = new Climber(new ClimberIO() {
-                                });
                                 LEDs = new LEDs(new LEDsIO() {
                                 });
                                 break;
                 }
 
                 hood.setDefaultCommand(hood.setPosition(() -> HoodConstants.minPosition));
-                climber.setDefaultCommand(climber.calibrate());
 
                 AllianceUtil.setRobot(drive::getPose);
 
@@ -356,7 +344,6 @@ public class RobotContainer {
                                 shooter,
                                 turret,
                                 hood,
-                                climber,
                                 LEDs,
                                 autoTargetUtil,
                                 autoAim, vision, sysidChooser, autoChooser);

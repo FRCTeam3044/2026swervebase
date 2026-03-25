@@ -5,7 +5,6 @@ import static edu.wpi.first.units.Units.Degrees;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
-import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
@@ -42,7 +41,6 @@ public class NormalTestState extends State implements ConfigurableClass {
                         Shooter shooter,
                         Spindexer spindexer,
                         Turret turret,
-                        Climber climber,
                         LEDs leds) {
 
                 super(stateMachine);
@@ -62,7 +60,6 @@ public class NormalTestState extends State implements ConfigurableClass {
                  * B = Shooter (Right joystick Y)
                  * X = Turret (Left joystick X)
                  * Y = Spindexer (Right joystick X)
-                 * POV Right = Climber Manual Move (Right joystick Y)
                  *
                  * Other Subsystems:
                  * LB = Intake Top
@@ -70,9 +67,6 @@ public class NormalTestState extends State implements ConfigurableClass {
                  * LT = Kicker Shoot
                  * RT = Kicker Block
                  *
-                 * POV Up = Climber Top
-                 * POV Down = Climber Down
-                 * POV Right = Climber ClimbPosition
                  * POV Left = Intake Rollers
                  *
                  */
@@ -90,17 +84,6 @@ public class NormalTestState extends State implements ConfigurableClass {
                 testControllerOne.b().whileTrue(shooter.runSpeed(() -> shooterSpeed.get()));
                 testControllerOne.x().whileTrue(turret.setAngle(() -> Degrees.of(turretPosition.get())));
                 testControllerOne.y().whileTrue(spindexer.setSpeed());
-
-                testControllerOne.povUp().whileTrue(climber.climberTop());
-                testControllerOne
-                                .povRight()
-                                .whileTrue(climber.climberPulledUp());
-                testControllerOne
-                                .povDown()
-                                .whileTrue(climber.climberBottom());
-                testControllerTwo
-                                .povRight()
-                                .whileTrue(climber.setSpeedWParameter(rightY));
 
                 testControllerTwo.a().whileTrue(hood.runPercent(leftY));
                 testControllerTwo.b().whileTrue(shooter.runPercent(rightY));

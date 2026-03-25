@@ -11,8 +11,6 @@ public class AutoEnums {
     }
 
     public enum AutoSteps {
-        LeftClimb(() -> false),
-        RightClimb(() -> false),
         FirstScore(() -> {
             if (RobotContainer.getInstance().autoStateTimer.get() > StateMachine.firstAutoTime.get()) {
                 RobotContainer.getInstance().autoStateTimer.stop();

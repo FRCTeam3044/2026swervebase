@@ -2,14 +2,12 @@ package frc.robot.statemachine.States;
 
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.LEDs.LEDs;
-import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.intake.Intake;
@@ -31,7 +29,6 @@ public class TeleState extends State {
       CommandXboxController driverController,
       CommandXboxController operatorController,
       Drive drive,
-      Climber climber,
       Intake intake,
       Spindexer spindexer,
       Hood hood,
@@ -83,8 +80,6 @@ public class TeleState extends State {
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     controller.start().onTrue(Commands.runOnce(hood::resetCalibration));
 
-    operator.povUp().whileTrue(climber.setSpeed(true));
-    operator.povDown().whileTrue(climber.setSpeed(false));
     operator.a().whileTrue(intake.intakeTop());
     operator.a().or(operator.x()).whileFalse(intake.intakeBottom());
     operator.a().or(operator.b()).whileFalse(intake.runRollers());

@@ -6,9 +6,11 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkFlexConfig;
 
 public class SpindexerConfig {
-  public static final SparkFlexConfig motorConfig = new com.revrobotics.spark.config.SparkFlexConfig();
+  public static final SparkFlexConfig leaderConfig = new SparkFlexConfig();
+  public static final SparkFlexConfig followerConfig = new SparkFlexConfig();
 
   static {
-    motorConfig.idleMode(IdleMode.kBrake).smartCurrentLimit(currentLimit, currentLimit).inverted(true);
+    leaderConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(currentLimit, currentLimit);
+    followerConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(currentLimit, currentLimit).follow(leaderCanId, true);
   }
 }

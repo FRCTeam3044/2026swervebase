@@ -16,7 +16,6 @@ import frc.robot.statemachine.States.Tele.InactiveHub;
 import frc.robot.statemachine.States.Tele.NeutralZone;
 import frc.robot.statemachine.States.TeleState;
 import frc.robot.statemachine.States.TestState;
-import frc.robot.statemachine.States.Auto.AutoClimb;
 import frc.robot.statemachine.States.ConsolidatedAuto.AutoTrajectories;
 import frc.robot.statemachine.States.ConsolidatedAuto.EmptyState;
 import frc.robot.statemachine.States.ConsolidatedAuto.IntakeDepot;
@@ -24,7 +23,6 @@ import frc.robot.statemachine.States.ConsolidatedAuto.IntakeOutpost;
 import frc.robot.statemachine.States.ConsolidatedAuto.NeutralPaths;
 import frc.robot.statemachine.States.ConsolidatedAuto.Scoring;
 import frc.robot.statemachine.States.ConsolidatedAuto.Transitions;
-import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
@@ -103,7 +101,6 @@ public class StateMachine extends StateMachineBase {
                         Shooter shooter,
                         Turret turret,
                         Hood hood,
-                        Climber climber,
                         LEDs leds,
                         AutoTargetUtil autoTargetUtil,
                         AutoAim autoAim,
@@ -114,7 +111,7 @@ public class StateMachine extends StateMachineBase {
 
                 DisabledState disabled = new DisabledState(this, leds, turret, hood, vision);
                 currentState = disabled;
-                State teleop = new TeleState(this, driverController, operatorController, drive, climber, intake,
+                State teleop = new TeleState(this, driverController, operatorController, drive, intake,
                                 spindexer, hood, turret, leds);
                 State test = new TestState(this, hood, turret);
                 State auto = new AutoState(this, autoChooser, turret, hood, intake, spindexer);
@@ -126,7 +123,7 @@ public class StateMachine extends StateMachineBase {
                                 spindexer, intake, autoTargetUtil);
                 State normalTest = new NormalTestState(this, driverController, operatorController, drive, hood, intake,
                                 kicker,
-                                shooter, spindexer, turret, climber, leds);
+                                shooter, spindexer, turret, leds);
                 test.withDefaultChild(calibration).withChild(normalTest,
                                 () -> !AutoAimDataManager.calibrationMode.get(), 0,
                                 "Normal Test Mode");
@@ -179,11 +176,6 @@ public class StateMachine extends StateMachineBase {
                 auto.withModeTransitions(disabled, teleop, auto, test);
 
                 // Autonomous work
-                AutoClimb leftClimb = new AutoClimb(this, autoTargetUtil, AutoTargetUtil.getLeftTower(), autoAim, drive,
-                                climber);
-                AutoClimb rightClimb = new AutoClimb(this, autoTargetUtil, AutoTargetUtil.getRightTower(), autoAim,
-                                drive,
-                                climber);
 
                 // Consolidated auto work
                 EmptyState emptyState = new EmptyState(this, drive);
@@ -295,9 +287,6 @@ public class StateMachine extends StateMachineBase {
                 auto.withChild(firstScore, () -> currentStep == AutoSteps.FirstScore, 0, "Auto to hub shot")
                                 .withChild(secondScore, () -> currentStep == AutoSteps.SecondScore, 0,
                                                 "Auto to second score")
-                                .withChild(leftClimb, () -> currentStep == AutoSteps.LeftClimb, 0, "Auto to left climb")
-                                .withChild(rightClimb, () -> currentStep == AutoSteps.RightClimb, 0,
-                                                "Auto to right climb")
                                 .withChild(leftSwoop,
                                                 () -> currentStep == AutoSteps.LeftSwoop, 0,
                                                 "Auto to left to right")
@@ -326,8 +315,6 @@ public class StateMachine extends StateMachineBase {
                                 .withChild(emptyState, () -> currentStep == AutoSteps.EmptyState, 0,
                                                 "Auto to empty state");
 
-                leftClimb.withTransition(auto, currentStateComplete, 0, "Left climb to auto");
-                rightClimb.withTransition(auto, currentStateComplete, "Right climb to auto");
                 firstScore.withTransition(auto, currentStateComplete, 0, "Shoot hub to auto");
                 secondScore.withTransition(auto, currentStateComplete, "Second score to auto");
                 leftSwoop.withTransition(auto, currentStateComplete, 0, "Left to right to auto");
