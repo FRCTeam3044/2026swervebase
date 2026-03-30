@@ -10,25 +10,27 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-public class SpindexerIOSpark implements SpindexerIO {
-  private final SparkFlex leader = new SparkFlex(leaderCanId, MotorType.kBrushless);
-  private final SparkFlex follower = new SparkFlex(followerCanId, MotorType.kBrushless);
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-  private RelativeEncoder encoderOne = leader.getEncoder();
-  private RelativeEncoder encoderTwo = follower.getEncoder();
+public class SpindexerIOSpark implements SpindexerIO {
+  private final SparkFlex bottom = new SparkFlex(leaderCanId, MotorType.kBrushless);
+  private final SparkFlex top = new SparkFlex(followerCanId, MotorType.kBrushless);
+
+  private RelativeEncoder encoderOne = bottom.getEncoder();
+  private RelativeEncoder encoderTwo = top.getEncoder();
 
   public SpindexerIOSpark() {
     tryUntilOk(
-        leader,
+        bottom,
         5,
-        () -> leader.configure(
+        () -> bottom.configure(
             SpindexerConfig.leaderConfig,
             ResetMode.kResetSafeParameters,
             PersistMode.kPersistParameters));
     tryUntilOk(
-        follower,
+        top,
         5,
-        () -> follower.configure(
+        () -> top.configure(
             SpindexerConfig.followerConfig,
             ResetMode.kResetSafeParameters,
             PersistMode.kPersistParameters));
@@ -36,16 +38,22 @@ public class SpindexerIOSpark implements SpindexerIO {
 
   @Override
   public void updateInputs(SpindexerIOInputs inputs) {
-    ifOk(leader, leader::getOutputCurrent, (value) -> inputs.leaderApms = value);
-    ifOk(follower, follower::getOutputCurrent, (value) -> inputs.followerApms = value);
-    ifOk(leader, leader::getAppliedOutput, (value) -> inputs.leaderOutput = value);
-    ifOk(follower, follower::getAppliedOutput, (value) -> inputs.followerOutput = value);
-    ifOk(leader, encoderOne::getVelocity, (value) -> inputs.leaderSpeed = value);
-    ifOk(follower, encoderTwo::getVelocity, (value) -> inputs.followerSpeed = value);
+    ifOk(bottom, bottom::getOutputCurrent, (value) -> inputs.bottomApms = value);
+    ifOk(top, top::getOutputCurrent, (value) -> inputs.topApms = value);
+    ifOk(bottom, bottom::getAppliedOutput, (value) -> inputs.bottomOutput = value);
+    ifOk(top, top::getAppliedOutput, (value) -> inputs.topOutput = value);
+    ifOk(bottom, encoderOne::getVelocity, (value) -> inputs.bottomSpeed = value);
+    ifOk(top, encoderTwo::getVelocity, (value) -> inputs.topSpeed = value);
   }
 
   @Override
-  public void setSpeed(double speed) {
-    leader.set(speed);
+  public void setTopSpeed(double speed) {
+    top.set(speed);
   }
+
+  @Override
+  public void setBottomSpeed(double speed) {
+    bottom.set(speed);
+  }
+
 }

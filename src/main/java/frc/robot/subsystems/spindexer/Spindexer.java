@@ -13,7 +13,9 @@ public class Spindexer extends SubsystemBase {
   private final SpindexerIO io;
   private final SpindexerIOInputsAutoLogged inputs = new SpindexerIOInputsAutoLogged();
 
-  private ConfigurableParameter<Double> spindexerSpeed = new ConfigurableParameter<Double>(0.5, "Spindexer speed");
+  private ConfigurableParameter<Double> topRollerSpeed = new ConfigurableParameter<Double>(-0.5, "Top roller speed");
+  private ConfigurableParameter<Double> bottomRollerSpeed = new ConfigurableParameter<Double>(0.5,
+      "Bottom roller speed");
 
   public Spindexer(SpindexerIO io) {
     this.io = io;
@@ -26,12 +28,23 @@ public class Spindexer extends SubsystemBase {
   }
 
   public Command setSpeed() {
-    return Commands.runEnd(() -> io.setSpeed(spindexerSpeed.get()), () -> io.setSpeed(0), this)
+    return Commands.runEnd(() -> {
+      io.setTopSpeed(topRollerSpeed.get());
+      io.setBottomSpeed(bottomRollerSpeed.get());
+    }, () -> {
+      io.setTopSpeed(0);
+      io.setBottomSpeed(0);
+    }, this)
         .withName("Run Spindexer");
   }
 
   public Command setSpeed(DoubleSupplier speed) {
-    return Commands.runEnd(() -> io.setSpeed(speed.getAsDouble()),
-        () -> io.setSpeed(0), this).withName("Run Spindexer at speed");
+    return Commands.runEnd(() -> {
+      io.setTopSpeed(speed.getAsDouble());
+      io.setBottomSpeed(speed.getAsDouble());
+    }, () -> {
+      io.setTopSpeed(0);
+      io.setBottomSpeed(0);
+    }, this).withName("Run Spindexer at speed");
   }
 }

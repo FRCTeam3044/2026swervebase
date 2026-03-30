@@ -11,6 +11,6 @@ public class SpindexerConfig {
 
   static {
     leaderConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(currentLimit, currentLimit);
-    followerConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(currentLimit, currentLimit).follow(leaderCanId, true);
+    followerConfig.idleMode(IdleMode.kCoast).smartCurrentLimit(currentLimit, currentLimit);
   }
 }
