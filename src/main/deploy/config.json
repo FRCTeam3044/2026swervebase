@@ -1015,7 +1015,7 @@
         "CalibrationState/Test Parameter 24": "0",
         "Top roller speed": {
             "comment": "Auto-Generated",
-            "value": "0.7"
+            "value": "0.9"
         },
         "CalibrationState/Test Parameter 20": "0",
         "Climb position": {
@@ -1155,7 +1155,7 @@
         "CalibrationState/Test Parameter 4": "0",
         "Kicker bottom speed": {
             "comment": "Auto-Generated",
-            "value": "-0.7"
+            "value": "-0.95"
         },
         "CalibrationState/Test Parameter 3": "0",
         "Intake bottom position": {
@@ -1251,7 +1251,7 @@
         },
         "Bottom roller speed": {
             "comment": "Auto-Generated",
-            "value": "-0.7"
+            "value": "-0.9"
         },
         "Hood Max Output": {
             "comment": "Auto-Generated",
@@ -1284,7 +1284,7 @@
         "CalibrationState/Test Parameter 94": "0",
         "Kicker top shoot speed": {
             "comment": "Auto-Generated",
-            "value": "0.9"
+            "value": "0.95"
         },
         "CalibrationState/Test Parameter 95": "0",
         "CalibrationState/Test Parameter 96": "0",
