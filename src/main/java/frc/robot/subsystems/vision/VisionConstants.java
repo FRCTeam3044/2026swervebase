@@ -13,22 +13,33 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
+import me.nabdev.oxconfig.ConfigurableParameter;
 
 public class VisionConstants {
+        private final static ConfigurableParameter<Boolean> onlyHubTagLayout = new ConfigurableParameter<>(
+                        false, "Only Hub Tag Layout");
+
         // AprilTag layout
         // public static AprilTagFieldLayout aprilTagLayout =
         // AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
         public static AprilTagFieldLayout aprilTagLayout;
+        public static AprilTagFieldLayout allTags;
+        public static AprilTagFieldLayout onlyHubTags;
 
         static {
                 try {
-                        aprilTagLayout = new AprilTagFieldLayout(
-                                        Filesystem.getDeployDirectory() + "/3-9-practice-fiasdasdasdeld.json");
+                        allTags = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+                        onlyHubTags = new AprilTagFieldLayout(
+                                        Filesystem.getDeployDirectory() + "/AprilTagLayouts/2026-rebuilt-onlyhub.json");
                 } catch (Exception e) {
                         e.printStackTrace();
-                        aprilTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
                 }
         }
+
+        public static AprilTagFieldLayout getAprilTagLayout() {
+                return onlyHubTagLayout.get() ? onlyHubTags : allTags;
+        }
+
         // Camera names, must match names configured on coprocessor
         public static String fsCamName = "fore_star";
         public static String ssCamName = "sensor_star";
