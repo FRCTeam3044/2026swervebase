@@ -958,7 +958,7 @@
             "comment": "Auto-Generated",
             "value": "1.0"
         },
-        "TestMode/Test Hood Position": "20",
+        "TestMode/Test Hood Position": "25",
         "Climber Motor Run Up Speed": {
             "comment": "Auto-Generated",
             "value": "0.9"
@@ -1257,7 +1257,7 @@
             "comment": "Auto-Generated",
             "value": "20.0"
         },
-        "TestMode/Test Shooter Speed": "1500.0",
+        "TestMode/Test Shooter Speed": "3000.0",
         "Turret Max Velocity": {
             "comment": "Auto-Generated",
             "value": "50.0"
