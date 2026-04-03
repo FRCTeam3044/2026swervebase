@@ -86,15 +86,25 @@ public class Turret extends SubsystemBase {
   }
 
   private boolean isOverridingTarget = false;
+  private boolean stopMoving = false;
 
   public Command setAngle(Supplier<Angle> angle) {
     Supplier<Angle> realAngleSupplier = () -> {
       if (RobotContainer.getInstance().hood.calibrated()) {
         isOverridingTarget = false;
+        stopMoving = false;
         return angle.get();
       }
 
       isOverridingTarget = true;
+
+      if (!inHoodDangerZone()) {
+        stopMoving = true;
+        return inputs.angle;
+      }
+
+      stopMoving = false;
+
       double targetAngle = angle.get().in(Degrees);
       double dangerOneMax = hoodDangerOneMax.get() - 5;
       double dangerTwoMin = hoodDangerTwoMin.get() + 5;
@@ -105,7 +115,13 @@ public class Turret extends SubsystemBase {
         return Degrees.of(dangerTwoMin - 5);
       }
     };
-    return Commands.runEnd(() -> io.setAngle(realAngleSupplier.get()), () -> io.setPercent(0))
+    return Commands.runEnd(() -> {
+      if (stopMoving) {
+        io.setPercent(0);
+      } else {
+        io.setAngle(realAngleSupplier.get());
+      }
+    }, () -> io.setPercent(0))
         .withName("Set Turret Angle");
   }
 

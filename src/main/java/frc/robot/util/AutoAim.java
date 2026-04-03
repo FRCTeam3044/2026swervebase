@@ -22,6 +22,12 @@ public class AutoAim {
 
   private ConfigurableParameter<Double> shooterDisengagedProportion = new ConfigurableParameter<>(0.5,
       "ShooterDisengagedProportion");
+  // private ConfigurableParameter<Double> hoodFudge = new
+  // ConfigurableParameter<>(-0.5,
+  // "HoodFudge");
+  // private ConfigurableParameter<Double> shooterFudge = new
+  // ConfigurableParameter<>(-300.0,
+  // "ShooterFudge");
 
   public AutoAim(Turret turret, Shooter shooter, Hood hood, AutoTargetUtil autoTargetUtil) {
     this.turret = turret;
@@ -42,9 +48,10 @@ public class AutoAim {
   public Command aimHub(BooleanSupplier shooterEngaged) {
     return Commands.parallel(
         turret.setAngle(() -> parameters.turretAngle().getMeasure()),
-        hood.setPosition(() -> parameters.hoodPosition()),
+        hood.setPosition(() -> parameters.hoodPosition()/* + hoodFudge.get() */),
         shooter.runSpeed(
-            () -> parameters.flywheelSpeed() * (shooterEngaged.getAsBoolean() ? 1 : shooterDisengagedProportion.get())))
+            () -> (/* shooterFudge.get() */ +parameters.flywheelSpeed())
+                * (shooterEngaged.getAsBoolean() ? 1 : shooterDisengagedProportion.get())))
         .withName("Auto Aim at Hub");
   }
 

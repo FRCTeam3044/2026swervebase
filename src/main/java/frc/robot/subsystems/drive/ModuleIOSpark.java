@@ -59,7 +59,10 @@ public class ModuleIOSpark implements ModuleIO {
         private final Debouncer driveConnectedDebounce = new Debouncer(0.5, Debouncer.DebounceType.kFalling);
         private final Debouncer turnConnectedDebounce = new Debouncer(0.5, Debouncer.DebounceType.kFalling);
 
+        private int module;
+
         public ModuleIOSpark(int module) {
+                this.module = module;
                 zeroRotation = switch (module) {
                         case 0 -> frontLeftZeroRotation;
                         case 1 -> frontRightZeroRotation;
@@ -96,7 +99,7 @@ public class ModuleIOSpark implements ModuleIO {
                                 .idleMode(IdleMode.kBrake)
                                 .smartCurrentLimit(driveMotorCurrentLimit, driveMotorCurrentLimit)
                                 .voltageCompensation(12.0)
-                                .inverted(module == 2 ? false : true);
+                                .inverted(true);
                 driveConfig.encoder
                                 .positionConversionFactor(driveEncoderPositionFactor)
                                 .velocityConversionFactor(driveEncoderVelocityFactor)
@@ -212,6 +215,8 @@ public class ModuleIOSpark implements ModuleIO {
 
         @Override
         public void setDriveVelocity(double velocityRadPerSec) {
+                // if (module != 1)
+                // return;
                 double ffVolts = driveKs * Math.signum(velocityRadPerSec) + driveKv * velocityRadPerSec;
                 driveController.setSetpoint(
                                 velocityRadPerSec,
@@ -223,6 +228,8 @@ public class ModuleIOSpark implements ModuleIO {
 
         @Override
         public void setTurnPosition(Rotation2d rotation) {
+                // if (module != 1)
+                // return;
                 double setpoint = MathUtil.inputModulus(
                                 rotation.plus(zeroRotation).getRadians(), turnPIDMinInput, turnPIDMaxInput);
                 turnController.setSetpoint(setpoint, ControlType.kPosition);

@@ -32,7 +32,8 @@ public class ActiveHub extends State {
     super(stateMachine);
     SmartXboxController operator = new SmartXboxController(operatorController, loop);
     SmartXboxController driver = new SmartXboxController(driverController, loop);
-    operator.rightTrigger().and(turret::isAtTarget).and(shooter::isAtSpeed).whileTrue(kicker.shootKicker())
+    operator.rightTrigger().and(turret::isAtTarget).and(shooter::isAtSpeed)
+        .whileTrue(kicker.shootKicker().alongWith(spindexer.setSpeed()))
         .whileTrue(leds.setBlinkingColor(Color.kGreen));
     operator.rightTrigger().negate().and(turret::isAtTarget).and(shooter::isAtSpeed)
         .whileTrue(leds.setSolidColor(() -> Color.kGreen));

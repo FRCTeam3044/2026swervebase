@@ -90,7 +90,7 @@ public class TeleState extends State {
         intake.intakeBottom().onlyWhile(operatorController.a().negate().and(operatorController.x().negate())));
     startWhenActive(intake.runRollers().onlyWhile(operatorController.a().negate()));
 
-    startWhenActive(spindexer.setSpeed());
+    // startWhenActive(spindexer.setSpeed());
 
     t(turret::nearFlipAround).whileTrue(Commands.runEnd(() -> {
       driverController.setRumble(RumbleType.kBothRumble, 1);

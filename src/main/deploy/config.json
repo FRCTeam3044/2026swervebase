@@ -291,6 +291,10 @@
         "CalibrationState/Test Parameter 80": "0",
         "CalibrationState/Test Parameter 81": "0",
         "CalibrationState/Test Parameter 82": "0",
+        "HoodFudge": {
+            "comment": "Auto-Generated",
+            "value": "-0.5"
+        },
         "Turret Fliparound Tolerance": {
             "comment": "Auto-Generated",
             "value": "15.0"
@@ -452,6 +456,10 @@
         "Shooter at speed tolerance (RPM)": {
             "comment": "Auto-Generated",
             "value": "5.0"
+        },
+        "ShooterFudge": {
+            "comment": "Auto-Generated",
+            "value": "-300.0"
         },
         "Hood Controller/D": "0.0"
     },
@@ -748,6 +756,10 @@
         "CalibrationState/Test Parameter 80": "0",
         "CalibrationState/Test Parameter 81": "0",
         "CalibrationState/Test Parameter 82": "0",
+        "HoodFudge": {
+            "comment": "Auto-Generated",
+            "value": "-0.5"
+        },
         "Turret Fliparound Tolerance": {
             "comment": "Auto-Generated",
             "value": "15.0"
@@ -909,6 +921,10 @@
         "Shooter at speed tolerance (RPM)": {
             "comment": "Auto-Generated",
             "value": "5.0"
+        },
+        "ShooterFudge": {
+            "comment": "Auto-Generated",
+            "value": "-300.0"
         },
         "Hood Controller/D": "0.0"
     },
@@ -1169,7 +1185,7 @@
         "CalibrationState/Test Parameter 54": "0",
         "Hood Calibration Speed": {
             "comment": "Auto-Generated",
-            "value": "-0.8"
+            "value": "-0.4"
         },
         "CalibrationState/Test Parameter 55": "0",
         "CalibrationState/Test Parameter 56": "0",
@@ -1204,6 +1220,10 @@
         "CalibrationState/Test Parameter 80": "0",
         "CalibrationState/Test Parameter 81": "0",
         "CalibrationState/Test Parameter 82": "0",
+        "HoodFudge": {
+            "comment": "Auto-Generated",
+            "value": "-0.5"
+        },
         "Turret Fliparound Tolerance": {
             "comment": "Auto-Generated",
             "value": "15.0"
@@ -1365,6 +1385,10 @@
         "Shooter at speed tolerance (RPM)": {
             "comment": "Auto-Generated",
             "value": "300.0"
+        },
+        "ShooterFudge": {
+            "comment": "Auto-Generated",
+            "value": "-200.0"
         },
         "Hood Controller/D": "0.00"
     }
