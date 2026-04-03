@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DriveCommands;
 import frc.robot.statemachine.StateMachine;
+import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoEnums.AutoSteps;
 import frc.robot.util.AutoTargetUtil;
@@ -178,6 +179,8 @@ public class Robot extends LoggedRobot {
 
     turretNotReset.set(!robotContainer.turret.hasReset());
     turretInDangerZone.set(robotContainer.turret.inHoodDangerZone() && !robotContainer.hood.calibrated());
+
+    VisionConstants.setUseHubAprilTags(robotContainer.autoTargetUtil.inAllianceZone());
 
     ShotCalculator.periodic();
   }

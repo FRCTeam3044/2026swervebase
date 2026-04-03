@@ -42,11 +42,11 @@ public class CalibrationState extends State {
                                                                 AutoAimDataManager.mzCalibrationMode.get())),
                                                 hood.setPosition(() -> calibrationShotHoodPosition.get()))
                                                 .withName("Calibration aiming"));
-                controller.rightTrigger().whileTrue(kicker.shootKicker());
+                controller.rightTrigger().whileTrue(kicker.shootKicker().alongWith(spindexer.setSpeed()));
                 // controller.rightTrigger().whileFalse(kicker.blockKicker());
                 // startWhenActive(kicker.blockKicker().onlyWhile(controller.rightTrigger().negate())
                 // .withName("Block Kicker"));
-                startWhenActive(spindexer.setSpeed());
+                // startWhenActive(spindexer.setSpeed());
                 startWhenActive(intake.runRollers());
                 startWhenActive(intake.intakeBottom());
                 startWhenActive(

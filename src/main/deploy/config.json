@@ -412,13 +412,13 @@
         "X Point Controller/I": "0.0",
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "40"
+            "value": "13"
         },
         "Hood Controller/P": "0.0",
         "X Point Controller/D": "0.0",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
-            "value": "4870"
+            "value": "2600"
         },
         "Climber Motor Running Speed": {
             "comment": "Auto-Generated",
@@ -433,7 +433,7 @@
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "false"
+            "value": "true"
         },
         "Hood Controller/Tolerance": "0.05",
         "Outpost distance": {
@@ -877,13 +877,13 @@
         "X Point Controller/I": "0.0",
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "40"
+            "value": "13"
         },
         "Hood Controller/P": "0.0",
         "X Point Controller/D": "0.0",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
-            "value": "4870"
+            "value": "2600"
         },
         "Climber Motor Running Speed": {
             "comment": "Auto-Generated",
@@ -898,7 +898,7 @@
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "false"
+            "value": "true"
         },
         "Hood Controller/Tolerance": "0.05",
         "Outpost distance": {
@@ -1341,13 +1341,13 @@
         "X Point Controller/I": "0.0",
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "40"
+            "value": "13"
         },
         "Hood Controller/P": "0.08",
         "X Point Controller/D": "0.2",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
-            "value": "4870"
+            "value": "2600"
         },
         "Climber Motor Running Speed": {
             "comment": "Auto-Generated",
@@ -1362,7 +1362,7 @@
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "false"
+            "value": "true"
         },
         "Hood Controller/Tolerance": "0.01",
         "Outpost distance": {

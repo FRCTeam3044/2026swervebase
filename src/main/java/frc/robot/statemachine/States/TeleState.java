@@ -67,7 +67,8 @@ public class TeleState extends State {
       }
     };
     abxy.whileTrue(DriveCommands.joystickDriveAtAngle(drive, driveX, driveY,
-        () -> AllianceUtil.getRotForAlliance(new Rotation2d(targetRotation.getAsDouble())), operator.rightTrigger()));
+        () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(targetRotation.getAsDouble())),
+        operator.rightTrigger()));
 
     abxy.negate().whileTrue(DriveCommands.joystickDrive(
         drive,

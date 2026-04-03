@@ -83,6 +83,7 @@ public class Turret extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Turret", inputs);
     Logger.recordOutput("Turret/InHoodDangerZone", inHoodDangerZone());
+    Logger.recordOutput("Turret/StopMoving", stopMoving);
   }
 
   private boolean isOverridingTarget = false;
@@ -116,10 +117,11 @@ public class Turret extends SubsystemBase {
       }
     };
     return Commands.runEnd(() -> {
+      var tA = realAngleSupplier.get();
       if (stopMoving) {
         io.setPercent(0);
       } else {
-        io.setAngle(realAngleSupplier.get());
+        io.setAngle(tA);
       }
     }, () -> io.setPercent(0))
         .withName("Set Turret Angle");

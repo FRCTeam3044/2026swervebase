@@ -18,17 +18,29 @@ public class VisionConstants {
         // AprilTag layout
         // public static AprilTagFieldLayout aprilTagLayout =
         // AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
-        public static AprilTagFieldLayout aprilTagLayout;
+        private static AprilTagFieldLayout hubAprilTags;
+        private static AprilTagFieldLayout allAprilTags;
+        private static boolean usingHubOnlyAprilTags = false;
 
         static {
+                allAprilTags = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
                 try {
-                        aprilTagLayout = new AprilTagFieldLayout(
-                                        Filesystem.getDeployDirectory() + "/3-9-practice-fiasdasdasdeld.json");
+                        hubAprilTags = new AprilTagFieldLayout(
+                                        Filesystem.getDeployDirectory() + "/2026-rebuilt-only-hub.json");
                 } catch (Exception e) {
                         e.printStackTrace();
-                        aprilTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+                        hubAprilTags = allAprilTags;
                 }
         }
+
+        public static AprilTagFieldLayout getAprilTagLayout() {
+                return usingHubOnlyAprilTags ? hubAprilTags : allAprilTags;
+        }
+
+        public static void setUseHubAprilTags(boolean useHubAprilTags) {
+                usingHubOnlyAprilTags = useHubAprilTags;
+        }
+
         // Camera names, must match names configured on coprocessor
         public static String fsCamName = "fore_star";
         public static String ssCamName = "sensor_star";
