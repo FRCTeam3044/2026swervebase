@@ -37,7 +37,7 @@ public class NeutralZone extends State {
     driver.start().whileFalse(autoAim.aimAllianceZone(() -> !operatorController.leftTrigger().getAsBoolean()));
     startWhenActive(
         autoAim.aimAllianceZone(() -> !operatorController.leftTrigger().getAsBoolean()).until(driver.start()));
-    operator.rightTrigger().whileTrue(kicker.shootKicker());
+    operator.rightTrigger().whileTrue(kicker.shootKicker().alongWith(spindexer.setSpeed()));
     startWhenActive(leds.defaultPattern());
   }
 }
