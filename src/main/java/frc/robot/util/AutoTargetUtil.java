@@ -21,8 +21,8 @@ public class AutoTargetUtil {
   final double redSideLine = 11.86622575;
 
   private Pose3d hub = new Pose3d(new Translation3d(4.62, 8.069 / 2.0, 2), new Rotation3d());
-  private Pose3d outpostAllianceTarget = new Pose3d(new Translation3d(3.3, 1.7, 2), new Rotation3d());
-  private Pose3d depotAllianceTarget = new Pose3d(new Translation3d(3.3, 6.3, 2), new Rotation3d());
+  private Pose3d outpostAllianceTarget = new Pose3d(new Translation3d(1, 1.7, 0), new Rotation3d());
+  private Pose3d depotAllianceTarget = new Pose3d(new Translation3d(1, 6.3, 0), new Rotation3d());
 
   private static Pose2d testNeutralZonePosition = new Pose2d(7, 4, Rotation2d.fromDegrees(0));
 
