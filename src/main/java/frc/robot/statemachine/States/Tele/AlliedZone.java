@@ -16,8 +16,8 @@ public class AlliedZone extends State {
 
     SmartXboxController driver = new SmartXboxController(controller, loop);
 
-    driver.start().whileFalse(autoAim.aimHub(() -> !operator.leftTrigger().getAsBoolean()));
+    driver.start().whileFalse(autoAim.aimHub(() -> !operator.x().getAsBoolean()));
     startWhenActive(
-        autoAim.aimHub(() -> !operator.leftTrigger().getAsBoolean()).until(driver.start()));
+        autoAim.aimHub(() -> !operator.x().getAsBoolean()).until(driver.start()));
   }
 }

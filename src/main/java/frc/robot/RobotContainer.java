@@ -332,7 +332,7 @@ public class RobotContainer {
                                 "Turret SysId (Dynamic Reverse)", turret.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
                 autoTargetUtil = new AutoTargetUtil(drive);
-                autoAim = new AutoAim(turret, shooter, hood, autoTargetUtil);
+                autoAim = new AutoAim(turret, shooter, hood, kicker, spindexer, autoTargetUtil);
                 stateMachine = new StateMachine(
                                 controllerOne,
                                 controllerTwo,

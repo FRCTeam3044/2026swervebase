@@ -34,10 +34,10 @@ public class NeutralZone extends State {
     SmartXboxController driver = new SmartXboxController(driverController, loop);
     SmartXboxController operator = new SmartXboxController(operatorController, loop);
 
-    driver.start().whileFalse(autoAim.aimAllianceZone(() -> !operatorController.leftTrigger().getAsBoolean()));
+    driver.start().whileFalse(autoAim.aimAllianceZone(() -> !operatorController.x().getAsBoolean()));
     startWhenActive(
-        autoAim.aimAllianceZone(() -> !operatorController.leftTrigger().getAsBoolean()).until(driver.start()));
-    operator.rightTrigger().whileTrue(kicker.shootKicker().alongWith(spindexer.setSpeed()));
+        autoAim.aimAllianceZone(() -> !operatorController.x().getAsBoolean()).until(driver.start()));
+    driver.rightTrigger().whileTrue(autoAim.fire(() -> true));
     startWhenActive(leds.defaultPattern());
   }
 }

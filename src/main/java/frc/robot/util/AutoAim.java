@@ -7,7 +7,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.kicker.Kicker;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.util.ShotCalculator.ShootingParameters;
 import me.nabdev.oxconfig.ConfigurableParameter;
@@ -17,8 +19,10 @@ public class AutoAim {
   private final Shooter shooter;
   private final Hood hood;
   private final AutoTargetUtil autoTargetUtil;
+  private final Kicker kicker;
+  private final Spindexer spindexer;
 
-  private ShootingParameters parameters = new ShootingParameters(true, new Rotation2d(), 0, 0);
+  private ShootingParameters parameters = new ShootingParameters(false, new Rotation2d(), 0, 0);
 
   private ConfigurableParameter<Double> shooterDisengagedProportion = new ConfigurableParameter<>(0.5,
       "ShooterDisengagedProportion");
@@ -29,20 +33,29 @@ public class AutoAim {
   // ConfigurableParameter<>(-300.0,
   // "ShooterFudge");
 
-  public AutoAim(Turret turret, Shooter shooter, Hood hood, AutoTargetUtil autoTargetUtil) {
+  public AutoAim(Turret turret, Shooter shooter, Hood hood, Kicker kicker, Spindexer spindexer,
+      AutoTargetUtil autoTargetUtil) {
     this.turret = turret;
     this.shooter = shooter;
     this.hood = hood;
+    this.kicker = kicker;
+    this.spindexer = spindexer;
     this.autoTargetUtil = autoTargetUtil;
   }
 
   public void periodic() {
     ShotCalculator.getInstance().clearShootingParameters();
-    if (autoTargetUtil.inNeutralZone()) {
+    if (!autoTargetUtil.inAllianceZone()) {
       parameters = ShotCalculator.getInstance().getParameters(autoTargetUtil.getAllianceZoneTarget(), true);
     } else {
       parameters = ShotCalculator.getInstance().getParameters(autoTargetUtil.getHub(), false);
     }
+  }
+
+  public Command fire(BooleanSupplier forceFire) {
+    return Commands.parallel(kicker.shootKicker(), spindexer.setSpeed())
+        .onlyWhile(() -> forceFire.getAsBoolean() || parameters.isValid()).repeatedly()
+        .withName("Fire Shot");
   }
 
   public Command aimHub(BooleanSupplier shooterEngaged) {

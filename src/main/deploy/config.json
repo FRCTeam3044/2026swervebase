@@ -66,6 +66,10 @@
         "CalibrationState/Test Parameter 119": "0",
         "CalibrationState/Test Parameter 110": "0",
         "CalibrationState/Test Parameter 113": "0",
+        "Max Distance": {
+            "comment": "Auto-Generated",
+            "value": "5.5"
+        },
         "CalibrationState/Test Parameter 114": "0",
         "CalibrationState/Test Parameter 111": "0",
         "CalibrationState/Test Parameter 112": "0",
@@ -112,6 +116,10 @@
         "CalibrationShotTurretAngle": {
             "comment": "Auto-Generated",
             "value": "0.0"
+        },
+        "Phase Delay": {
+            "comment": "Auto-Generated",
+            "value": "0.05"
         },
         "Y Point Controller/Tolerance": "0.05",
         "Shooter at speed tight tolerance (RPM)": {
@@ -359,7 +367,7 @@
         },
         "Shooter Midzone Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Shooter Speed Controller/D": "0.0",
         "Climb pathfinding distance": {
@@ -433,7 +441,7 @@
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Hood Controller/Tolerance": "0.05",
         "Outpost distance": {
@@ -531,6 +539,10 @@
         "CalibrationState/Test Parameter 119": "0",
         "CalibrationState/Test Parameter 110": "0",
         "CalibrationState/Test Parameter 113": "0",
+        "Max Distance": {
+            "comment": "Auto-Generated",
+            "value": "5.5"
+        },
         "CalibrationState/Test Parameter 114": "0",
         "CalibrationState/Test Parameter 111": "0",
         "CalibrationState/Test Parameter 112": "0",
@@ -577,6 +589,10 @@
         "CalibrationShotTurretAngle": {
             "comment": "Auto-Generated",
             "value": "0.0"
+        },
+        "Phase Delay": {
+            "comment": "Auto-Generated",
+            "value": "0.05"
         },
         "Y Point Controller/Tolerance": "0.05",
         "Shooter at speed tight tolerance (RPM)": {
@@ -824,7 +840,7 @@
         },
         "Shooter Midzone Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Shooter Speed Controller/D": "0.0",
         "Climb pathfinding distance": {
@@ -898,7 +914,7 @@
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Hood Controller/Tolerance": "0.05",
         "Outpost distance": {
@@ -995,6 +1011,10 @@
         "CalibrationState/Test Parameter 119": "0",
         "CalibrationState/Test Parameter 110": "0",
         "CalibrationState/Test Parameter 113": "0",
+        "Max Distance": {
+            "comment": "Auto-Generated",
+            "value": "5.5"
+        },
         "CalibrationState/Test Parameter 114": "0",
         "CalibrationState/Test Parameter 111": "0",
         "CalibrationState/Test Parameter 112": "0",
@@ -1041,6 +1061,10 @@
         "CalibrationShotTurretAngle": {
             "comment": "Auto-Generated",
             "value": "0.0"
+        },
+        "Phase Delay": {
+            "comment": "Auto-Generated",
+            "value": "0.05"
         },
         "Y Point Controller/Tolerance": "0.05",
         "Shooter at speed tight tolerance (RPM)": {
@@ -1288,7 +1312,7 @@
         },
         "Shooter Midzone Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Shooter Speed Controller/D": "0.0",
         "Climb pathfinding distance": {
@@ -1362,7 +1386,7 @@
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Hood Controller/Tolerance": "0.01",
         "Outpost distance": {

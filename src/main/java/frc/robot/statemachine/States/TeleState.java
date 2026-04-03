@@ -38,19 +38,17 @@ public class TeleState extends State {
     SmartXboxController controller = new SmartXboxController(driverController, loop);
     SmartXboxController operator = new SmartXboxController(operatorController, loop);
 
-    DoubleSupplier slowMult = () -> (operator.rightTrigger().getAsBoolean()
-        && !driverController.rightTrigger().getAsBoolean()) ? slowModeSpeed.get() : 1;
-    DoubleSupplier driveY = () -> -driverController.getLeftX() * slowMult.getAsDouble();
-    DoubleSupplier driveX = () -> -driverController.getLeftY() * slowMult.getAsDouble();
+    DoubleSupplier driveY = () -> -driverController.getLeftX();
+    DoubleSupplier driveX = () -> -driverController.getLeftY();
 
     startWhenActive(
         DriveCommands.joystickDrive(
             drive,
             driveX,
             driveY,
-            () -> -driverController.getRightX() * slowMult.getAsDouble(),
+            () -> -driverController.getRightX(),
             true,
-            operator.rightTrigger()));
+            driverController.rightTrigger()));
     SmartTrigger abxy = controller.a().or(controller.b()).or(controller.x()).or(controller.y());
 
     DoubleSupplier targetRotation = () -> {
@@ -68,27 +66,30 @@ public class TeleState extends State {
     };
     abxy.whileTrue(DriveCommands.joystickDriveAtAngle(drive, driveX, driveY,
         () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(targetRotation.getAsDouble())),
-        operator.rightTrigger()));
+        driverController.rightTrigger()));
 
     abxy.negate().whileTrue(DriveCommands.joystickDrive(
         drive,
         driveX,
         driveY,
-        () -> -driverController.getRightX() * slowMult.getAsDouble(),
+        () -> -driverController.getRightX(),
         true,
-        operator.rightTrigger()));
+        driverController.rightTrigger()));
 
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     controller.start().onTrue(Commands.runOnce(hood::resetCalibration));
 
+    // lt = raise but keep intake running
+    // a = raise intake and turn off
     operator.a().whileTrue(intake.intakeTop());
-    operator.a().or(operator.x()).whileFalse(intake.intakeBottom());
+    operator.a().or(operator.leftTrigger()).whileFalse(intake.intakeBottom());
     operator.a().or(operator.b()).whileFalse(intake.runRollers());
     operator.b().whileTrue(intake.runRollersReverse());
-    operator.x().whileTrue(intake.intakeTop());
+    operator.leftTrigger().whileTrue(intake.intakeTop());
 
     startWhenActive(
-        intake.intakeBottom().onlyWhile(operatorController.a().negate().and(operatorController.x().negate())));
+        intake.intakeBottom()
+            .onlyWhile(operatorController.a().negate().and(operatorController.leftTrigger().negate())));
     startWhenActive(intake.runRollers().onlyWhile(operatorController.a().negate()));
 
     // startWhenActive(spindexer.setSpeed());

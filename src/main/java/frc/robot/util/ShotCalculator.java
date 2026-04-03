@@ -19,6 +19,7 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import lombok.experimental.ExtensionMethod;
+import me.nabdev.oxconfig.ConfigurableParameter;
 
 import java.io.FileNotFoundException;
 
@@ -49,7 +50,8 @@ public class ShotCalculator {
 
     public static AutoAimDataManager dm;
 
-    private static double phaseDelay = 0.03;
+    private static ConfigurableParameter<Double> phaseDelay = new ConfigurableParameter<Double>(0.05, "Phase Delay");
+    private static ConfigurableParameter<Double> maxDistance = new ConfigurableParameter<Double>(5.5, "Max Distance");
 
     public static Transform3d robotToTurret = new Transform3d(Units.inchesToMeters(3.75), Units.inchesToMeters(6.75),
             Units.inchesToMeters(0.381), Rotation3d.kZero);
@@ -76,9 +78,9 @@ public class ShotCalculator {
         ChassisSpeeds robotRelativeVelocity = Robot.robotContainer.drive.getRobotRelativeChassisSpeeds();
         estimatedPose = estimatedPose.exp(
                 new Twist2d(
-                        robotRelativeVelocity.vxMetersPerSecond * phaseDelay,
-                        robotRelativeVelocity.vyMetersPerSecond * phaseDelay,
-                        robotRelativeVelocity.omegaRadiansPerSecond * phaseDelay));
+                        robotRelativeVelocity.vxMetersPerSecond * phaseDelay.get(),
+                        robotRelativeVelocity.vyMetersPerSecond * phaseDelay.get(),
+                        robotRelativeVelocity.omegaRadiansPerSecond * phaseDelay.get()));
 
         // Calculate distance from turret to target
         // Translation2d target =
@@ -119,7 +121,7 @@ public class ShotCalculator {
         hoodPosition = dm.getShotHoodPositionMap(secondaryValues).get(lookaheadTurretToTargetDistance);
         latestParameters = new ShootingParameters(
                 lookaheadTurretToTargetDistance >= dm.getMinDistance(secondaryValues)
-                        && lookaheadTurretToTargetDistance <= dm.getMaxDistance(secondaryValues),
+                        && lookaheadTurretToTargetDistance <= maxDistance.get(),
                 turretAngle,
                 hoodPosition,
                 dm.getShotFlywheelSpeedMap(secondaryValues).get(lookaheadTurretToTargetDistance));
