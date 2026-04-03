@@ -54,7 +54,9 @@ public class AutoAim {
 
   public Command fire(BooleanSupplier forceFire) {
     return Commands.parallel(kicker.shootKicker(), spindexer.setSpeed())
-        .onlyWhile(() -> forceFire.getAsBoolean() || parameters.isValid()).repeatedly()
+        .onlyWhile(() -> (forceFire.getAsBoolean() || parameters.isValid()) && turret.isAtTarget() && hood.atPosition()
+            && shooter.isAtSpeed())
+        .repeatedly()
         .withName("Fire Shot");
   }
 
