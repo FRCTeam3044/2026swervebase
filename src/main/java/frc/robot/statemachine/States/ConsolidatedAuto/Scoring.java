@@ -21,36 +21,38 @@ import me.nabdev.pathfinding.structures.Obstacle;
 import me.nabdev.pathfinding.structures.Vertex;
 
 public class Scoring extends State {
-    public Scoring(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil, Drive drive, Kicker kicker,
-            Shooter shooter,
-            Hood hood, Turret turret, AutoAim autoAim,
-            double rot) {
-        super(stateMachine);
+        public Scoring(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil, Drive drive, Kicker kicker,
+                        Shooter shooter,
+                        Hood hood, Turret turret, AutoAim autoAim,
+                        double rot) {
+                super(stateMachine);
 
-        Supplier<Pose2d> targetSupplier = () -> {
-            if (autoTargetUtil.inAllianceZone()) {
-                return drive.getPose();
-            }
-            Obstacle allianceZone = AutoTargetUtil.allianceSide();
-            Vertex robotPos = new Vertex(drive.getPose());
-            return allianceZone.calculateNearestPoint(robotPos).asPose2d();
-        };
+                Supplier<Pose2d> targetSupplier = () -> {
+                        if (autoTargetUtil.inAllianceZone()) {
+                                return drive.getPose();
+                        }
+                        Obstacle allianceZone = AutoTargetUtil.allianceSide();
+                        Vertex robotPos = new Vertex(drive.getPose());
+                        return allianceZone.calculateNearestPoint(robotPos).asPose2d();
+                };
 
-        startWhenActive(DriveCommands.goToPoint(drive, targetSupplier,
-                () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(rot))));
-        t(() -> drive.atPose(targetSupplier.get()))
-                .whileTrue(Commands.run(() -> drive.stop()));
-        startWhenActive(() -> Commands
-                .deferredProxy(() -> Commands.runOnce(() -> RobotContainer.getInstance().autoStateTimer.start()))
-                .onlyIf(() -> autoTargetUtil.inAllianceZone()));
-        t(() -> autoTargetUtil.inAllianceZone())
-                .onTrue(Commands.runOnce(() -> RobotContainer.getInstance().autoStateTimer.start()));
-        startWhenActive(Commands.waitSeconds(0.4).andThen(kicker.shootKicker())
-                .onlyIf(() -> autoTargetUtil.inAllianceZone() && shooter.isAtSpeed() && turret.isAtTarget()
-                        && hood.atPosition()));
-        t(shooter::isAtSpeed).and(turret::isAtTarget).and(autoTargetUtil::inAllianceZone).and(hood::atPosition)
-                .onTrue(Commands.waitSeconds(0.4).andThen(kicker.shootKicker()));
-        startWhenActive(autoAim.aimHub(() -> true).onlyIf(() -> autoTargetUtil.inAllianceZone()));
-        t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> true));
-    }
+                startWhenActive(DriveCommands.goToPoint(drive, targetSupplier,
+                                () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(rot))));
+                t(() -> drive.atPose(targetSupplier.get()))
+                                .whileTrue(Commands.run(() -> drive.stop()));
+                startWhenActive(() -> Commands
+                                .deferredProxy(() -> Commands
+                                                .runOnce(() -> RobotContainer.getInstance().autoStateTimer.start()))
+                                .onlyIf(() -> autoTargetUtil.inAllianceZone()));
+                t(() -> autoTargetUtil.inAllianceZone())
+                                .onTrue(Commands.runOnce(() -> RobotContainer.getInstance().autoStateTimer.start()));
+                startWhenActive(Commands.waitSeconds(0.4).andThen(autoAim.fire(() -> true))
+                                .onlyIf(() -> autoTargetUtil.inAllianceZone() && shooter.isAtSpeed()
+                                                && turret.isAtTarget()
+                                                && hood.atPosition()));
+                t(shooter::isAtSpeed).and(turret::isAtTarget).and(autoTargetUtil::inAllianceZone).and(hood::atPosition)
+                                .onTrue(Commands.waitSeconds(0.4).andThen(autoAim.fire(() -> true)));
+                startWhenActive(autoAim.aimHub(() -> true).onlyIf(() -> autoTargetUtil.inAllianceZone()));
+                t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> true));
+        }
 }
