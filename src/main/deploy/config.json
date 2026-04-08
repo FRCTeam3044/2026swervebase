@@ -1140,7 +1140,7 @@
         "Point Theta Controller/D": "0.0",
         "Tight pathfinding tolerance": {
             "comment": "Auto-Generated",
-            "value": "0.0"
+            "value": "0.7"
         },
         "Kicker top block speed": {
             "comment": "Auto-Generated",
@@ -1263,7 +1263,7 @@
         "CalibrationState/Test Parameter 79": "0",
         "TIght rotation tolerance": {
             "comment": "Auto-Generated",
-            "value": "0.0"
+            "value": "0.1745"
         },
         "CalibrationState/Test Parameter 72": "0",
         "CalibrationState/Test Parameter 73": "0",

@@ -17,8 +17,8 @@ import me.nabdev.pathfinding.structures.Vertex;
 public class AutoTargetUtil {
   private final Drive drive;
 
-  final double blueSideLine = 4.67482575;
-  final double redSideLine = 11.86622575;
+  final double blueSideLine = 4.4;
+  final double redSideLine = 12;
 
   private Pose3d hub = new Pose3d(new Translation3d(4.62, 8.069 / 2.0, 2), new Rotation3d());
   private Pose3d outpostAllianceTarget = new Pose3d(new Translation3d(1, 1.7, 0), new Rotation3d());
@@ -37,6 +37,8 @@ public class AutoTargetUtil {
   private static Pose2d bottomRightMiddle = new Pose2d(7.75, 3.5, Rotation2d.fromDegrees(0));
   private static Pose2d rightBehindHub = new Pose2d(6, 3.5, Rotation2d.fromDegrees(0));
   private static Pose2d rightWideHub = new Pose2d(6, 2, Rotation2d.fromDegrees(0));
+
+  private static Pose2d testBumpPos = new Pose2d(6, 2.5, Rotation2d.fromDegrees(0));
 
   private static POIData depot = POIData.createFromRed(0.4, 5.96503125, 1.06827289, 5.96503125);
 
@@ -139,8 +141,16 @@ public class AutoTargetUtil {
     return AllianceUtil.getPoseForAlliance(mirrorY(rightWideHub));
   }
 
-  public static Pose2d getWideRighHub() {
+  public static Pose2d getWideRightHub() {
     return AllianceUtil.getPoseForAlliance(rightWideHub);
+  }
+
+  public static Pose2d getLeftBumpPos() {
+    return AllianceUtil.getPoseForAlliance(mirrorY(testBumpPos));
+  }
+
+  public static Pose2d getRightBumpPos() {
+    return AllianceUtil.getPoseForAlliance(testBumpPos);
   }
 
   public static Pose2d getNeutralZone() {

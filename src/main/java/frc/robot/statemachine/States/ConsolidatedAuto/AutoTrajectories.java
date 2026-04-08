@@ -78,7 +78,7 @@ public class AutoTrajectories {
 
     public static ArrayList<Pose2d> getRightHubPath() {
         ArrayList<Pose2d> path = new ArrayList<>();
-        Collections.addAll(path, AutoTargetUtil.getCloseRightNeutral(), AutoTargetUtil.getWideRighHub(),
+        Collections.addAll(path, AutoTargetUtil.getCloseRightNeutral(), AutoTargetUtil.getWideRightHub(),
                 AutoTargetUtil.getRightHubPos());
         return path;
     };

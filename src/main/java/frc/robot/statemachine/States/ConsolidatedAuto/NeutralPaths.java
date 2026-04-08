@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.kicker.Kicker;
 import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoAim;
@@ -18,7 +19,7 @@ public class NeutralPaths extends State {
     public static boolean stateComplete = false;
 
     public NeutralPaths(StateMachineBase stateMachine, AutoAim autoAim, Supplier<ArrayList<Pose2d>> path, Drive drive,
-            Kicker kicker, double firstRot, double secondRot, int turnPoint, boolean passing) {
+            Kicker kicker, Intake intake, double firstRot, double secondRot, int turnPoint, boolean passing) {
         super(stateMachine);
 
         Supplier<Rotation2d> rot = () -> {
@@ -37,8 +38,8 @@ public class NeutralPaths extends State {
         t(() -> drive.atPose(path.get().get(turnPoint)))
                 .onTrue(Commands.runOnce(() -> stateComplete = true));
 
-        startWhenActive(autoAim.fire(() -> true).onlyIf(() -> passing));
-        startWhenActive(autoAim.aimAllianceZone(() -> true).onlyIf(() -> passing));
+        startWhenActive(autoAim.fire(() -> true));
+        startWhenActive(autoAim.aimAllianceZone(() -> true));
     }
 
 }

@@ -271,6 +271,7 @@ public class RobotContainer {
                 // Set up auto routines
                 autoChooser.addOption("Test Depot", StateMachine.testDepot);
                 autoChooser.addOption("Test Outpost", StateMachine.testOutpost);
+                autoChooser.addOption("Test right over bump", StateMachine.testRightOverBump);
 
                 // autoChooser.addOption("Left In-Out", StateMachine.leftInOutAuto);
                 // autoChooser.addOption("Right In-Out", StateMachine.rightInOutAuto);

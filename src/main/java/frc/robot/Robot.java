@@ -220,6 +220,7 @@ public class Robot extends LoggedRobot {
     PathfindingDebugUtils.drawPoint("Test/Top right middle", new Vertex(AutoTargetUtil.getTopRightMiddle()));
     PathfindingDebugUtils.drawPoint("Test/Bottom right middle", new Vertex(AutoTargetUtil.getBottomRightMiddle()));
     PathfindingDebugUtils.drawPoint("Test/Right behind hub", new Vertex(AutoTargetUtil.getRightHubPos()));
+    PathfindingDebugUtils.drawPoint("Test/Test bump position", new Vertex(AutoTargetUtil.getRightBumpPos()));
   }
 
   public static Supplier<ArrayList<AutoSteps>> autoSupplier = () -> {
