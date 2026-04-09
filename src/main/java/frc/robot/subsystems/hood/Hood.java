@@ -30,6 +30,7 @@ public class Hood extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Hood", inputs);
     Logger.recordOutput("Hood/Calibrated", calibrated);
+    Logger.recordOutput("Hood/AtPosition", atPosition());
   }
 
   public Command setPosition(DoubleSupplier position) {

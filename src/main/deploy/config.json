@@ -121,6 +121,10 @@
             "comment": "Auto-Generated",
             "value": "0.05"
         },
+        "Blue Side az line": {
+            "comment": "Auto-Generated",
+            "value": "4.0"
+        },
         "Y Point Controller/Tolerance": "0.05",
         "Shooter at speed tight tolerance (RPM)": {
             "comment": "Auto-Generated",
@@ -594,6 +598,10 @@
             "comment": "Auto-Generated",
             "value": "0.05"
         },
+        "Blue Side az line": {
+            "comment": "Auto-Generated",
+            "value": "4.0"
+        },
         "Y Point Controller/Tolerance": "0.05",
         "Shooter at speed tight tolerance (RPM)": {
             "comment": "Auto-Generated",
@@ -1065,6 +1073,10 @@
         "Phase Delay": {
             "comment": "Auto-Generated",
             "value": "0.05"
+        },
+        "Blue Side az line": {
+            "comment": "Auto-Generated",
+            "value": "4.52"
         },
         "Y Point Controller/Tolerance": "0.05",
         "Shooter at speed tight tolerance (RPM)": {

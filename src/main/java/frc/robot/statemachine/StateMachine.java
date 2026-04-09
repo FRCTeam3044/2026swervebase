@@ -246,11 +246,11 @@ public class StateMachine extends StateMachineBase {
                                 AutoSteps.SecondScore, AutoSteps.IntakeOutpost, AutoSteps.EmptyState);
 
                 Collections.addAll(leftOrbit, AutoSteps.FirstScore, AutoSteps.LeftSwoop, AutoSteps.LeftHub,
-                                AutoSteps.LeftTransition,
+                                AutoSteps.LeftCloseTransition,
                                 AutoSteps.SecondScore, AutoSteps.EmptyState);
 
                 Collections.addAll(rightOrbit, AutoSteps.FirstScore, AutoSteps.RightSwoop,
-                                AutoSteps.RightHub, AutoSteps.RightTransition, AutoSteps.SecondScore,
+                                AutoSteps.RightHub, AutoSteps.RightCloseTransition, AutoSteps.SecondScore,
                                 AutoSteps.EmptyState);
 
                 Collections.addAll(leftOrbitDepot, AutoSteps.FirstScore, AutoSteps.LeftSwoop, AutoSteps.LeftHub,

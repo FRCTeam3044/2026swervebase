@@ -46,12 +46,12 @@ public class Scoring extends State {
                                 .onlyIf(() -> autoTargetUtil.inAllianceZone()));
                 t(() -> autoTargetUtil.inAllianceZone())
                                 .onTrue(Commands.runOnce(() -> RobotContainer.getInstance().autoStateTimer.start()));
-                startWhenActive(Commands.waitSeconds(0.4).andThen(autoAim.fire(() -> true))
+                startWhenActive(Commands.waitSeconds(0.4).andThen(autoAim.fire(() -> false))
                                 .onlyIf(() -> autoTargetUtil.inAllianceZone() && shooter.isAtSpeed()
                                                 && turret.isAtTarget()
                                                 && hood.atPosition()));
                 t(shooter::isAtSpeed).and(turret::isAtTarget).and(autoTargetUtil::inAllianceZone).and(hood::atPosition)
-                                .onTrue(Commands.waitSeconds(0.4).andThen(autoAim.fire(() -> true)));
+                                .onTrue(Commands.waitSeconds(0.4).andThen(autoAim.fire(() -> false)));
                 startWhenActive(autoAim.aimHub(() -> true).onlyIf(() -> autoTargetUtil.inAllianceZone()));
                 t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> true));
         }

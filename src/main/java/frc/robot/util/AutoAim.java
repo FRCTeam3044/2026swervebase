@@ -3,6 +3,9 @@ package frc.robot.util;
 import static edu.wpi.first.units.Units.RPM;
 
 import java.util.function.BooleanSupplier;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -54,8 +57,17 @@ public class AutoAim {
 
   public Command fire(BooleanSupplier forceFire) {
     return Commands.parallel(kicker.shootKicker(), spindexer.setSpeed())
-        .onlyWhile(() -> (forceFire.getAsBoolean() || parameters.isValid()) && turret.isAtTarget() && hood.atPosition()
-            && shooter.isAtSpeed())
+        .onlyWhile(() -> {
+          boolean force = forceFire.getAsBoolean();
+          boolean otherSubsystemsAtPos = parameters.isValid() && hood.atPosition()
+              && shooter.isAtSpeed();
+          boolean firing = turret.isAtTarget() && (force || otherSubsystemsAtPos);
+          Logger.recordOutput("AutoAim/ForcingFire", force);
+          Logger.recordOutput("AutoAim/OtherSubsystemsAtPos", otherSubsystemsAtPos);
+          Logger.recordOutput("AutoAim/Firing", firing);
+
+          return firing;
+        })
         .repeatedly()
         .withName("Fire Shot");
   }

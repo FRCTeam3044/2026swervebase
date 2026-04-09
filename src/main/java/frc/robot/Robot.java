@@ -183,6 +183,18 @@ public class Robot extends LoggedRobot {
     VisionConstants.setUseHubAprilTags(robotContainer.autoTargetUtil.inAllianceZone());
 
     ShotCalculator.periodic();
+
+    PathfindingDebugUtils.drawLine("Red Auto Line", new Vertex(AutoTargetUtil.redSideLine(), 0),
+        new Vertex(AutoTargetUtil.redSideLine(), 8));
+    PathfindingDebugUtils.drawLine("Blue Auto Line", new Vertex(AutoTargetUtil.blueSideLine(), 0),
+        new Vertex(AutoTargetUtil.blueSideLine(), 8));
+
+    Logger.recordOutput("IsInAz", robotContainer.autoTargetUtil.inAllianceZone());
+
+    Logger.recordOutput("At test safe neutral pose",
+        robotContainer.drive.atPose(AutoTargetUtil.getSafeCloseLeftNeutral()));
+    Logger.recordOutput("At test safe neutral rot",
+        robotContainer.drive.atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0))));
   }
 
   private void publishSchedule(String key, ShiftInfo info) {

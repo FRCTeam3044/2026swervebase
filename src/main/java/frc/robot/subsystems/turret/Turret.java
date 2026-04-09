@@ -84,6 +84,7 @@ public class Turret extends SubsystemBase {
     Logger.processInputs("Turret", inputs);
     Logger.recordOutput("Turret/InHoodDangerZone", inHoodDangerZone());
     Logger.recordOutput("Turret/StopMoving", stopMoving);
+    Logger.recordOutput("Turret/AtPosition", isAtTarget());
   }
 
   private boolean isOverridingTarget = false;

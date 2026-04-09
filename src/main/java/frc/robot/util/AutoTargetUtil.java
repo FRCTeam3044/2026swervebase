@@ -9,6 +9,7 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.util.AllianceUtil.AllianceColor;
 import lombok.experimental.ExtensionMethod;
+import me.nabdev.oxconfig.ConfigurableParameter;
 import me.nabdev.pathfinding.structures.Obstacle;
 import me.nabdev.pathfinding.structures.Vector;
 import me.nabdev.pathfinding.structures.Vertex;
@@ -17,8 +18,8 @@ import me.nabdev.pathfinding.structures.Vertex;
 public class AutoTargetUtil {
   private final Drive drive;
 
-  final double blueSideLine = 4.4;
-  final double redSideLine = 12;
+  public final static ConfigurableParameter<Double> blueSideLine = new ConfigurableParameter<Double>(4.0,
+      "Blue Side az line");
 
   private Pose3d hub = new Pose3d(new Translation3d(4.62, 8.069 / 2.0, 2), new Rotation3d());
   private Pose3d outpostAllianceTarget = new Pose3d(new Translation3d(1, 1.7, 0), new Rotation3d());
@@ -206,8 +207,16 @@ public class AutoTargetUtil {
         .transformBy(ShotCalculator.robotToTurret.toTransform2d());
   }
 
+  public static double redSideLine() {
+    return DriveConstants.pathfinder.map.fieldx - blueSideLine.get();
+  }
+
+  public static double blueSideLine() {
+    return blueSideLine.get();
+  }
+
   public boolean inNeutralZone() {
-    if (this.getTurretPose().getX() < redSideLine && this.getTurretPose().getX() > blueSideLine) {
+    if (this.getTurretPose().getX() < redSideLine() && this.getTurretPose().getX() > blueSideLine()) {
       return true;
     }
     return false;
@@ -216,9 +225,9 @@ public class AutoTargetUtil {
   public boolean inAllianceZone() {
     AllianceColor allianceColor = AllianceUtil.getAlliance();
 
-    if ((this.getTurretPose().getX() > redSideLine
+    if ((this.getTurretPose().getX() > redSideLine()
         && (allianceColor == AllianceColor.RED || allianceColor == AllianceColor.UNKNOWN))
-        || (this.getTurretPose().getX() < blueSideLine
+        || (this.getTurretPose().getX() < blueSideLine()
             && (allianceColor == AllianceColor.BLUE || allianceColor == AllianceColor.UNKNOWN))) {
       return true;
     }
@@ -227,8 +236,8 @@ public class AutoTargetUtil {
 
   public boolean inOpponentZone() {
     AllianceColor allianceColor = AllianceUtil.getAlliance();
-    if ((this.getTurretPose().getX() > redSideLine && allianceColor == AllianceColor.BLUE)
-        || (this.getTurretPose().getX() < blueSideLine && allianceColor == AllianceColor.RED)) {
+    if ((this.getTurretPose().getX() > redSideLine() && allianceColor == AllianceColor.BLUE)
+        || (this.getTurretPose().getX() < blueSideLine() && allianceColor == AllianceColor.RED)) {
       return true;
     }
     return false;

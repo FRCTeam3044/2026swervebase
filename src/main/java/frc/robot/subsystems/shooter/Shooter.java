@@ -55,6 +55,8 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Shooter", inputs);
+
+    Logger.recordOutput("Shooter/AtSpeed", isAtSpeed());
   }
 
   public Command runSpeed(DoubleSupplier speed) {
