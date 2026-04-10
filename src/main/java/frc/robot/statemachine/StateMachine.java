@@ -248,12 +248,12 @@ public class StateMachine extends StateMachineBase {
 
                 Collections.addAll(leftComp, AutoSteps.LeftInOut, AutoSteps.LeftBumpTransition, AutoSteps.OverBump,
                                 AutoSteps.SecondScore, AutoSteps.LeftAzPoint, AutoSteps.FarLeftInOut,
-                                AutoSteps.LeftBumpTransition, AutoSteps.OverBump,
+                                AutoSteps.LeftBumpTransition, AutoSteps.OverBump, AutoSteps.IntakeDepot,
                                 AutoSteps.EmptyState);
 
                 Collections.addAll(rightComp, AutoSteps.RightInOut, AutoSteps.RightBumpTransition, AutoSteps.OverBump,
                                 AutoSteps.SecondScore, AutoSteps.RightAzPoint, AutoSteps.FarRightInOut,
-                                AutoSteps.RightBumpTransition, AutoSteps.OverBump,
+                                AutoSteps.RightBumpTransition, AutoSteps.OverBump, AutoSteps.IntakeOutpost,
                                 AutoSteps.EmptyState);
 
                 Collections.addAll(middleCompDepot, AutoSteps.IntakeDepot, AutoSteps.EmptyState);
