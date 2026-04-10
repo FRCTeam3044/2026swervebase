@@ -24,7 +24,7 @@ public interface GyroIO {
     public double navXPitch = 0.0;
     public double navXRoll = 0.0;
     public double angleToNormal = 0.0;
-    public Vector<N3> normalVector;
+    // public Vector<N3> normalVector;
     public double magnitude = 0.0;
   }
 

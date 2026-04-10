@@ -40,6 +40,11 @@ public class Turret extends SubsystemBase {
 
   private final ConfigurableParameter<Double> turretRumbleTolerance = new ConfigurableParameter<>(15.0,
       "Turret Fliparound Tolerance");
+  private final ConfigurableParameter<Double> turretRedTolerance = new ConfigurableParameter<>(10.0,
+      "Turret Solid Red Tolerance");
+
+  private final ConfigurableParameter<Double> turretBlinkingRedTolerance = new ConfigurableParameter<>(5.0,
+      "Turret Blinking Red Tolerance");
 
   private final ConfigurableParameter<Double> slowSpeed = new ConfigurableParameter<>(1000.0, "Turret sSlow Speed");
 
@@ -179,6 +184,14 @@ public class Turret extends SubsystemBase {
 
   public boolean nearFlipAround() {
     return distanceToFlipAround() < turretRumbleTolerance.get();
+  }
+
+  public boolean nearerFlipAround() {
+    return distanceToFlipAround() < turretRedTolerance.get();
+  }
+
+  public boolean nearestFlipAround() {
+    return distanceToFlipAround() < turretBlinkingRedTolerance.get();
   }
 
   public double distanceToFlipAround() {

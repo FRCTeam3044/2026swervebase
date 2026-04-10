@@ -1058,7 +1058,7 @@
             "comment": "Auto-Generated",
             "value": "1.0"
         },
-        "TestMode/Test Hood Position": "25",
+        "TestMode/Test Hood Position": "30",
         "Climber Motor Run Up Speed": {
             "comment": "Auto-Generated",
             "value": "0.9"
@@ -1326,11 +1326,11 @@
         },
         "Turret Fliparound Tolerance": {
             "comment": "Auto-Generated",
-            "value": "30.0"
+            "value": "45.0"
         },
         "Turret Solid Red Tolerance": {
             "comment": "Auto-Generated",
-            "value": "20.0"
+            "value": "25.0"
         },
         "Turret Error FF Tolerance": {
             "comment": "Auto-Generated",
@@ -1438,7 +1438,7 @@
         "CalibrationState/Test Parameter 92": "0",
         "Second auto shot time": {
             "comment": "Auto-Generated",
-            "value": "2.0"
+            "value": "4.0"
         },
         "CalibrationState/Test Parameter 93": "0",
         "Intake Position Controller/P": "0.0",

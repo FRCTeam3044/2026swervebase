@@ -16,18 +16,12 @@ import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.util.AllianceUtil;
 import frc.robot.util.HubShiftUtil;
-import me.nabdev.oxconfig.ConfigurableParameter;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 import me.nabdev.oxidation.util.SmartTrigger;
 import me.nabdev.oxidation.util.SmartXboxController;
 
 public class TeleState extends State {
-  private final ConfigurableParameter<Double> turretRedTolerance = new ConfigurableParameter<>(10.0,
-      "Turret Solid Red Tolerance");
-
-  private final ConfigurableParameter<Double> turretBlinkingRedTolerance = new ConfigurableParameter<>(5.0,
-      "Turret Blinking Red Tolerance");
 
   public TeleState(
       StateMachineBase stateMachine,
@@ -99,7 +93,7 @@ public class TeleState extends State {
 
     // startWhenActive(spindexer.setSpeed());
 
-    t(turret::nearFlipAround).whileTrue(Commands.runEnd(() -> {
+    t(turret::nearerFlipAround).whileTrue(Commands.runEnd(() -> {
       driverController.setRumble(RumbleType.kBothRumble, 1);
     }, () -> {
       driverController.setRumble(RumbleType.kBothRumble, 0);
@@ -107,10 +101,9 @@ public class TeleState extends State {
 
     startWhenActive(leds.defaultPattern());
     t(turret::nearFlipAround).whileTrue(leds.setBlinkingOrSolidColor(() -> {
-      return turret.distanceToFlipAround() < turretBlinkingRedTolerance.get()
-          || turret.distanceToFlipAround() > turretRedTolerance.get();
+      return turret.nearestFlipAround() || !turret.nearerFlipAround();
     }, () -> {
-      return turret.distanceToFlipAround() < turretRedTolerance.get() ? Color.kRed : Color.kOrange;
+      return turret.nearerFlipAround() ? Color.kRed : Color.kOrange;
     }))
         .whileFalse(leds.defaultPattern());
 

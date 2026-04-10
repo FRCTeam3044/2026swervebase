@@ -56,7 +56,7 @@ public class GyroIONavX implements GyroIO {
     inputs.navXPitch = navX.getPitch();
     inputs.navXRoll = navX.getRoll();
     inputs.angleToNormal = angleToNormal;
-    inputs.normalVector = rotatedNormalVec;
+    // inputs.normalVector = rotatedNormalVec;
     inputs.magnitude = magnitude;
 
     yawTimestampQueue.clear();
