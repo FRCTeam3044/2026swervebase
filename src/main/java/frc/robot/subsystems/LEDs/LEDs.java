@@ -2,6 +2,7 @@ package frc.robot.subsystems.LEDs;
 
 import static frc.robot.subsystems.LEDs.LEDsConstants.length;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.LEDPattern;
@@ -32,6 +33,17 @@ public class LEDs extends SubsystemBase {
 
   public Command setBlinkingColor(Color color) {
     return Commands.run(() -> io.setBlinkingColor(color), this)
+        .withName("Blinking Purple LEDs").ignoringDisable(true);
+  }
+
+  public Command setBlinkingOrSolidColor(BooleanSupplier blinking, Supplier<Color> color) {
+    return Commands.run(() -> {
+      if (blinking.getAsBoolean()) {
+        io.setBlinkingColor(color.get());
+      } else {
+        io.setSolidColor(LEDPattern.solid(color.get()));
+      }
+    }, this)
         .withName("Blinking Purple LEDs").ignoringDisable(true);
   }
 

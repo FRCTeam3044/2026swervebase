@@ -166,8 +166,16 @@ public class Turret extends SubsystemBase {
   }
 
   public boolean nearFlipAround() {
-    return Math.abs(inputs.angle.minus(TurretConstants.maxAngle).in(Degrees)) < turretRumbleTolerance.get()
-        || Math.abs(inputs.angle.minus(TurretConstants.minAngle).in(Degrees)) < turretRumbleTolerance.get();
+    return distanceToFlipAround() < turretRumbleTolerance.get();
+  }
+
+  public double distanceToFlipAround() {
+    double max = Math.abs(inputs.angle.minus(TurretConstants.maxAngle).in(Degrees));
+    double min = Math.abs(inputs.angle.minus(TurretConstants.minAngle).in(Degrees));
+    if (max < min) {
+      return max;
+    }
+    return min;
   }
 
   public boolean movingSlow() {

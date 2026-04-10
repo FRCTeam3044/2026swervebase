@@ -11,7 +11,11 @@ import static frc.robot.subsystems.drive.DriveConstants.*;
 
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
+
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import java.util.Queue;
 
@@ -28,6 +32,13 @@ public class GyroIONavX implements GyroIO {
 
   @Override
   public void updateInputs(GyroIOInputs inputs) {
+    Rotation3d normalRotation = new Rotation3d(navX.getRoll(), navX.getPitch(), 0);
+    Vector<N3> normalVector = normalRotation.getAxis();
+    Rotation3d normalRobotRot = new Rotation3d(0, 0, 0);
+    Vector<N3> normalRobotVector = normalRobotRot.getAxis();
+    double dotProduct = normalVector.dot(normalRobotVector);
+    double magnitude = normalVector.normF() * normalRobotVector.normF();
+    double angleToNormal = Math.acos(dotProduct / magnitude);
     inputs.connected = navX.isConnected();
     inputs.yawPosition = Rotation2d.fromDegrees(-navX.getAngle());
     inputs.yawVelocityRadPerSec = Units.degreesToRadians(-navX.getRawGyroZ());
@@ -38,6 +49,7 @@ public class GyroIONavX implements GyroIO {
         .toArray(Rotation2d[]::new);
     inputs.navXPitch = navX.getPitch();
     inputs.navXRoll = navX.getRoll();
+    inputs.angleToNormal = angleToNormal;
     yawTimestampQueue.clear();
     yawPositionQueue.clear();
   }

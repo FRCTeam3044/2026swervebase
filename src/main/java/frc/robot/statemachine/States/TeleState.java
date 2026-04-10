@@ -22,7 +22,11 @@ import me.nabdev.oxidation.util.SmartTrigger;
 import me.nabdev.oxidation.util.SmartXboxController;
 
 public class TeleState extends State {
-  private ConfigurableParameter<Double> slowModeSpeed = new ConfigurableParameter<>(0.6, "Slow Mode Speed");
+  private final ConfigurableParameter<Double> turretRedTolerance = new ConfigurableParameter<>(15.0,
+      "Turret Solid Red Tolerance");
+
+  private final ConfigurableParameter<Double> turretBlinkingRedTolerance = new ConfigurableParameter<>(15.0,
+      "Turret Blinking Red Tolerance");
 
   public TeleState(
       StateMachineBase stateMachine,
@@ -99,6 +103,12 @@ public class TeleState extends State {
     }, () -> {
       driverController.setRumble(RumbleType.kBothRumble, 0);
     }));
+
+    startWhenActive(leds.defaultPattern());
+    // t(turret::nearFlipAround).whileTrue(leds.setBlinkingOrSolidColor(() -> {
+
+    // }))
+    // .whileFalse(leds.defaultPattern());
 
     t(() -> HubShiftUtil.getShiftedShiftInfo().remainingTime() < 10)
         .onTrue(Commands.deadline(Commands.waitSeconds(0.25), Commands.runEnd(() -> {

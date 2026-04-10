@@ -166,12 +166,10 @@ public class RobotContainer {
                                                 new VisionIOPhotonVision(fpCamName, robotToFp));
                                 hood = new Hood(new HoodIOSim());
                                 intake = new Intake(new IntakeIOSpark());
-                                shooter = new Shooter(new ShooterIOSim());
-                                spindexer = new Spindexer(new SpindexerIO() {
-                                });
-                                kicker = new Kicker(new KickerIO() {
-                                });
-                                turret = new Turret(new TurretIOSim());
+                                shooter = new Shooter(new ShooterIOSpark());
+                                spindexer = new Spindexer(new SpindexerIOSpark());
+                                kicker = new Kicker(new KickerIOSpark());
+                                turret = new Turret(new TurretIOSpark());
                                 LEDs = new LEDs(new LEDsIORio());
                                 break;
 
