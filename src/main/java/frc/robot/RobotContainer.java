@@ -12,6 +12,7 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
+import java.lang.Thread.State;
 import java.util.ArrayList;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -273,6 +274,10 @@ public class RobotContainer {
                 // autoChooser.addOption("Left In-Out Depot", StateMachine.leftInOutDepot);
                 // autoChooser.addOption("Right In-Out Outpost",
                 // StateMachine.rightInOutOutpost);
+                autoChooser.addOption("Left", StateMachine.leftComp);
+                autoChooser.addOption("Right", StateMachine.rightComp);
+                autoChooser.addOption("Middle Depot", StateMachine.middleCompDepot);
+                autoChooser.addOption("Middle Outpost", StateMachine.middleCompOutpost);
                 autoChooser.addOption("Test bump", StateMachine.testBumpAuto);
                 autoChooser.addOption("Left Orbit", StateMachine.leftOrbit);
                 autoChooser.addOption("Right Orbit", StateMachine.rightOrbit);
