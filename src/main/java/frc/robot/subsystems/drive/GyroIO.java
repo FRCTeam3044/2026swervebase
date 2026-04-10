@@ -9,9 +9,7 @@ package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.units.measure.Temperature;
-
-import static edu.wpi.first.units.Units.Celsius;
+import edu.wpi.first.math.numbers.N3;
 
 import org.littletonrobotics.junction.AutoLog;
 
@@ -26,6 +24,8 @@ public interface GyroIO {
     public double navXPitch = 0.0;
     public double navXRoll = 0.0;
     public double angleToNormal = 0.0;
+    public Vector<N3> normalVector;
+    public double magnitude = 0.0;
   }
 
   public default void updateInputs(GyroIOInputs inputs) {
