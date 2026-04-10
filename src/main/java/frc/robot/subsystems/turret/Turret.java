@@ -182,6 +182,8 @@ public class Turret extends SubsystemBase {
   }
 
   public double distanceToFlipAround() {
+    if (inputs.computedTargetAngle == null)
+      return Double.MAX_VALUE;
     double max = Math.abs(inputs.computedTargetAngle.minus(TurretConstants.maxAngle).in(Degrees));
     double min = Math.abs(inputs.computedTargetAngle.minus(TurretConstants.minAngle).in(Degrees));
     if (max < min) {
