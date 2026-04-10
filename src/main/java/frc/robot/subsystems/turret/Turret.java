@@ -35,6 +35,8 @@ public class Turret extends SubsystemBase {
 
   private final ConfigurableParameter<Double> tolerance = new ConfigurableParameter<Double>(2.0,
       "Turret Angle Tolerance (degrees)");
+  private final ConfigurableParameter<Double> wideTolerance = new ConfigurableParameter<Double>(8.0,
+      "Turret Wide Angle Tolerance (degrees)");
 
   private final ConfigurableParameter<Double> turretRumbleTolerance = new ConfigurableParameter<>(15.0,
       "Turret Fliparound Tolerance");
@@ -149,6 +151,16 @@ public class Turret extends SubsystemBase {
       return false;
     }
     return Math.abs(inputs.angle.in(Degrees) - inputs.computedTargetAngle.in(Degrees)) < tolerance.get();
+  }
+
+  public boolean isAtTargetWide() {
+    if (isOverridingTarget) {
+      return false;
+    }
+    if (inputs.angle == null || inputs.computedTargetAngle == null) {
+      return false;
+    }
+    return Math.abs(inputs.angle.in(Degrees) - inputs.computedTargetAngle.in(Degrees)) < wideTolerance.get();
   }
 
   public boolean inHoodDangerZone() {

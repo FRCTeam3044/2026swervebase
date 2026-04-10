@@ -164,7 +164,7 @@ public class RobotContainer {
                                                 new VisionIOPhotonVision(ssCamName, robotToSs),
                                                 new VisionIOPhotonVision(spCamName, robotToSp),
                                                 new VisionIOPhotonVision(fpCamName, robotToFp));
-                                hood = new Hood(new HoodIOSim());
+                                hood = new Hood(new HoodIOSpark());
                                 intake = new Intake(new IntakeIOSpark());
                                 shooter = new Shooter(new ShooterIOSpark());
                                 spindexer = new Spindexer(new SpindexerIOSpark());

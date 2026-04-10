@@ -61,8 +61,10 @@ public class AutoAim {
           boolean force = forceFire.getAsBoolean();
           boolean otherSubsystemsAtPos = parameters.isValid() && hood.atPosition()
               && shooter.isAtSpeed();
-          boolean firing = turret.isAtTarget() && (force || otherSubsystemsAtPos);
+          boolean turretGood = autoTargetUtil.inAllianceZone() ? turret.isAtTarget() : turret.isAtTargetWide();
+          boolean firing = turretGood && (force || otherSubsystemsAtPos);
           Logger.recordOutput("AutoAim/ForcingFire", force);
+          Logger.recordOutput("AutoAim/TurretGood", turretGood);
           Logger.recordOutput("AutoAim/OtherSubsystemsAtPos", otherSubsystemsAtPos);
           Logger.recordOutput("AutoAim/Firing", firing);
 

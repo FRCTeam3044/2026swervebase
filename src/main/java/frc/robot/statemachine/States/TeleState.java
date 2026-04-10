@@ -4,6 +4,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
@@ -22,10 +23,10 @@ import me.nabdev.oxidation.util.SmartTrigger;
 import me.nabdev.oxidation.util.SmartXboxController;
 
 public class TeleState extends State {
-  private final ConfigurableParameter<Double> turretRedTolerance = new ConfigurableParameter<>(15.0,
+  private final ConfigurableParameter<Double> turretRedTolerance = new ConfigurableParameter<>(10.0,
       "Turret Solid Red Tolerance");
 
-  private final ConfigurableParameter<Double> turretBlinkingRedTolerance = new ConfigurableParameter<>(15.0,
+  private final ConfigurableParameter<Double> turretBlinkingRedTolerance = new ConfigurableParameter<>(5.0,
       "Turret Blinking Red Tolerance");
 
   public TeleState(
@@ -105,10 +106,13 @@ public class TeleState extends State {
     }));
 
     startWhenActive(leds.defaultPattern());
-    // t(turret::nearFlipAround).whileTrue(leds.setBlinkingOrSolidColor(() -> {
-
-    // }))
-    // .whileFalse(leds.defaultPattern());
+    t(turret::nearFlipAround).whileTrue(leds.setBlinkingOrSolidColor(() -> {
+      return turret.distanceToFlipAround() < turretBlinkingRedTolerance.get()
+          || turret.distanceToFlipAround() > turretRedTolerance.get();
+    }, () -> {
+      return turret.distanceToFlipAround() < turretRedTolerance.get() ? Color.kRed : Color.kOrange;
+    }))
+        .whileFalse(leds.defaultPattern());
 
     t(() -> HubShiftUtil.getShiftedShiftInfo().remainingTime() < 10)
         .onTrue(Commands.deadline(Commands.waitSeconds(0.25), Commands.runEnd(() -> {
