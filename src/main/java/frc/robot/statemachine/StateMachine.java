@@ -56,11 +56,15 @@ public class StateMachine extends StateMachineBase {
         String autoWinner = DriverStation.getGameSpecificMessage();
         AllianceColor allianceColor = AllianceUtil.getAlliance();
 
-        // Fully tested autos
+        // Comp autos
+        public static ArrayList<AutoSteps> leftComp = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> rightComp = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> middleCompDepot = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> middleCompOutpost = new ArrayList<AutoSteps>();
+
+        // Autos
         public static ArrayList<AutoSteps> leftOrbit = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> leftOrbitDepot = new ArrayList<AutoSteps>();
-
-        // Untested autos
 
         public static ArrayList<AutoSteps> rightOrbitBump = new ArrayList<AutoSteps>();
 
@@ -201,10 +205,10 @@ public class StateMachine extends StateMachineBase {
                 Transitions rightTransition = new Transitions(this, drive,
                                 () -> AutoTargetUtil.getSafeRightNeutral(), 0.0);
 
-                Transitions leftReverseTransition = new Transitions(this, drive,
-                                () -> AutoTargetUtil.getSafeLeftNeutral(), 180.0);
-                Transitions rightReverseTransition = new Transitions(this, drive,
-                                () -> AutoTargetUtil.getSafeRightNeutral(), 180.0);
+                Transitions leftAzTransition = new Transitions(this, drive,
+                                () -> AutoTargetUtil.getLeftAzPoint(), 180.0);
+                Transitions rightAzTransition = new Transitions(this, drive,
+                                () -> AutoTargetUtil.getRightAzPoint(), 180.0);
 
                 Transitions leftCloseTransition = new Transitions(this, drive,
                                 () -> AutoTargetUtil.getSafeCloseLeftNeutral(), 0.0);
@@ -241,6 +245,19 @@ public class StateMachine extends StateMachineBase {
                                 drive, kicker, intake, 270, 270, 0, false);
 
                 // Add steps to auto options
+
+                Collections.addAll(leftComp, AutoSteps.LeftInOut, AutoSteps.LeftBumpTransition, AutoSteps.OverBump,
+                                AutoSteps.SecondScore, AutoSteps.LeftAzPoint, AutoSteps.FarLeftInOut,
+                                AutoSteps.LeftBumpTransition, AutoSteps.OverBump,
+                                AutoSteps.EmptyState);
+
+                Collections.addAll(rightComp, AutoSteps.RightInOut, AutoSteps.RightBumpTransition, AutoSteps.OverBump,
+                                AutoSteps.SecondScore, AutoSteps.RightAzPoint, AutoSteps.FarRightInOut,
+                                AutoSteps.RightBumpTransition, AutoSteps.OverBump,
+                                AutoSteps.EmptyState);
+
+                Collections.addAll(middleCompDepot, AutoSteps.IntakeDepot, AutoSteps.EmptyState);
+                Collections.addAll(middleCompOutpost, AutoSteps.IntakeOutpost, AutoSteps.EmptyState);
 
                 Collections.addAll(rightOrbitBump, AutoSteps.FirstScore, AutoSteps.RightSwoop,
                                 AutoSteps.RightHub, AutoSteps.RightBumpTransition, AutoSteps.OverBump,
@@ -332,15 +349,14 @@ public class StateMachine extends StateMachineBase {
                                                 "Auto to left transition")
                                 .withChild(rightTransition, () -> currentStep == AutoSteps.RightTransition, 0,
                                                 "Auto to rightTransition")
-                                .withChild(leftReverseTransition, () -> currentStep == AutoSteps.LeftReverseTransition,
-                                                0, "Auto to left reverse transition")
-                                .withChild(rightReverseTransition,
-                                                () -> currentStep == AutoSteps.RightReverseTransition, 0,
-                                                "Auto to right reverse transition")
                                 .withChild(leftCloseTransition, () -> currentStep == AutoSteps.LeftCloseTransition, 0,
                                                 "Auto to left close transition")
                                 .withChild(rightCloseTransition, () -> currentStep == AutoSteps.RightCloseTransition, 0,
                                                 "Auto to right close transition")
+                                .withChild(leftAzTransition, () -> currentStep == AutoSteps.LeftAzPoint, 0,
+                                                "Auto to left az transition")
+                                .withChild(rightAzTransition, () -> currentStep == AutoSteps.RightAzPoint, 0,
+                                                "Auto to right az transition")
                                 .withChild(leftInOut, () -> currentStep == AutoSteps.LeftInOut, 0,
                                                 "Auto to left in out")
                                 .withChild(rightInOut, () -> currentStep == AutoSteps.RightInOut, 0,
@@ -369,11 +385,10 @@ public class StateMachine extends StateMachineBase {
                 intakeOutpost.withTransition(auto, currentStateComplete, "Outpost intake to auto");
                 leftTransition.withTransition(auto, currentStateComplete, 0, "Left transition to auto");
                 rightTransition.withTransition(auto, currentStateComplete, 0, "Right transition to auto");
-                leftReverseTransition.withTransition(auto, currentStateComplete, 0, "Left reverse transition to auto");
-                rightReverseTransition.withTransition(auto, currentStateComplete, 0,
-                                "Right reverse transition to auto");
-                leftCloseTransition.withTransition(auto, currentStateComplete, 0, "Left close transition to auto");
                 rightCloseTransition.withTransition(auto, currentStateComplete, 0, "Right close transition to auto");
+                leftCloseTransition.withTransition(auto, currentStateComplete, 0, "Left close transition to auto");
+                leftAzTransition.withTransition(auto, currentStateComplete, 0, "Left az transition to auto");
+                rightAzTransition.withTransition(auto, currentStateComplete, 0, "Right az transition to auto");
                 leftInOut.withTransition(auto, currentStateComplete, 0, "Left in out to auto");
                 rightInOut.withTransition(auto, currentStateComplete, 0, "Right in out to auto");
                 farLeftInOut.withTransition(auto, currentStateComplete, 0, "Far left in out to auto");

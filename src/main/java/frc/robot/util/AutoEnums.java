@@ -42,13 +42,13 @@ public class AutoEnums {
         RightTransition(() -> RobotContainer.getInstance().drive
                 .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0))) &&
                 RobotContainer.getInstance().drive.atPoseTight(AutoTargetUtil.getSafeRightNeutral())),
-        LeftReverseTransition(() -> RobotContainer.getInstance().drive
+        LeftAzPoint(() -> RobotContainer.getInstance().drive
                 .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180)))
                 &&
-                RobotContainer.getInstance().drive.atPoseTight(AutoTargetUtil.getSafeLeftNeutral())),
-        RightReverseTransition(() -> RobotContainer.getInstance().drive
-                .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180))) &&
-                RobotContainer.getInstance().drive.atPoseTight(AutoTargetUtil.getSafeRightNeutral())),
+                RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getLeftAzPoint())),
+        RightAzPoint(() -> RobotContainer.getInstance().drive
+                .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180)))
+                && RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getRightAzPoint())),
         LeftCloseTransition(() -> RobotContainer.getInstance().drive
                 .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0)))
                 &&

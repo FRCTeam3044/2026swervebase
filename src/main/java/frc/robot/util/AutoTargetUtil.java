@@ -41,6 +41,7 @@ public class AutoTargetUtil {
   private static Pose2d bottomRightMiddle = new Pose2d(7.75, 3.5, Rotation2d.fromDegrees(0));
   private static Pose2d rightBehindHub = new Pose2d(6, 3.5, Rotation2d.fromDegrees(0));
   private static Pose2d rightWideHub = new Pose2d(6, 2, Rotation2d.fromDegrees(0));
+  private static Pose2d rightAzPoint = new Pose2d(3, 0.64, Rotation2d.fromDegrees(0));
 
   private static Pose2d testBumpPos = new Pose2d(6, 2.5, Rotation2d.fromDegrees(0));
 
@@ -157,6 +158,14 @@ public class AutoTargetUtil {
 
   public static Pose2d getRightBumpPos() {
     return AllianceUtil.getPoseForAlliance(testBumpPos);
+  }
+
+  public static Pose2d getLeftAzPoint() {
+    return AllianceUtil.getPoseForAlliance(mirrorY(rightAzPoint));
+  }
+
+  public static Pose2d getRightAzPoint() {
+    return AllianceUtil.getPoseForAlliance(rightAzPoint);
   }
 
   public static Pose2d getNeutralZone() {
