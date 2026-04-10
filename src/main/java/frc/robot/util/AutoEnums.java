@@ -42,6 +42,13 @@ public class AutoEnums {
         RightTransition(() -> RobotContainer.getInstance().drive
                 .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0))) &&
                 RobotContainer.getInstance().drive.atPoseTight(AutoTargetUtil.getSafeRightNeutral())),
+        LeftReverseTransition(() -> RobotContainer.getInstance().drive
+                .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180)))
+                &&
+                RobotContainer.getInstance().drive.atPoseTight(AutoTargetUtil.getSafeLeftNeutral())),
+        RightReverseTransition(() -> RobotContainer.getInstance().drive
+                .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180))) &&
+                RobotContainer.getInstance().drive.atPoseTight(AutoTargetUtil.getSafeRightNeutral())),
         LeftCloseTransition(() -> RobotContainer.getInstance().drive
                 .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0)))
                 &&
@@ -51,16 +58,17 @@ public class AutoEnums {
                 RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeCloseRightNeutral())),
         LeftInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getBottomLeftMiddle())),
         RightInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getBottomRightMiddle())),
+        FarLeftInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getTopLeftMiddle())),
+        FarRightInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getTopRightMiddle())),
         LeftHub(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getLeftHubPos())),
         RightHub(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getRightHubPos())),
-        // FarLeftInOut(() ->
-        // RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getTopLeftMiddle())),
-        // FarRightInOut(() ->
-        // RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getTopRightMiddle())),
-        RightBumpTransition(() -> RobotContainer.getInstance().drive.atPoseTight(AutoTargetUtil.getRightBumpPos())
-                && RobotContainer.getInstance().drive.atRotationTight(Rotation2d.fromDegrees(180))),
-        LeftBumpTransition(() -> RobotContainer.getInstance().drive.atPoseTight(AutoTargetUtil.getLeftBumpPos())
-                && RobotContainer.getInstance().drive.atRotationTight(Rotation2d.fromDegrees(180))),
+        RightBumpTransition(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getRightBumpPos())
+                && RobotContainer.getInstance().drive
+                        .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180)))),
+        LeftBumpTransition(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getLeftBumpPos())
+                && RobotContainer.getInstance().drive
+                        .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180)))),
+        OverBump(() -> RobotContainer.getInstance().autoTargetUtil.pastBump()),
         EmptyState(() -> false);
 
         private final BooleanSupplier condition;

@@ -20,13 +20,13 @@ public class IntakeOutpost extends State {
                 super(stateMachine);
 
                 startWhenActive(
-                                DriveCommands.goToPoint(drive, () -> AutoTargetUtil.getOutpost(),
+                                DriveCommands.goToPointSlow(drive, () -> AutoTargetUtil.getOutpost(),
                                                 () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0))));
                 t(() -> drive.atPose(AutoTargetUtil.getOutpost())).onTrue(Commands.run(() -> drive.stop()));
 
-                startWhenActive(autoAim.fire(() -> true)
+                startWhenActive(autoAim.fire(() -> false)
                                 .onlyIf(() -> autoTargetUtil.inAllianceZone() && shooter.isAtSpeed()));
-                t(shooter::isAtSpeed).and(autoTargetUtil::inAllianceZone).onTrue(autoAim.fire(() -> true));
+                t(shooter::isAtSpeed).and(autoTargetUtil::inAllianceZone).onTrue(autoAim.fire(() -> false));
                 startWhenActive(autoAim.aimHub(() -> true).onlyIf(() -> autoTargetUtil.inAllianceZone()));
                 t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> true));
         }

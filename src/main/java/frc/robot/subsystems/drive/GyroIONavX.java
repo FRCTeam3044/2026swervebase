@@ -37,6 +37,7 @@ public class GyroIONavX implements GyroIO {
         .map((Double value) -> Rotation2d.fromDegrees(-value))
         .toArray(Rotation2d[]::new);
     inputs.navXPitch = navX.getPitch();
+    inputs.navXRoll = navX.getRoll();
     yawTimestampQueue.clear();
     yawPositionQueue.clear();
   }

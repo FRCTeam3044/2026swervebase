@@ -54,6 +54,8 @@ public class TurretIOSim implements TurretIO {
     @Override
     public void updateInputs(TurretIOInputs inputs) {
         inputs.angle = angle;
+        inputs.computedTargetAngle = angle;
+        inputs.hasReset = true;
     }
 
     @Override

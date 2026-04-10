@@ -48,7 +48,7 @@ public class TeleState extends State {
             driveY,
             () -> -driverController.getRightX(),
             true,
-            driverController.rightTrigger()));
+            operator.rightTrigger().or(operator.rightBumper())));
     SmartTrigger abxy = controller.a().or(controller.b()).or(controller.x()).or(controller.y());
 
     DoubleSupplier targetRotation = () -> {
@@ -66,7 +66,7 @@ public class TeleState extends State {
     };
     abxy.whileTrue(DriveCommands.joystickDriveAtAngle(drive, driveX, driveY,
         () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(targetRotation.getAsDouble())),
-        driverController.rightTrigger()));
+        operator.rightTrigger().or(operator.rightBumper())));
 
     abxy.negate().whileTrue(DriveCommands.joystickDrive(
         drive,
@@ -74,7 +74,7 @@ public class TeleState extends State {
         driveY,
         () -> -driverController.getRightX(),
         true,
-        driverController.rightTrigger()));
+        operator.rightTrigger().or(operator.rightBumper())));
 
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     controller.start().onTrue(Commands.runOnce(hood::resetCalibration));

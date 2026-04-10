@@ -164,12 +164,14 @@ public class RobotContainer {
                                                 new VisionIOPhotonVision(ssCamName, robotToSs),
                                                 new VisionIOPhotonVision(spCamName, robotToSp),
                                                 new VisionIOPhotonVision(fpCamName, robotToFp));
-                                hood = new Hood(new HoodIOSpark());
+                                hood = new Hood(new HoodIOSim());
                                 intake = new Intake(new IntakeIOSpark());
-                                shooter = new Shooter(new ShooterIOSpark());
-                                spindexer = new Spindexer(new SpindexerIOSpark());
-                                kicker = new Kicker(new KickerIOSpark());
-                                turret = new Turret(new TurretIOSpark());
+                                shooter = new Shooter(new ShooterIOSim());
+                                spindexer = new Spindexer(new SpindexerIO() {
+                                });
+                                kicker = new Kicker(new KickerIO() {
+                                });
+                                turret = new Turret(new TurretIOSim());
                                 LEDs = new LEDs(new LEDsIORio());
                                 break;
 
@@ -269,18 +271,15 @@ public class RobotContainer {
                 autoChooser = new LoggedDashboardChooser<>("Auto choices");
 
                 // Set up auto routines
-                autoChooser.addOption("Test Depot", StateMachine.testDepot);
-                autoChooser.addOption("Test Outpost", StateMachine.testOutpost);
-                autoChooser.addOption("Test right over bump", StateMachine.testRightOverBump);
 
-                // autoChooser.addOption("Left In-Out", StateMachine.leftInOutAuto);
-                // autoChooser.addOption("Right In-Out", StateMachine.rightInOutAuto);
                 // autoChooser.addOption("Left In-Out Depot", StateMachine.leftInOutDepot);
                 // autoChooser.addOption("Right In-Out Outpost",
                 // StateMachine.rightInOutOutpost);
-
+                autoChooser.addOption("Test bump", StateMachine.testBumpAuto);
                 autoChooser.addOption("Left Orbit", StateMachine.leftOrbit);
                 autoChooser.addOption("Right Orbit", StateMachine.rightOrbit);
+                autoChooser.addOption("Left Double Swipe", StateMachine.leftDoubleSwipe);
+                autoChooser.addOption("Right Double Swipe", StateMachine.rightDoubleSwipe);
                 autoChooser.addOption("Left Orbit Depot", StateMachine.leftOrbitDepot);
                 autoChooser.addOption("Right Orbit Outpost", StateMachine.rightOrbitOutpost);
                 autoChooser.addOption("Left Swoop Depot", StateMachine.leftSwoopDepot);

@@ -33,16 +33,16 @@ public class IntakeDepot extends State {
                 Supplier<Pose2d> intakeTarget = () -> AutoTargetUtil.getDepot().poseFacing(intakeDist.get(), true);
 
                 Command pathfind = DriveCommands
-                                .goToPoint(drive, pathfindingTarget,
+                                .goToPointSlow(drive, pathfindingTarget,
                                                 () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0)))
                                 .withName("Pathfinding");
 
                 Command pointControl = DriveCommands.pointControl(drive, intakeTarget)
                                 .until(() -> DriveCommands.pointControllerConverged).withName("Close point control");
 
-                startWhenActive(autoAim.fire(() -> true)
+                startWhenActive(autoAim.fire(() -> false)
                                 .onlyIf(() -> autoTargetUtil.inAllianceZone() && shooter.isAtSpeed()));
-                t(shooter::isAtSpeed).and(autoTargetUtil::inAllianceZone).onTrue(autoAim.fire(() -> true));
+                t(shooter::isAtSpeed).and(autoTargetUtil::inAllianceZone).onTrue(autoAim.fire(() -> false));
                 startWhenActive(autoAim.aimHub(() -> true).onlyIf(() -> autoTargetUtil.inAllianceZone()));
                 t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> true));
 

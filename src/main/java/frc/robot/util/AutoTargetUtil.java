@@ -21,6 +21,9 @@ public class AutoTargetUtil {
   public final static ConfigurableParameter<Double> blueSideLine = new ConfigurableParameter<Double>(4.0,
       "Blue Side az line");
 
+  public final static ConfigurableParameter<Double> blueBumpSideLine = new ConfigurableParameter<Double>(3.5,
+      "Blue bump side az line");
+
   private Pose3d hub = new Pose3d(new Translation3d(4.62, 8.069 / 2.0, 2), new Rotation3d());
   private Pose3d outpostAllianceTarget = new Pose3d(new Translation3d(1, 1.7, 0), new Rotation3d());
   private Pose3d depotAllianceTarget = new Pose3d(new Translation3d(1, 6.3, 0), new Rotation3d());
@@ -32,8 +35,8 @@ public class AutoTargetUtil {
 
   private static Pose2d rightNeutral = new Pose2d(8.5, 1.25, Rotation2d.fromDegrees(0));
   private static Pose2d closeRightNeutral = new Pose2d(7.75, 1.25, Rotation2d.fromDegrees(0));
-  private static Pose2d safeRightNeutral = new Pose2d(7.75, 0.5, Rotation2d.fromDegrees(0));
-  private static Pose2d safeCloseRightNeutral = new Pose2d(6, 0.5, Rotation2d.fromDegrees(0));
+  private static Pose2d safeRightNeutral = new Pose2d(7.75, 0.64, Rotation2d.fromDegrees(0));
+  private static Pose2d safeCloseRightNeutral = new Pose2d(6, 0.64, Rotation2d.fromDegrees(0));
   private static Pose2d topRightMiddle = new Pose2d(8.5, 3.5, Rotation2d.fromDegrees(0));
   private static Pose2d bottomRightMiddle = new Pose2d(7.75, 3.5, Rotation2d.fromDegrees(0));
   private static Pose2d rightBehindHub = new Pose2d(6, 3.5, Rotation2d.fromDegrees(0));
@@ -46,16 +49,18 @@ public class AutoTargetUtil {
   private static Pose2d outpost = new Pose2d(0.5, 0.5, Rotation2d.fromDegrees(180));
 
   private static Obstacle redAllianceZone = Obstacle.createObstacle(
-      new Vertex(12.5, 0),
-      new Vertex(12.5, 8.0692625),
+      new Vertex(
+          DriveConstants.pathfinder.map.fieldx - 3.8, 0),
+      new Vertex(DriveConstants.pathfinder.map.fieldx
+          - 3.8, 8.0692625),
       new Vertex(16.5410515, 8.0692625),
       new Vertex(16.5410515, 0));
 
   private static Obstacle blueAllianceZone = Obstacle.createObstacle(
       new Vertex(0, 0),
       new Vertex(0, 8.0692625),
-      new Vertex(4, 8.0692625),
-      new Vertex(4, 0));
+      new Vertex(3.8, 8.0692625),
+      new Vertex(3.8, 0));
 
   private static Obstacle redAllianceZoneSecond = Obstacle.createObstacle(
       new Vertex(13.1, 0),
@@ -213,6 +218,23 @@ public class AutoTargetUtil {
 
   public static double blueSideLine() {
     return blueSideLine.get();
+  }
+
+  public static double redBumpSideLine() {
+    return DriveConstants.pathfinder.map.fieldx - blueBumpSideLine.get();
+  }
+
+  public static double blueBumpSideLine() {
+    return blueBumpSideLine.get();
+  }
+
+  public boolean pastBump() {
+    AllianceColor allianceColor = AllianceUtil.getAlliance();
+
+    return (this.getTurretPose().getX() > redBumpSideLine()
+        && (allianceColor == AllianceColor.RED || allianceColor == AllianceColor.UNKNOWN))
+        || (this.getTurretPose().getX() < blueBumpSideLine()
+            && (allianceColor == AllianceColor.BLUE || allianceColor == AllianceColor.UNKNOWN));
   }
 
   public boolean inNeutralZone() {

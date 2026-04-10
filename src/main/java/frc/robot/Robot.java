@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DriveCommands;
 import frc.robot.statemachine.StateMachine;
+import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoEnums.AutoSteps;
@@ -122,7 +123,7 @@ public class Robot extends LoggedRobot {
     robotContainer.stateMachine.onStartup();
     Logger.recordOutput("test path",
         DriveCommands.generateTrajectory(robotContainer.drive, new Pose2d(1, 1, new Rotation2d(0)),
-            new Pose2d(2, 1, new Rotation2d(0))));
+            new Pose2d(2, 1, new Rotation2d(0)), false));
 
     // PathfindingDebugUtils.drawLines("Field Map",
     // DriveConstants.pathfinder.visualizeEdges(),
@@ -131,6 +132,8 @@ public class Robot extends LoggedRobot {
     // PathfindingDebugUtils.drawLines("Field Map Inflated",
     // DriveConstants.pathfinder.visualizeEdges(),
     // DriveConstants.pathfinder.visualizeInflatedVertices());
+    // PathfindingDebugUtils.drawPoint("CloseLeftSafe",
+    // new Vertex(AutoTargetUtil.getSafeCloseLeftNeutral()));
 
   }
 
@@ -162,6 +165,8 @@ public class Robot extends LoggedRobot {
     publishSchedule("ShiftedShift", shifted);
     publishSchedule("OfficialShift", official);
     field.setRobotPose(robotContainer.drive.getPose());
+
+    Logger.recordOutput("Auto shot time", RobotContainer.getInstance().autoStateTimer.get());
     SmartDashboard.putData(field);
     // SmartDashboard.putString(
     // "ShiftedShift/Text",

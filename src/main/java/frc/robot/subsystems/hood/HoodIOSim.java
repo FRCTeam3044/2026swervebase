@@ -75,6 +75,8 @@ public class HoodIOSim implements HoodIO {
   @Override
   public void updateInputs(HoodIOInputs inputs) {
     inputs.position = position;
+    inputs.setpoint = position;
+    inputs.stalled = true;
   }
 
   @Override

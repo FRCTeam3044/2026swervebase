@@ -16,11 +16,13 @@ import frc.robot.statemachine.States.Tele.InactiveHub;
 import frc.robot.statemachine.States.Tele.NeutralZone;
 import frc.robot.statemachine.States.TeleState;
 import frc.robot.statemachine.States.TestState;
+import frc.robot.statemachine.States.Auto.FarRightInOut;
 import frc.robot.statemachine.States.ConsolidatedAuto.AutoTrajectories;
 import frc.robot.statemachine.States.ConsolidatedAuto.EmptyState;
 import frc.robot.statemachine.States.ConsolidatedAuto.IntakeDepot;
 import frc.robot.statemachine.States.ConsolidatedAuto.IntakeOutpost;
 import frc.robot.statemachine.States.ConsolidatedAuto.NeutralPaths;
+import frc.robot.statemachine.States.ConsolidatedAuto.OverBump;
 import frc.robot.statemachine.States.ConsolidatedAuto.Scoring;
 import frc.robot.statemachine.States.ConsolidatedAuto.Transitions;
 import frc.robot.subsystems.LEDs.LEDs;
@@ -54,22 +56,23 @@ public class StateMachine extends StateMachineBase {
         String autoWinner = DriverStation.getGameSpecificMessage();
         AllianceColor allianceColor = AllianceUtil.getAlliance();
 
-        // Test autos for practice field
-        public static ArrayList<AutoSteps> testDepot = new ArrayList<AutoSteps>();
-        public static ArrayList<AutoSteps> testOutpost = new ArrayList<AutoSteps>();
-        public static ArrayList<AutoSteps> testRightOverBump = new ArrayList<AutoSteps>();
+        // Fully tested autos
+        public static ArrayList<AutoSteps> leftOrbit = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> leftOrbitDepot = new ArrayList<AutoSteps>();
 
-        public static ArrayList<AutoSteps> leftInOutAuto = new ArrayList<AutoSteps>();
-        public static ArrayList<AutoSteps> rightInOutAuto = new ArrayList<AutoSteps>();
+        // Untested autos
+
+        public static ArrayList<AutoSteps> rightOrbitBump = new ArrayList<AutoSteps>();
+
+        public static ArrayList<AutoSteps> testBumpAuto = new ArrayList<>();
+
+        public static ArrayList<AutoSteps> leftDoubleSwipe = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> rightDoubleSwipe = new ArrayList<AutoSteps>();
 
         public static ArrayList<AutoSteps> leftInOutDepot = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> rightInOutOutpost = new ArrayList<AutoSteps>();
 
-        // Autos to choose from
-        public static ArrayList<AutoSteps> leftOrbit = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> rightOrbit = new ArrayList<AutoSteps>();
-
-        public static ArrayList<AutoSteps> leftOrbitDepot = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> rightOrbitOutpost = new ArrayList<AutoSteps>();
 
         public static ArrayList<AutoSteps> leftSwoopDepot = new ArrayList<AutoSteps>();
@@ -191,10 +194,17 @@ public class StateMachine extends StateMachineBase {
                 IntakeDepot intakeDepot = new IntakeDepot(this, autoTargetUtil, autoAim, drive, intake, kicker,
                                 shooter);
 
+                OverBump overBump = new OverBump(this, drive);
+
                 Transitions leftTransition = new Transitions(this, drive,
                                 () -> AutoTargetUtil.getSafeLeftNeutral(), 0.0);
                 Transitions rightTransition = new Transitions(this, drive,
                                 () -> AutoTargetUtil.getSafeRightNeutral(), 0.0);
+
+                Transitions leftReverseTransition = new Transitions(this, drive,
+                                () -> AutoTargetUtil.getSafeLeftNeutral(), 180.0);
+                Transitions rightReverseTransition = new Transitions(this, drive,
+                                () -> AutoTargetUtil.getSafeRightNeutral(), 180.0);
 
                 Transitions leftCloseTransition = new Transitions(this, drive,
                                 () -> AutoTargetUtil.getSafeCloseLeftNeutral(), 0.0);
@@ -218,6 +228,13 @@ public class StateMachine extends StateMachineBase {
                 NeutralPaths rightInOut = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getRightInOut(), drive,
                                 kicker, intake, 270.0, 270.0, 0, true);
 
+                NeutralPaths farLeftInOut = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getFarLeftInOut(),
+                                drive,
+                                kicker, intake, 90.0, 90.0, 0, true);
+                NeutralPaths farRightInOut = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getFarRightInOut(),
+                                drive,
+                                kicker, intake, 270.0, 270.0, 0, true);
+
                 NeutralPaths leftHubPath = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getLeftHubPath(),
                                 drive, kicker, intake, 90, 90, 0, false);
                 NeutralPaths rightHubPath = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getRightHubPath(),
@@ -225,17 +242,23 @@ public class StateMachine extends StateMachineBase {
 
                 // Add steps to auto options
 
-                Collections.addAll(testDepot, AutoSteps.IntakeDepot);
-                Collections.addAll(testOutpost, AutoSteps.IntakeOutpost);
-                Collections.addAll(testRightOverBump, AutoSteps.RightBumpTransition, AutoSteps.EmptyState);
+                Collections.addAll(rightOrbitBump, AutoSteps.FirstScore, AutoSteps.RightSwoop,
+                                AutoSteps.RightHub, AutoSteps.RightBumpTransition, AutoSteps.OverBump,
+                                AutoSteps.SecondScore, AutoSteps.IntakeOutpost,
+                                AutoSteps.EmptyState);
 
-                Collections.addAll(leftInOutAuto, AutoSteps.FirstScore, AutoSteps.LeftInOut,
-                                AutoSteps.LeftCloseTransition,
-                                AutoSteps.SecondScore, AutoSteps.EmptyState);
+                Collections.addAll(testBumpAuto, AutoSteps.RightBumpTransition, AutoSteps.OverBump,
+                                AutoSteps.EmptyState);
 
-                Collections.addAll(rightInOutAuto, AutoSteps.FirstScore, AutoSteps.RightInOut,
-                                AutoSteps.RightCloseTransition,
-                                AutoSteps.SecondScore, AutoSteps.EmptyState);
+                Collections.addAll(leftDoubleSwipe, AutoSteps.FirstScore, AutoSteps.FarLeftInOut,
+                                AutoSteps.LeftTransition, AutoSteps.SecondScore, AutoSteps.LeftTransition,
+                                AutoSteps.LeftInOut,
+                                AutoSteps.LeftTransition, AutoSteps.SecondScore, AutoSteps.EmptyState);
+
+                Collections.addAll(rightDoubleSwipe, AutoSteps.FirstScore, AutoSteps.FarRightInOut,
+                                AutoSteps.RightTransition, AutoSteps.SecondScore, AutoSteps.RightTransition,
+                                AutoSteps.RightInOut,
+                                AutoSteps.RightTransition, AutoSteps.SecondScore, AutoSteps.EmptyState);
 
                 Collections.addAll(leftInOutDepot, AutoSteps.FirstScore, AutoSteps.LeftInOut,
                                 AutoSteps.LeftCloseTransition,
@@ -255,11 +278,13 @@ public class StateMachine extends StateMachineBase {
 
                 Collections.addAll(leftOrbitDepot, AutoSteps.FirstScore, AutoSteps.LeftSwoop, AutoSteps.LeftHub,
                                 AutoSteps.LeftCloseTransition,
-                                AutoSteps.SecondScore, AutoSteps.IntakeDepot, AutoSteps.EmptyState);
+                                // AutoSteps.SecondScore,
+                                AutoSteps.IntakeDepot, AutoSteps.EmptyState);
 
                 Collections.addAll(rightOrbitOutpost, AutoSteps.FirstScore, AutoSteps.RightSwoop, AutoSteps.RightHub,
                                 AutoSteps.RightCloseTransition,
-                                AutoSteps.SecondScore, AutoSteps.IntakeOutpost, AutoSteps.EmptyState);
+                                // AutoSteps.SecondScore,
+                                AutoSteps.IntakeOutpost, AutoSteps.EmptyState);
 
                 Collections.addAll(leftSwoopDepot, AutoSteps.FirstScore,
                                 AutoSteps.LeftSwoop,
@@ -307,6 +332,11 @@ public class StateMachine extends StateMachineBase {
                                                 "Auto to left transition")
                                 .withChild(rightTransition, () -> currentStep == AutoSteps.RightTransition, 0,
                                                 "Auto to rightTransition")
+                                .withChild(leftReverseTransition, () -> currentStep == AutoSteps.LeftReverseTransition,
+                                                0, "Auto to left reverse transition")
+                                .withChild(rightReverseTransition,
+                                                () -> currentStep == AutoSteps.RightReverseTransition, 0,
+                                                "Auto to right reverse transition")
                                 .withChild(leftCloseTransition, () -> currentStep == AutoSteps.LeftCloseTransition, 0,
                                                 "Auto to left close transition")
                                 .withChild(rightCloseTransition, () -> currentStep == AutoSteps.RightCloseTransition, 0,
@@ -315,6 +345,10 @@ public class StateMachine extends StateMachineBase {
                                                 "Auto to left in out")
                                 .withChild(rightInOut, () -> currentStep == AutoSteps.RightInOut, 0,
                                                 "Auto to right in out")
+                                .withChild(farLeftInOut, () -> currentStep == AutoSteps.FarLeftInOut, 0,
+                                                "Auto to far left in out")
+                                .withChild(farRightInOut, () -> currentStep == AutoSteps.FarRightInOut, 0,
+                                                "Auto to far right in out")
                                 .withChild(leftHubPath, () -> currentStep == AutoSteps.LeftHub, 0,
                                                 "Auto to left hub path")
                                 .withChild(rightHubPath, () -> currentStep == AutoSteps.RightHub, 0,
@@ -323,6 +357,7 @@ public class StateMachine extends StateMachineBase {
                                                 "Auto to right bump")
                                 .withChild(leftBumpTransition, () -> currentStep == AutoSteps.LeftBumpTransition, 0,
                                                 "Auto to left bump")
+                                .withChild(overBump, () -> currentStep == AutoSteps.OverBump, 0, "Auto to over bump")
                                 .withChild(emptyState, () -> currentStep == AutoSteps.EmptyState, 0,
                                                 "Auto to empty state");
 
@@ -334,14 +369,20 @@ public class StateMachine extends StateMachineBase {
                 intakeOutpost.withTransition(auto, currentStateComplete, "Outpost intake to auto");
                 leftTransition.withTransition(auto, currentStateComplete, 0, "Left transition to auto");
                 rightTransition.withTransition(auto, currentStateComplete, 0, "Right transition to auto");
+                leftReverseTransition.withTransition(auto, currentStateComplete, 0, "Left reverse transition to auto");
+                rightReverseTransition.withTransition(auto, currentStateComplete, 0,
+                                "Right reverse transition to auto");
                 leftCloseTransition.withTransition(auto, currentStateComplete, 0, "Left close transition to auto");
                 rightCloseTransition.withTransition(auto, currentStateComplete, 0, "Right close transition to auto");
                 leftInOut.withTransition(auto, currentStateComplete, 0, "Left in out to auto");
                 rightInOut.withTransition(auto, currentStateComplete, 0, "Right in out to auto");
+                farLeftInOut.withTransition(auto, currentStateComplete, 0, "Far left in out to auto");
+                farRightInOut.withTransition(auto, currentStateComplete, 0, "Far right in out to auto");
                 leftHubPath.withTransition(auto, currentStateComplete, 0, "Left hub path to auto");
                 rightHubPath.withTransition(auto, currentStateComplete, 0, "Right hub path to auto");
                 leftBumpTransition.withTransition(auto, currentStateComplete, 0, "Left bump to auto");
                 rightBumpTransition.withTransition(auto, currentStateComplete, 0, "Right bump to auto");
+                overBump.withTransition(auto, currentStateComplete, 0, "Over bump to auto");
                 emptyState.withTransition(auto, currentStateComplete, 0, "Empty to auto");
 
                 // For SYSID (comment out for normal autos)

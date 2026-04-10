@@ -11,6 +11,8 @@ public class ShooterIOSim implements ShooterIO {
     public void updateInputs(ShooterIOInputs inputs) {
         inputs.leaderVelocity = velocity;
         inputs.followerVelocity = velocity;
+        inputs.calculatedGoal = velocity;
+        inputs.targetSpeed = velocity;
     }
 
     @Override

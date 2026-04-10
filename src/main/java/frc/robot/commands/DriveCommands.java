@@ -62,10 +62,12 @@ public class DriveCommands {
 
   private static ConfigurableParameter<Double> pathfindingMaxSpeed = new ConfigurableParameter<>(4.8,
       "Pathfinding Max Speed");
+  private static ConfigurableParameter<Double> pathfindingSlowMaxSpeed = new ConfigurableParameter<>(4.8,
+      "Pathfinding Slow Max Speed");
   private static ConfigurableParameter<Double> pathfindingMaxAccel = new ConfigurableParameter<>(2.0,
       "Pathfinding Max Accel");
-  private static ConfigurableParameter<Double> pathfindingMaxAccelAuto = new ConfigurableParameter<>(5.0,
-      "Pathfinding Max Accel (Auto)");
+  private static ConfigurableParameter<Double> pathfindingSlowMaxAccel = new ConfigurableParameter<>(5.0,
+      "Pathfinding Slow Max Accel");
   private static ConfigurableParameter<Double> pathfindingRotationMaxSpeed = new ConfigurableParameter<>(
       Math.PI / 2,
       "Pathfinding Max Rotation Speed");
@@ -134,7 +136,7 @@ public class DriveCommands {
           double x = linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec();
           double y = linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec();
 
-          if (true) {
+          if (false) {
             if (!wasAccelLimited) {
               xLimiter.reset(x);
               yLimiter.reset(y);
@@ -380,15 +382,41 @@ public class DriveCommands {
   public static Command goToPoint(Drive drive, Supplier<Pose2d> pose, Supplier<Rotation2d> rotation) {
     return Commands.deferredProxy(() -> {
       Pose2d curPose = pose.get();
-      return followTrajectory(drive, generateTrajectory(drive, curPose), rotation,
+      return followTrajectory(drive, generateTrajectory(drive, curPose, false), rotation,
           null, false);
+    }).withName("Go To Point");
+  }
+
+  public static Command goToPointSlow(Drive drive, Supplier<Pose2d> pose, Supplier<Rotation2d> rotation) {
+    return Commands.deferredProxy(() -> {
+      Pose2d curPose = pose.get();
+      return followTrajectory(drive, generateTrajectory(drive, curPose, true), rotation,
+          null, false);
+    }).withName("Go To Point");
+  }
+
+  public static Command goToPointAndthen(Drive drive, Supplier<Pose2d> pose, Supplier<Rotation2d> rotation,
+      Supplier<Command> after) {
+    return Commands.deferredProxy(() -> {
+      Pose2d curPose = pose.get();
+      return followTrajectory(drive, generateTrajectory(drive, curPose, false), rotation,
+          null, false).andThen(after.get()).withName("Follow Trajectory and then");
+    }).withName("Go To Point");
+  }
+
+  public static Command goToPointAndthenSlow(Drive drive, Supplier<Pose2d> pose, Supplier<Rotation2d> rotation,
+      Command after) {
+    return Commands.deferredProxy(() -> {
+      Pose2d curPose = pose.get();
+      return followTrajectory(drive, generateTrajectory(drive, curPose, true), rotation,
+          null, false).andThen(after).withName("Follow Trajectory and then");
     }).withName("Go To Point");
   }
 
   public static Command goToPoints(Drive drive, Supplier<ArrayList<Pose2d>> posesSupplier,
       Supplier<Rotation2d> rotation) {
     return Commands.deferredProxy(() -> {
-      return followTrajectory(drive, generateTrajectory(drive, posesSupplier.get()), rotation,
+      return followTrajectory(drive, generateTrajectory(drive, posesSupplier.get(), false), rotation,
           null, false);
     }).withName("Go To Point");
   }
@@ -440,10 +468,10 @@ public class DriveCommands {
         .finallyDo(timer::stop).withName("Follow Trajectory");
   };
 
-  public static Trajectory generateTrajectory(Drive drive, Pose2d start, Pose2d end) {
+  public static Trajectory generateTrajectory(Drive drive, Pose2d start, Pose2d end, boolean slow) {
     try {
       Path path = DriveConstants.pathfinder.generatePath(start, end);
-      TrajectoryConfig config = getTrajectoryConfig(drive, path);
+      TrajectoryConfig config = getTrajectoryConfig(drive, path, slow);
       return path.asTrajectory(config);
     } catch (Exception e) {
       DriverStation.reportWarning("Failed to generate path: " + start + " to " + end,
@@ -452,10 +480,10 @@ public class DriveCommands {
     }
   }
 
-  public static Trajectory generateTrajectory(Drive drive, ArrayList<Pose2d> waypoints) {
+  public static Trajectory generateTrajectory(Drive drive, ArrayList<Pose2d> waypoints, boolean slow) {
     try {
       Path path = DriveConstants.pathfinder.generatePath(drive.getPose(), waypoints);
-      TrajectoryConfig config = getTrajectoryConfig(drive, path);
+      TrajectoryConfig config = getTrajectoryConfig(drive, path, slow);
       return path.asTrajectory(config);
     } catch (Exception e) {
       DriverStation.reportWarning("Failed to generate path: ",
@@ -464,14 +492,13 @@ public class DriveCommands {
     }
   }
 
-  private static Trajectory generateTrajectory(Drive drive, Pose2d end) {
-    return generateTrajectory(drive, drive.getPose(), end);
+  private static Trajectory generateTrajectory(Drive drive, Pose2d end, boolean slow) {
+    return generateTrajectory(drive, drive.getPose(), end, slow);
   }
 
-  private static TrajectoryConfig getTrajectoryConfig(Drive drive, Path path) {
-    TrajectoryConfig config = new TrajectoryConfig(pathfindingMaxSpeed.get(),
-        /* DriverStation.isAutonomous() ? pathfindingMaxAccelAuto.get() : */
-        pathfindingMaxAccel.get());
+  private static TrajectoryConfig getTrajectoryConfig(Drive drive, Path path, boolean slow) {
+    TrajectoryConfig config = new TrajectoryConfig(slow ? pathfindingSlowMaxSpeed.get() : pathfindingMaxSpeed.get(),
+        slow ? pathfindingSlowMaxAccel.get() : pathfindingMaxAccel.get());
 
     ChassisSpeeds chassisSpeed = ChassisSpeeds.fromRobotRelativeSpeeds(drive.getVelocity(),
         drive.getRotation());

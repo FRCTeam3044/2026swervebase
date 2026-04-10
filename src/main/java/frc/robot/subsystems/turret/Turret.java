@@ -146,7 +146,6 @@ public class Turret extends SubsystemBase {
       return false;
     }
     if (inputs.angle == null || inputs.computedTargetAngle == null) {
-      System.out.println("Unable to tell if turret is at target!");
       return false;
     }
     return Math.abs(inputs.angle.in(Degrees) - inputs.computedTargetAngle.in(Degrees)) < tolerance.get();
