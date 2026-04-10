@@ -35,7 +35,7 @@ public class GyroIONavX implements GyroIO {
 
   @Override
   public void updateInputs(GyroIOInputs inputs) {
-    Rotation3d normalRotation = new Rotation3d(navX.getRoll(), navX.getPitch(), 0);
+    Rotation3d normalRotation = new Rotation3d(navX.getRoll() * Math.PI / 180, navX.getPitch() * Math.PI / 180, 0);
     Vector<N3> baseNormalVector = VecBuilder.fill(0, 0, 1);
     Matrix<N3, N1> rotatedNormal = normalRotation.toMatrix().times(baseNormalVector);
     Vector<N3> rotatedNormalVec = new Vector<N3>(rotatedNormal);
