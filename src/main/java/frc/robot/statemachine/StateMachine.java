@@ -16,7 +16,6 @@ import frc.robot.statemachine.States.Tele.InactiveHub;
 import frc.robot.statemachine.States.Tele.NeutralZone;
 import frc.robot.statemachine.States.TeleState;
 import frc.robot.statemachine.States.TestState;
-import frc.robot.statemachine.States.Auto.FarRightInOut;
 import frc.robot.statemachine.States.ConsolidatedAuto.AutoTrajectories;
 import frc.robot.statemachine.States.ConsolidatedAuto.EmptyState;
 import frc.robot.statemachine.States.ConsolidatedAuto.IntakeDepot;
@@ -198,27 +197,43 @@ public class StateMachine extends StateMachineBase {
                 IntakeDepot intakeDepot = new IntakeDepot(this, autoTargetUtil, autoAim, drive, intake, kicker,
                                 shooter);
 
-                OverBump overBump = new OverBump(this, drive);
+                OverBump overBump = new OverBump(this, autoAim, drive);
 
-                Transitions leftTransition = new Transitions(this, drive,
-                                () -> AutoTargetUtil.getSafeLeftNeutral(), 0.0);
-                Transitions rightTransition = new Transitions(this, drive,
-                                () -> AutoTargetUtil.getSafeRightNeutral(), 0.0);
+                Transitions leftTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                                shooter,
+                                () -> AutoTargetUtil.getSafeLeftNeutral(), 0.0, false, false);
+                Transitions rightTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                                shooter,
+                                () -> AutoTargetUtil.getSafeRightNeutral(), 0.0, false, false);
 
-                Transitions leftAzTransition = new Transitions(this, drive,
-                                () -> AutoTargetUtil.getLeftAzPoint(), 180.0);
-                Transitions rightAzTransition = new Transitions(this, drive,
-                                () -> AutoTargetUtil.getRightAzPoint(), 180.0);
+                Transitions leftAzTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                                shooter,
+                                () -> AutoTargetUtil.getLeftAzPoint(), 180.0, true, false);
+                Transitions rightAzTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                                shooter,
+                                () -> AutoTargetUtil.getRightAzPoint(), 180.0, true, false);
 
-                Transitions leftCloseTransition = new Transitions(this, drive,
-                                () -> AutoTargetUtil.getSafeCloseLeftNeutral(), 0.0);
-                Transitions rightCloseTransition = new Transitions(this, drive,
-                                () -> AutoTargetUtil.getSafeCloseRightNeutral(), 0.0);
+                Transitions leftCloseTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                                shooter,
+                                () -> AutoTargetUtil.getSafeCloseLeftNeutral(), 0.0, false, false);
+                Transitions rightCloseTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                                shooter,
+                                () -> AutoTargetUtil.getSafeCloseRightNeutral(), 0.0, false, false);
 
-                Transitions rightBumpTransition = new Transitions(this, drive, () -> AutoTargetUtil.getRightBumpPos(),
-                                180);
-                Transitions leftBumpTransition = new Transitions(this, drive, () -> AutoTargetUtil.getLeftBumpPos(),
-                                180);
+                Transitions leftReverseTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                                shooter,
+                                () -> AutoTargetUtil.getSafeCloseLeftNeutral(), 180.0, false, true);
+                Transitions rightReverseTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                                shooter,
+                                () -> AutoTargetUtil.getSafeCloseRightNeutral(), 180.0, false, true);
+
+                Transitions rightBumpTransition = new Transitions(this, autoTargetUtil,
+                                autoAim, drive, hood, turret,
+                                shooter, () -> AutoTargetUtil.getRightBumpPos(),
+                                180, false, false);
+                Transitions leftBumpTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                                shooter, () -> AutoTargetUtil.getLeftBumpPos(),
+                                180, false, false);
 
                 NeutralPaths leftSwoop = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getLeftCurve(), drive,
                                 kicker, intake,
@@ -228,16 +243,16 @@ public class StateMachine extends StateMachineBase {
                                 300.0, 50.0, 1, true);
 
                 NeutralPaths leftInOut = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getLeftInOut(), drive,
-                                kicker, intake, 90.0, 90.0, 0, true);
+                                kicker, intake, 90.0, 90.0, 0, false);
                 NeutralPaths rightInOut = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getRightInOut(), drive,
-                                kicker, intake, 270.0, 270.0, 0, true);
+                                kicker, intake, 270.0, 270.0, 0, false);
 
                 NeutralPaths farLeftInOut = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getFarLeftInOut(),
                                 drive,
-                                kicker, intake, 90.0, 90.0, 0, true);
+                                kicker, intake, 90.0, 90.0, 0, false);
                 NeutralPaths farRightInOut = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getFarRightInOut(),
                                 drive,
-                                kicker, intake, 270.0, 270.0, 0, true);
+                                kicker, intake, 270.0, 270.0, 0, false);
 
                 NeutralPaths leftHubPath = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getLeftHubPath(),
                                 drive, kicker, intake, 90, 90, 0, false);
@@ -246,14 +261,17 @@ public class StateMachine extends StateMachineBase {
 
                 // Add steps to auto options
 
-                Collections.addAll(leftComp, AutoSteps.FarLeftInOut, AutoSteps.LeftBumpTransition, AutoSteps.OverBump,
-                                AutoSteps.SecondScore, AutoSteps.LeftAzPoint, AutoSteps.FarLeftInOut,
+                Collections.addAll(leftComp, AutoSteps.LeftReverseTransition, AutoSteps.FarLeftInOut,
+                                AutoSteps.LeftBumpTransition, AutoSteps.OverBump,
+                                AutoSteps.SecondScore, AutoSteps.LeftAzPoint, AutoSteps.LeftReverseTransition,
+                                AutoSteps.LeftHub,
                                 AutoSteps.LeftBumpTransition, AutoSteps.OverBump, AutoSteps.IntakeDepot,
                                 AutoSteps.EmptyState);
 
-                Collections.addAll(rightComp, AutoSteps.FarRightInOut, AutoSteps.RightBumpTransition,
-                                AutoSteps.OverBump,
-                                AutoSteps.SecondScore, AutoSteps.RightAzPoint, AutoSteps.FarRightInOut,
+                Collections.addAll(rightComp, AutoSteps.RightReverseTransition, AutoSteps.FarRightInOut,
+                                AutoSteps.RightBumpTransition,
+                                AutoSteps.OverBump, AutoSteps.RightAzPoint, AutoSteps.RightReverseTransition,
+                                AutoSteps.RightHub,
                                 AutoSteps.RightBumpTransition, AutoSteps.OverBump, AutoSteps.IntakeOutpost,
                                 AutoSteps.EmptyState);
 
@@ -354,6 +372,12 @@ public class StateMachine extends StateMachineBase {
                                                 "Auto to left close transition")
                                 .withChild(rightCloseTransition, () -> currentStep == AutoSteps.RightCloseTransition, 0,
                                                 "Auto to right close transition")
+                                .withChild(leftReverseTransition, () -> currentStep == AutoSteps.LeftReverseTransition,
+                                                0,
+                                                "Auto to left close transition")
+                                .withChild(rightReverseTransition,
+                                                () -> currentStep == AutoSteps.RightReverseTransition, 0,
+                                                "Auto to right close transition")
                                 .withChild(leftAzTransition, () -> currentStep == AutoSteps.LeftAzPoint, 0,
                                                 "Auto to left az transition")
                                 .withChild(rightAzTransition, () -> currentStep == AutoSteps.RightAzPoint, 0,
@@ -388,6 +412,9 @@ public class StateMachine extends StateMachineBase {
                 rightTransition.withTransition(auto, currentStateComplete, 0, "Right transition to auto");
                 rightCloseTransition.withTransition(auto, currentStateComplete, 0, "Right close transition to auto");
                 leftCloseTransition.withTransition(auto, currentStateComplete, 0, "Left close transition to auto");
+                rightReverseTransition.withTransition(auto, currentStateComplete, 0,
+                                "Right reverse transition to auto");
+                leftReverseTransition.withTransition(auto, currentStateComplete, 0, "Left reverse transition to auto");
                 leftAzTransition.withTransition(auto, currentStateComplete, 0, "Left az transition to auto");
                 rightAzTransition.withTransition(auto, currentStateComplete, 0, "Right az transition to auto");
                 leftInOut.withTransition(auto, currentStateComplete, 0, "Left in out to auto");

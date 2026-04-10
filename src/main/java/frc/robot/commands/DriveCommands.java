@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.Mode;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.DriveConstants;
@@ -379,10 +380,14 @@ public class DriveCommands {
     double gyroDelta = 0.0;
   }
 
-  public static Command goToPoint(Drive drive, Supplier<Pose2d> pose, Supplier<Rotation2d> rotation) {
+  public static Command goToPoint(Drive drive, Supplier<Pose2d> pose, Supplier<Rotation2d> rotation,
+      boolean forceFast) {
     return Commands.deferredProxy(() -> {
       Pose2d curPose = pose.get();
-      return followTrajectory(drive, generateTrajectory(drive, curPose, false), rotation,
+      return followTrajectory(drive,
+          generateTrajectory(drive, curPose,
+              !forceFast || RobotContainer.getInstance().autoTargetUtil.inAllianceZone()),
+          rotation,
           null, false);
     }).withName("Go To Point");
   }
@@ -396,10 +401,13 @@ public class DriveCommands {
   }
 
   public static Command goToPointAndthen(Drive drive, Supplier<Pose2d> pose, Supplier<Rotation2d> rotation,
-      Supplier<Command> after) {
+      Supplier<Command> after, boolean forceFast) {
     return Commands.deferredProxy(() -> {
       Pose2d curPose = pose.get();
-      return followTrajectory(drive, generateTrajectory(drive, curPose, false), rotation,
+      return followTrajectory(drive,
+          generateTrajectory(drive, curPose, !forceFast || RobotContainer.getInstance().autoTargetUtil
+              .inAllianceZone()),
+          rotation,
           null, false).andThen(after.get()).withName("Follow Trajectory and then");
     }).withName("Go To Point");
   }

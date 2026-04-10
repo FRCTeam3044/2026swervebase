@@ -15,11 +15,14 @@ import com.studica.frc.AHRS.NavXComType;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import frc.robot.RobotContainer;
+
 import java.util.Queue;
 
 /** IO implementation for NavX. */
@@ -27,6 +30,8 @@ public class GyroIONavX implements GyroIO {
   private final AHRS navX = new AHRS(NavXComType.kUSB1, (byte) odometryFrequency);
   private final Queue<Double> yawPositionQueue;
   private final Queue<Double> yawTimestampQueue;
+
+  private final LinearFilter linearFilter = LinearFilter.movingAverage(5);
 
   public GyroIONavX() {
     yawTimestampQueue = SparkOdometryThread.getInstance().makeTimestampQueue();
@@ -44,6 +49,8 @@ public class GyroIONavX implements GyroIO {
     double magnitude = rotatedNormalVec.normF() * baseNormalVector.normF();
     double angleToNormal = Math.acos(dotProduct / magnitude);
 
+    double filteredAngle = linearFilter.calculate(angleToNormal);
+
     inputs.connected = navX.isConnected();
     inputs.yawPosition = Rotation2d.fromDegrees(-navX.getAngle());
     inputs.yawVelocityRadPerSec = Units.degreesToRadians(-navX.getRawGyroZ());
@@ -58,6 +65,9 @@ public class GyroIONavX implements GyroIO {
     inputs.angleToNormal = angleToNormal;
     // inputs.normalVector = rotatedNormalVec;
     inputs.magnitude = magnitude;
+    inputs.filteredAngle = filteredAngle;
+
+    inputs.pastBump = RobotContainer.getInstance().drive.pastBump;
 
     yawTimestampQueue.clear();
     yawPositionQueue.clear();

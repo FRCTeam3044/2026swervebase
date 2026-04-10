@@ -24,6 +24,7 @@ public class AutoAim {
   private final AutoTargetUtil autoTargetUtil;
   private final Kicker kicker;
   private final Spindexer spindexer;
+  private boolean firing = false;
 
   private ShootingParameters parameters = new ShootingParameters(false, new Rotation2d(), 0, 0);
 
@@ -56,7 +57,9 @@ public class AutoAim {
   }
 
   public Command fire(BooleanSupplier forceFire) {
-    return Commands.parallel(kicker.shootKicker(), spindexer.setSpeed())
+    return Commands
+        .parallel(kicker.shootKicker(), spindexer.setSpeed(),
+            Commands.runEnd(() -> firing = true, () -> firing = false))
         .onlyWhile(() -> {
           boolean force = forceFire.getAsBoolean();
           boolean otherSubsystemsAtPos = parameters.isValid() && hood.atPosition()
@@ -91,5 +94,10 @@ public class AutoAim {
         shooter.runSpeed(
             () -> parameters.flywheelSpeed() * (shooterEngaged.getAsBoolean() ? 1 : shooterDisengagedProportion.get())))
         .withName("Auto Aim at AZ");
+  }
+
+  public boolean firing() {
+    Logger.recordOutput("Firing", firing);
+    return firing;
   }
 }

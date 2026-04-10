@@ -46,8 +46,6 @@ public class Turret extends SubsystemBase {
   private final ConfigurableParameter<Double> turretBlinkingRedTolerance = new ConfigurableParameter<>(5.0,
       "Turret Blinking Red Tolerance");
 
-  private final ConfigurableParameter<Double> slowSpeed = new ConfigurableParameter<>(1000.0, "Turret sSlow Speed");
-
   public Turret(TurretIO io) {
     this.io = io;
 
@@ -203,9 +201,5 @@ public class Turret extends SubsystemBase {
       return max;
     }
     return min;
-  }
-
-  public boolean movingSlow() {
-    return Math.abs(inputs.angularVelocity.in(RPM)) < slowSpeed.get();
   }
 }

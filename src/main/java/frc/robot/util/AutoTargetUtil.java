@@ -24,6 +24,9 @@ public class AutoTargetUtil {
   public final static ConfigurableParameter<Double> blueBumpSideLine = new ConfigurableParameter<Double>(3.5,
       "Blue bump side az line");
 
+  public final static ConfigurableParameter<Double> blueFastSpeedLine = new ConfigurableParameter<Double>(3.5,
+      "Blue fast speed line");
+
   private Pose3d hub = new Pose3d(new Translation3d(4.62, 8.069 / 2.0, 2), new Rotation3d());
   private Pose3d outpostAllianceTarget = new Pose3d(new Translation3d(1, 1.7, 0), new Rotation3d());
   private Pose3d depotAllianceTarget = new Pose3d(new Translation3d(1, 6.3, 0), new Rotation3d());
@@ -35,15 +38,15 @@ public class AutoTargetUtil {
 
   private static Pose2d rightNeutral = new Pose2d(8.5, 1.25, Rotation2d.fromDegrees(0));
   private static Pose2d closeRightNeutral = new Pose2d(7.75, 1.25, Rotation2d.fromDegrees(0));
-  private static Pose2d safeRightNeutral = new Pose2d(7.75, 0.64, Rotation2d.fromDegrees(0));
-  private static Pose2d safeCloseRightNeutral = new Pose2d(6, 0.64, Rotation2d.fromDegrees(0));
-  private static Pose2d topRightMiddle = new Pose2d(8.5, 3.5, Rotation2d.fromDegrees(0));
-  private static Pose2d bottomRightMiddle = new Pose2d(7.75, 3.5, Rotation2d.fromDegrees(0));
-  private static Pose2d rightBehindHub = new Pose2d(6, 3.5, Rotation2d.fromDegrees(0));
-  private static Pose2d rightWideHub = new Pose2d(6, 2, Rotation2d.fromDegrees(0));
-  private static Pose2d rightAzPoint = new Pose2d(3, 0.64, Rotation2d.fromDegrees(0));
+  private static Pose2d safeRightNeutral = new Pose2d(7.75, 0.6, Rotation2d.fromDegrees(0));
+  private static Pose2d safeCloseRightNeutral = new Pose2d(6, 0.6, Rotation2d.fromDegrees(0));
+  private static Pose2d topRightMiddle = new Pose2d(8.5, 3.2, Rotation2d.fromDegrees(0));
+  private static Pose2d bottomRightMiddle = new Pose2d(7.75, 3.2, Rotation2d.fromDegrees(0));
+  private static Pose2d rightBehindHub = new Pose2d(6.5, 3.5, Rotation2d.fromDegrees(0));
+  private static Pose2d rightWideHub = new Pose2d(6.5, 2, Rotation2d.fromDegrees(0));
+  private static Pose2d rightAzPoint = new Pose2d(2.5, 0.1, Rotation2d.fromDegrees(0));
 
-  private static Pose2d testBumpPos = new Pose2d(6, 2.5, Rotation2d.fromDegrees(0));
+  private static Pose2d testBumpPos = new Pose2d(6.8, 2.5, Rotation2d.fromDegrees(0));
 
   private static POIData depot = POIData.createFromRed(0.4, 5.96503125, 1.06827289, 5.96503125);
 
@@ -235,6 +238,23 @@ public class AutoTargetUtil {
 
   public static double blueBumpSideLine() {
     return blueBumpSideLine.get();
+  }
+
+  public static double redFastSpeedLine() {
+    return DriveConstants.pathfinder.map.fieldx - blueFastSpeedLine.get();
+  }
+
+  public static double blueFastSpeedLine() {
+    return blueFastSpeedLine.get();
+  }
+
+  public boolean pastFastLine() {
+    AllianceColor allianceColor = AllianceUtil.getAlliance();
+
+    return (this.getTurretPose().getX() > redFastSpeedLine()
+        && (allianceColor == AllianceColor.RED || allianceColor == AllianceColor.UNKNOWN))
+        || (this.getTurretPose().getX() < blueFastSpeedLine()
+            && (allianceColor == AllianceColor.BLUE || allianceColor == AllianceColor.UNKNOWN));
   }
 
   public boolean pastBump() {

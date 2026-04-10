@@ -37,7 +37,7 @@ public class Scoring extends State {
                 };
 
                 startWhenActive(DriveCommands.goToPoint(drive, targetSupplier,
-                                () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(rot))));
+                                () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(rot)), false));
                 t(() -> drive.atPose(targetSupplier.get()))
                                 .whileTrue(Commands.run(() -> drive.stop()));
                 startWhenActive(() -> Commands

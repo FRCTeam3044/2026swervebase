@@ -56,6 +56,13 @@ public class AutoEnums {
         RightCloseTransition(() -> RobotContainer.getInstance().drive
                 .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0))) &&
                 RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeCloseRightNeutral())),
+        LeftReverseTransition(() -> RobotContainer.getInstance().drive
+                .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180)))
+                &&
+                RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeCloseLeftNeutral())),
+        RightReverseTransition(() -> RobotContainer.getInstance().drive
+                .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180))) &&
+                RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getSafeCloseRightNeutral())),
         LeftInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getBottomLeftMiddle())),
         RightInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getBottomRightMiddle())),
         FarLeftInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getTopLeftMiddle())),
@@ -68,7 +75,16 @@ public class AutoEnums {
         LeftBumpTransition(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getLeftBumpPos())
                 && RobotContainer.getInstance().drive
                         .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180)))),
-        OverBump(() -> RobotContainer.getInstance().autoTargetUtil.pastBump()),
+        // RobotContainer.getInstance().autoTargetUtil.pastBump() &&
+        OverBump(() -> {
+            if (RobotContainer.getInstance().drive.pastBump) {
+                RobotContainer.getInstance().drive.pastBump = false;
+                RobotContainer.getInstance().drive.bumpTimer.stop();
+                RobotContainer.getInstance().drive.bumpTimer.reset();
+                return true;
+            }
+            return false;
+        }),
         EmptyState(() -> false);
 
         private final BooleanSupplier condition;

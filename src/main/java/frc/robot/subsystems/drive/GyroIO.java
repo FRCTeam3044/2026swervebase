@@ -26,6 +26,8 @@ public interface GyroIO {
     public double angleToNormal = 0.0;
     // public Vector<N3> normalVector;
     public double magnitude = 0.0;
+    public double filteredAngle = 0.0;
+    public boolean pastBump = false;
   }
 
   public default void updateInputs(GyroIOInputs inputs) {

@@ -132,8 +132,8 @@ public class Robot extends LoggedRobot {
     // PathfindingDebugUtils.drawLines("Field Map Inflated",
     // DriveConstants.pathfinder.visualizeEdges(),
     // DriveConstants.pathfinder.visualizeInflatedVertices());
-    // PathfindingDebugUtils.drawPoint("CloseLeftSafe",
-    // new Vertex(AutoTargetUtil.getSafeCloseLeftNeutral()));
+    PathfindingDebugUtils.drawPoint("RightAzPoint",
+        new Vertex(AutoTargetUtil.getRightAzPoint()));
 
   }
 
@@ -185,7 +185,8 @@ public class Robot extends LoggedRobot {
     turretNotReset.set(!robotContainer.turret.hasReset());
     turretInDangerZone.set(robotContainer.turret.inHoodDangerZone() && !robotContainer.hood.calibrated());
 
-    VisionConstants.setUseHubAprilTags(robotContainer.autoTargetUtil.inAllianceZone());
+    VisionConstants
+        .setUseHubAprilTags(robotContainer.autoTargetUtil.inAllianceZone() && robotContainer.autoAim.firing());
 
     ShotCalculator.periodic();
 

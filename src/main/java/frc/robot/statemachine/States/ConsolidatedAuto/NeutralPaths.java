@@ -38,8 +38,8 @@ public class NeutralPaths extends State {
         t(() -> drive.atPose(path.get().get(turnPoint)))
                 .onTrue(Commands.runOnce(() -> stateComplete = true));
 
-        startWhenActive(autoAim.fire(() -> true));
-        startWhenActive(autoAim.aimAllianceZone(() -> true));
+        startWhenActive(autoAim.fire(() -> true).onlyIf(() -> passing));
+        startWhenActive(autoAim.aimAllianceZone(() -> true).onlyIf(() -> passing));
     }
 
 }

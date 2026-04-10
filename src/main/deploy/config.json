@@ -147,6 +147,10 @@
             "comment": "Auto-Generated",
             "value": "0.25"
         },
+        "Past bump time": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
         "CalibrationState/Test Parameter 36": "0",
         "CalibrationState/Test Parameter 37": "0",
         "CalibrationState/Test Parameter 38": "0",
@@ -183,6 +187,10 @@
             "value": "1.0"
         },
         "CalibrationState/Test Parameter 29": "0",
+        "Blue fast speed line": {
+            "comment": "Auto-Generated",
+            "value": "3.5"
+        },
         "CalibrationState/Test Parameter 25": "0",
         "CalibrationState/Test Parameter 26": "0",
         "Hood Danger One Max": {
@@ -227,6 +235,10 @@
         "Point Theta Controller/I": "0.0",
         "Pathfinding Y Controller/Tolerance": "0.05",
         "Y Point Controller/D": "0.0",
+        "Top filtered angle": {
+            "comment": "Auto-Generated",
+            "value": "0.15"
+        },
         "Y Point Controller/I": "0.0",
         "Pathfinding Max Accel": {
             "comment": "Auto-Generated",
@@ -444,13 +456,13 @@
         "X Point Controller/I": "0.0",
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "43"
+            "value": "30"
         },
         "Hood Controller/P": "0.0",
         "X Point Controller/D": "0.0",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
-            "value": "7500"
+            "value": "4200"
         },
         "Climber Motor Running Speed": {
             "comment": "Auto-Generated",
@@ -458,6 +470,10 @@
         },
         "Shooter Speed Controller/I": "0.0",
         "X Point Controller/P": "0.0",
+        "Bottom filtered angle": {
+            "comment": "Auto-Generated",
+            "value": "0.15"
+        },
         "Shooter Speed Controller/P": "0.0",
         "Pathfinding Max Rotation Speed": {
             "comment": "Auto-Generated",
@@ -652,6 +668,10 @@
             "comment": "Auto-Generated",
             "value": "0.25"
         },
+        "Past bump time": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
         "CalibrationState/Test Parameter 36": "0",
         "CalibrationState/Test Parameter 37": "0",
         "CalibrationState/Test Parameter 38": "0",
@@ -688,6 +708,10 @@
             "value": "1.0"
         },
         "CalibrationState/Test Parameter 29": "0",
+        "Blue fast speed line": {
+            "comment": "Auto-Generated",
+            "value": "3.5"
+        },
         "CalibrationState/Test Parameter 25": "0",
         "CalibrationState/Test Parameter 26": "0",
         "Hood Danger One Max": {
@@ -732,6 +756,10 @@
         "Point Theta Controller/I": "0.0",
         "Pathfinding Y Controller/Tolerance": "0.05",
         "Y Point Controller/D": "0.0",
+        "Top filtered angle": {
+            "comment": "Auto-Generated",
+            "value": "0.15"
+        },
         "Y Point Controller/I": "0.0",
         "Pathfinding Max Accel": {
             "comment": "Auto-Generated",
@@ -949,13 +977,13 @@
         "X Point Controller/I": "0.0",
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "43"
+            "value": "30"
         },
         "Hood Controller/P": "0.0",
         "X Point Controller/D": "0.0",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
-            "value": "7500"
+            "value": "4200"
         },
         "Climber Motor Running Speed": {
             "comment": "Auto-Generated",
@@ -963,6 +991,10 @@
         },
         "Shooter Speed Controller/I": "0.0",
         "X Point Controller/P": "5.0",
+        "Bottom filtered angle": {
+            "comment": "Auto-Generated",
+            "value": "0.15"
+        },
         "Shooter Speed Controller/P": "0.0",
         "Pathfinding Max Rotation Speed": {
             "comment": "Auto-Generated",
@@ -1021,7 +1053,7 @@
         "Pathfinding X Controller/D": "0.2",
         "Pathfinding Slow Max Speed": {
             "comment": "Auto-Generated",
-            "value": "4.8"
+            "value": "1.0"
         },
         "Top climber position": {
             "comment": "Auto-Generated",
@@ -1066,7 +1098,7 @@
         "Pathfinding Theta Controller/D": "0.0",
         "Intake roller speed": {
             "comment": "Auto-Generated",
-            "value": "0.8"
+            "value": "1.0"
         },
         "CalibrationState/Test Parameter 117": "0",
         "CalibrationState/Test Parameter 118": "0",
@@ -1156,6 +1188,10 @@
             "comment": "Auto-Generated",
             "value": "12"
         },
+        "Past bump time": {
+            "comment": "Auto-Generated",
+            "value": "0.2"
+        },
         "CalibrationState/Test Parameter 36": "0",
         "CalibrationState/Test Parameter 37": "0",
         "CalibrationState/Test Parameter 38": "0",
@@ -1192,6 +1228,10 @@
             "value": "1.2"
         },
         "CalibrationState/Test Parameter 29": "0",
+        "Blue fast speed line": {
+            "comment": "Auto-Generated",
+            "value": "3.4"
+        },
         "CalibrationState/Test Parameter 25": "0",
         "CalibrationState/Test Parameter 26": "0",
         "Hood Danger One Max": {
@@ -1236,6 +1276,10 @@
         "Point Theta Controller/I": "0.0",
         "Pathfinding Y Controller/Tolerance": "0.05",
         "Y Point Controller/D": "0.2",
+        "Top filtered angle": {
+            "comment": "Auto-Generated",
+            "value": "0.2"
+        },
         "Y Point Controller/I": "0.0",
         "Pathfinding Max Accel": {
             "comment": "Auto-Generated",
@@ -1334,7 +1378,7 @@
         },
         "Turret Error FF Tolerance": {
             "comment": "Auto-Generated",
-            "value": "4.0"
+            "value": "2.0"
         },
         "CalibrationState/Test Parameter 69": "0",
         "CalibrationState/Test Parameter 76": "0",
@@ -1400,7 +1444,7 @@
         },
         "Pathfinding Slow Max Accel": {
             "comment": "Auto-Generated",
-            "value": "5.0"
+            "value": "2.0"
         },
         "Shooter Speed Controller/D": "0.0",
         "Climb pathfinding distance": {
@@ -1438,7 +1482,7 @@
         "CalibrationState/Test Parameter 92": "0",
         "Second auto shot time": {
             "comment": "Auto-Generated",
-            "value": "4.0"
+            "value": "0.0"
         },
         "CalibrationState/Test Parameter 93": "0",
         "Intake Position Controller/P": "0.0",
@@ -1453,13 +1497,13 @@
         "X Point Controller/I": "0.0",
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "43"
+            "value": "30"
         },
         "Hood Controller/P": "0.08",
         "X Point Controller/D": "0.2",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
-            "value": "7500"
+            "value": "4200"
         },
         "Climber Motor Running Speed": {
             "comment": "Auto-Generated",
@@ -1467,6 +1511,10 @@
         },
         "Shooter Speed Controller/I": "0.0",
         "X Point Controller/P": "2",
+        "Bottom filtered angle": {
+            "comment": "Auto-Generated",
+            "value": "0.13"
+        },
         "Shooter Speed Controller/P": "0.00025",
         "Pathfinding Max Rotation Speed": {
             "comment": "Auto-Generated",
@@ -1474,7 +1522,7 @@
         },
         "Turret Wide Angle Tolerance (degrees)": {
             "comment": "Auto-Generated",
-            "value": "8.0"
+            "value": "7.0"
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",

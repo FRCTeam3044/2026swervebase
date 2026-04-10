@@ -23,18 +23,18 @@ public class VisionConstants {
         private static boolean usingHubOnlyAprilTags = false;
 
         static {
-                // allAprilTags =
+                allAprilTags = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
+                // try {
+                // allAprilTags = new AprilTagFieldLayout(
+                // Filesystem.getDeployDirectory() + "/pfield-blue-4-10.json");
+                // } catch (Exception e) {
+                // e.printStackTrace();
+                // hubAprilTags =
                 // AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
-                try {
-                        allAprilTags = new AprilTagFieldLayout(
-                                        Filesystem.getDeployDirectory() + "/pfield-blue-4-10.json");
-                } catch (Exception e) {
-                        e.printStackTrace();
-                        hubAprilTags = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
-                }
+                // }
                 try {
                         hubAprilTags = new AprilTagFieldLayout(
-                                        Filesystem.getDeployDirectory() + "/pfield-blue-4-10-only-hub.json");
+                                        Filesystem.getDeployDirectory() + "/2026-rebuilt-only-hub.json");
                 } catch (Exception e) {
                         e.printStackTrace();
                         hubAprilTags = allAprilTags;

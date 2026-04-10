@@ -144,7 +144,8 @@ public class DriveConstants {
                                                         KilogramSquareMeters.of(0.02),
                                                         wheelCOF));
 
-        public static final Distance mapleBumperSize = Inches.of(35);
+        // supposed to be 35
+        public static final Distance mapleBumperSize = Inches.of(34.5);
 
         public static final Pathfinder pathfinder = (new PathfinderBuilder(Field.REBUILT_2026_TRENCH))
                         .setNormalizeCorners(false)

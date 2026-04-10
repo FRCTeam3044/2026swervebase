@@ -28,6 +28,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -35,6 +36,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.Mode;
 import frc.robot.RobotContainer;
 import frc.robot.commands.DriveCommands;
+import me.nabdev.oxconfig.ConfigurableParameter;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -51,6 +53,15 @@ public class Drive extends SubsystemBase {
   private final Alert gyroDisconnectedAlert = new Alert("Disconnected gyro, using kinematics as fallback.",
       AlertType.kError);
 
+  public boolean pastBump;
+  public Timer bumpTimer = new Timer();
+
+  public final ConfigurableParameter<Double> topFilteredAngle = new ConfigurableParameter<>(0.2, "Top filtered angle");
+  public final ConfigurableParameter<Double> bottomFilteredAngle = new ConfigurableParameter<>(0.15,
+      "Bottom filtered angle");
+  public final ConfigurableParameter<Double> pastBumpTime = new ConfigurableParameter<>(0.5,
+      "Past bump time");
+
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(moduleTranslations);
   private Rotation2d rawGyroRotation = Rotation2d.kZero;
   private SwerveModulePosition[] lastModulePositions = // For delta tracking
@@ -63,6 +74,10 @@ public class Drive extends SubsystemBase {
   private SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(kinematics, rawGyroRotation,
       lastModulePositions, Pose2d.kZero);
   private final Consumer<Pose2d> resetSimulationPoseCallBack;
+
+  public double getFilteredAngle() {
+    return gyroInputs.filteredAngle;
+  }
 
   public boolean atPose(Pose2d pose) {
     double distance = pose.getTranslation().getDistance(this.getPose().getTranslation());
@@ -119,6 +134,15 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if (gyroInputs.filteredAngle > topFilteredAngle.get()) {
+      bumpTimer.restart();
+      pastBump = false;
+    } else if (gyroInputs.filteredAngle < bottomFilteredAngle.get() && bumpTimer.get() > pastBumpTime.get()) {
+      pastBump = true;
+    } else {
+      pastBump = false;
+    }
+
     odometryLock.lock(); // Prevents odometry updates while reading data
     gyroIO.updateInputs(gyroInputs);
     Logger.processInputs("Drive/Gyro", gyroInputs);
