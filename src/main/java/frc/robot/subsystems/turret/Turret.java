@@ -1,7 +1,7 @@
 package frc.robot.subsystems.turret;
 
 import frc.robot.RobotContainer;
-
+import frc.robot.util.AutoTargetUtil;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -37,7 +37,9 @@ public class Turret extends SubsystemBase {
       "Turret Angle Tolerance (degrees)");
   private final ConfigurableParameter<Double> wideTolerance = new ConfigurableParameter<Double>(8.0,
       "Turret Wide Angle Tolerance (degrees)");
-
+  private final ConfigurableParameter<Double> wideNeutralTolerance = new ConfigurableParameter<Double>(10.0,
+      "Turret Wide Angle Neutral Tolerance (degrees)");
+  
   private final ConfigurableParameter<Double> turretRumbleTolerance = new ConfigurableParameter<>(15.0,
       "Turret Fliparound Tolerance");
   private final ConfigurableParameter<Double> turretRedTolerance = new ConfigurableParameter<>(10.0,
@@ -163,7 +165,11 @@ public class Turret extends SubsystemBase {
     if (inputs.angle == null || inputs.computedTargetAngle == null) {
       return false;
     }
-    return Math.abs(inputs.angle.in(Degrees) - inputs.computedTargetAngle.in(Degrees)) < wideTolerance.get();
+    if(AutoTargetUtil.instance != null && AutoTargetUtil.instance.inNeutralZone()) {
+      return Math.abs(inputs.angle.in(Degrees) - inputs.computedTargetAngle.in(Degrees)) < wideNeutralTolerance.get();
+    } else {
+      return Math.abs(inputs.angle.in(Degrees) - inputs.computedTargetAngle.in(Degrees)) < wideTolerance.get();
+    }
   }
 
   public boolean inHoodDangerZone() {

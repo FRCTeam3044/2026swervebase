@@ -80,16 +80,27 @@ public class TeleState extends State {
 
     // lt = raise but keep intake running
     // a = raise intake and turn off
-    operator.a().whileTrue(intake.intakeTop());
-    operator.a().or(operator.leftTrigger()).whileFalse(intake.intakeBottom());
-    operator.a().or(operator.b()).whileFalse(intake.runRollers());
-    operator.b().whileTrue(intake.runRollersReverse());
-    operator.leftTrigger().whileTrue(intake.intakeTop());
+    // operator.a().whileTrue(intake.intakeTop());
+    // operator.a().or(operator.leftTrigger()).whileFalse(intake.intakeBottom());
+    // operator.a().or(operator.b()).whileFalse(intake.runRollers());
+    // operator.b().whileTrue(intake.runRollersReverse());
 
-    startWhenActive(
-        intake.intakeBottom()
-            .onlyWhile(operatorController.a().negate().and(operatorController.leftTrigger().negate())));
-    startWhenActive(intake.runRollers().onlyWhile(operatorController.a().negate()));
+    // raise intake when a is pressed
+    // operator.a().whileTrue(intake.intakeTop());
+    // run intake down unless a or left trigger is pressed
+    // operator.a().or(operator.leftTrigger()).whileFalse(intake.intakeBottom());
+    // run rollers unless a or b is pressed
+    // operator.a().or(operator.b()).whileFalse(intake.runRollers());
+    // when b is pressed run rollers in reverse
+    operator.b().whileTrue(intake.runRollersReverse());
+    // raise intake when trigger is pressed
+    operator.leftTrigger().whileTrue(intake.intakeTop().alongWith(intake.runRollers()));
+    // when y is pressed, run intake down and spin rollers
+    operator.a().whileTrue(intake.intakeBottom().alongWith(intake.runRollers()));
+    // startWhenActive(
+        // intake.intakeBottom()
+            // .onlyWhile(operatorController.a().negate().and(operatorController.leftTrigger().negate())));
+    // startWhenActive(intake.runRollers().onlyWhile(operatorController.a().negate()));
 
     // startWhenActive(spindexer.setSpeed());
 

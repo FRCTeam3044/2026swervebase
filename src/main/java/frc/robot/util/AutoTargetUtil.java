@@ -16,6 +16,7 @@ import me.nabdev.pathfinding.structures.Vertex;
 
 @ExtensionMethod({ GeomUtil.class })
 public class AutoTargetUtil {
+  public static AutoTargetUtil instance;
   private final Drive drive;
 
   public final static ConfigurableParameter<Double> blueSideLine = new ConfigurableParameter<Double>(4.0,
@@ -79,6 +80,9 @@ public class AutoTargetUtil {
       new Vertex(3.4, 0));
 
   public AutoTargetUtil(Drive drive) {
+    if(instance==null) {
+      instance=this;
+    }
     this.drive = drive;
   }
 

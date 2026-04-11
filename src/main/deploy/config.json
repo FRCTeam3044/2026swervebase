@@ -309,6 +309,10 @@
             "comment": "Auto-Generated",
             "value": "2500.0"
         },
+        "Turret Wide Angle Neutral Tolerance (degrees)": {
+            "comment": "Auto-Generated",
+            "value": "10.0"
+        },
         "CalibrationState/Test Parameter 87": "0",
         "CalibrationState/Test Parameter 88": "0",
         "CalibrationState/Test Parameter 89": "0",
@@ -830,6 +834,10 @@
             "comment": "Auto-Generated",
             "value": "2500.0"
         },
+        "Turret Wide Angle Neutral Tolerance (degrees)": {
+            "comment": "Auto-Generated",
+            "value": "10.0"
+        },
         "CalibrationState/Test Parameter 87": "0",
         "CalibrationState/Test Parameter 88": "0",
         "CalibrationState/Test Parameter 89": "0",
@@ -1350,6 +1358,10 @@
             "comment": "Auto-Generated",
             "value": "2500.0"
         },
+        "Turret Wide Angle Neutral Tolerance (degrees)": {
+            "comment": "Auto-Generated",
+            "value": "10.0"
+        },
         "CalibrationState/Test Parameter 87": "0",
         "CalibrationState/Test Parameter 88": "0",
         "CalibrationState/Test Parameter 89": "0",
@@ -1466,7 +1478,7 @@
         "CalibrationState/Test Parameter 96": "0",
         "Turret Angle Tolerance (degrees)": {
             "comment": "Auto-Generated",
-            "value": "6.0"
+            "value": "2.0"
         },
         "CalibrationState/Test Parameter 97": "0",
         "Outpost pathfinding distance": {
