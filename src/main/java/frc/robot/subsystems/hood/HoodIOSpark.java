@@ -29,6 +29,7 @@ public class HoodIOSpark implements HoodIO {
   private final ConfigurableParameter<Double> stallVelocityTolerance = new ConfigurableParameter<Double>(0.5,
       "Hood Stall Velocity Tolerance");
   private final ConfigurableParameter<Double> maxOutput = new ConfigurableParameter<>(10.0, "Hood Max Output");
+  private final ConfigurableParameter<Double> minOutput = new ConfigurableParameter<>(10.0, "Hood Min Output");
   private final ConfigurableParameter<Double> errorFFTolerance = new ConfigurableParameter<>(1.5,
       "Hood Error FF Tolerance");
   private final ConfigurableParameter<Double> velocityScale = new ConfigurableParameter<>(5.0,
@@ -40,7 +41,12 @@ public class HoodIOSpark implements HoodIO {
   private double setpoint;
   LinearFilter currentFilter = LinearFilter.movingAverage(4);
 
-  SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV);
+  final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.0, 0.001);
+  public final ConfigurableParameter<Double> kV = new ConfigurableParameter<Double>(0.001, "Hood kV",
+      feedforward::setKv);
+  public final ConfigurableParameter<Double> kS = new ConfigurableParameter<Double>(0.0, "Hood kS",
+      feedforward::setKs);
+  public final ConfigurableParameter<Double> kPos = new ConfigurableParameter<Double>(0.0, "Hood kPos");
 
   private double error = 0.0;
   private double velocitySetpoint = 0.0;
@@ -73,27 +79,36 @@ public class HoodIOSpark implements HoodIO {
 
   @Override
   public void setPosition(double position) {
-    setpoint = position;
-
-    double pidOutput = MathUtil.clamp(
-        hoodController.calculate(hoodEncoder.getPosition(), setpoint),
-        -pidMax.get(), pidMax.get());
+    this.setpoint = position;
 
     double signedError = hoodEncoder.getPosition() - setpoint;
     this.error = signedError;
     double unsignedError = Math.abs(signedError);
+    double clampedError = Math.max(unsignedError - errorFFTolerance.get(), 0);
 
     this.velocitySetpoint = -1 * Math.signum(signedError)
-        * Math.min(Math.max(unsignedError - errorFFTolerance.get(), 0) * velocityScale.get(),
+        * Math.min(clampedError * velocityScale.get(),
             maxVelocity.get());
 
     double ffOutput = feedforward.calculate(this.velocitySetpoint);
 
+    double pidOutput = MathUtil.clamp(
+        hoodController.calculate(hoodEncoder.getPosition(), this.setpoint),
+        -pidMax.get(), pidMax.get());
+
+    double posOutput = Math.signum(this.velocitySetpoint) * (maxPosition - hoodEncoder.getPosition()) * kPos.get();
+
     Logger.recordOutput("Hood/PidOutput", pidOutput);
     Logger.recordOutput("Hood/FFOutput", ffOutput);
+    Logger.recordOutput("Hood/PosOutput", posOutput);
+    Logger.recordOutput("Hood/TotalFFOutput", ffOutput + posOutput);
 
-    double output = MathUtil.clamp(pidOutput + ffOutput, -maxOutput.get(), maxOutput.get());
-    motor.setVoltage(output);
+    double output = MathUtil.clamp(pidOutput + ffOutput + posOutput, -maxOutput.get(), maxOutput.get());
+    if (Math.abs(output) < minOutput.get()) {
+      motor.setVoltage(0);
+    } else {
+      motor.setVoltage(output);
+    }
   }
 
   @Override
