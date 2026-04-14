@@ -11,6 +11,7 @@ import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import me.nabdev.oxconfig.ConfigurableParameter;
 
 public class SpindexerIOSpark implements SpindexerIO {
   private final SparkFlex bottom = new SparkFlex(leaderCanId, MotorType.kBrushless);

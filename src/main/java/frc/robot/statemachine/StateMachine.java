@@ -121,7 +121,7 @@ public class StateMachine extends StateMachineBase {
                 State teleop = new TeleState(this, driverController, operatorController, drive, intake,
                                 spindexer, hood, turret, leds);
                 State test = new TestState(this, hood, turret);
-                State auto = new AutoState(this, autoChooser, turret, hood, intake, spindexer);
+                State auto = new AutoState(this, autoChooser, autoTargetUtil, turret, hood, intake, spindexer);
 
                 this.registerToRootState(test, teleop, auto, disabled);
 
