@@ -7,6 +7,7 @@
 
 package frc.robot.util;
 
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -52,6 +53,10 @@ public class ShotCalculator {
 
     private static ConfigurableParameter<Double> phaseDelay = new ConfigurableParameter<Double>(0.05, "Phase Delay");
     private static ConfigurableParameter<Double> maxDistance = new ConfigurableParameter<Double>(5.5, "Max Distance");
+    private static ConfigurableParameter<Double> hoodAccounting = new ConfigurableParameter<Double>(0.001,
+            "Hood Account");
+
+    private LinearFilter flywheelAvg = LinearFilter.movingAverage(5);
 
     public static Transform3d robotToTurret = new Transform3d(Units.inchesToMeters(3.75), Units.inchesToMeters(6.75),
             Units.inchesToMeters(0.381), Rotation3d.kZero);
@@ -119,12 +124,19 @@ public class ShotCalculator {
         turretAngle = new Rotation2d(target.minus(lookaheadPose.getTranslation()).getAngle().getMeasure()
                 .minus(RobotContainer.getInstance().drive.getPose().getRotation().getMeasure()));
         hoodPosition = dm.getShotHoodPositionMap(secondaryValues).get(lookaheadTurretToTargetDistance);
+
+        double targetFlywheelSpeed = dm.getShotFlywheelSpeedMap(secondaryValues).get(lookaheadTurretToTargetDistance);
+        double flywheelSpeed = flywheelAvg.calculate(RobotContainer.getInstance().shooter.getSpeed());
+        double hoodAdjustment = -(flywheelSpeed - targetFlywheelSpeed) * hoodAccounting.get();
+
+        hoodPosition += hoodAdjustment;
+
         latestParameters = new ShootingParameters(
                 lookaheadTurretToTargetDistance >= dm.getMinDistance(secondaryValues)
                         && lookaheadTurretToTargetDistance <= maxDistance.get(),
                 turretAngle,
-                hoodPosition,
-                dm.getShotFlywheelSpeedMap(secondaryValues).get(lookaheadTurretToTargetDistance));
+                hoodPosition, targetFlywheelSpeed);
+
         // Log calculated values
         Logger.recordOutput("ShotCalculator/LookaheadPose", lookaheadPose);
         Logger.recordOutput("ShotCalculator/TurretToTargetDistance", lookaheadTurretToTargetDistance);

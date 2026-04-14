@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import me.nabdev.oxconfig.ConfigurableParameter;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
@@ -27,21 +28,26 @@ public class Spindexer extends SubsystemBase {
     Logger.processInputs("Spindexer", inputs);
   }
 
-  public Command setSpeed() {
-    return Commands.runEnd(() -> {
-      io.setTopSpeed(topRollerSpeed.get());
-      io.setBottomSpeed(bottomRollerSpeed.get());
-    }, () -> {
-      io.setTopSpeed(0);
-      io.setBottomSpeed(0);
-    }, this)
-        .withName("Run Spindexer");
+  public Command setSpeed(DoubleSupplier speed) {
+    return setSpeed(speed, speed, () -> false);
   }
 
-  public Command setSpeed(DoubleSupplier speed) {
+  public Command setSpeed() {
+    return setSpeed(() -> false);
+  }
+
+  public Command setSpeed(boolean reverse) {
+    return setSpeed(topRollerSpeed::get, bottomRollerSpeed::get, () -> reverse);
+  }
+
+  public Command setSpeed(BooleanSupplier reverse) {
+    return setSpeed(topRollerSpeed::get, bottomRollerSpeed::get, reverse);
+  }
+
+  public Command setSpeed(DoubleSupplier topSpeed, DoubleSupplier bottomSpeed, BooleanSupplier reverse) {
     return Commands.runEnd(() -> {
-      io.setTopSpeed(speed.getAsDouble());
-      io.setBottomSpeed(speed.getAsDouble());
+      io.setTopSpeed((reverse.getAsBoolean() ? -1.0 : 1.0) * topSpeed.getAsDouble());
+      io.setBottomSpeed((reverse.getAsBoolean() ? -1.0 : 1.0) * bottomSpeed.getAsDouble());
     }, () -> {
       io.setTopSpeed(0);
       io.setBottomSpeed(0);

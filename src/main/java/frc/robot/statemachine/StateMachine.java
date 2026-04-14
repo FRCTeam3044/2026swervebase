@@ -261,9 +261,10 @@ public class StateMachine extends StateMachineBase {
 
                 // Add steps to auto options
 
-                Collections.addAll(leftComp, AutoSteps.LeftReverseTransition, AutoSteps.FarLeftInOut,
-                                AutoSteps.LeftBumpTransition, AutoSteps.OverBump,
-                                AutoSteps.SecondScore, AutoSteps.LeftAzPoint, AutoSteps.LeftReverseTransition,
+                Collections.addAll(leftComp, AutoSteps.FirstScore, AutoSteps.LeftReverseTransition,
+                                AutoSteps.FarLeftInOut,
+                                AutoSteps.LeftBumpTransition, AutoSteps.OverBump, AutoSteps.LeftAzPoint,
+                                AutoSteps.LeftReverseTransition,
                                 AutoSteps.LeftHub,
                                 AutoSteps.LeftBumpTransition, AutoSteps.OverBump, AutoSteps.IntakeDepot,
                                 AutoSteps.EmptyState);
@@ -272,7 +273,8 @@ public class StateMachine extends StateMachineBase {
                                 AutoSteps.RightBumpTransition,
                                 AutoSteps.OverBump, AutoSteps.RightAzPoint, AutoSteps.RightReverseTransition,
                                 AutoSteps.RightHub,
-                                AutoSteps.RightBumpTransition, AutoSteps.OverBump, AutoSteps.IntakeOutpost,
+                                AutoSteps.RightBumpTransition, AutoSteps.OverBump, AutoSteps.RightAzPoint,
+                                AutoSteps.FirstScore,
                                 AutoSteps.EmptyState);
 
                 Collections.addAll(middleCompDepot, AutoSteps.IntakeDepot, AutoSteps.EmptyState);

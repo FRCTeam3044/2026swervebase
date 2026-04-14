@@ -104,6 +104,10 @@
             "comment": "Auto-Generated",
             "value": "false"
         },
+        "Rotational Speed Max (rad/sec)": {
+            "comment": "Auto-Generated",
+            "value": "2.0"
+        },
         "CalibrationState/Test Parameter 14": "0",
         "CalibrationState/Test Parameter 15": "0",
         "CalibrationState/Test Parameter 16": "0",
@@ -483,6 +487,10 @@
             "value": "30"
         },
         "Hood Controller/P": "0.0",
+        "Hood Account": {
+            "comment": "Auto-Generated",
+            "value": "0.001"
+        },
         "X Point Controller/D": "0.0",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
@@ -648,6 +656,10 @@
         "Spin in disabled": {
             "comment": "Auto-Generated",
             "value": "false"
+        },
+        "Rotational Speed Max (rad/sec)": {
+            "comment": "Auto-Generated",
+            "value": "2.0"
         },
         "CalibrationState/Test Parameter 14": "0",
         "CalibrationState/Test Parameter 15": "0",
@@ -1028,6 +1040,10 @@
             "value": "30"
         },
         "Hood Controller/P": "0.0",
+        "Hood Account": {
+            "comment": "Auto-Generated",
+            "value": "0.001"
+        },
         "X Point Controller/D": "0.0",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
@@ -1150,7 +1166,7 @@
         "Pathfinding Theta Controller/D": "0.0",
         "Intake roller speed": {
             "comment": "Auto-Generated",
-            "value": "1.0"
+            "value": "0.9"
         },
         "CalibrationState/Test Parameter 117": "0",
         "CalibrationState/Test Parameter 118": "0",
@@ -1193,6 +1209,10 @@
             "comment": "Auto-Generated",
             "value": "false"
         },
+        "Rotational Speed Max (rad/sec)": {
+            "comment": "Auto-Generated",
+            "value": "1.7"
+        },
         "CalibrationState/Test Parameter 14": "0",
         "CalibrationState/Test Parameter 15": "0",
         "CalibrationState/Test Parameter 16": "0",
@@ -1216,7 +1236,7 @@
         },
         "Phase Delay": {
             "comment": "Auto-Generated",
-            "value": "0.05"
+            "value": "0.125"
         },
         "Blue Side az line": {
             "comment": "Auto-Generated",
@@ -1487,7 +1507,7 @@
         "Intake Position Controller/D": "0.0",
         "ShooterDisengagedProportion": {
             "comment": "Auto-Generated",
-            "value": "0.5"
+            "value": "0.6"
         },
         "Hood Velocity Scale": {
             "comment": "Auto-Generated",
@@ -1572,6 +1592,10 @@
             "value": "30"
         },
         "Hood Controller/P": "0.0",
+        "Hood Account": {
+            "comment": "Auto-Generated",
+            "value": "0.005"
+        },
         "X Point Controller/D": "0.2",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
@@ -1620,7 +1644,7 @@
         },
         "Shooter at speed tolerance (RPM)": {
             "comment": "Auto-Generated",
-            "value": "600.0"
+            "value": "1000.0"
         },
         "ShooterFudge": {
             "comment": "Auto-Generated",

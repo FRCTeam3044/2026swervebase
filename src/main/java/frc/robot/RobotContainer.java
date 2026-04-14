@@ -96,7 +96,7 @@ public class RobotContainer {
         private final Intake intake;
         private final Spindexer spindexer;
         private final Kicker kicker;
-        private final Shooter shooter;
+        public final Shooter shooter;
         public final Turret turret;
         private final Vision vision;
         public final LEDs LEDs;
@@ -335,7 +335,7 @@ public class RobotContainer {
                                 "Turret SysId (Dynamic Reverse)", turret.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
                 autoTargetUtil = new AutoTargetUtil(drive);
-                autoAim = new AutoAim(turret, shooter, hood, kicker, spindexer, autoTargetUtil);
+                autoAim = new AutoAim(turret, shooter, hood, kicker, spindexer, autoTargetUtil, drive);
                 stateMachine = new StateMachine(
                                 controllerOne,
                                 controllerTwo,

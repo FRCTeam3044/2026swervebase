@@ -94,12 +94,13 @@ public class TeleState extends State {
     // when b is pressed run rollers in reverse
     operator.b().whileTrue(intake.runRollersReverse());
     // raise intake when trigger is pressed
-    operator.leftTrigger().whileTrue(intake.intakeTop().alongWith(intake.runRollers()));
+    operator.leftTrigger().runWhileTrue(intake.intakeTop());
     // when y is pressed, run intake down and spin rollers
-    operator.a().whileTrue(intake.intakeBottom().alongWith(intake.runRollers()));
+    operator.a().and(operator.leftTrigger().negate()).whileTrue(intake.intakeBottom());
+    operator.a().whileTrue(intake.runRollers());
     // startWhenActive(
-        // intake.intakeBottom()
-            // .onlyWhile(operatorController.a().negate().and(operatorController.leftTrigger().negate())));
+    // intake.intakeBottom()
+    // .onlyWhile(operatorController.a().negate().and(operatorController.leftTrigger().negate())));
     // startWhenActive(intake.runRollers().onlyWhile(operatorController.a().negate()));
 
     // startWhenActive(spindexer.setSpeed());

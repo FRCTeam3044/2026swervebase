@@ -43,8 +43,8 @@ public class AutoTargetUtil {
   private static Pose2d safeCloseRightNeutral = new Pose2d(6, 0.6, Rotation2d.fromDegrees(0));
   private static Pose2d topRightMiddle = new Pose2d(8.5, 3.2, Rotation2d.fromDegrees(0));
   private static Pose2d bottomRightMiddle = new Pose2d(7.75, 3.2, Rotation2d.fromDegrees(0));
-  private static Pose2d rightBehindHub = new Pose2d(6.5, 3.5, Rotation2d.fromDegrees(0));
-  private static Pose2d rightWideHub = new Pose2d(6.5, 2, Rotation2d.fromDegrees(0));
+  private static Pose2d rightBehindHub = new Pose2d(7, 3.5, Rotation2d.fromDegrees(0));
+  private static Pose2d rightWideHub = new Pose2d(7, 2, Rotation2d.fromDegrees(0));
   private static Pose2d rightAzPoint = new Pose2d(2.5, 0.1, Rotation2d.fromDegrees(0));
 
   private static Pose2d testBumpPos = new Pose2d(6.8, 2.5, Rotation2d.fromDegrees(0));
@@ -80,8 +80,8 @@ public class AutoTargetUtil {
       new Vertex(3.4, 0));
 
   public AutoTargetUtil(Drive drive) {
-    if(instance==null) {
-      instance=this;
+    if (instance == null) {
+      instance = this;
     }
     this.drive = drive;
   }
