@@ -17,6 +17,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Voltage;
+import me.nabdev.oxconfig.ConfigurableParameter;
 import me.nabdev.oxconfig.sampleClasses.ConfigurableProfiledPIDController;
 
 public class ShooterIOSpark implements ShooterIO {
@@ -27,6 +28,10 @@ public class ShooterIOSpark implements ShooterIO {
   private final RelativeEncoder followerEncoder = followerMotor.getEncoder();
   private ConfigurableProfiledPIDController controller = new ConfigurableProfiledPIDController(0.0, 0.0, 0.0,
       new Constraints(maxAcceleration, maxJerk), "Shooter Speed Controller");
+  private final ConfigurableParameter<Double> bangBangThreshold = new ConfigurableParameter<>(200.0,
+      "Bang Bang Threshold");
+  private final ConfigurableParameter<Double> bangBangOutput = new ConfigurableParameter<>(0.5,
+      "Bang Bang Output");
 
   private double targetSpeed = 0.0;
   private double calculatedGoal = 0.0;
@@ -57,7 +62,12 @@ public class ShooterIOSpark implements ShooterIO {
     double goal = controller.getGoal().position;
     this.calculatedGoal = goal;
     this.ffOutput = feedforward.calculate(goal);
-    leaderMotor.setVoltage(this.pidOutput + this.ffOutput);
+    double bbOut = 0;
+    if (targetSpeed - leaderEncoder.getVelocity() > bangBangThreshold.get()) {
+      bbOut = bangBangOutput.get();
+    }
+    leaderMotor.setVoltage(this.pidOutput + this.ffOutput + bbOut);
+
   }
 
   @Override
