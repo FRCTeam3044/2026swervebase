@@ -271,14 +271,13 @@ public class RobotContainer {
 
                 // Set up auto routines
 
-                // autoChooser.addOption("Left In-Out Depot", StateMachine.leftInOutDepot);
-                // autoChooser.addOption("Right In-Out Outpost",
-                // StateMachine.rightInOutOutpost);
                 autoChooser.addOption("Left", StateMachine.leftComp);
+                autoChooser.addOption("Left w/ First Shot", StateMachine.leftWShotComp);
                 autoChooser.addOption("Right", StateMachine.rightComp);
+                autoChooser.addOption("Right w/ First Shot", StateMachine.rightWShotComp);
                 autoChooser.addOption("Middle Depot", StateMachine.middleCompDepot);
                 autoChooser.addOption("Middle Outpost", StateMachine.middleCompOutpost);
-                autoChooser.addOption("Test bump", StateMachine.testBumpAuto);
+
                 autoChooser.addOption("Left Orbit", StateMachine.leftOrbit);
                 autoChooser.addOption("Right Orbit", StateMachine.rightOrbit);
                 autoChooser.addOption("Left Double Swipe", StateMachine.leftDoubleSwipe);
@@ -287,9 +286,13 @@ public class RobotContainer {
                 autoChooser.addOption("Right Orbit Outpost", StateMachine.rightOrbitOutpost);
                 autoChooser.addOption("Left Swoop Depot", StateMachine.leftSwoopDepot);
                 autoChooser.addOption("Right Swoop Outpost", StateMachine.rightSwoopOutpost);
-                autoChooser.addOption("Just score", StateMachine.justShoot);
-                autoChooser.addOption("Shoot Depot", StateMachine.shootDepot);
-                autoChooser.addOption("Shoot Outpost", StateMachine.shootOutpost);
+                // autoChooser.addOption("Test bump", StateMachine.testBumpAuto);
+                // autoChooser.addOption("Left In-Out Depot", StateMachine.leftInOutDepot);
+                // autoChooser.addOption("Right In-Out Outpost",
+                // StateMachine.rightInOutOutpost);
+                // autoChooser.addOption("Just score", StateMachine.justShoot);
+                // autoChooser.addOption("Shoot Depot", StateMachine.shootDepot);
+                // autoChooser.addOption("Shoot Outpost", StateMachine.shootOutpost);
 
                 DriverStation.getGameSpecificMessage();
 

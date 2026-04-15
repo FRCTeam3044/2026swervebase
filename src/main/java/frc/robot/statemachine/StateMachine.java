@@ -57,7 +57,9 @@ public class StateMachine extends StateMachineBase {
 
         // Comp autos
         public static ArrayList<AutoSteps> leftComp = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> leftWShotComp = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> rightComp = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> rightWShotComp = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> middleCompDepot = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> middleCompOutpost = new ArrayList<AutoSteps>();
 
@@ -261,7 +263,15 @@ public class StateMachine extends StateMachineBase {
 
                 // Add steps to auto options
 
-                Collections.addAll(leftComp, AutoSteps.FirstScore, AutoSteps.LeftReverseTransition,
+                Collections.addAll(leftComp, AutoSteps.LeftReverseTransition,
+                                AutoSteps.FarLeftInOut,
+                                AutoSteps.LeftBumpTransition, AutoSteps.OverBump, AutoSteps.LeftAzPoint,
+                                AutoSteps.LeftReverseTransition,
+                                AutoSteps.LeftHub,
+                                AutoSteps.LeftBumpTransition, AutoSteps.OverBump, AutoSteps.IntakeDepot,
+                                AutoSteps.EmptyState);
+
+                Collections.addAll(leftWShotComp, AutoSteps.FirstScore, AutoSteps.LeftReverseTransition,
                                 AutoSteps.FarLeftInOut,
                                 AutoSteps.LeftBumpTransition, AutoSteps.OverBump, AutoSteps.LeftAzPoint,
                                 AutoSteps.LeftReverseTransition,
@@ -270,6 +280,15 @@ public class StateMachine extends StateMachineBase {
                                 AutoSteps.EmptyState);
 
                 Collections.addAll(rightComp, AutoSteps.RightReverseTransition, AutoSteps.FarRightInOut,
+                                AutoSteps.RightBumpTransition,
+                                AutoSteps.OverBump, AutoSteps.RightAzPoint, AutoSteps.RightReverseTransition,
+                                AutoSteps.RightHub,
+                                AutoSteps.RightBumpTransition, AutoSteps.OverBump, AutoSteps.RightAzPoint,
+                                AutoSteps.FirstScore,
+                                AutoSteps.EmptyState);
+
+                Collections.addAll(rightWShotComp, AutoSteps.FirstScore, AutoSteps.RightReverseTransition,
+                                AutoSteps.FarRightInOut,
                                 AutoSteps.RightBumpTransition,
                                 AutoSteps.OverBump, AutoSteps.RightAzPoint, AutoSteps.RightReverseTransition,
                                 AutoSteps.RightHub,
