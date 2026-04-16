@@ -17,32 +17,34 @@ import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.util.SmartXboxController;
 
 public class NeutralZone extends State {
-  public NeutralZone(
-      StateMachine stateMachine,
-      CommandXboxController driverController,
-      CommandXboxController operatorController,
-      GenericHID operatorBoard,
-      Drive drive,
-      Intake intake,
-      Spindexer spindexer,
-      Kicker kicker,
-      Turret turret,
-      Hood hood,
-      Shooter shooter,
-      AutoAim autoAim, LEDs leds) {
-    super(stateMachine);
-    SmartXboxController driver = new SmartXboxController(driverController, loop);
-    SmartXboxController operator = new SmartXboxController(operatorController, loop);
+    public NeutralZone(
+            StateMachine stateMachine,
+            CommandXboxController driverController,
+            CommandXboxController operatorController,
+            GenericHID operatorBoard,
+            Drive drive,
+            Intake intake,
+            Spindexer spindexer,
+            Kicker kicker,
+            Turret turret,
+            Hood hood,
+            Shooter shooter,
+            AutoAim autoAim, LEDs leds) {
+        super(stateMachine);
+        SmartXboxController driver = new SmartXboxController(driverController, loop);
+        SmartXboxController operator = new SmartXboxController(operatorController, loop);
 
-    driver.start()
-        .whileFalse(autoAim.aimAllianceZone(() -> operator.rightTrigger().or(operator.rightBumper()).getAsBoolean()));
-    startWhenActive(
-        autoAim.aimAllianceZone(() -> operator.rightTrigger().or(operator.rightBumper()).getAsBoolean())
-            .until(driver.start()));
-    startWhenActive(autoAim.fire(() -> true,
-        () -> operator.x().getAsBoolean()).onlyWhile(operator.rightBumper().or(operator.rightTrigger())));
-    operator.rightBumper().or(operator.rightTrigger()).whileTrue(autoAim.fire(() -> true,
-        () -> operator.x().getAsBoolean()));
-    startWhenActive(leds.defaultPattern());
-  }
+        driver.start()
+                .whileFalse(autoAim
+                        .aimAllianceZone(() -> operator.rightTrigger().or(operator.rightBumper()).getAsBoolean()));
+        startWhenActive(
+                autoAim.aimAllianceZone(() -> operator.rightTrigger().or(operator.rightBumper()).getAsBoolean())
+                        .until(driver.start()));
+        startWhenActive(autoAim.fire(() -> true,
+                () -> operator.x().getAsBoolean(), false)
+                .onlyWhile(operator.rightBumper().or(operator.rightTrigger())));
+        operator.rightBumper().or(operator.rightTrigger()).whileTrue(autoAim.fire(() -> true,
+                () -> operator.x().getAsBoolean(), false));
+        startWhenActive(leds.defaultPattern());
+    }
 }

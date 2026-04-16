@@ -47,7 +47,7 @@ public class CalibrationState extends State {
                 // startWhenActive(kicker.blockKicker().onlyWhile(controller.rightTrigger().negate())
                 // .withName("Block Kicker"));
                 // startWhenActive(spindexer.setSpeed());
-                startWhenActive(intake.runRollers());
+                controller.a().whileTrue(intake.runRollers());
                 startWhenActive(intake.intakeBottom());
                 startWhenActive(
                                 DriveCommands.joystickDrive(

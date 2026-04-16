@@ -76,7 +76,8 @@ public class TeleState extends State {
         operator.rightTrigger().or(operator.rightBumper())));
 
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
-    controller.start().onTrue(Commands.runOnce(hood::resetCalibration));
+    operator.povDown().onTrue(Commands.runOnce(hood::resetCalibration));
+    operator.start().whileTrue(turret.nudge());
 
     // lt = raise but keep intake running
     // a = raise intake and turn off

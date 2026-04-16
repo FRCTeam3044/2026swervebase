@@ -39,7 +39,7 @@ public class Turret extends SubsystemBase {
       "Turret Wide Angle Tolerance (degrees)");
   private final ConfigurableParameter<Double> wideNeutralTolerance = new ConfigurableParameter<Double>(10.0,
       "Turret Wide Angle Neutral Tolerance (degrees)");
-  
+
   private final ConfigurableParameter<Double> turretRumbleTolerance = new ConfigurableParameter<>(15.0,
       "Turret Fliparound Tolerance");
   private final ConfigurableParameter<Double> turretRedTolerance = new ConfigurableParameter<>(10.0,
@@ -140,6 +140,11 @@ public class Turret extends SubsystemBase {
         .withName("Run Turret At Percent");
   }
 
+  public Command nudge() {
+    return Commands.runEnd(() -> io.setPercent(0.05), () -> io.setPercent(0), this)
+        .withName("Nudge Turret");
+  }
+
   public void resetAngle(boolean reset) {
     io.resetAngle(reset);
   }
@@ -158,6 +163,16 @@ public class Turret extends SubsystemBase {
     return Math.abs(inputs.angle.in(Degrees) - inputs.computedTargetAngle.in(Degrees)) < tolerance.get();
   }
 
+  public boolean isAtTarget(double tolerance) {
+    if (isOverridingTarget) {
+      return false;
+    }
+    if (inputs.angle == null || inputs.computedTargetAngle == null) {
+      return false;
+    }
+    return Math.abs(inputs.angle.in(Degrees) - inputs.computedTargetAngle.in(Degrees)) < tolerance;
+  }
+
   public boolean isAtTargetWide() {
     if (isOverridingTarget) {
       return false;
@@ -165,7 +180,7 @@ public class Turret extends SubsystemBase {
     if (inputs.angle == null || inputs.computedTargetAngle == null) {
       return false;
     }
-    if(AutoTargetUtil.instance != null && AutoTargetUtil.instance.inNeutralZone()) {
+    if (AutoTargetUtil.instance != null && AutoTargetUtil.instance.inNeutralZone()) {
       return Math.abs(inputs.angle.in(Degrees) - inputs.computedTargetAngle.in(Degrees)) < wideNeutralTolerance.get();
     } else {
       return Math.abs(inputs.angle.in(Degrees) - inputs.computedTargetAngle.in(Degrees)) < wideTolerance.get();

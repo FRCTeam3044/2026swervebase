@@ -49,6 +49,9 @@ public interface TurretIO {
   public default void setPercent(double percent) {
   }
 
+  public default void setPercent(double percent, boolean force) {
+  }
+
   public default void updateInputs(TurretIOInputs inputs) {
   }
 

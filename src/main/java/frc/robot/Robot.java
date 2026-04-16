@@ -167,6 +167,7 @@ public class Robot extends LoggedRobot {
     field.setRobotPose(robotContainer.drive.getPose());
 
     Logger.recordOutput("Auto shot time", RobotContainer.getInstance().autoStateTimer.get());
+    Logger.recordOutput("Robot velocity", RobotContainer.getInstance().drive.getFieldRelativeChassisSpeeds());
     SmartDashboard.putData(field);
     // SmartDashboard.putString(
     // "ShiftedShift/Text",

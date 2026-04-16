@@ -40,7 +40,8 @@ public class ShotCalculator {
     }
 
     public record ShootingParameters(
-            boolean isValid,
+            boolean isTurretValid,
+            boolean isDistanceValid,
             Rotation2d turretAngle,
             double hoodPosition,
             double flywheelSpeed) {
@@ -52,14 +53,25 @@ public class ShotCalculator {
     public static AutoAimDataManager dm;
 
     private static ConfigurableParameter<Double> phaseDelay = new ConfigurableParameter<Double>(0.05, "Phase Delay");
+    private static ConfigurableParameter<Double> rotPhaseDelay = new ConfigurableParameter<Double>(0.05,
+            "Rotation Phase Delay");
     private static ConfigurableParameter<Double> maxDistance = new ConfigurableParameter<Double>(5.5, "Max Distance");
     private static ConfigurableParameter<Double> hoodAccounting = new ConfigurableParameter<Double>(0.001,
             "Hood Account");
+    private static ConfigurableParameter<Double> turretFudge = new ConfigurableParameter<Double>(0.01,
+            "Turret Fudge");
+
+    private ConfigurableParameter<Double> safeHubShootTolerance = new ConfigurableParameter<>(2.0,
+            "SafeShootNetTolerance");
+
+    private ConfigurableParameter<Double> safeNeutralShootTolerance = new ConfigurableParameter<>(2.5,
+            "SafeShootNeutralTolerance");
 
     private LinearFilter flywheelAvg = LinearFilter.movingAverage(5);
+    private LinearFilter velFilter = LinearFilter.movingAverage(5);
 
-    public static Transform3d robotToTurret = new Transform3d(Units.inchesToMeters(3.75), Units.inchesToMeters(6.75),
-            Units.inchesToMeters(0.381), Rotation3d.kZero);
+    public static Transform3d robotToTurret = new Transform3d(Units.inchesToMeters(6.75), Units.inchesToMeters(3.75),
+            Units.inchesToMeters(15), Rotation3d.kZero);
 
     static {
         try {
@@ -81,11 +93,12 @@ public class ShotCalculator {
         // Calculate estimated pose while accounting for phase delay
         Pose2d estimatedPose = Robot.robotContainer.drive.getPose();
         ChassisSpeeds robotRelativeVelocity = Robot.robotContainer.drive.getRobotRelativeChassisSpeeds();
+        // robotRelativeVelocity.omegaRadiansPerSecond *= -1;
         estimatedPose = estimatedPose.exp(
                 new Twist2d(
                         robotRelativeVelocity.vxMetersPerSecond * phaseDelay.get(),
                         robotRelativeVelocity.vyMetersPerSecond * phaseDelay.get(),
-                        robotRelativeVelocity.omegaRadiansPerSecond * phaseDelay.get()));
+                        robotRelativeVelocity.omegaRadiansPerSecond * rotPhaseDelay.get()));
 
         // Calculate distance from turret to target
         // Translation2d target =
@@ -99,7 +112,7 @@ public class ShotCalculator {
         double robotAngle = estimatedPose.getRotation().getRadians();
         double turretVelocityX = robotVelocity.vxMetersPerSecond
                 + robotVelocity.omegaRadiansPerSecond
-                        * (robotToTurret.getY() * Math.cos(robotAngle)
+                        * (robotToTurret.getY() * -Math.cos(robotAngle)
                                 - robotToTurret.getX() * Math.sin(robotAngle));
         double turretVelocityY = robotVelocity.vyMetersPerSecond
                 + robotVelocity.omegaRadiansPerSecond
@@ -128,10 +141,21 @@ public class ShotCalculator {
         double targetFlywheelSpeed = dm.getShotFlywheelSpeedMap(secondaryValues).get(lookaheadTurretToTargetDistance);
         double flywheelSpeed = flywheelAvg.calculate(RobotContainer.getInstance().shooter.getSpeed());
         double hoodAdjustment = -(flywheelSpeed - targetFlywheelSpeed) * hoodAccounting.get();
+        double turretAdjustment = velFilter.calculate(robotVelocity.omegaRadiansPerSecond) * turretFudge.get();
 
         hoodPosition += hoodAdjustment;
+        turretAngle = turretAngle.plus(Rotation2d.fromRadians(turretAdjustment));
+
+        double acceptableAngle = Math
+                .atan2(RobotContainer.getInstance().autoTargetUtil.inAllianceZone() ? safeHubShootTolerance.get()
+                        : safeNeutralShootTolerance.get(), lookaheadTurretToTargetDistance);
+        Logger.recordOutput("ShotCalculator/AcceptableAngle", acceptableAngle);
+        boolean isGood = RobotContainer.getInstance().turret.isAtTarget(Math.toDegrees(acceptableAngle));
+
+        Logger.recordOutput("ShotCalculator/TurretGood", isGood);
 
         latestParameters = new ShootingParameters(
+                isGood,
                 lookaheadTurretToTargetDistance >= dm.getMinDistance(secondaryValues)
                         && lookaheadTurretToTargetDistance <= maxDistance.get(),
                 turretAngle,

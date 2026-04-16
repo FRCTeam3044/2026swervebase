@@ -18,6 +18,10 @@
             "comment": "Auto-Generated",
             "value": "4.8"
         },
+        "SafeShootNeutralTolerance": {
+            "comment": "Auto-Generated",
+            "value": "2.5"
+        },
         "Top climber position": {
             "comment": "Auto-Generated",
             "value": "0.0"
@@ -80,6 +84,10 @@
         },
         "CalibrationState/Test Parameter 114": "0",
         "CalibrationState/Test Parameter 111": "0",
+        "Rotation Phase Delay": {
+            "comment": "Auto-Generated",
+            "value": "0.05"
+        },
         "CalibrationState/Test Parameter 112": "0",
         "Intake deploy speed": {
             "comment": "Auto-Generated",
@@ -314,6 +322,10 @@
             "comment": "Auto-Generated",
             "value": "-0.05"
         },
+        "Turret Fudge": {
+            "comment": "Auto-Generated",
+            "value": "0.01"
+        },
         "CalibrationState/Test Parameter 55": "0",
         "CalibrationState/Test Parameter 56": "0",
         "CalibrationState/Test Parameter 57": "0",
@@ -395,6 +407,10 @@
             "value": "3.0"
         },
         "Intake Position Controller/I": "0.0",
+        "SafeShootNetTolerance": {
+            "comment": "Auto-Generated",
+            "value": "2.0"
+        },
         "Turret Blinking Red Tolerance": {
             "comment": "Auto-Generated",
             "value": "5.0"
@@ -488,7 +504,7 @@
         "X Point Controller/I": "0.0",
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "30"
+            "value": "33"
         },
         "Hood Controller/P": "0.0",
         "Hood Account": {
@@ -498,7 +514,7 @@
         "X Point Controller/D": "0.0",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
-            "value": "4200"
+            "value": "4100"
         },
         "Climber Motor Running Speed": {
             "comment": "Auto-Generated",
@@ -579,6 +595,10 @@
             "comment": "Auto-Generated",
             "value": "4.8"
         },
+        "SafeShootNeutralTolerance": {
+            "comment": "Auto-Generated",
+            "value": "2.5"
+        },
         "Top climber position": {
             "comment": "Auto-Generated",
             "value": "0.0"
@@ -641,6 +661,10 @@
         },
         "CalibrationState/Test Parameter 114": "0",
         "CalibrationState/Test Parameter 111": "0",
+        "Rotation Phase Delay": {
+            "comment": "Auto-Generated",
+            "value": "0.05"
+        },
         "CalibrationState/Test Parameter 112": "0",
         "Intake deploy speed": {
             "comment": "Auto-Generated",
@@ -875,6 +899,10 @@
             "comment": "Auto-Generated",
             "value": "-0.05"
         },
+        "Turret Fudge": {
+            "comment": "Auto-Generated",
+            "value": "0.01"
+        },
         "CalibrationState/Test Parameter 55": "0",
         "CalibrationState/Test Parameter 56": "0",
         "CalibrationState/Test Parameter 57": "0",
@@ -956,6 +984,10 @@
             "value": "3.0"
         },
         "Intake Position Controller/I": "0.0",
+        "SafeShootNetTolerance": {
+            "comment": "Auto-Generated",
+            "value": "2.0"
+        },
         "Turret Blinking Red Tolerance": {
             "comment": "Auto-Generated",
             "value": "5.0"
@@ -1049,7 +1081,7 @@
         "X Point Controller/I": "0.0",
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "30"
+            "value": "33"
         },
         "Hood Controller/P": "0.0",
         "Hood Account": {
@@ -1059,7 +1091,7 @@
         "X Point Controller/D": "0.0",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
-            "value": "4200"
+            "value": "4100"
         },
         "Climber Motor Running Speed": {
             "comment": "Auto-Generated",
@@ -1139,6 +1171,10 @@
             "comment": "Auto-Generated",
             "value": "1.0"
         },
+        "SafeShootNeutralTolerance": {
+            "comment": "Auto-Generated",
+            "value": "2.5"
+        },
         "Top climber position": {
             "comment": "Auto-Generated",
             "value": "100"
@@ -1197,10 +1233,14 @@
         "CalibrationState/Test Parameter 113": "0",
         "Max Distance": {
             "comment": "Auto-Generated",
-            "value": "5.5"
+            "value": "6.1"
         },
         "CalibrationState/Test Parameter 114": "0",
         "CalibrationState/Test Parameter 111": "0",
+        "Rotation Phase Delay": {
+            "comment": "Auto-Generated",
+            "value": "0"
+        },
         "CalibrationState/Test Parameter 112": "0",
         "Intake deploy speed": {
             "comment": "Auto-Generated",
@@ -1227,7 +1267,7 @@
         },
         "Rotational Speed Max (rad/sec)": {
             "comment": "Auto-Generated",
-            "value": "1.7"
+            "value": "9"
         },
         "CalibrationState/Test Parameter 14": "0",
         "CalibrationState/Test Parameter 15": "0",
@@ -1299,7 +1339,7 @@
         "CalibrationState/Test Parameter 40": "0",
         "CalibrationState/Test Parameter 41": "0",
         "CalibrationState/Test Parameter 42": "0",
-        "Turret PID/P": "0.15",
+        "Turret PID/P": "0.02",
         "Hood Stall Current Tolerance": {
             "comment": "Auto-Generated",
             "value": "0.2"
@@ -1308,7 +1348,7 @@
             "comment": "Auto-Generated",
             "value": "0.25"
         },
-        "Turret PID/D": "0.003",
+        "Turret PID/D": "0.005",
         "Hood kV": {
             "comment": "Auto-Generated",
             "value": "0.00095"
@@ -1410,7 +1450,7 @@
         "CalibrationState/Test Parameter 63": "0",
         "X Point Controller/Tolerance": "0.05",
         "CalibrationState/Test Parameter 64": "0",
-        "Turret PID/Tolerance": "0.05",
+        "Turret PID/Tolerance": "0.01",
         "CalibrationState/Test Parameter 60": "0",
         "CalibrationState/Test Parameter 2": "0",
         "Y Point Controller/P": "2.0",
@@ -1434,6 +1474,10 @@
         "Hood Calibration Speed": {
             "comment": "Auto-Generated",
             "value": "-0.5"
+        },
+        "Turret Fudge": {
+            "comment": "Auto-Generated",
+            "value": "-0.1"
         },
         "CalibrationState/Test Parameter 55": "0",
         "CalibrationState/Test Parameter 56": "0",
@@ -1486,7 +1530,7 @@
         },
         "Turret Error FF Tolerance": {
             "comment": "Auto-Generated",
-            "value": "2.0"
+            "value": "0.8"
         },
         "CalibrationState/Test Parameter 69": "0",
         "CalibrationState/Test Parameter 76": "0",
@@ -1516,6 +1560,10 @@
             "value": "3.0"
         },
         "Intake Position Controller/I": "0.0",
+        "SafeShootNetTolerance": {
+            "comment": "Auto-Generated",
+            "value": "0.5"
+        },
         "Turret Blinking Red Tolerance": {
             "comment": "Auto-Generated",
             "value": "10.0"
@@ -1574,7 +1622,7 @@
         "CalibrationState/Test Parameter 96": "0",
         "Turret Angle Tolerance (degrees)": {
             "comment": "Auto-Generated",
-            "value": "2.0"
+            "value": "5.0"
         },
         "Bang Bang Threshold": {
             "comment": "Auto-Generated",
@@ -1609,7 +1657,7 @@
         "X Point Controller/I": "0.0",
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "30"
+            "value": "33"
         },
         "Hood Controller/P": "0.0",
         "Hood Account": {
@@ -1619,7 +1667,7 @@
         "X Point Controller/D": "0.2",
         "CalibrationShotFlywheelSpeed": {
             "comment": "Auto-Generated",
-            "value": "4200"
+            "value": "4100"
         },
         "Climber Motor Running Speed": {
             "comment": "Auto-Generated",
@@ -1638,7 +1686,7 @@
         },
         "Turret Wide Angle Tolerance (degrees)": {
             "comment": "Auto-Generated",
-            "value": "7.0"
+            "value": "10.0"
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",

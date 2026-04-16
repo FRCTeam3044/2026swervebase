@@ -63,9 +63,9 @@ public class ShooterIOSpark implements ShooterIO {
     this.calculatedGoal = goal;
     this.ffOutput = feedforward.calculate(goal);
     double bbOut = 0;
-    if (targetSpeed - leaderEncoder.getVelocity() > bangBangThreshold.get()) {
-      bbOut = bangBangOutput.get();
-    }
+    // if (targetSpeed - leaderEncoder.getVelocity() > bangBangThreshold.get()) {
+    // bbOut = bangBangOutput.get();
+    // }
     leaderMotor.setVoltage(this.pidOutput + this.ffOutput + bbOut);
 
   }

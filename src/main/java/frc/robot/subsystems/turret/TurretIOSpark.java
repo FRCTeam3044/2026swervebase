@@ -192,6 +192,15 @@ public class TurretIOSpark implements TurretIO {
     motor.set(applySoftLimits(percent));
   }
 
+  @Override
+  public void setPercent(double percent, boolean force) {
+    if (!turretHasReset && !force) {
+      motor.set(0);
+      return;
+    }
+    motor.set(applySoftLimits(percent));
+  }
+
   private Angle getPrimaryAbsEncoderAngle() {
     return Radians
         .of(MathUtil.angleModulus(Rotations.of(driveAbsEncoder.get()).minus(primaryAbsEncoderZero).in(Radians))

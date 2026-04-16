@@ -29,7 +29,7 @@ public class AutoAim {
   private final Drive drive;
   private boolean firing = false;
 
-  private ShootingParameters parameters = new ShootingParameters(false, new Rotation2d(), 0, 0);
+  private ShootingParameters parameters = new ShootingParameters(false, false, new Rotation2d(), 0, 0);
 
   private ConfigurableParameter<Double> shooterDisengagedProportion = new ConfigurableParameter<>(0.5,
       "ShooterDisengagedProportion");
@@ -64,34 +64,48 @@ public class AutoAim {
   }
 
   public Command fire(BooleanSupplier forceFire) {
-    return fire(forceFire, () -> false);
+    return fire(forceFire, () -> false, true);
   }
 
-  public Command fire(BooleanSupplier forceFire, BooleanSupplier jiggleIndexer) {
-    return Commands
-        .parallel(kicker.shootKicker(), Commands.parallel(spindexer.setSpeed(jiggleIndexer).onlyWhile(() -> {
-          boolean force = forceFire.getAsBoolean();
-          boolean hoodGood = hood.atPosition();
-          boolean shooterGood = shooter.isAtSpeed();
-          boolean distanceGood = parameters.isValid();
-          boolean otherSubsystemsAtPos = distanceGood && hoodGood && shooterGood;
-          boolean turretGood = autoTargetUtil.inAllianceZone() ? turret.isAtTarget() : turret.isAtTargetWide();
-          boolean angularVelocityGood = Math.abs(drive.getVelocity().omegaRadiansPerSecond) < rotationalSpeedMax.get();
-          boolean firing = angularVelocityGood && turretGood && (force || otherSubsystemsAtPos);
-          Logger.recordOutput("AutoAim/ForcingFire", force);
-          Logger.recordOutput("AutoAim/AngularVelocityGood", angularVelocityGood);
-          Logger.recordOutput("AutoAim/TurretGood", turretGood);
-          Logger.recordOutput("AutoAim/HoodGood", hoodGood);
-          Logger.recordOutput("AutoAim/ShooterGood", shooterGood);
-          Logger.recordOutput("AutoAim/DistanceGood", distanceGood);
-          Logger.recordOutput("AutoAim/Firing", firing);
+  public Command fire(BooleanSupplier forceFire, BooleanSupplier jiggleIndexer, boolean runKicker) {
+    BooleanSupplier safeShoot = () -> {
+      boolean force = forceFire.getAsBoolean();
+      boolean hoodGood = hood.atPosition();
+      boolean shooterGood = shooter.isAtSpeed();
+      boolean turretGood = parameters.isTurretValid();
+      boolean distanceGood = parameters.isDistanceValid();
+      boolean otherSubsystemsAtPos = hoodGood && shooterGood;
+      // boolean turretGood = autoTargetUtil.inAllianceZone() ? turret.isAtTarget() :
+      // turret.isAtTargetWide();
+      boolean angularVelocityGood = Math.abs(drive.getVelocity().omegaRadiansPerSecond) < rotationalSpeedMax.get();
+      boolean firing = turretGood && (force || (otherSubsystemsAtPos && angularVelocityGood && distanceGood));
 
-          return firing;
-        })
-            .repeatedly(),
-            Commands.runEnd(() -> firing = true, () -> firing = false)))
+      Logger.recordOutput("AutoAim/ForcingFire", force);
+      Logger.recordOutput("AutoAim/AngularVelocityGood", angularVelocityGood);
+      // Logger.recordOutput("AutoAim/TurretGood", turretGood);
+      Logger.recordOutput("AutoAim/HoodGood", hoodGood);
+      Logger.recordOutput("AutoAim/ShooterGood", shooterGood);
+      Logger.recordOutput("AutoAim/turretGood", turretGood);
+      Logger.recordOutput("AutoAim/distanceGood", distanceGood);
+      Logger.recordOutput("AutoAim/Firing", firing);
 
-        .withName("Fire Shot");
+      return firing;
+    };
+
+    if (runKicker) {
+      return Commands
+          .parallel(kicker.shootKicker(), Commands.parallel(spindexer.setSpeed(jiggleIndexer).onlyWhile(safeShoot)
+              .repeatedly(),
+              Commands.runEnd(() -> firing = true, () -> firing = false)))
+
+          .withName("Fire Shot");
+    } else {
+      return Commands
+          .parallel(Commands.parallel(spindexer.setSpeed(jiggleIndexer), kicker.shootKicker()).onlyWhile(safeShoot)
+              .repeatedly(),
+              Commands.runEnd(() -> firing = true, () -> firing = false))
+          .withName("Fire Shot");
+    }
   }
 
   public Command aimHub(BooleanSupplier shooterEngaged) {
