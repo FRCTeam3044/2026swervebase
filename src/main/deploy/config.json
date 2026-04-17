@@ -537,7 +537,7 @@
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Bang Bang Output": {
             "comment": "Auto-Generated",
@@ -1114,7 +1114,7 @@
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Bang Bang Output": {
             "comment": "Auto-Generated",
@@ -1690,7 +1690,7 @@
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Bang Bang Output": {
             "comment": "Auto-Generated",

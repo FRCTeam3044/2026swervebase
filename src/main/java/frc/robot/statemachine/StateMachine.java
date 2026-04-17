@@ -126,7 +126,7 @@ public class StateMachine extends StateMachineBase {
                 DisabledState disabled = new DisabledState(this, leds, turret, hood, vision);
                 currentState = disabled;
                 State teleop = new TeleState(this, driverController, operatorController, drive, intake,
-                                spindexer, hood, turret, shooter, autoAim, leds);
+                                spindexer, hood, turret, shooter, autoAim, leds, autoTargetUtil);
                 State test = new TestState(this, hood, turret, leds);
                 State auto = new AutoState(this, autoChooser, autoTargetUtil, turret, hood, intake, spindexer);
 

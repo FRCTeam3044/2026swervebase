@@ -26,9 +26,8 @@ public final class HapticsUtil {
   }
 
   public static Command rumbleForTime(CommandXboxController controller, double time) {
-    return Commands.sequence(
-        Commands.runOnce(() -> controller.setRumble(RumbleType.kBothRumble, 1)),
-        Commands.waitSeconds(time),
-        Commands.runOnce(() -> controller.setRumble(RumbleType.kBothRumble, 0)));
+    return Commands.deadline(Commands.waitSeconds(time),
+        Commands.run(() -> controller.setRumble(RumbleType.kBothRumble, 1))).andThen(
+            Commands.runOnce(() -> controller.setRumble(RumbleType.kBothRumble, 0)));
   }
 }

@@ -19,6 +19,7 @@ import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.AllianceUtil;
 import frc.robot.util.AutoAim;
+import frc.robot.util.AutoTargetUtil;
 import frc.robot.util.HubShiftUtil;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
@@ -30,17 +31,18 @@ public class TeleState extends State {
   boolean turretEnabled = true;
 
   public TeleState(
-  StateMachineBase stateMachine,
-  CommandXboxController driverController,
-  CommandXboxController operatorController,
-  Drive drive,
-  Intake intake,
-  Spindexer spindexer,
-  Hood hood,
-  Turret turret,
-  Shooter shooter,
-  AutoAim autoAim,
-  LEDs leds) {
+      StateMachineBase stateMachine,
+      CommandXboxController driverController,
+      CommandXboxController operatorController,
+      Drive drive,
+      Intake intake,
+      Spindexer spindexer,
+      Hood hood,
+      Turret turret,
+      Shooter shooter,
+      AutoAim autoAim,
+      LEDs leds,
+      AutoTargetUtil autoTargetUtil) {
     super(stateMachine);
     SmartXboxController controller = new SmartXboxController(driverController, loop);
     SmartXboxController operator = new SmartXboxController(operatorController, loop);
@@ -117,22 +119,23 @@ public class TeleState extends State {
     // .onlyWhile(operatorController.a().negate().and(operatorController.leftTrigger().negate())));
     // startWhenActive(intake.runRollers().onlyWhile(operatorController.a().negate()));
 
-  startWhenActive(leds.defaultPattern());
-  BooleanSupplier safeShootBlocking = () -> !autoAim.safeShoot(() -> operator.rightBumper().getAsBoolean()) && operator.rightTrigger().or(operator.rightBumper()).getAsBoolean();
-  t(() -> turret.nearFlipAround())
-    .whileTrue(leds.setSolidColor(() -> turret.nearerFlipAround() ? Color.kRed : Color.kOrange));
-  t(() -> !turret.nearFlipAround()).and(() -> !safeShootBlocking.getAsBoolean())
-    .whileTrue(leds.defaultPattern());
-  t(safeShootBlocking)
-    .whileTrue(leds.setSolidColor(() -> Color.kGreen));
-  
+    startWhenActive(leds.defaultPattern());
+    BooleanSupplier safeShootBlocking = () -> !autoAim
+        .safeShoot(() -> operator.rightBumper().getAsBoolean() || autoTargetUtil.inNeutralZone())
+        && operator.rightTrigger().or(operator.rightBumper()).getAsBoolean();
+    t(() -> turret.nearFlipAround())
+        .whileTrue(leds.setSolidColor(() -> turret.nearerFlipAround() ? Color.kRed : Color.kOrange));
+    t(() -> !turret.nearFlipAround()).and(() -> !safeShootBlocking.getAsBoolean())
+        .whileTrue(leds.defaultPattern());
+    t(safeShootBlocking)
+        .whileTrue(leds.setSolidColor(() -> Color.kGreen));
 
-  operator.rightTrigger().or(operator.rightBumper())
-    .whileTrue(Commands.run(() -> HapticsUtil.rumbleForTime(driverController, 0.75)))
-    .onFalse(HapticsUtil.rumblePulses(driverController, 2, 0.12, 0.08));
+    operator.rightTrigger().or(operator.rightBumper())
+        .onTrue(HapticsUtil.rumbleForTime(driverController, 0.75))
+        .onFalse(HapticsUtil.rumblePulses(driverController, 2, 0.12, 0.08));
 
-  t(() -> HubShiftUtil.getShiftedShiftInfo().remainingTime() < 10)
-    .onTrue(HapticsUtil.rumblePulses(driverController, 3, 0.12, 0.08));
+    t(() -> HubShiftUtil.getShiftedShiftInfo().remainingTime() < 10)
+        .onTrue(HapticsUtil.rumblePulses(operatorController, 3, 0.12, 0.08));
     t(() -> HubShiftUtil.getShiftedShiftInfo().remainingTime() < 5)
         .onTrue(Commands.deadline(Commands.waitSeconds(0.75), Commands.runEnd(() -> {
           operatorController.setRumble(RumbleType.kBothRumble, 1);
