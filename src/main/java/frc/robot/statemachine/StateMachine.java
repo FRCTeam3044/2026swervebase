@@ -99,6 +99,11 @@ public class StateMachine extends StateMachineBase {
         public static ConfigurableParameter<Double> secondAutoTime = new ConfigurableParameter<>(4.0,
                         "Second auto shot time");
 
+        public static ConfigurableParameter<Double> pathfindingDist = new ConfigurableParameter<>(0.7,
+                        "Depot pathfinding distance");
+        public static ConfigurableParameter<Double> intakeDist = new ConfigurableParameter<>(0.4,
+                        "Depot distance");
+
         public StateMachine(
                         CommandXboxController driverController,
                         CommandXboxController operatorController,

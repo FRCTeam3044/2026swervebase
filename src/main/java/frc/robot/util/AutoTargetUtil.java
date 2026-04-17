@@ -38,11 +38,11 @@ public class AutoTargetUtil {
   private static POIData rightTower = POIData.createFromRed(1.06223613, 4.28304359, 1.06223613, 4.88304359);
 
   private static Pose2d rightNeutral = new Pose2d(8.5, 1.25, Rotation2d.fromDegrees(0));
-  private static Pose2d closeRightNeutral = new Pose2d(7.75, 1.25, Rotation2d.fromDegrees(0));
+  private static Pose2d closeRightNeutral = new Pose2d(7.5, 1.25, Rotation2d.fromDegrees(0));
   private static Pose2d safeRightNeutral = new Pose2d(7.75, 0.6, Rotation2d.fromDegrees(0));
   private static Pose2d safeCloseRightNeutral = new Pose2d(6, 0.6, Rotation2d.fromDegrees(0));
   private static Pose2d topRightMiddle = new Pose2d(8.5, 3.2, Rotation2d.fromDegrees(0));
-  private static Pose2d bottomRightMiddle = new Pose2d(7.75, 3.2, Rotation2d.fromDegrees(0));
+  private static Pose2d bottomRightMiddle = new Pose2d(7.5, 3.2, Rotation2d.fromDegrees(0));
   private static Pose2d rightBehindHub = new Pose2d(7, 3.5, Rotation2d.fromDegrees(0));
   private static Pose2d rightWideHub = new Pose2d(7, 2, Rotation2d.fromDegrees(0));
   private static Pose2d rightAzPoint = new Pose2d(2.5, 0.1, Rotation2d.fromDegrees(0));

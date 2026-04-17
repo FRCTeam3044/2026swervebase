@@ -24,6 +24,6 @@ public class AlliedZone extends State {
         .whileFalse(autoAim.aimHub(() -> operator.rightTrigger().or(operator.rightBumper()).getAsBoolean()));
     startWhenActive(
         autoAim.aimHub(() -> operator.rightTrigger().or(operator.rightBumper()).getAsBoolean())
-            .until(operator.povDown()));
+            .until(operator.povDown().or(() -> !hood.calibrated())));
   }
 }

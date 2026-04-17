@@ -30,10 +30,19 @@ public class NeutralPaths extends State {
             }
         };
 
+        Supplier<Pose2d> pose = () -> {
+            ArrayList<Pose2d> points = path.get();
+            if (points == null || points.size() == 0) {
+                return new Pose2d();
+            }
+            Pose2d lastPose = points.get(points.size() - 1);
+            return new Pose2d(lastPose.getTranslation(), rot.get());
+        };
+
         startWhenActive(Commands.runOnce(() -> stateComplete = false));
 
-        startWhenActive(DriveCommands.goToPoints(drive, () -> path.get(),
-                () -> rot.get()));
+        startWhenActive(DriveCommands.goToPointsAndThen(drive, () -> path.get(),
+                () -> rot.get(), () -> DriveCommands.pointControl(drive, pose)));
 
         t(() -> drive.atPose(path.get().get(turnPoint)))
                 .onTrue(Commands.runOnce(() -> stateComplete = true));

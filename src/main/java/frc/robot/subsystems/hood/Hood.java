@@ -79,4 +79,8 @@ public class Hood extends SubsystemBase {
   public double getPosition() {
     return inputs.position;
   }
+
+  public void setEnabled(boolean enabled) {
+    io.setEnabled(enabled);
+  }
 }

@@ -23,6 +23,8 @@ import me.nabdev.oxidation.util.SmartXboxController;
 
 public class TeleState extends State {
 
+  boolean turretEnabled = true;
+
   public TeleState(
       StateMachineBase stateMachine,
       CommandXboxController driverController,
@@ -77,7 +79,12 @@ public class TeleState extends State {
 
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     operator.povDown().onTrue(Commands.runOnce(hood::resetCalibration));
-    operator.start().whileTrue(turret.nudge());
+    operator.povUp().whileTrue(turret.nudge());
+    operator.povLeft().onTrue(Commands.runOnce(() -> {
+      turretEnabled = !turretEnabled;
+      turret.setEnabled(turretEnabled);
+      hood.setEnabled(turretEnabled);
+    }));
 
     // lt = raise but keep intake running
     // a = raise intake and turn off

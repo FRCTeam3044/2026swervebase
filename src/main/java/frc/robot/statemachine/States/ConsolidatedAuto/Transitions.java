@@ -18,40 +18,42 @@ import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
 
 public class Transitions extends State {
-    public Transitions(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil, AutoAim autoAim, Drive drive,
-            Hood hood, Turret turret, Shooter shooter, Supplier<Pose2d> pos,
-            double rot, boolean shooting, boolean forceFast) {
-        super(stateMachine);
+        public Transitions(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil, AutoAim autoAim, Drive drive,
+                        Hood hood, Turret turret, Shooter shooter, Supplier<Pose2d> pos,
+                        double rot, boolean shooting, boolean forceFast) {
+                super(stateMachine);
 
-        Supplier<Command> pointControllerCommand = () -> DriveCommands.pointControl(drive, () -> {
-            Pose2d pose = pos.get();
-            return new Pose2d(pose.getX(), pose.getY(),
-                    AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(rot)));
-        });
+                Supplier<Command> pointControllerCommand = () -> DriveCommands.pointControl(drive, () -> {
+                        Pose2d pose = pos.get();
+                        return new Pose2d(pose.getX(), pose.getY(),
+                                        AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(rot)));
+                });
 
-        startWhenActive(
-                DriveCommands.goToPointAndthen(drive, () -> pos.get(),
-                        () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(rot)),
-                        pointControllerCommand, forceFast));
-        t(() -> !autoTargetUtil.inAllianceZone()).onTrue(
-                DriveCommands.goToPointAndthen(drive, () -> pos.get(),
-                        () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(rot)), pointControllerCommand,
-                        forceFast));
+                startWhenActive(
+                                DriveCommands.goToPointAndthen(drive, () -> pos.get(),
+                                                () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(rot)),
+                                                pointControllerCommand, forceFast));
+                t(() -> !autoTargetUtil.inAllianceZone()).onTrue(
+                                DriveCommands.goToPointAndthen(drive, () -> pos.get(),
+                                                () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(rot)),
+                                                pointControllerCommand,
+                                                forceFast));
 
-        // startWhenActive(() -> pointControllerCommand.get().onlyIf(() ->
-        // pointControl));
-        // t(() -> drive.atPose(pos.get())).onTrue(DriveCommands.pointControl(drive,
-        // pos));
+                // startWhenActive(() -> pointControllerCommand.get().onlyIf(() ->
+                // pointControl));
+                // t(() -> drive.atPose(pos.get())).onTrue(DriveCommands.pointControl(drive,
+                // pos));
 
-        startWhenActive(autoAim.fire(() -> !autoTargetUtil.inAllianceZone() && shooting));
+                startWhenActive(autoAim.fire(() -> !autoTargetUtil.inAllianceZone()).onlyIf(() -> shooting));
 
-        startWhenActive(
-                autoAim.aimHub(() -> true).onlyWhile(() -> autoTargetUtil.inAllianceZone() && shooting)
-                        .withName("Aim Hub (trans)"));
-        startWhenActive(
-                autoAim.aimAllianceZone(() -> true).onlyWhile(() -> !autoTargetUtil.inAllianceZone() && shooting)
-                        .withName("Aim Az (trans)"));
-        t(() -> autoTargetUtil.inAllianceZone() && shooting).runWhileTrue(autoAim.aimHub(() -> true))
-                .runWhileFalse(autoAim.aimAllianceZone(() -> true));
-    }
+                startWhenActive(
+                                autoAim.aimHub(() -> true).onlyWhile(() -> autoTargetUtil.inAllianceZone() && shooting)
+                                                .withName("Aim Hub (trans)"));
+                startWhenActive(
+                                autoAim.aimAllianceZone(() -> true)
+                                                .onlyWhile(() -> !autoTargetUtil.inAllianceZone() && shooting)
+                                                .withName("Aim Az (trans)"));
+                t(() -> autoTargetUtil.inAllianceZone() && shooting).runWhileTrue(autoAim.aimHub(() -> true))
+                                .runWhileFalse(autoAim.aimAllianceZone(() -> true));
+        }
 }

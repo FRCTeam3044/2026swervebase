@@ -413,11 +413,11 @@ public class DriveCommands {
   }
 
   public static Command goToPointAndthenSlow(Drive drive, Supplier<Pose2d> pose, Supplier<Rotation2d> rotation,
-      Command after) {
+      Supplier<Command> after) {
     return Commands.deferredProxy(() -> {
       Pose2d curPose = pose.get();
       return followTrajectory(drive, generateTrajectory(drive, curPose, true), rotation,
-          null, false).andThen(after).withName("Follow Trajectory and then");
+          null, false).andThen(after.get()).withName("Follow Trajectory and then");
     }).withName("Go To Point");
   }
 
@@ -426,6 +426,14 @@ public class DriveCommands {
     return Commands.deferredProxy(() -> {
       return followTrajectory(drive, generateTrajectory(drive, posesSupplier.get(), false), rotation,
           null, false);
+    }).withName("Go To Point");
+  }
+
+  public static Command goToPointsAndThen(Drive drive, Supplier<ArrayList<Pose2d>> posesSupplier,
+      Supplier<Rotation2d> rotation, Supplier<Command> after) {
+    return Commands.deferredProxy(() -> {
+      return followTrajectory(drive, generateTrajectory(drive, posesSupplier.get(), false), rotation,
+          null, false).andThen(after.get());
     }).withName("Go To Point");
   }
 

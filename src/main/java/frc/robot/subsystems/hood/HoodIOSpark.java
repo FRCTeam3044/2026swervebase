@@ -51,6 +51,8 @@ public class HoodIOSpark implements HoodIO {
   private double error = 0.0;
   private double velocitySetpoint = 0.0;
 
+  private boolean enabled = true;
+
   public HoodIOSpark() {
     tryUntilOk(
         motor,
@@ -104,6 +106,12 @@ public class HoodIOSpark implements HoodIO {
     Logger.recordOutput("Hood/TotalFFOutput", ffOutput + posOutput);
 
     double output = MathUtil.clamp(pidOutput + ffOutput + posOutput, -maxOutput.get(), maxOutput.get());
+
+    if (!enabled) {
+      motor.set(0);
+      return;
+    }
+
     if (Math.abs(output) < minOutput.get()) {
       motor.setVoltage(0);
     } else {
@@ -113,11 +121,23 @@ public class HoodIOSpark implements HoodIO {
 
   @Override
   public void setPercent(double percent) {
+    if (!enabled) {
+      motor.set(0);
+      return;
+    }
     motor.set(percent);
   }
 
   @Override
   public void resetPosition(double position) {
     hoodEncoder.setPosition(position);
+  }
+
+  @Override
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
+    if (!enabled) {
+      motor.set(0);
+    }
   }
 }

@@ -141,7 +141,7 @@ public class Turret extends SubsystemBase {
   }
 
   public Command nudge() {
-    return Commands.runEnd(() -> io.setPercent(0.05), () -> io.setPercent(0), this)
+    return Commands.runEnd(() -> io.setPercent(0.08), () -> io.setPercent(0), this)
         .withName("Nudge Turret");
   }
 
@@ -222,5 +222,9 @@ public class Turret extends SubsystemBase {
       return max;
     }
     return min;
+  }
+
+  public void setEnabled(boolean enabled) {
+    io.setEnabled(enabled);
   }
 }

@@ -29,6 +29,9 @@ public interface HoodIO {
   public default void resetPosition(double position) {
   }
 
+  public default void setEnabled(boolean enabled) {
+  }
+
   public default void updateInputs(HoodIOInputs inputs) {
   }
 }

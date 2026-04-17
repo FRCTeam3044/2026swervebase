@@ -69,6 +69,8 @@ public class TurretIOSpark implements TurretIO {
   private final double degreesPerEncoderUnit = (angleAtPos2.in(Degrees) - angleAtPos1.in(Degrees))
       / (encoderAtPos2 - encoderAtPos1);
 
+  private boolean enabled = true;
+
   public TurretIOSpark() {
     // EasyCRTConfig crtConfig = new EasyCRTConfig(
     // () -> Rotations.of(driveAbsEncoder.get()),
@@ -171,7 +173,7 @@ public class TurretIOSpark implements TurretIO {
       motor.set(0);
       return;
     }
-    motor.setVoltage(applySoftLimits(output));
+    runMotor(output, true);
   }
 
   @Override
@@ -180,7 +182,7 @@ public class TurretIOSpark implements TurretIO {
       motor.set(0);
       return;
     }
-    motor.setVoltage(applySoftLimits(volts.in(Volts)));
+    runMotor(volts.in(Volts), true);
   }
 
   @Override
@@ -189,7 +191,7 @@ public class TurretIOSpark implements TurretIO {
       motor.set(0);
       return;
     }
-    motor.set(applySoftLimits(percent));
+    runMotor(percent, false);
   }
 
   @Override
@@ -198,7 +200,27 @@ public class TurretIOSpark implements TurretIO {
       motor.set(0);
       return;
     }
-    motor.set(applySoftLimits(percent));
+    runMotor(percent, false);
+  }
+
+  @Override
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
+    if (!enabled) {
+      motor.set(0);
+    }
+  }
+
+  private void runMotor(double output, boolean voltage) {
+    if (!enabled) {
+      motor.set(0);
+      return;
+    }
+    if (voltage) {
+      motor.setVoltage(applySoftLimits(output));
+    } else {
+      motor.set(output);
+    }
   }
 
   private Angle getPrimaryAbsEncoderAngle() {

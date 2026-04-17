@@ -57,4 +57,8 @@ public interface TurretIO {
 
   public default void resetAngle(boolean reset) {
   }
+
+  public default void setEnabled(boolean enabled) {
+
+  }
 }
