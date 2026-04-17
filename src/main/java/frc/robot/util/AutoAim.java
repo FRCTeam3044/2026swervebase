@@ -68,7 +68,23 @@ public class AutoAim {
   }
 
   public Command fire(BooleanSupplier forceFire, BooleanSupplier jiggleIndexer, boolean runKicker) {
-    BooleanSupplier safeShoot = () -> {
+    if (runKicker) {
+      return Commands
+          .parallel(kicker.shootKicker(), Commands.parallel(spindexer.setSpeed(jiggleIndexer).onlyWhile(() -> safeShoot(forceFire))
+              .repeatedly(),
+              Commands.runEnd(() -> firing = true, () -> firing = false)))
+
+          .withName("Fire Shot");
+    } else {
+      return Commands
+          .parallel(Commands.parallel(spindexer.setSpeed(jiggleIndexer), kicker.shootKicker()).onlyWhile(() -> safeShoot(forceFire))
+              .repeatedly(),
+              Commands.runEnd(() -> firing = true, () -> firing = false))
+          .withName("Fire Shot");
+    }
+  }
+
+  public boolean safeShoot(BooleanSupplier forceFire) {
       boolean force = forceFire.getAsBoolean();
       boolean hoodGood = hood.atPosition();
       boolean shooterGood = shooter.isAtSpeed();
@@ -88,24 +104,7 @@ public class AutoAim {
       Logger.recordOutput("AutoAim/turretGood", turretGood);
       Logger.recordOutput("AutoAim/distanceGood", distanceGood);
       Logger.recordOutput("AutoAim/Firing", firing);
-
-      return firing;
-    };
-
-    if (runKicker) {
-      return Commands
-          .parallel(kicker.shootKicker(), Commands.parallel(spindexer.setSpeed(jiggleIndexer).onlyWhile(safeShoot)
-              .repeatedly(),
-              Commands.runEnd(() -> firing = true, () -> firing = false)))
-
-          .withName("Fire Shot");
-    } else {
-      return Commands
-          .parallel(Commands.parallel(spindexer.setSpeed(jiggleIndexer), kicker.shootKicker()).onlyWhile(safeShoot)
-              .repeatedly(),
-              Commands.runEnd(() -> firing = true, () -> firing = false))
-          .withName("Fire Shot");
-    }
+    return firing;
   }
 
   public Command aimHub(BooleanSupplier shooterEngaged) {

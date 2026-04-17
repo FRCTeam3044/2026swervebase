@@ -1,5 +1,6 @@
 package frc.robot.statemachine.States;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -7,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.util.HapticsUtil;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.drive.Drive;
@@ -14,7 +16,9 @@ import frc.robot.subsystems.hood.Hood;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.spindexer.Spindexer;
 import frc.robot.subsystems.turret.Turret;
+import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.util.AllianceUtil;
+import frc.robot.util.AutoAim;
 import frc.robot.util.HubShiftUtil;
 import me.nabdev.oxidation.State;
 import me.nabdev.oxidation.StateMachineBase;
@@ -26,15 +30,17 @@ public class TeleState extends State {
   boolean turretEnabled = true;
 
   public TeleState(
-      StateMachineBase stateMachine,
-      CommandXboxController driverController,
-      CommandXboxController operatorController,
-      Drive drive,
-      Intake intake,
-      Spindexer spindexer,
-      Hood hood,
-      Turret turret,
-      LEDs leds) {
+  StateMachineBase stateMachine,
+  CommandXboxController driverController,
+  CommandXboxController operatorController,
+  Drive drive,
+  Intake intake,
+  Spindexer spindexer,
+  Hood hood,
+  Turret turret,
+  Shooter shooter,
+  AutoAim autoAim,
+  LEDs leds) {
     super(stateMachine);
     SmartXboxController controller = new SmartXboxController(driverController, loop);
     SmartXboxController operator = new SmartXboxController(operatorController, loop);
@@ -111,29 +117,22 @@ public class TeleState extends State {
     // .onlyWhile(operatorController.a().negate().and(operatorController.leftTrigger().negate())));
     // startWhenActive(intake.runRollers().onlyWhile(operatorController.a().negate()));
 
-    // startWhenActive(spindexer.setSpeed());
+  startWhenActive(leds.defaultPattern());
+  BooleanSupplier safeShootBlocking = () -> !autoAim.safeShoot(() -> operator.rightBumper().getAsBoolean()) && operator.rightTrigger().or(operator.rightBumper()).getAsBoolean();
+  t(() -> turret.nearFlipAround())
+    .whileTrue(leds.setSolidColor(() -> turret.nearerFlipAround() ? Color.kRed : Color.kOrange));
+  t(() -> !turret.nearFlipAround()).and(() -> !safeShootBlocking.getAsBoolean())
+    .whileTrue(leds.defaultPattern());
+  t(safeShootBlocking)
+    .whileTrue(leds.setSolidColor(() -> Color.kGreen));
+  
 
-    t(turret::nearerFlipAround).whileTrue(Commands.runEnd(() -> {
-      driverController.setRumble(RumbleType.kBothRumble, 1);
-    }, () -> {
-      driverController.setRumble(RumbleType.kBothRumble, 0);
-    }));
+  operator.rightTrigger().or(operator.rightBumper())
+    .whileTrue(Commands.run(() -> HapticsUtil.rumbleForTime(driverController, 0.75)))
+    .onFalse(HapticsUtil.rumblePulses(driverController, 2, 0.12, 0.08));
 
-    startWhenActive(leds.defaultPattern());
-    t(turret::nearFlipAround).whileTrue(leds.setBlinkingOrSolidColor(() -> {
-      return turret.nearestFlipAround() || !turret.nearerFlipAround();
-    }, () -> {
-      return turret.nearerFlipAround() ? Color.kRed : Color.kOrange;
-    }))
-        .whileFalse(leds.defaultPattern());
-
-    t(() -> HubShiftUtil.getShiftedShiftInfo().remainingTime() < 10)
-        .onTrue(Commands.deadline(Commands.waitSeconds(0.25), Commands.runEnd(() -> {
-          operatorController.setRumble(RumbleType.kBothRumble, 1);
-        }, () -> {
-          operatorController.setRumble(RumbleType.kBothRumble, 0);
-        })));
-
+  t(() -> HubShiftUtil.getShiftedShiftInfo().remainingTime() < 10)
+    .onTrue(HapticsUtil.rumblePulses(driverController, 3, 0.12, 0.08));
     t(() -> HubShiftUtil.getShiftedShiftInfo().remainingTime() < 5)
         .onTrue(Commands.deadline(Commands.waitSeconds(0.75), Commands.runEnd(() -> {
           operatorController.setRumble(RumbleType.kBothRumble, 1);
