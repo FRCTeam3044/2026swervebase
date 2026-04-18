@@ -128,6 +128,10 @@
             "comment": "Auto-Generated",
             "value": "-0.5"
         },
+        "Neutral Zone tolerance (RPM)": {
+            "comment": "Auto-Generated",
+            "value": "1200.0"
+        },
         "CalibrationState/Test Parameter 20": "0",
         "Climb position": {
             "comment": "Auto-Generated",
@@ -705,6 +709,10 @@
             "comment": "Auto-Generated",
             "value": "-0.5"
         },
+        "Neutral Zone tolerance (RPM)": {
+            "comment": "Auto-Generated",
+            "value": "1200.0"
+        },
         "CalibrationState/Test Parameter 20": "0",
         "Climb position": {
             "comment": "Auto-Generated",
@@ -1280,6 +1288,10 @@
         "Top roller speed": {
             "comment": "Auto-Generated",
             "value": "1.0"
+        },
+        "Neutral Zone tolerance (RPM)": {
+            "comment": "Auto-Generated",
+            "value": "1200.0"
         },
         "CalibrationState/Test Parameter 20": "0",
         "Climb position": {

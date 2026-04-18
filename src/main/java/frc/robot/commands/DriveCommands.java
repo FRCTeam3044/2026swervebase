@@ -161,9 +161,11 @@ public class DriveCommands {
           boolean isFlipped = AllianceUtil.getAlliance() == AllianceColor.RED;
           Rotation2d rotation = new Rotation2d();
 
-          if (Constants.currentMode == Mode.SIM) {
-            rotation = new Rotation2d(3 * Math.PI / 2);
-          } else if (isFlipped) {
+          /*
+           * if (Constants.currentMode == Mode.SIM) {
+           * rotation = new Rotation2d(3 * Math.PI / 2);
+           * } else
+           */if (isFlipped) {
             rotation = new Rotation2d(Math.PI);
           }
           drive.runVelocity(

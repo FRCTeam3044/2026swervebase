@@ -25,13 +25,14 @@ public class IntakeDepot extends State {
 
                 Supplier<Pose2d> pathfindingTarget = () -> AutoTargetUtil.getDepot().poseFacing(
                                 StateMachine.pathfindingDist.get(),
-                                false);
+                                true);
                 Supplier<Pose2d> intakeTarget = () -> AutoTargetUtil.getDepot()
                                 .poseFacing(StateMachine.intakeDist.get(), true);
 
                 Command pathfind = DriveCommands
-                                .goToPoint(drive, pathfindingTarget,
-                                                () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0)), true)
+                                .goToPointAndthen(drive, pathfindingTarget,
+                                                () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0)),
+                                                () -> DriveCommands.pointControl(drive, pathfindingTarget), true)
                                 .withName("Pathfinding");
 
                 Command pointControl = DriveCommands.pointControl(drive, intakeTarget)
