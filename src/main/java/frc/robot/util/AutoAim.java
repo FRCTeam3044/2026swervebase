@@ -70,40 +70,49 @@ public class AutoAim {
   public Command fire(BooleanSupplier forceFire, BooleanSupplier jiggleIndexer, boolean runKicker) {
     if (runKicker) {
       return Commands
-          .parallel(kicker.shootKicker(), Commands.parallel(spindexer.setSpeed(jiggleIndexer).onlyWhile(() -> safeShoot(forceFire))
-              .repeatedly(),
-              Commands.runEnd(() -> firing = true, () -> firing = false)))
+          .parallel(kicker.shootKicker(),
+              Commands.parallel(spindexer.setSpeed(jiggleIndexer).onlyWhile(() -> safeShoot(forceFire))
+                  .repeatedly(),
+                  Commands.runEnd(() -> firing = true, () -> firing = false)))
 
           .withName("Fire Shot");
     } else {
       return Commands
-          .parallel(Commands.parallel(spindexer.setSpeed(jiggleIndexer), kicker.shootKicker()).onlyWhile(() -> safeShoot(forceFire))
-              .repeatedly(),
+          .parallel(
+              Commands.parallel(spindexer.setSpeed(jiggleIndexer), kicker.shootKicker())
+                  .onlyWhile(() -> safeShoot(forceFire))
+                  .repeatedly(),
               Commands.runEnd(() -> firing = true, () -> firing = false))
           .withName("Fire Shot");
     }
   }
 
   public boolean safeShoot(BooleanSupplier forceFire) {
-      boolean force = forceFire.getAsBoolean();
-      boolean hoodGood = hood.atPosition();
-      boolean shooterGood = shooter.isAtSpeed();
-      boolean turretGood = parameters.isTurretValid();
-      boolean distanceGood = parameters.isDistanceValid();
-      boolean otherSubsystemsAtPos = hoodGood && shooterGood;
-      // boolean turretGood = autoTargetUtil.inAllianceZone() ? turret.isAtTarget() :
-      // turret.isAtTargetWide();
-      boolean angularVelocityGood = Math.abs(drive.getVelocity().omegaRadiansPerSecond) < rotationalSpeedMax.get();
-      boolean firing = turretGood && (force || (otherSubsystemsAtPos && angularVelocityGood && distanceGood));
+    boolean force = forceFire.getAsBoolean();
+    boolean hoodGood = hood.atPosition();
+    boolean shooterGood = shooter.isAtSpeed();
+    boolean turretGood = parameters.isTurretValid();
+    boolean distanceGood = parameters.isDistanceValid();
+    boolean otherSubsystemsAtPos = hoodGood && shooterGood;
+    boolean inNeutralZone = !autoTargetUtil.inAllianceZone();
 
-      Logger.recordOutput("AutoAim/ForcingFire", force);
-      Logger.recordOutput("AutoAim/AngularVelocityGood", angularVelocityGood);
-      // Logger.recordOutput("AutoAim/TurretGood", turretGood);
-      Logger.recordOutput("AutoAim/HoodGood", hoodGood);
-      Logger.recordOutput("AutoAim/ShooterGood", shooterGood);
-      Logger.recordOutput("AutoAim/turretGood", turretGood);
-      Logger.recordOutput("AutoAim/distanceGood", distanceGood);
-      Logger.recordOutput("AutoAim/Firing", firing);
+    boolean isAboveSpeedWide = shooter.isAboveSpeedWide();
+    // boolean turretGood = autoTargetUtil.inAllianceZone() ? turret.isAtTarget() :
+    // turret.isAtTargetWide();
+    boolean angularVelocityGood = Math.abs(drive.getVelocity().omegaRadiansPerSecond) < rotationalSpeedMax.get();
+    Logger.recordOutput("AutoAim/InNeutralZone", inNeutralZone);
+    Logger.recordOutput("AutoAim/IsAboveSpeedWide", isAboveSpeedWide);
+    boolean firing = (!inNeutralZone || isAboveSpeedWide) && turretGood
+        && (force || (otherSubsystemsAtPos && angularVelocityGood && distanceGood));
+
+    Logger.recordOutput("AutoAim/ForcingFire", force);
+    Logger.recordOutput("AutoAim/AngularVelocityGood", angularVelocityGood);
+    // Logger.recordOutput("AutoAim/TurretGood", turretGood);
+    Logger.recordOutput("AutoAim/HoodGood", hoodGood);
+    Logger.recordOutput("AutoAim/ShooterGood", shooterGood);
+    Logger.recordOutput("AutoAim/turretGood", turretGood);
+    Logger.recordOutput("AutoAim/distanceGood", distanceGood);
+    Logger.recordOutput("AutoAim/Firing", firing);
     return firing;
   }
 

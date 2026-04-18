@@ -25,6 +25,8 @@ public class Shooter extends SubsystemBase {
       "Shooter at speed tight tolerance (RPM)");
   private ConfigurableParameter<Double> minSpeed = new ConfigurableParameter<Double>(2500.0,
       "Shooter min speed (RPM)");
+  private ConfigurableParameter<Double> neutralZoneTolerance = new ConfigurableParameter<Double>(1200.0,
+      "Neutral Zone tolerance (RPM)");
   private double targetSpeed = 0.0;
 
   public Shooter(ShooterIO io) {
@@ -84,6 +86,12 @@ public class Shooter extends SubsystemBase {
     boolean isAtSpeed = inputs.calculatedGoal > minSpeed.get()
         && Math.abs(inputs.leaderVelocity - inputs.calculatedGoal) < tolerance.get();
     Logger.recordOutput("IsAtSpeed", isAtSpeed);
+    return isAtSpeed;
+  }
+
+  public boolean isAboveSpeedWide() {
+    boolean isAtSpeed = inputs.leaderVelocity > (inputs.calculatedGoal - neutralZoneTolerance.get());
+    Logger.recordOutput("IsAtNeutralZoneSpeed", isAtSpeed);
     return isAtSpeed;
   }
 

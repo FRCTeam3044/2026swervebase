@@ -123,16 +123,15 @@ public class TeleState extends State {
     BooleanSupplier safeShootBlocking = () -> !autoAim
         .safeShoot(() -> operator.rightBumper().getAsBoolean() || autoTargetUtil.inNeutralZone())
         && operator.rightTrigger().or(operator.rightBumper()).getAsBoolean();
-    t(() -> turret.nearFlipAround())
-        .whileTrue(leds.setSolidColor(() -> turret.nearerFlipAround() ? Color.kRed : Color.kOrange));
+    t(() -> turret.nearFlipAround() || safeShootBlocking.getAsBoolean())
+        .whileTrue(leds.setSolidColor(() -> safeShootBlocking.getAsBoolean() ? Color.kGreen
+            : (turret.nearerFlipAround() ? Color.kRed : Color.kOrange)));
     t(() -> !turret.nearFlipAround()).and(() -> !safeShootBlocking.getAsBoolean())
         .whileTrue(leds.defaultPattern());
-    t(safeShootBlocking)
-        .whileTrue(leds.setSolidColor(() -> Color.kGreen));
 
     operator.rightTrigger().or(operator.rightBumper())
         .onTrue(HapticsUtil.rumbleForTime(driverController, 0.75))
-        .onFalse(HapticsUtil.rumblePulses(driverController, 2, 0.12, 0.08));
+        .onFalse(HapticsUtil.rumblePulses(driverController, 2, 0.2, 0.1));
 
     t(() -> HubShiftUtil.getShiftedShiftInfo().remainingTime() < 10)
         .onTrue(HapticsUtil.rumblePulses(operatorController, 3, 0.12, 0.08));
