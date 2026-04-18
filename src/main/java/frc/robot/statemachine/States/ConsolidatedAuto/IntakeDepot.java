@@ -46,7 +46,7 @@ public class IntakeDepot extends State {
 
                 startWhenActive(pathfind);
                 t(() -> drive.atPoseTight(pathfindingTarget.get())
-                                && drive.atRotationTight(Rotation2d.fromDegrees(180)))
+                                && drive.atRotationTight(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0))))
                                 .onTrue(pointControl);
         }
 }
