@@ -271,6 +271,11 @@ public class RobotContainer {
 
                 // Set up auto routines
 
+                autoChooser.addOption("Left Hub Steal", StateMachine.leftHubSteal);
+                autoChooser.addOption("Right Hub Steal", StateMachine.rightHubSteal);
+                autoChooser.addOption("Left Midline Pass", StateMachine.leftMiddlePass);
+                autoChooser.addOption("Right Midline Pass", StateMachine.rightMiddlePass);
+
                 autoChooser.addOption("Left", StateMachine.leftComp);
                 autoChooser.addOption("Left w/ First Shot", StateMachine.leftWShotComp);
                 autoChooser.addOption("Right", StateMachine.rightComp);

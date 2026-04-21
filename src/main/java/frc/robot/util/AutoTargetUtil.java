@@ -46,6 +46,10 @@ public class AutoTargetUtil {
   private static Pose2d rightBehindHub = new Pose2d(7, 3.5, Rotation2d.fromDegrees(0));
   private static Pose2d rightWideHub = new Pose2d(7, 2, Rotation2d.fromDegrees(0));
   private static Pose2d rightAzPoint = new Pose2d(2.5, 0.1, Rotation2d.fromDegrees(0));
+  private static Pose2d oppositeHubPoint = new Pose2d(DriveConstants.pathfinder.map.fieldx - 5.5,
+      DriveConstants.pathfinder.map.fieldy / 2, Rotation2d.fromDegrees(180));
+  private static Pose2d rightMidline = new Pose2d(DriveConstants.pathfinder.map.fieldx / 2, 0.1,
+      Rotation2d.fromDegrees(0));
 
   private static Pose2d testBumpPos = new Pose2d(6.8, 2.5, Rotation2d.fromDegrees(0));
 
@@ -175,8 +179,20 @@ public class AutoTargetUtil {
     return AllianceUtil.getPoseForAlliance(rightAzPoint);
   }
 
+  public static Pose2d getLeftMidline() {
+    return AllianceUtil.getPoseForAlliance(mirrorY(rightMidline));
+  }
+
+  public static Pose2d getRightMidline() {
+    return AllianceUtil.getPoseForAlliance(rightMidline);
+  }
+
   public static Pose2d getNeutralZone() {
     return AllianceUtil.getPoseForAlliance(testNeutralZonePosition);
+  }
+
+  public static Pose2d getOppositeHubPoint() {
+    return AllianceUtil.getPoseForAlliance(oppositeHubPoint);
   }
 
   public static POIData getLeftTower() {

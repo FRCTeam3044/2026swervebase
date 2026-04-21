@@ -18,6 +18,7 @@ import frc.robot.statemachine.States.TeleState;
 import frc.robot.statemachine.States.TestState;
 import frc.robot.statemachine.States.ConsolidatedAuto.AutoTrajectories;
 import frc.robot.statemachine.States.ConsolidatedAuto.EmptyState;
+import frc.robot.statemachine.States.ConsolidatedAuto.HubSteal;
 import frc.robot.statemachine.States.ConsolidatedAuto.IntakeDepot;
 import frc.robot.statemachine.States.ConsolidatedAuto.IntakeOutpost;
 import frc.robot.statemachine.States.ConsolidatedAuto.NeutralPaths;
@@ -64,6 +65,13 @@ public class StateMachine extends StateMachineBase {
         public static ArrayList<AutoSteps> middleCompOutpost = new ArrayList<AutoSteps>();
 
         // Autos
+
+        public static ArrayList<AutoSteps> leftMiddlePass = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> rightMiddlePass = new ArrayList<AutoSteps>();
+
+        public static ArrayList<AutoSteps> leftHubSteal = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> rightHubSteal = new ArrayList<AutoSteps>();
+
         public static ArrayList<AutoSteps> leftOrbit = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> leftOrbitDepot = new ArrayList<AutoSteps>();
 
@@ -266,7 +274,28 @@ public class StateMachine extends StateMachineBase {
                 NeutralPaths rightHubPath = new NeutralPaths(this, autoAim, () -> AutoTrajectories.getRightHubPath(),
                                 drive, kicker, intake, 270, 270, 0, false);
 
+                NeutralPaths leftToRight = new NeutralPaths(this, autoAim,
+                                () -> AutoTrajectories.getLeftToRightNeutral(), drive, kicker,
+                                intake, 90, 90, 0, true);
+
+                NeutralPaths rightToLeft = new NeutralPaths(this, autoAim,
+                                () -> AutoTrajectories.getRightToLeftNeutral(), drive, kicker,
+                                intake, 270, 270, 0, true);
+
+                HubSteal leftHubStealState = new HubSteal(this, autoTargetUtil, autoAim, drive, true);
+                HubSteal rightHubStealState = new HubSteal(this, autoTargetUtil, autoAim, drive, false);
+
                 // Add steps to auto options
+
+                Collections.addAll(leftHubSteal, AutoSteps.FirstScore, AutoSteps.LeftReverseTransition,
+                                AutoSteps.LeftHubSteal, AutoSteps.EmptyState);
+                Collections.addAll(rightHubSteal, AutoSteps.FirstScore, AutoSteps.RightReverseTransition,
+                                AutoSteps.RightHubSteal, AutoSteps.EmptyState);
+
+                Collections.addAll(leftMiddlePass, AutoSteps.FirstScore, AutoSteps.LeftReverseTransition,
+                                AutoSteps.LeftToRight, AutoSteps.EmptyState);
+                Collections.addAll(rightMiddlePass, AutoSteps.FirstScore, AutoSteps.RightReverseTransition,
+                                AutoSteps.RightToLeft, AutoSteps.EmptyState);
 
                 Collections.addAll(leftComp, AutoSteps.LeftReverseTransition,
                                 AutoSteps.FarLeftInOut,
@@ -420,11 +449,19 @@ public class StateMachine extends StateMachineBase {
                                                 "Auto to left hub path")
                                 .withChild(rightHubPath, () -> currentStep == AutoSteps.RightHub, 0,
                                                 "Auto to right hub path")
+                                .withChild(leftToRight, () -> currentStep == AutoSteps.LeftToRight, 0,
+                                                "Auto to left to right")
+                                .withChild(rightToLeft, () -> currentStep == AutoSteps.RightToLeft, 0,
+                                                "Auto to right to left")
                                 .withChild(rightBumpTransition, () -> currentStep == AutoSteps.RightBumpTransition, 0,
                                                 "Auto to right bump")
                                 .withChild(leftBumpTransition, () -> currentStep == AutoSteps.LeftBumpTransition, 0,
                                                 "Auto to left bump")
                                 .withChild(overBump, () -> currentStep == AutoSteps.OverBump, 0, "Auto to over bump")
+                                .withChild(leftHubStealState, () -> currentStep == AutoSteps.LeftHubSteal, 0,
+                                                "Auto to left hub steal")
+                                .withChild(rightHubStealState, () -> currentStep == AutoSteps.RightHubSteal, 0,
+                                                "Auto to right hub steal")
                                 .withChild(emptyState, () -> currentStep == AutoSteps.EmptyState, 0,
                                                 "Auto to empty state");
 
@@ -449,9 +486,13 @@ public class StateMachine extends StateMachineBase {
                 farRightInOut.withTransition(auto, currentStateComplete, 0, "Far right in out to auto");
                 leftHubPath.withTransition(auto, currentStateComplete, 0, "Left hub path to auto");
                 rightHubPath.withTransition(auto, currentStateComplete, 0, "Right hub path to auto");
+                leftToRight.withTransition(auto, currentStateComplete, 0, "Left to right to auto");
+                rightToLeft.withTransition(auto, currentStateComplete, 0, "Right to left to auto");
                 leftBumpTransition.withTransition(auto, currentStateComplete, 0, "Left bump to auto");
                 rightBumpTransition.withTransition(auto, currentStateComplete, 0, "Right bump to auto");
                 overBump.withTransition(auto, currentStateComplete, 0, "Over bump to auto");
+                leftHubStealState.withTransition(auto, currentStateComplete, 0, "Left hub steal to auto");
+                rightHubStealState.withTransition(auto, currentStateComplete, 0, "Right hub steal to auto");
                 emptyState.withTransition(auto, currentStateComplete, 0, "Empty to auto");
 
                 // For SYSID (comment out for normal autos)

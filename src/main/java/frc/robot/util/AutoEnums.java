@@ -69,6 +69,10 @@ public class AutoEnums {
                 FarRightInOut(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getTopRightMiddle())),
                 LeftHub(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getLeftHubPos())),
                 RightHub(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getRightHubPos())),
+                LeftToRight(() -> false),
+                RightToLeft(() -> false),
+                LeftHubSteal(() -> false),
+                RightHubSteal(() -> false),
                 RightBumpTransition(() -> RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getRightBumpPos())
                                 && RobotContainer.getInstance().drive
                                                 .atRotation(AllianceUtil
