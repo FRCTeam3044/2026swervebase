@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.statemachine.StateMachine;
 import frc.robot.subsystems.drive.Drive;
@@ -40,6 +41,13 @@ public class IntakeDepot extends State {
 
                 // startWhenActive(autoAim.fire(() -> false)
                 // .onlyIf(() -> drive.atPose(pathfindingTarget.get())));
+
+                startWhenActive(Commands.waitSeconds(StateMachine.intakeDeployTime.get()).andThen(intake.runRollers()));
+                startWhenActive(intake.intakeBottom());
+
+                t(() -> drive.atPose(intakeTarget.get())).onTrue(
+                                Commands.waitSeconds(StateMachine.depotWaitTime.get()).andThen(intake.intakeJostle()));
+
                 t(() -> drive.atPose(pathfindingTarget.get())).onTrue(autoAim.fire(() -> false));
 
                 startWhenActive(autoAim.aimHub(() -> true).onlyIf(() -> autoTargetUtil.inAllianceZone()));

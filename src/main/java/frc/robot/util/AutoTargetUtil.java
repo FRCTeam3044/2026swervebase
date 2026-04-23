@@ -53,7 +53,7 @@ public class AutoTargetUtil {
 
   private static Pose2d testBumpPos = new Pose2d(6.8, 2.5, Rotation2d.fromDegrees(0));
 
-  private static POIData depot = POIData.createFromRed(0.4, 5.96503125, 1.06827289, 5.96503125);
+  private static POIData depot = POIData.createFromRed(0.4, 6.05, 1.06827289, 6.05);
 
   private static Pose2d outpost = new Pose2d(0.5, 0.5, Rotation2d.fromDegrees(180));
 

@@ -113,7 +113,8 @@ public class TeleState extends State {
     // raise intake when trigger is pressed
     operator.leftTrigger().runWhileTrue(intake.intakeTop());
     // when y is pressed, run intake down and spin rollers
-    operator.a().and(operator.leftTrigger().negate()).whileTrue(intake.intakeBottom());
+    operator.a().and(operator.leftTrigger().negate()).and((operator.leftBumper().negate()))
+        .whileTrue(intake.intakeBottom());
     operator.a().whileTrue(intake.runRollers());
     // startWhenActive(
     // intake.intakeBottom()

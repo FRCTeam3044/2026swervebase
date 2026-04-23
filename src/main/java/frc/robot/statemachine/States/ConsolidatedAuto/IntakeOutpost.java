@@ -24,6 +24,9 @@ public class IntakeOutpost extends State {
                                                 () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0))));
                 t(() -> drive.atPose(AutoTargetUtil.getOutpost())).onTrue(Commands.run(() -> drive.stop()));
 
+                startWhenActive(intake.intakeBottom());
+                startWhenActive(intake.runRollers());
+
                 startWhenActive(autoAim.fire(() -> false)
                                 .onlyIf(() -> autoTargetUtil.inAllianceZone() && shooter.isAtSpeed()));
                 t(shooter::isAtSpeed).and(autoTargetUtil::inAllianceZone).onTrue(autoAim.fire(() -> false));

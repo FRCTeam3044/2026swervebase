@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import me.nabdev.oxconfig.ConfigurableParameter;
+
+import java.util.HashSet;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
@@ -47,8 +50,8 @@ public class Intake extends SubsystemBase {
   }
 
   public Command intakeJostle() {
-    return intakeBottom().withTimeout(intakeDownTime.get()).andThen(intakeBottom().withTimeout(intakeUpTime.get()))
-        .repeatedly();
+    return Commands.defer(() -> Commands.repeatingSequence(intakeBottom().withTimeout(intakeDownTime.get()),
+        intakeTop().withTimeout(intakeUpTime.get())), new HashSet<>());
   }
 
   public Command runRollers() {

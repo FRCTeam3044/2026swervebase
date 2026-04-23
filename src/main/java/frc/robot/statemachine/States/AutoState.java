@@ -22,8 +22,6 @@ public class AutoState extends State {
 
     // t(() -> turret.inHoodDangerZone() &&
     // !hood.calibrated()).whileTrue(turret.exitDangerZone());
-    startWhenActive(intake.intakeBottom());
-    startWhenActive(intake.runRollers());
 
     startWhenActive(spindexer.setSpeed());
 

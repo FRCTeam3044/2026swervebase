@@ -9,6 +9,7 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.kicker.Kicker;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.turret.Turret;
@@ -21,7 +22,8 @@ import me.nabdev.pathfinding.structures.Obstacle;
 import me.nabdev.pathfinding.structures.Vertex;
 
 public class Scoring extends State {
-        public Scoring(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil, Drive drive, Kicker kicker,
+        public Scoring(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil, Drive drive, Intake intake,
+                        Kicker kicker,
                         Shooter shooter,
                         Hood hood, Turret turret, AutoAim autoAim,
                         double rot) {
@@ -35,6 +37,9 @@ public class Scoring extends State {
                         Vertex robotPos = new Vertex(drive.getPose());
                         return allianceZone.calculateNearestPoint(robotPos).asPose2d();
                 };
+
+                startWhenActive(intake.intakeBottom());
+                startWhenActive(intake.runRollers());
 
                 startWhenActive(DriveCommands.goToPoint(drive, targetSupplier,
                                 () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(rot)), false));

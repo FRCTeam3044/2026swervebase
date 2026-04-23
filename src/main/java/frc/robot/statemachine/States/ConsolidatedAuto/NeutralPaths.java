@@ -39,6 +39,9 @@ public class NeutralPaths extends State {
             return new Pose2d(lastPose.getTranslation(), rot.get());
         };
 
+        startWhenActive(intake.intakeBottom());
+        startWhenActive(intake.runRollers());
+
         startWhenActive(Commands.runOnce(() -> stateComplete = false));
 
         startWhenActive(DriveCommands.goToPointsAndThen(drive, () -> path.get(),

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.hood.Hood;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.util.AllianceUtil;
@@ -19,6 +20,7 @@ import me.nabdev.oxidation.StateMachineBase;
 
 public class Transitions extends State {
         public Transitions(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil, AutoAim autoAim, Drive drive,
+                        Intake intake,
                         Hood hood, Turret turret, Shooter shooter, Supplier<Pose2d> pos,
                         double rot, boolean shooting, boolean forceFast) {
                 super(stateMachine);
@@ -43,6 +45,9 @@ public class Transitions extends State {
                 // pointControl));
                 // t(() -> drive.atPose(pos.get())).onTrue(DriveCommands.pointControl(drive,
                 // pos));
+
+                startWhenActive(intake.intakeBottom());
+                startWhenActive(intake.runRollers());
 
                 startWhenActive(autoAim.fire(() -> !autoTargetUtil.inAllianceZone()).onlyIf(() -> shooting));
 

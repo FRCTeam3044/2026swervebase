@@ -112,6 +112,12 @@ public class StateMachine extends StateMachineBase {
         public static ConfigurableParameter<Double> intakeDist = new ConfigurableParameter<>(0.4,
                         "Depot distance");
 
+        public static ConfigurableParameter<Double> depotWaitTime = new ConfigurableParameter<>(3.0,
+                        "Depot wait time");
+
+        public static ConfigurableParameter<Double> intakeDeployTime = new ConfigurableParameter<>(1.0,
+                        "Intake deploy wait time");
+
         public StateMachine(
                         CommandXboxController driverController,
                         CommandXboxController operatorController,
@@ -202,9 +208,11 @@ public class StateMachine extends StateMachineBase {
                 // Consolidated auto work
                 EmptyState emptyState = new EmptyState(this, drive);
 
-                Scoring firstScore = new Scoring(this, autoTargetUtil, drive, kicker, shooter, hood, turret, autoAim,
+                Scoring firstScore = new Scoring(this, autoTargetUtil, drive, intake, kicker, shooter, hood, turret,
+                                autoAim,
                                 180);
-                Scoring secondScore = new Scoring(this, autoTargetUtil, drive, kicker, shooter, hood, turret, autoAim,
+                Scoring secondScore = new Scoring(this, autoTargetUtil, drive, intake, kicker, shooter, hood, turret,
+                                autoAim,
                                 0);
 
                 IntakeOutpost intakeOutpost = new IntakeOutpost(this, autoTargetUtil, autoAim, drive, intake, kicker,
@@ -214,39 +222,47 @@ public class StateMachine extends StateMachineBase {
 
                 OverBump overBump = new OverBump(this, autoAim, drive);
 
-                Transitions leftTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                Transitions leftTransition = new Transitions(this, autoTargetUtil, autoAim, drive, intake, hood, turret,
                                 shooter,
                                 () -> AutoTargetUtil.getSafeLeftNeutral(), 0.0, false, false);
-                Transitions rightTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                Transitions rightTransition = new Transitions(this, autoTargetUtil, autoAim, drive, intake, hood,
+                                turret,
                                 shooter,
                                 () -> AutoTargetUtil.getSafeRightNeutral(), 0.0, false, false);
 
-                Transitions leftAzTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                Transitions leftAzTransition = new Transitions(this, autoTargetUtil, autoAim, drive, intake, hood,
+                                turret,
                                 shooter,
                                 () -> AutoTargetUtil.getLeftAzPoint(), 180.0, true, false);
-                Transitions rightAzTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                Transitions rightAzTransition = new Transitions(this, autoTargetUtil, autoAim, drive, intake, hood,
+                                turret,
                                 shooter,
                                 () -> AutoTargetUtil.getRightAzPoint(), 180.0, true, false);
 
-                Transitions leftCloseTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                Transitions leftCloseTransition = new Transitions(this, autoTargetUtil, autoAim, drive, intake, hood,
+                                turret,
                                 shooter,
                                 () -> AutoTargetUtil.getSafeCloseLeftNeutral(), 0.0, false, false);
-                Transitions rightCloseTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                Transitions rightCloseTransition = new Transitions(this, autoTargetUtil, autoAim, drive, intake, hood,
+                                turret,
                                 shooter,
                                 () -> AutoTargetUtil.getSafeCloseRightNeutral(), 0.0, false, false);
 
-                Transitions leftReverseTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                Transitions leftReverseTransition = new Transitions(this, autoTargetUtil, autoAim, drive, intake, hood,
+                                turret,
                                 shooter,
                                 () -> AutoTargetUtil.getSafeCloseLeftNeutral(), 180.0, false, true);
-                Transitions rightReverseTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                Transitions rightReverseTransition = new Transitions(this, autoTargetUtil, autoAim, drive, intake, hood,
+                                turret,
                                 shooter,
                                 () -> AutoTargetUtil.getSafeCloseRightNeutral(), 180.0, false, true);
 
                 Transitions rightBumpTransition = new Transitions(this, autoTargetUtil,
-                                autoAim, drive, hood, turret,
+                                autoAim, drive, intake, hood, turret,
                                 shooter, () -> AutoTargetUtil.getRightBumpPos(),
                                 180, false, false);
-                Transitions leftBumpTransition = new Transitions(this, autoTargetUtil, autoAim, drive, hood, turret,
+                Transitions leftBumpTransition = new Transitions(this, autoTargetUtil, autoAim, drive, intake, hood,
+                                turret,
                                 shooter, () -> AutoTargetUtil.getLeftBumpPos(),
                                 180, false, false);
 
