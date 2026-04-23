@@ -38,10 +38,10 @@ public class IntakeDepot extends State {
                 Command pointControl = DriveCommands.pointControl(drive, intakeTarget)
                                 .until(() -> DriveCommands.pointControllerConverged).withName("Close point control");
 
-                startWhenActive(autoAim.fire(() -> false)
-                                .onlyIf(() -> drive.atPose(pathfindingTarget.get()) && shooter.isAtSpeed()));
-                t(shooter::isAtSpeed).and(
-                                () -> drive.atPose(pathfindingTarget.get())).onTrue(autoAim.fire(() -> false));
+                // startWhenActive(autoAim.fire(() -> false)
+                // .onlyIf(() -> drive.atPose(pathfindingTarget.get())));
+                t(() -> drive.atPose(pathfindingTarget.get())).onTrue(autoAim.fire(() -> false));
+
                 startWhenActive(autoAim.aimHub(() -> true).onlyIf(() -> autoTargetUtil.inAllianceZone()));
                 t(() -> autoTargetUtil.inAllianceZone()).onTrue(autoAim.aimHub(() -> true));
 

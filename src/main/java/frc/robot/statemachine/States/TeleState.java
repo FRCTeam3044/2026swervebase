@@ -109,6 +109,7 @@ public class TeleState extends State {
     // operator.a().or(operator.b()).whileFalse(intake.runRollers());
     // when b is pressed run rollers in reverse
     operator.b().whileTrue(intake.runRollersReverse());
+    operator.leftBumper().whileTrue(intake.intakeJostle());
     // raise intake when trigger is pressed
     operator.leftTrigger().runWhileTrue(intake.intakeTop());
     // when y is pressed, run intake down and spin rollers

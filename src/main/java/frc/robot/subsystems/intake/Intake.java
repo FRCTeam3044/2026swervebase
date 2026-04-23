@@ -21,6 +21,11 @@ public class Intake extends SubsystemBase {
   private ConfigurableParameter<Double> intakeRetractSpeed = new ConfigurableParameter<Double>(0.05,
       "Intake retract speed");
 
+  private ConfigurableParameter<Double> intakeDownTime = new ConfigurableParameter<Double>(0.05,
+      "Intake down time auto");
+  private ConfigurableParameter<Double> intakeUpTime = new ConfigurableParameter<Double>(0.05,
+      "Intake up time auto");
+
   public Intake(IntakeIO io) {
     this.io = io;
   }
@@ -39,6 +44,11 @@ public class Intake extends SubsystemBase {
   public Command intakeBottom() {
     return Commands.runEnd(() -> io.setIntakeSpeed(intakeDeploySpeed.get()), () -> io.setIntakeSpeed(0), this)
         .withName("Intake to Bottom");
+  }
+
+  public Command intakeJostle() {
+    return intakeBottom().withTimeout(intakeDownTime.get()).andThen(intakeBottom().withTimeout(intakeUpTime.get()))
+        .repeatedly();
   }
 
   public Command runRollers() {
