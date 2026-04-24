@@ -60,6 +60,7 @@ public class ModuleIOSpark implements ModuleIO {
         private final Debouncer turnConnectedDebounce = new Debouncer(0.5, Debouncer.DebounceType.kFalling);
 
         private int module;
+        private SparkFlexConfig driveConfig;
 
         public ModuleIOSpark(int module) {
                 this.module = module;
@@ -94,7 +95,7 @@ public class ModuleIOSpark implements ModuleIO {
                 turnController = turnSpark.getClosedLoopController();
 
                 // Configure drive motor
-                var driveConfig = new SparkFlexConfig();
+                driveConfig = new SparkFlexConfig();
                 driveConfig
                                 .idleMode(IdleMode.kBrake)
                                 .smartCurrentLimit(driveMotorCurrentLimit, driveMotorCurrentLimit)
@@ -233,5 +234,12 @@ public class ModuleIOSpark implements ModuleIO {
                 double setpoint = MathUtil.inputModulus(
                                 rotation.plus(zeroRotation).getRadians(), turnPIDMinInput, turnPIDMaxInput);
                 turnController.setSetpoint(setpoint, ControlType.kPosition);
+        }
+
+        @Override
+        public void setCurrentLimit(int currentLimit) {
+                driveConfig.smartCurrentLimit(currentLimit, currentLimit);
+                driveSpark.configureAsync(driveConfig, ResetMode.kNoResetSafeParameters,
+                                PersistMode.kNoPersistParameters);
         }
 }

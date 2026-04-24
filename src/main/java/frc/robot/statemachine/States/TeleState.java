@@ -5,6 +5,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -29,6 +30,7 @@ import me.nabdev.oxidation.util.SmartXboxController;
 public class TeleState extends State {
 
   boolean turretEnabled = true;
+  boolean overdriveEnabled = false;
 
   public TeleState(
       StateMachineBase stateMachine,
@@ -148,6 +150,13 @@ public class TeleState extends State {
         }, () -> {
           operatorController.setRumble(RumbleType.kBothRumble, 0);
         })));
+
+    driver.povLeft().or(driver.povDown()).onTrue(Commands.runOnce(() -> {
+      overdriveEnabled = !overdriveEnabled;
+      drive.setOverdriveEnabled(overdriveEnabled);
+    }));
+
+    startWhenActive(Commands.run(() -> SmartDashboard.putBoolean("OverdriveEnabled", overdriveEnabled)));
 
     // t(() -> turret.inHoodDangerZone() &&
     // !hood.calibrated()).whileTrue(turret.exitDangerZone());

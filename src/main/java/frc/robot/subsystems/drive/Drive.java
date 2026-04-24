@@ -237,6 +237,12 @@ public class Drive extends SubsystemBase {
     }
   }
 
+  public void setOverdriveEnabled(boolean enabled) {
+    for (int i = 0; i < 4; i++) {
+      modules[i].setOverdriveEnabled(enabled);
+    }
+  }
+
   public ChassisSpeeds getVelocity() {
     return kinematics.toChassisSpeeds(getModuleStates());
   }
