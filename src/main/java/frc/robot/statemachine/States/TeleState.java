@@ -44,7 +44,7 @@ public class TeleState extends State {
       LEDs leds,
       AutoTargetUtil autoTargetUtil) {
     super(stateMachine);
-    SmartXboxController controller = new SmartXboxController(driverController, loop);
+    SmartXboxController driver = new SmartXboxController(driverController, loop);
     SmartXboxController operator = new SmartXboxController(operatorController, loop);
 
     DoubleSupplier driveY = () -> -driverController.getLeftX();
@@ -57,17 +57,17 @@ public class TeleState extends State {
             driveY,
             () -> -driverController.getRightX(),
             true,
-            operator.rightTrigger().or(operator.rightBumper())));
-    SmartTrigger abxy = controller.a().or(controller.b()).or(controller.x()).or(controller.y());
+            driver.rightTrigger().or(driver.rightBumper())));
+    SmartTrigger abxy = driver.a().or(driver.b()).or(driver.x()).or(driver.y());
 
     DoubleSupplier targetRotation = () -> {
-      if (controller.a().getAsBoolean()) {
+      if (driver.a().getAsBoolean()) {
         return 0;
-      } else if (controller.b().getAsBoolean()) {
+      } else if (driver.b().getAsBoolean()) {
         return 90.0;
-      } else if (controller.x().getAsBoolean()) {
+      } else if (driver.x().getAsBoolean()) {
         return 270.0;
-      } else if (controller.y().getAsBoolean()) {
+      } else if (driver.y().getAsBoolean()) {
         return 180.0;
       } else {
         return 0.0;
@@ -75,7 +75,7 @@ public class TeleState extends State {
     };
     abxy.whileTrue(DriveCommands.joystickDriveAtAngle(drive, driveX, driveY,
         () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(targetRotation.getAsDouble())),
-        operator.rightTrigger().or(operator.rightBumper())));
+        driver.rightTrigger().or(driver.rightBumper())));
 
     abxy.negate().whileTrue(DriveCommands.joystickDrive(
         drive,
@@ -83,7 +83,7 @@ public class TeleState extends State {
         driveY,
         () -> -driverController.getRightX(),
         true,
-        operator.rightTrigger().or(operator.rightBumper())));
+        driver.rightTrigger().or(driver.rightBumper())));
 
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     operator.povDown().onTrue(Commands.runOnce(hood::resetCalibration));
@@ -116,6 +116,11 @@ public class TeleState extends State {
     operator.a().and(operator.leftTrigger().negate()).and((operator.leftBumper().negate()))
         .whileTrue(intake.intakeBottom());
     operator.a().whileTrue(intake.runRollers());
+    t(drive::isDrivingTowardsIntake).and(operator.b().negate()).whileTrue(intake.runRollers());
+    t(drive::isDrivingTowardsIntake).and(operator.leftBumper().negate()).and(operator.leftTrigger().negate())
+        .whileTrue(intake.intakeBottom());
+    operator.x().and(driver.rightTrigger().negate()).and(driver.rightBumper().negate())
+        .whileTrue(spindexer.setSpeed(() -> true));
     // startWhenActive(
     // intake.intakeBottom()
     // .onlyWhile(operatorController.a().negate().and(operatorController.leftTrigger().negate())));
@@ -123,17 +128,17 @@ public class TeleState extends State {
 
     startWhenActive(leds.defaultPattern());
     BooleanSupplier safeShootBlocking = () -> !autoAim
-        .safeShoot(() -> operator.rightBumper().getAsBoolean() || autoTargetUtil.inNeutralZone())
-        && operator.rightTrigger().or(operator.rightBumper()).getAsBoolean();
+        .safeShoot(() -> driver.rightBumper().getAsBoolean() || autoTargetUtil.inNeutralZone())
+        && driver.rightTrigger().or(driver.rightBumper()).getAsBoolean();
     t(() -> turret.nearFlipAround() || safeShootBlocking.getAsBoolean())
         .whileTrue(leds.setSolidColor(() -> safeShootBlocking.getAsBoolean() ? Color.kGreen
             : (turret.nearerFlipAround() ? Color.kRed : Color.kOrange)));
     t(() -> !turret.nearFlipAround()).and(() -> !safeShootBlocking.getAsBoolean())
         .whileTrue(leds.defaultPattern());
 
-    operator.rightTrigger().or(operator.rightBumper())
-        .onTrue(HapticsUtil.rumbleForTime(driverController, 0.75))
-        .onFalse(HapticsUtil.rumblePulses(driverController, 2, 0.2, 0.1));
+    // operator.rightTrigger().or(operator.rightBumper())
+    // .onTrue(HapticsUtil.rumbleForTime(driverController, 0.75))
+    // .onFalse(HapticsUtil.rumblePulses(driverController, 2, 0.2, 0.1));
 
     t(() -> HubShiftUtil.getShiftedShiftInfo().remainingTime() < 10)
         .onTrue(HapticsUtil.rumblePulses(operatorController, 3, 0.12, 0.08));

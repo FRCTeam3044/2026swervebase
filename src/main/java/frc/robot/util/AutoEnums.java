@@ -33,7 +33,14 @@ public class AutoEnums {
                 RightSwoop(() -> frc.robot.statemachine.States.ConsolidatedAuto.NeutralPaths.stateComplete
                                 && RobotContainer.getInstance().drive.atPose(AutoTargetUtil
                                                 .getCloseRightNeutral())),
-                IntakeDepot(/* TODO: figure out whether to have end condition or not */ () -> false),
+                IntakeDepot(() -> {
+                        if (RobotContainer.getInstance().autoStateTimer.get() > StateMachine.depotAutoTime.get()) {
+                                RobotContainer.getInstance().autoStateTimer.stop();
+                                RobotContainer.getInstance().autoStateTimer.reset();
+                                return true;
+                        }
+                        return false;
+                }),
                 IntakeOutpost(/* TODO: figure out whether to have end condition or not */ () -> false),
                 LeftTransition(() -> RobotContainer.getInstance().drive
                                 .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0)))
@@ -47,6 +54,13 @@ public class AutoEnums {
                                 &&
                                 RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getLeftAzPoint())),
                 RightAzPoint(() -> RobotContainer.getInstance().drive
+                                .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180)))
+                                && RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getRightAzPoint())),
+                LeftAzPointFast(() -> RobotContainer.getInstance().drive
+                                .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180)))
+                                &&
+                                RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getLeftAzPoint())),
+                RightAzPointFast(() -> RobotContainer.getInstance().drive
                                 .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(180)))
                                 && RobotContainer.getInstance().drive.atPose(AutoTargetUtil.getRightAzPoint())),
                 LeftCloseTransition(() -> RobotContainer.getInstance().drive

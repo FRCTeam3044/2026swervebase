@@ -524,7 +524,7 @@
         "X Point Controller/I": "0.0",
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "33"
+            "value": "40"
         },
         "Hood Controller/P": "0.0",
         "Hood Account": {
@@ -557,7 +557,7 @@
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "false"
+            "value": "true"
         },
         "Bang Bang Output": {
             "comment": "Auto-Generated",
@@ -568,6 +568,10 @@
             "comment": "Auto-Generated",
             "value": "0.4"
         },
+        "Moving towards intake threshold": {
+            "comment": "Auto-Generated",
+            "value": "-0.02"
+        },
         "Intake top position": {
             "comment": "Auto-Generated",
             "value": "0.5"
@@ -575,6 +579,10 @@
         "Rotation tolerance": {
             "comment": "Auto-Generated",
             "value": "0.0"
+        },
+        "Depot auto time": {
+            "comment": "Auto-Generated",
+            "value": "4.0"
         },
         "Hood Controller/I": "0.0",
         "Bottom climber position": {
@@ -1121,7 +1129,7 @@
         "X Point Controller/I": "0.0",
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "33"
+            "value": "40"
         },
         "Hood Controller/P": "0.0",
         "Hood Account": {
@@ -1154,7 +1162,7 @@
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "false"
+            "value": "true"
         },
         "Bang Bang Output": {
             "comment": "Auto-Generated",
@@ -1165,6 +1173,10 @@
             "comment": "Auto-Generated",
             "value": "0.4"
         },
+        "Moving towards intake threshold": {
+            "comment": "Auto-Generated",
+            "value": "-0.02"
+        },
         "Intake top position": {
             "comment": "Auto-Generated",
             "value": "0.5"
@@ -1172,6 +1184,10 @@
         "Rotation tolerance": {
             "comment": "Auto-Generated",
             "value": "0.1745"
+        },
+        "Depot auto time": {
+            "comment": "Auto-Generated",
+            "value": "4.0"
         },
         "Hood Controller/I": "0.0",
         "Bottom climber position": {
@@ -1656,7 +1672,7 @@
         },
         "Pathfinding Slow Max Accel": {
             "comment": "Auto-Generated",
-            "value": "2.0"
+            "value": "3.0"
         },
         "Shooter Speed Controller/D": "0.0",
         "Climb pathfinding distance": {
@@ -1717,7 +1733,7 @@
         "X Point Controller/I": "0.0",
         "CalibrationShotHoodPosition": {
             "comment": "Auto-Generated",
-            "value": "33"
+            "value": "40"
         },
         "Hood Controller/P": "0.0",
         "Hood Account": {
@@ -1750,7 +1766,7 @@
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "false"
+            "value": "true"
         },
         "Bang Bang Output": {
             "comment": "Auto-Generated",
@@ -1761,6 +1777,10 @@
             "comment": "Auto-Generated",
             "value": "0.4"
         },
+        "Moving towards intake threshold": {
+            "comment": "Auto-Generated",
+            "value": "-0.02"
+        },
         "Intake top position": {
             "comment": "Auto-Generated",
             "value": "0.5"
@@ -1768,6 +1788,10 @@
         "Rotation tolerance": {
             "comment": "Auto-Generated",
             "value": "0.1745"
+        },
+        "Depot auto time": {
+            "comment": "Auto-Generated",
+            "value": "4.0"
         },
         "Hood Controller/I": "0.0",
         "Bottom climber position": {

@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.RobotContainer;
 import frc.robot.commands.DriveCommands;
 import frc.robot.statemachine.StateMachine;
 import frc.robot.subsystems.drive.Drive;
@@ -41,6 +42,9 @@ public class IntakeDepot extends State {
 
                 // startWhenActive(autoAim.fire(() -> false)
                 // .onlyIf(() -> drive.atPose(pathfindingTarget.get())));
+
+                t(() -> drive.atPose(pathfindingTarget.get()))
+                                .onTrue(Commands.runOnce(() -> RobotContainer.getInstance().autoStateTimer.start()));
 
                 startWhenActive(Commands.waitSeconds(StateMachine.intakeDeployTime.get()).andThen(intake.runRollers()));
                 startWhenActive(intake.intakeBottom());

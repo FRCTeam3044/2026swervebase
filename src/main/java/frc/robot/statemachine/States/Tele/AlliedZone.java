@@ -21,9 +21,9 @@ public class AlliedZone extends State {
     SmartXboxController operator = new SmartXboxController(operatorController, loop);
 
     operator.povDown().or(() -> !hood.calibrated())
-        .whileFalse(autoAim.aimHub(() -> operator.rightTrigger().or(operator.rightBumper()).getAsBoolean()));
+        .whileFalse(autoAim.aimHub(() -> driver.rightTrigger().or(driver.rightBumper()).getAsBoolean()));
     startWhenActive(
-        autoAim.aimHub(() -> operator.rightTrigger().or(operator.rightBumper()).getAsBoolean())
+        autoAim.aimHub(() -> driver.rightTrigger().or(driver.rightBumper()).getAsBoolean())
             .until(operator.povDown().or(() -> !hood.calibrated())));
   }
 }

@@ -61,6 +61,8 @@ public class Drive extends SubsystemBase {
       "Bottom filtered angle");
   public final ConfigurableParameter<Double> pastBumpTime = new ConfigurableParameter<>(0.5,
       "Past bump time");
+  public final ConfigurableParameter<Double> movingTowardsIntakeThreshold = new ConfigurableParameter<>(-0.02,
+      "Moving towards intake threshold");
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(moduleTranslations);
   private Rotation2d rawGyroRotation = Rotation2d.kZero;
@@ -242,6 +244,11 @@ public class Drive extends SubsystemBase {
   /** Stops the drive. */
   public void stop() {
     runVelocity(new ChassisSpeeds());
+  }
+
+  public boolean isDrivingTowardsIntake() {
+    ChassisSpeeds robotRelativeSpeeds = getRobotRelativeChassisSpeeds();
+    return robotRelativeSpeeds.vxMetersPerSecond < movingTowardsIntakeThreshold.get();
   }
 
   /**

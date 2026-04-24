@@ -131,7 +131,7 @@ public class Turret extends SubsystemBase {
       } else {
         io.setAngle(tA);
       }
-    }, () -> io.setPercent(0))
+    }, () -> io.setPercent(0), this)
         .withName("Set Turret Angle");
   }
 

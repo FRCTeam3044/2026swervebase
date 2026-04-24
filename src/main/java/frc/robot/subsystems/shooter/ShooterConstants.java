@@ -4,7 +4,7 @@ public class ShooterConstants {
   public static final int leaderCanId = 19;
   public static final int followerCanId = 20;
   public static final int currentLimit = 80;
-  public static final double maxSpeed = 660; // RPM
+  // public static final double maxSpeed = 660; // RPM
 
   public static final double kS = 0.069052;
   public static final double kV = 0.0018;

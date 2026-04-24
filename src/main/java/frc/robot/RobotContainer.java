@@ -261,6 +261,7 @@ public class RobotContainer {
                 }
 
                 hood.setDefaultCommand(hood.setPosition(() -> HoodConstants.minPosition));
+                turret.setDefaultCommand(turret.setAngle(() -> Degrees.of(0)));
 
                 AllianceUtil.setRobot(drive::getPose);
 

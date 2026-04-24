@@ -407,7 +407,7 @@ public class DriveCommands {
     return Commands.deferredProxy(() -> {
       Pose2d curPose = pose.get();
       return followTrajectory(drive,
-          generateTrajectory(drive, curPose, !forceFast || RobotContainer.getInstance().autoTargetUtil
+          generateTrajectory(drive, curPose, !forceFast && RobotContainer.getInstance().autoTargetUtil
               .inAllianceZone()),
           rotation,
           null, false).andThen(after.get()).withName("Follow Trajectory and then");
@@ -435,6 +435,14 @@ public class DriveCommands {
       Supplier<Rotation2d> rotation, Supplier<Command> after) {
     return Commands.deferredProxy(() -> {
       return followTrajectory(drive, generateTrajectory(drive, posesSupplier.get(), false), rotation,
+          null, false).andThen(after.get());
+    }).withName("Go To Point");
+  }
+
+  public static Command goToPointsAndThenSlow(Drive drive, Supplier<ArrayList<Pose2d>> posesSupplier,
+      Supplier<Rotation2d> rotation, Supplier<Command> after, boolean slow) {
+    return Commands.deferredProxy(() -> {
+      return followTrajectory(drive, generateTrajectory(drive, posesSupplier.get(), slow), rotation,
           null, false).andThen(after.get());
     }).withName("Go To Point");
   }

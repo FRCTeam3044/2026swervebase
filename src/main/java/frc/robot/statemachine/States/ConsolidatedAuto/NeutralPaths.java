@@ -19,7 +19,8 @@ public class NeutralPaths extends State {
     public static boolean stateComplete = false;
 
     public NeutralPaths(StateMachineBase stateMachine, AutoAim autoAim, Supplier<ArrayList<Pose2d>> path, Drive drive,
-            Kicker kicker, Intake intake, double firstRot, double secondRot, int turnPoint, boolean passing) {
+            Kicker kicker, Intake intake, double firstRot, double secondRot, int turnPoint, boolean passing,
+            boolean slow) {
         super(stateMachine);
 
         Supplier<Rotation2d> rot = () -> {
@@ -41,11 +42,12 @@ public class NeutralPaths extends State {
 
         startWhenActive(intake.intakeBottom());
         startWhenActive(intake.runRollers());
+        t(() -> drive.atPose(path.get().get(path.get().size() - 1))).onTrue(intake.intakeJostle());
 
         startWhenActive(Commands.runOnce(() -> stateComplete = false));
 
-        startWhenActive(DriveCommands.goToPointsAndThen(drive, () -> path.get(),
-                () -> rot.get(), () -> DriveCommands.pointControl(drive, pose)));
+        startWhenActive(DriveCommands.goToPointsAndThenSlow(drive, () -> path.get(),
+                () -> rot.get(), () -> DriveCommands.pointControl(drive, pose), slow));
 
         t(() -> drive.atPose(path.get().get(turnPoint)))
                 .onTrue(Commands.runOnce(() -> stateComplete = true));
