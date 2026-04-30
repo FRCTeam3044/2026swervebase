@@ -262,6 +262,7 @@ public class RobotContainer {
 
                 hood.setDefaultCommand(hood.setPosition(() -> HoodConstants.minPosition));
                 turret.setDefaultCommand(turret.setAngle(() -> Degrees.of(0)));
+                intake.setDefaultCommand(intake.runRollersSlow());
 
                 AllianceUtil.setRobot(drive::getPose);
 
@@ -281,7 +282,8 @@ public class RobotContainer {
                 autoChooser.addOption("Left w/ First Shot", StateMachine.leftWShotComp);
                 autoChooser.addOption("Right", StateMachine.rightComp);
                 autoChooser.addOption("Right w/ First Shot", StateMachine.rightWShotComp);
-                autoChooser.addOption("Middle Depot", StateMachine.middleCompDepot);
+                autoChooser.addOption("Depot pass", StateMachine.middleCompDepot);
+                autoChooser.addOption("Depot stay", StateMachine.middleDepotStay);
                 autoChooser.addOption("Middle Outpost", StateMachine.middleCompOutpost);
 
                 autoChooser.addOption("Left Orbit", StateMachine.leftOrbit);

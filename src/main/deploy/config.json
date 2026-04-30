@@ -375,6 +375,10 @@
         "CalibrationState/Test Parameter 83": "0",
         "CalibrationState/Test Parameter 84": "0",
         "CalibrationState/Test Parameter 85": "0",
+        "Intake roller speed slow": {
+            "comment": "Auto-Generated",
+            "value": "0.05"
+        },
         "CalibrationState/Test Parameter 86": "0",
         "CalibrationState/Test Parameter 80": "0",
         "CalibrationState/Test Parameter 81": "0",
@@ -557,7 +561,7 @@
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Bang Bang Output": {
             "comment": "Auto-Generated",
@@ -980,6 +984,10 @@
         "CalibrationState/Test Parameter 83": "0",
         "CalibrationState/Test Parameter 84": "0",
         "CalibrationState/Test Parameter 85": "0",
+        "Intake roller speed slow": {
+            "comment": "Auto-Generated",
+            "value": "0.05"
+        },
         "CalibrationState/Test Parameter 86": "0",
         "CalibrationState/Test Parameter 80": "0",
         "CalibrationState/Test Parameter 81": "0",
@@ -1162,7 +1170,7 @@
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Bang Bang Output": {
             "comment": "Auto-Generated",
@@ -1584,6 +1592,10 @@
         "CalibrationState/Test Parameter 83": "0",
         "CalibrationState/Test Parameter 84": "0",
         "CalibrationState/Test Parameter 85": "0",
+        "Intake roller speed slow": {
+            "comment": "Auto-Generated",
+            "value": "-0.11"
+        },
         "CalibrationState/Test Parameter 86": "0",
         "CalibrationState/Test Parameter 80": "0",
         "CalibrationState/Test Parameter 81": "0",
@@ -1766,7 +1778,7 @@
         },
         "Shooter Calibration Mode": {
             "comment": "Auto-Generated",
-            "value": "true"
+            "value": "false"
         },
         "Bang Bang Output": {
             "comment": "Auto-Generated",

@@ -41,6 +41,7 @@ public class AutoEnums {
                         }
                         return false;
                 }),
+                IntakeDepotStay(() -> false),
                 IntakeOutpost(/* TODO: figure out whether to have end condition or not */ () -> false),
                 LeftTransition(() -> RobotContainer.getInstance().drive
                                 .atRotation(AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(0)))

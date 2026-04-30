@@ -15,6 +15,8 @@ public class Intake extends SubsystemBase {
 
   private ConfigurableParameter<Double> intakeRollerSpeed = new ConfigurableParameter<Double>(0.5,
       "Intake roller speed");
+  private ConfigurableParameter<Double> intakeRollerSpeedSlow = new ConfigurableParameter<Double>(0.05,
+      "Intake roller speed slow");
 
   // private ConfigurableParameter<Double> intakeTopPosition = new
   // ConfigurableParameter<Double>(0.5,
@@ -40,12 +42,12 @@ public class Intake extends SubsystemBase {
   }
 
   public Command intakeTop() {
-    return Commands.runEnd(() -> io.setIntakeSpeed(intakeRetractSpeed.get()), () -> io.setIntakeSpeed(0), this)
+    return Commands.runEnd(() -> io.setIntakeSpeed(intakeRetractSpeed.get()), () -> io.setIntakeSpeed(0))
         .withName("Intake to Top");
   }
 
   public Command intakeBottom() {
-    return Commands.runEnd(() -> io.setIntakeSpeed(intakeDeploySpeed.get()), () -> io.setIntakeSpeed(0), this)
+    return Commands.runEnd(() -> io.setIntakeSpeed(intakeDeploySpeed.get()), () -> io.setIntakeSpeed(0))
         .withName("Intake to Bottom");
   }
 
@@ -55,12 +57,22 @@ public class Intake extends SubsystemBase {
   }
 
   public Command runRollers() {
-    return Commands.runEnd(() -> io.setSpeedRollers(intakeRollerSpeed.get()), () -> io.setSpeedRollers(0))
+    return Commands.runEnd(() -> io.setSpeedRollers(intakeRollerSpeed.get()), () -> io.setSpeedRollers(0), this)
+        .withName("Run Intake Rollers");
+  }
+
+  public Command runRollersSlow() {
+    return Commands.runEnd(() -> io.setSpeedRollers(intakeRollerSpeedSlow.get()), () -> io.setSpeedRollers(0), this)
+        .withName("Run Intake Rollers");
+  }
+
+  public Command runRollersJamDetection() {
+    return Commands.runEnd(() -> io.setSpeedRollers(intakeRollerSpeed.get()), () -> io.setSpeedRollers(0), this)
         .withName("Run Intake Rollers");
   }
 
   public Command runRollersReverse() {
-    return Commands.runEnd(() -> io.setSpeedRollers(-intakeRollerSpeed.get()), () -> io.setSpeedRollers(0))
+    return Commands.runEnd(() -> io.setSpeedRollers(-intakeRollerSpeed.get()), () -> io.setSpeedRollers(0), this)
         .withName("Run Intake Rollers");
   }
 }

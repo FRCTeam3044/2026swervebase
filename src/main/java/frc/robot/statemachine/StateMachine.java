@@ -63,6 +63,7 @@ public class StateMachine extends StateMachineBase {
         public static ArrayList<AutoSteps> rightWShotComp = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> middleCompDepot = new ArrayList<AutoSteps>();
         public static ArrayList<AutoSteps> middleCompOutpost = new ArrayList<AutoSteps>();
+        public static ArrayList<AutoSteps> middleDepotStay = new ArrayList<AutoSteps>();
 
         // Autos
 
@@ -222,6 +223,8 @@ public class StateMachine extends StateMachineBase {
                                 shooter);
                 IntakeDepot intakeDepot = new IntakeDepot(this, autoTargetUtil, autoAim, drive, intake, kicker,
                                 shooter);
+                IntakeDepot intakeDepotStay = new IntakeDepot(this, autoTargetUtil, autoAim, drive, intake, kicker,
+                                shooter);
 
                 OverBump overBump = new OverBump(this, autoAim, drive);
 
@@ -327,6 +330,8 @@ public class StateMachine extends StateMachineBase {
 
                 Collections.addAll(middleCompDepot, AutoSteps.IntakeDepot, AutoSteps.LeftAzPointFast,
                                 AutoSteps.LeftReverseTransition, AutoSteps.LeftToRight, AutoSteps.EmptyState);
+
+                Collections.addAll(middleDepotStay, AutoSteps.IntakeDepotStay);
 
                 Collections.addAll(leftComp, AutoSteps.LeftReverseTransition,
                                 AutoSteps.FarLeftInOut,
@@ -496,6 +501,8 @@ public class StateMachine extends StateMachineBase {
                                                 "Auto to left hub steal")
                                 .withChild(rightHubStealState, () -> currentStep == AutoSteps.RightHubSteal, 0,
                                                 "Auto to right hub steal")
+                                .withChild(intakeDepotStay, () -> currentStep == AutoSteps.IntakeDepotStay, 0,
+                                                "Auto to empty state")
                                 .withChild(emptyState, () -> currentStep == AutoSteps.EmptyState, 0,
                                                 "Auto to empty state");
 
@@ -504,6 +511,7 @@ public class StateMachine extends StateMachineBase {
                 leftSwoop.withTransition(auto, currentStateComplete, 0, "Left to right to auto");
                 rightSwoop.withTransition(auto, currentStateComplete, "Right to left to auto");
                 intakeDepot.withTransition(auto, currentStateComplete, "Depot intake to auto");
+                intakeDepotStay.withTransition(auto, currentStateComplete, "Depot stay to auto");
                 intakeOutpost.withTransition(auto, currentStateComplete, "Outpost intake to auto");
                 leftTransition.withTransition(auto, currentStateComplete, 0, "Left transition to auto");
                 rightTransition.withTransition(auto, currentStateComplete, 0, "Right transition to auto");
