@@ -137,6 +137,10 @@ public class DriveCommands {
           double x = linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec();
           double y = linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec();
 
+          if (x == 0 && y == 0 && omega == 0) {
+            drive.stopWithX();
+          }
+
           if (false) {
             if (!wasAccelLimited) {
               xLimiter.reset(x);

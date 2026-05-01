@@ -1243,7 +1243,7 @@
     "competition": {
         "Depot distance": {
             "comment": "Auto-Generated",
-            "value": "0.4"
+            "value": "0.5"
         },
         "Hood kPos": {
             "comment": "Auto-Generated",
@@ -1563,7 +1563,7 @@
         "CalibrationState/Test Parameter 2": "0",
         "Y Point Controller/P": "2.0",
         "CalibrationState/Test Parameter 1": "0",
-        "TestMode/Test Turret Position": "0",
+        "TestMode/Test Turret Position": "60",
         "CalibrationState/Test Parameter 4": "0",
         "Kicker bottom speed": {
             "comment": "Auto-Generated",
@@ -1701,7 +1701,7 @@
             "comment": "Auto-Generated",
             "value": "18.0"
         },
-        "TestMode/Test Shooter Speed": "500.0",
+        "TestMode/Test Shooter Speed": "700.0",
         "Intake jam reverse time": {
             "comment": "Auto-Generated",
             "value": "0.2"

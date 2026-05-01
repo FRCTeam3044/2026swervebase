@@ -13,7 +13,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,6 +30,7 @@ import frc.robot.util.AutoTargetUtil;
 import frc.robot.util.Elastic;
 import frc.robot.util.HubShiftUtil;
 import frc.robot.util.ShotCalculator;
+import frc.robot.util.AllianceUtil.AllianceColor;
 import frc.robot.util.HubShiftUtil.ShiftInfo;
 import frc.robot.util.PathfindingDebugUtils;
 import me.nabdev.oxconfig.OxConfig;
@@ -222,6 +225,8 @@ public class Robot extends LoggedRobot {
 
   public static int loopCount = 0;
 
+  private String elasticTab = "MidmatchRNormal";
+
   /** This function is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {
@@ -240,6 +245,11 @@ public class Robot extends LoggedRobot {
     PathfindingDebugUtils.drawPoint("Test/Bottom right middle", new Vertex(AutoTargetUtil.getBottomRightMiddle()));
     PathfindingDebugUtils.drawPoint("Test/Right behind hub", new Vertex(AutoTargetUtil.getRightHubPos()));
     PathfindingDebugUtils.drawPoint("Test/Test bump position", new Vertex(AutoTargetUtil.getRightBumpPos()));
+
+    AllianceColor alliance = AllianceUtil.getAlliance();
+    int driverStation = DriverStation.getLocation().orElse(1);
+    elasticTab = "Midmatch" + (alliance == AllianceColor.BLUE ? "B" : "R")
+        + (driverStation == 3 ? "Flipped" : "Normal");
   }
 
   public static Supplier<ArrayList<AutoSteps>> autoSupplier = () -> {
@@ -262,7 +272,7 @@ public class Robot extends LoggedRobot {
     StateMachine.currentStep = autoSupplier.get().get(StateMachine.index);
     HubShiftUtil.initialize();
 
-    Elastic.selectTab(1);
+    Elastic.selectTab(elasticTab);
   }
 
   /** This function is called periodically during autonomous. */
@@ -279,7 +289,7 @@ public class Robot extends LoggedRobot {
     HubShiftUtil.initialize();
     timer.restart();
     autoWinnerAlerted = false;
-    Elastic.selectTab(1);
+    Elastic.selectTab(elasticTab);
   }
 
   /** This function is called periodically during operator control. */
@@ -341,5 +351,8 @@ public class Robot extends LoggedRobot {
     }
 
     robotContainer.updateMechanism();
+  }
+
+  private void selectElasticTab() {
   }
 }

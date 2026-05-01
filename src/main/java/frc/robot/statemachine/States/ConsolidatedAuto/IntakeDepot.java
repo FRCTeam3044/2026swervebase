@@ -22,14 +22,15 @@ import me.nabdev.oxidation.StateMachineBase;
 public class IntakeDepot extends State {
         public IntakeDepot(StateMachineBase stateMachine, AutoTargetUtil autoTargetUtil, AutoAim autoAim, Drive drive,
                         Intake intake,
-                        Kicker kicker, Shooter shooter) {
+                        Kicker kicker, Shooter shooter, boolean fullyIn) {
                 super(stateMachine);
 
                 Supplier<Pose2d> pathfindingTarget = () -> AutoTargetUtil.getDepot().poseFacing(
                                 StateMachine.pathfindingDist.get(),
                                 true);
                 Supplier<Pose2d> intakeTarget = () -> AutoTargetUtil.getDepot()
-                                .poseFacing(StateMachine.intakeDist.get(), true);
+                                .poseFacing((fullyIn ? StateMachine.intakeDistFullyIn.get()
+                                                : StateMachine.intakeDist.get()), true);
 
                 Command pathfind = DriveCommands
                                 .goToPointAndthen(drive, pathfindingTarget,

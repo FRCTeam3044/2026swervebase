@@ -115,6 +115,8 @@ public class StateMachine extends StateMachineBase {
                         "Depot pathfinding distance");
         public static ConfigurableParameter<Double> intakeDist = new ConfigurableParameter<>(0.4,
                         "Depot distance");
+        public static ConfigurableParameter<Double> intakeDistFullyIn = new ConfigurableParameter<>(0.35,
+                        "Depot distance fully in");
 
         public static ConfigurableParameter<Double> depotWaitTime = new ConfigurableParameter<>(3.0,
                         "Depot wait time");
@@ -222,9 +224,9 @@ public class StateMachine extends StateMachineBase {
                 IntakeOutpost intakeOutpost = new IntakeOutpost(this, autoTargetUtil, autoAim, drive, intake, kicker,
                                 shooter);
                 IntakeDepot intakeDepot = new IntakeDepot(this, autoTargetUtil, autoAim, drive, intake, kicker,
-                                shooter);
+                                shooter, false);
                 IntakeDepot intakeDepotStay = new IntakeDepot(this, autoTargetUtil, autoAim, drive, intake, kicker,
-                                shooter);
+                                shooter, true);
 
                 OverBump overBump = new OverBump(this, autoAim, drive);
 
