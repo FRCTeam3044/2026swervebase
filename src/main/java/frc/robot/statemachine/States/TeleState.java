@@ -59,7 +59,7 @@ public class TeleState extends State {
             driveY,
             () -> -driverController.getRightX(),
             true,
-            driver.rightTrigger().or(driver.rightBumper())));
+            driver.rightTrigger()/* .or(driver.rightBumper()) */));
     SmartTrigger abxy = driver.a().or(driver.b()).or(driver.x()).or(driver.y());
 
     DoubleSupplier targetRotation = () -> {
@@ -77,7 +77,7 @@ public class TeleState extends State {
     };
     abxy.whileTrue(DriveCommands.joystickDriveAtAngle(drive, driveX, driveY,
         () -> AllianceUtil.getRotForAlliance(Rotation2d.fromDegrees(targetRotation.getAsDouble())),
-        driver.rightTrigger().or(driver.rightBumper())));
+        driver.rightTrigger()/* .or(driver.rightBumper()) */));
 
     abxy.negate().whileTrue(DriveCommands.joystickDrive(
         drive,
@@ -85,7 +85,7 @@ public class TeleState extends State {
         driveY,
         () -> -driverController.getRightX(),
         true,
-        driver.rightTrigger().or(driver.rightBumper())));
+        driver.rightTrigger()/* .or(driver.rightBumper()) */));
 
     // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     operator.povDown().onTrue(Commands.runOnce(hood::resetCalibration));
@@ -114,6 +114,8 @@ public class TeleState extends State {
     operator.leftBumper().whileTrue(intake.intakeJostle());
     // raise intake when trigger is pressed
     operator.leftTrigger().runWhileTrue(intake.intakeTop());
+    operator.leftTrigger().whileTrue(Commands.runEnd(() -> driverController.setRumble(RumbleType.kBothRumble, 1),
+        () -> driverController.setRumble(RumbleType.kBothRumble, 0)));
     // when y is pressed, run intake down and spin rollers
     operator.a().and(operator.leftTrigger().negate()).and((operator.leftBumper().negate()))
         .whileTrue(intake.intakeBottom());
@@ -121,7 +123,8 @@ public class TeleState extends State {
     t(drive::isDrivingTowardsIntake).and(operator.b().negate()).whileTrue(intake.runRollers());
     t(drive::isDrivingTowardsIntake).and(operator.leftBumper().negate()).and(operator.leftTrigger().negate())
         .whileTrue(intake.intakeBottom());
-    operator.x().and(driver.rightTrigger().negate()).and(driver.rightBumper().negate())
+    t(() -> operator.x().getAsBoolean() || driver.rightBumper().getAsBoolean()).and(driver.rightTrigger().negate())
+        /* .and(driver.rightBumper().negate()) */
         .whileTrue(spindexer.setSpeed(() -> true));
     // startWhenActive(
     // intake.intakeBottom()
@@ -130,8 +133,8 @@ public class TeleState extends State {
 
     startWhenActive(leds.defaultPattern());
     BooleanSupplier safeShootBlocking = () -> !autoAim
-        .safeShoot(() -> driver.rightBumper().getAsBoolean() || autoTargetUtil.inNeutralZone())
-        && driver.rightTrigger().or(driver.rightBumper()).getAsBoolean();
+        .safeShoot(() -> /* driver.rightBumper().getAsBoolean() || */ autoTargetUtil.inNeutralZone())
+        && driver.rightTrigger()/* .or(driver.rightBumper()) */.getAsBoolean();
     t(() -> turret.nearFlipAround() || safeShootBlocking.getAsBoolean())
         .whileTrue(leds.setSolidColor(() -> safeShootBlocking.getAsBoolean() ? Color.kGreen
             : (turret.nearerFlipAround() ? Color.kRed : Color.kOrange)));
@@ -142,14 +145,14 @@ public class TeleState extends State {
     // .onTrue(HapticsUtil.rumbleForTime(driverController, 0.75))
     // .onFalse(HapticsUtil.rumblePulses(driverController, 2, 0.2, 0.1));
 
-    t(() -> HubShiftUtil.getShiftedShiftInfo().remainingTime() < 10)
-        .onTrue(HapticsUtil.rumblePulses(operatorController, 3, 0.12, 0.08));
-    t(() -> HubShiftUtil.getShiftedShiftInfo().remainingTime() < 5)
-        .onTrue(Commands.deadline(Commands.waitSeconds(0.75), Commands.runEnd(() -> {
-          operatorController.setRumble(RumbleType.kBothRumble, 1);
-        }, () -> {
-          operatorController.setRumble(RumbleType.kBothRumble, 0);
-        })));
+    // t(() -> HubShiftUtil.getShiftedShiftInfo().remainingTime() < 10)
+    // .onTrue(HapticsUtil.rumblePulses(operatorController, 3, 0.12, 0.08));
+    // t(() -> HubShiftUtil.getShiftedShiftInfo().remainingTime() < 5)
+    // .onTrue(Commands.deadline(Commands.waitSeconds(0.75), Commands.runEnd(() -> {
+    // operatorController.setRumble(RumbleType.kBothRumble, 1);
+    // }, () -> {
+    // operatorController.setRumble(RumbleType.kBothRumble, 0);
+    // })));
 
     driver.povLeft().or(driver.povDown()).onTrue(Commands.runOnce(() -> {
       overdriveEnabled = !overdriveEnabled;

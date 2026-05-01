@@ -37,16 +37,17 @@ public class NeutralZone extends State {
                 operator.povDown().or(() -> !hood.calibrated())
                                 .whileFalse(autoAim
                                                 .aimAllianceZone(() -> driver.rightTrigger()
-                                                                .or(driver.rightBumper()).getAsBoolean()));
+                                                                /* .or(driver.rightBumper()) */ .getAsBoolean()));
                 startWhenActive(
                                 autoAim.aimAllianceZone(
-                                                () -> driver.rightTrigger().or(driver.rightBumper()).getAsBoolean())
+                                                () -> driver.rightTrigger()
+                                                                /* .or(driver.rightBumper()) */.getAsBoolean())
                                                 .until(operator.povDown().or(() -> !hood.calibrated())));
                 startWhenActive(autoAim.fire(() -> true,
-                                () -> operator.x().getAsBoolean(), false)
-                                .onlyWhile(driver.rightBumper().or(driver.rightTrigger())));
-                driver.rightBumper().or(driver.rightTrigger()).whileTrue(autoAim.fire(() -> true,
-                                () -> operator.x().getAsBoolean(), false));
+                                () -> operator.x().getAsBoolean() || driver.rightBumper().getAsBoolean(), false)
+                                .onlyWhile(/* driver.rightBumper().or( */driver.rightTrigger()));
+                /* driver.rightBumper().or( */driver.rightTrigger().whileTrue(autoAim.fire(() -> true,
+                                () -> operator.x().getAsBoolean() || driver.rightBumper().getAsBoolean(), false));
                 startWhenActive(leds.defaultPattern());
         }
 }

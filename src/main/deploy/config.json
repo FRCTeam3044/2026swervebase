@@ -187,6 +187,10 @@
             "comment": "Auto-Generated",
             "value": "1.2"
         },
+        "Intake jam debounce time": {
+            "comment": "Auto-Generated",
+            "value": "0.1"
+        },
         "Hood kG": {
             "comment": "Auto-Generated",
             "value": "0.0"
@@ -333,6 +337,10 @@
         "CalibrationState/Test Parameter 47": "0",
         "CalibrationState/Test Parameter 48": "0",
         "CalibrationState/Test Parameter 49": "0",
+        "Intake jam speed threshold": {
+            "comment": "Auto-Generated",
+            "value": "100.0"
+        },
         "CalibrationState/Test Parameter 54": "0",
         "Hood Calibration Speed": {
             "comment": "Auto-Generated",
@@ -453,6 +461,10 @@
             "value": "10.0"
         },
         "TestMode/Test Shooter Speed": "0.0",
+        "Intake jam reverse time": {
+            "comment": "Auto-Generated",
+            "value": "0.2"
+        },
         "Turret Max Velocity": {
             "comment": "Auto-Generated",
             "value": "10.0"
@@ -796,6 +808,10 @@
             "comment": "Auto-Generated",
             "value": "1.2"
         },
+        "Intake jam debounce time": {
+            "comment": "Auto-Generated",
+            "value": "0.1"
+        },
         "Hood kG": {
             "comment": "Auto-Generated",
             "value": "0.0"
@@ -942,6 +958,10 @@
         "CalibrationState/Test Parameter 47": "0",
         "CalibrationState/Test Parameter 48": "0",
         "CalibrationState/Test Parameter 49": "0",
+        "Intake jam speed threshold": {
+            "comment": "Auto-Generated",
+            "value": "100.0"
+        },
         "CalibrationState/Test Parameter 54": "0",
         "Hood Calibration Speed": {
             "comment": "Auto-Generated",
@@ -1062,6 +1082,10 @@
             "value": "10.0"
         },
         "TestMode/Test Shooter Speed": "0.0",
+        "Intake jam reverse time": {
+            "comment": "Auto-Generated",
+            "value": "0.2"
+        },
         "Turret Max Velocity": {
             "comment": "Auto-Generated",
             "value": "10.0"
@@ -1404,6 +1428,10 @@
             "comment": "Auto-Generated",
             "value": "1.2"
         },
+        "Intake jam debounce time": {
+            "comment": "Auto-Generated",
+            "value": "0.1"
+        },
         "Hood kG": {
             "comment": "Auto-Generated",
             "value": "0.0"
@@ -1550,6 +1578,10 @@
         "CalibrationState/Test Parameter 47": "0",
         "CalibrationState/Test Parameter 48": "0",
         "CalibrationState/Test Parameter 49": "0",
+        "Intake jam speed threshold": {
+            "comment": "Auto-Generated",
+            "value": "100.0"
+        },
         "CalibrationState/Test Parameter 54": "0",
         "Hood Calibration Speed": {
             "comment": "Auto-Generated",
@@ -1669,7 +1701,11 @@
             "comment": "Auto-Generated",
             "value": "18.0"
         },
-        "TestMode/Test Shooter Speed": "1400.0",
+        "TestMode/Test Shooter Speed": "500.0",
+        "Intake jam reverse time": {
+            "comment": "Auto-Generated",
+            "value": "0.2"
+        },
         "Turret Max Velocity": {
             "comment": "Auto-Generated",
             "value": "50.0"

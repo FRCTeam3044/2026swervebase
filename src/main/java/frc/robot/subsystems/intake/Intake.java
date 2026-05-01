@@ -1,5 +1,7 @@
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,6 +32,15 @@ public class Intake extends SubsystemBase {
       "Intake down time auto");
   private ConfigurableParameter<Double> intakeUpTime = new ConfigurableParameter<Double>(0.05,
       "Intake up time auto");
+  private ConfigurableParameter<Double> intakeJamSpeedthreshold = new ConfigurableParameter<Double>(100.0,
+      "Intake jam speed threshold");
+  private ConfigurableParameter<Double> intakeJamReverseTime = new ConfigurableParameter<Double>(0.2,
+      "Intake jam reverse time");
+
+  private Debouncer intakeJamDebouncer = new Debouncer(0.2, DebounceType.kRising);
+
+  private ConfigurableParameter<Double> intakeJamDebounceTime = new ConfigurableParameter<Double>(0.1,
+      "Intake jam debounce time", intakeJamDebouncer::setDebounceTime);
 
   public Intake(IntakeIO io) {
     this.io = io;
@@ -67,8 +78,8 @@ public class Intake extends SubsystemBase {
   }
 
   public Command runRollersJamDetection() {
-    return Commands.runEnd(() -> io.setSpeedRollers(intakeRollerSpeed.get()), () -> io.setSpeedRollers(0), this)
-        .withName("Run Intake Rollers");
+    return runRollers().until(() -> intakeJamDebouncer.calculate(inputs.speedRollers < intakeJamSpeedthreshold.get()))
+        .andThen(runRollersReverse().withTimeout(intakeJamReverseTime.get())).repeatedly();
   }
 
   public Command runRollersReverse() {
