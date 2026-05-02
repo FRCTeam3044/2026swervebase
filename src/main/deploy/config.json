@@ -605,6 +605,10 @@
             "comment": "Auto-Generated",
             "value": "0.0"
         },
+        "Depot distance fully in": {
+            "comment": "Auto-Generated",
+            "value": "0.35"
+        },
         "Shooter at speed tolerance (RPM)": {
             "comment": "Auto-Generated",
             "value": "5.0"
@@ -1226,6 +1230,10 @@
             "comment": "Auto-Generated",
             "value": "0.0"
         },
+        "Depot distance fully in": {
+            "comment": "Auto-Generated",
+            "value": "0.35"
+        },
         "Shooter at speed tolerance (RPM)": {
             "comment": "Auto-Generated",
             "value": "5.0"
@@ -1845,6 +1853,10 @@
         "Bottom climber position": {
             "comment": "Auto-Generated",
             "value": "0"
+        },
+        "Depot distance fully in": {
+            "comment": "Auto-Generated",
+            "value": "0.35"
         },
         "Shooter at speed tolerance (RPM)": {
             "comment": "Auto-Generated",
